@@ -1,0 +1,4 @@
+module core;
+
+type Collection[+T] extends Iterable[T] {
+}

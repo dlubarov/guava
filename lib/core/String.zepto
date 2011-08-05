@@ -1,0 +1,4 @@
+module core;
+
+type String extends Sequence[Char] {
+}

@@ -1,0 +1,27 @@
+module core;
+
+type Maybe[+T] extends Iterable[T] {
+  Bool isSomething();
+}
+
+type Some[+T] extends Maybe[T] {
+  T value;
+
+  Bool isSomething() {
+    return true;
+  }
+
+  Iterator[T] iterator() {
+    return new SingletonIterator[T](this.value);
+  }
+}
+
+type None[+T] extends Maybe[T] {
+  Bool isSomething() {
+    return false;
+  }
+
+  Iterator[T] iterator() {
+    return new EmptyIterator[T]();
+  }
+}

@@ -1,0 +1,27 @@
+module core;
+
+type Int {
+  Int +() {}
+  Int -() {}
+  Int ~() {}
+
+  Int +(Int that) {}
+  Int -(Int that) {}
+  Int *(Int that) {}
+  Int /(Int that) {}
+  Int %(Int that) {}
+  Int &(Int that) {}
+  Int |(Int that) {}
+  Int ^(Int that) {}
+  Int <<(Int that) {}
+  Int >>(Int that) {}
+
+  Bool <(Int that) {}
+  Bool >(Int that) {}
+  Bool <=(Int that) {}
+  Bool >=(Int that) {}
+
+  Bool ==(Object that) {}
+  Int hashCode() {}
+  String toString() {}
+}

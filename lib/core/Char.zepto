@@ -1,0 +1,7 @@
+module core;
+
+type Char {
+  Bool ==(Object that) {}
+  Int hashCode() {}
+  String toString() {}
+}
