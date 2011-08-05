@@ -15,7 +15,21 @@ public class IfElseStm extends Statement {
     }
     
     public String toString() {
-        return String.format("if (%s)\n%s\nelse\n%s",
-                cond, indent(bodyTrue), indent(bodyFalse));
+        StringBuilder sb = new StringBuilder("if (");
+        sb.append(cond).append(')');
+
+        if (bodyTrue instanceof BlockStm)
+            sb.append(' ').append(bodyTrue);
+        else
+            sb.append('\n').append(indent(bodyTrue));
+
+        sb.append("\nelse");
+
+        if (bodyFalse instanceof BlockStm)
+            sb.append(' ').append(bodyFalse);
+        else
+            sb.append('\n').append(indent(bodyFalse));
+
+        return sb.toString();
     }
 }

@@ -158,15 +158,44 @@ public final class Parser {
         }
     }
 
+    private ParseResult<Expression> parseParenExp(int p) {
+        parseChar(p++, '(');
+        p = optWS(p);
+        ParseResult<Expression> resExp = parseExpression(p);
+        p = resExp.rem;
+        p = optWS(p);
+        parseChar(p++, ')');
+        return new ParseResult<Expression>(resExp.val, p);
+    }
+
+    private ParseResult<Expression> parseConstructor(int p) {
+        p = parseString(p, "new");
+        p = someWS(p);
+        ParseResult<Type> resType = parseType(p);
+        p = resType.rem;
+        p = optWS(p);
+        ParseResult<Expression[]> resArgs = parseArgumentList(p);
+        p = resArgs.rem;
+        return new ParseResult<Expression>(new NewExp(resType.val, resArgs.val), p);
+    }
+    
     private ParseResult<Expression> parseAtom(int p) {
         try {
-            return parseLitInt(p);
+            return parseParenExp(p);
         } catch (ParseException e1) {
             try {
-                return parseLitBool(p);
+                return parseLitInt(p);
             } catch (ParseException e2) {
-                ParseResult<String> resId = parseIdentifier(p);
-                return new ParseResult<Expression>(new VarExp(resId.val), resId.rem);
+                try {
+                    return parseLitBool(p);
+                } catch (ParseException e3) {
+                    try {
+                        return parseConstructor(p);
+                    } catch (ParseException e4) {
+                        ParseResult<String> resId = parseIdentifier(p);
+                        return new ParseResult<Expression>(new VarExp(resId.val), resId.rem);
+                    }
+                }
             }
         }
     }
