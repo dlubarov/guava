@@ -25,6 +25,7 @@ public class Invocation extends Expression {
         //     class method: SomeClass.myMethod(...)
         //     normal instance method: something.myMethod(...)
         //     functor: something.someCollection(idx)
+        //     class get: SomeClass(...)
 
         FullTypeDesc[] genericArgsRef = ctx.resolveAllFull(genericArgs);
         rst.exp.Expression[] argsRef = new rst.exp.Expression[args.length];
@@ -40,8 +41,15 @@ public class Invocation extends Expression {
                     return new ClassMethodInvocation(ctx.resolveRaw(typeName), memberAcc.memberName,
                                                      genericArgsRef, argsRef);
             }
-            return new InstanceMethodInvocationOrGet(memberAcc.target.refine(ctx),
+            return new InstanceMethodInvocationOrGet(owner.refine(ctx),
                     memberAcc.memberName, genericArgsRef, argsRef);
+        }
+
+        if (target instanceof VarExp) {
+            String typeName = ((VarExp) target).id;
+            if (ctx.hasRawType(typeName))
+                // class get, e.g. MyClass(...)
+                return new ClassMethodInvocation(ctx.resolveRaw(typeName), "get", genericArgsRef, argsRef);
         }
         
         // Must be a get call, such as getArray()(index)

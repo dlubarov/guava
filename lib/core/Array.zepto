@@ -1,0 +1,23 @@
+abstract type Array[+T] extends Sequence[T] {
+  T get(Int idx);
+}
+
+type MutableArray[T] extends Array[T] {
+  Void init(Collection[T] source) {}
+
+  T get(Int idx) {}
+
+  Void set(Int idx, T val);
+}
+
+type ImmutableArray[+T] extends Array[T] {
+  MutableArray[T] store;
+
+  Void init(Collection[T] source) {
+    this.store = new MutableArray[T](source);
+  }
+
+  T get(Int idx) {
+    return store[idx];
+  }
+}

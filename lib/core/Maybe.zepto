@@ -2,6 +2,9 @@ module core;
 
 type Maybe[+T] extends Iterable[T] {
   Bool isSomething();
+
+  T get();
+  T getOr(T default);
 }
 
 type Some[+T] extends Maybe[T] {
@@ -9,6 +12,14 @@ type Some[+T] extends Maybe[T] {
 
   Bool isSomething() {
     return true;
+  }
+
+  T get() {
+    return this.value;
+  }
+
+  T getOr(T default) {
+    return this.value;
   }
 
   Iterator[T] iterator() {
@@ -19,6 +30,10 @@ type Some[+T] extends Maybe[T] {
 type None[+T] extends Maybe[T] {
   Bool isSomething() {
     return false;
+  }
+
+  T getOr(T default) {
+    return default;
   }
 
   Iterator[T] iterator() {

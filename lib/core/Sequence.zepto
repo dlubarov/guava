@@ -1,4 +1,60 @@
 module core;
 
 type Sequence[+T] extends Collection[T] {
+  T get(Int idx) {
+    # TODO bounds check
+    Iterator[T] iter = this.iterator();
+    while (idx > 0) {
+      iter.next();
+      idx = idx - 1;
+    }
+    return iter.next();
+  }
+
+  Maybe[T] first() {
+    if (this.isEmpty())
+      return new None[T]();
+    else
+      return new Some[T](this[0]);
+  }
+
+  Maybe[T] last() {
+    if (this.isEmpty())
+      return new None[T]();
+    else
+      return new Some[T](this[size() - 1]);
+  }
+
+  Sequence[T] first(Int n) {
+    List[T] result = new EmptyList[T]();
+    Iterator[T] iter = this.iterator();
+    while (iter.hasNext() & result.size() < n)
+      result = new NonEmptyList(iter.next().get(), result);
+    return result.reverse();
+  }
+
+  Sequence[T] last(Int n) {
+    return this.reverse().first(n).reverse();
+  }
+
+  Maybe[Int] firstIndexOf(T elem) {
+    Iterator[T] iter = this.iterator();
+    Int i = 0;
+    while (iter.hasNext()) {
+      if (iter.next().get() == elem)
+        return i;
+      i = i + 1;
+    }
+    return new None[Int]();
+  }
+
+  Maybe[Int] lastIndexOf(T elem) {
+  }
+
+  Sequence[T] reverse() {
+    List[T] result = new EmptyList[T]();
+    for (T elem : this)
+      result = new NonEmptyList(elem, result);
+    return result;
+  }
 }

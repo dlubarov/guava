@@ -36,7 +36,10 @@ public class GlobalContext {
     }
 
     public Set<String> getTypeNamesFor(String module) {
-        return typeDefs.get(module).keySet();
+        Map<String, TypeDef> typesByName = typeDefs.get(module);
+        if (typesByName == null)
+            throw new NoSuchElementException(String.format("no module named \"%s\"", module));
+        return typesByName.keySet();
     }
 
     // TODO: is there a more natural place for the top-level refine method?

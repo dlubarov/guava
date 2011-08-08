@@ -1,4 +1,17 @@
 module core;
 
 type String extends Sequence[Char] {
+  ImmutableSequence[Char] store;
+
+  Void init(Sequence[Char] source) {
+    this.store = ImmutableSequence[Char](source);
+  }
+
+  Iterator[Char] iterator() {
+    return this.store.iterator();
+  }
+
+  String toString() {
+    return this;
+  }
 }

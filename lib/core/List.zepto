@@ -1,0 +1,56 @@
+module core;
+
+abstract type List[+T] extends Sequence[T] {
+  List[T] tail();
+}
+
+type NonEmptyList[+T] extends List[T] {
+  T head;
+  List[T] tail;
+  Int size;
+
+  Void init(T head, List[T] tail) {
+    this.head = head;
+    this.tail = tail;
+    this.size = tail.size() + 1;
+  }
+
+  T first() {
+    return this.head;
+  }
+
+  List[T] last(Int n) {
+    if (size() >= n)
+      return this;
+    else
+      return this.tail.last(n);
+  }
+
+  Int size() {
+    return this.size;
+  }
+}
+
+type EmptyList[+T] extends List[T] {
+  Iterator[T] iterator() {
+    return new EmptyIterator[T]();
+  }
+}
+
+type ListIterator[+T] extends Iterator[T] {
+  List[T] current;
+
+  Void init(List[T] source) {
+    this.current = source;
+  }
+
+  Maybe[T] next() {
+    if (current.isEmpty())
+      return new None[T]();
+    else {
+      T elem = new Some(current.first());
+      current = current.last(current.size() - 1);
+      return elem;
+    }
+  }
+}

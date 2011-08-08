@@ -1,0 +1,12 @@
+module core;
+
+type Map[-K, +V] extends Collection[Pair[K, V]] {
+  V get(K key);
+}
+
+type MutableMap[K, V] extends Map[K, V] {
+  V set(K key, V val);
+}
+
+type ImmutableMap[-K, +V] extends Map[K, V] {
+}

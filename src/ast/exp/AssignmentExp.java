@@ -31,7 +31,7 @@ public class AssignmentExp extends Expression {
             Expression[] args = new Expression[leftInv.args.length + 1];
             System.arraycopy(leftInv.args, 0, args, 0, leftInv.args.length);
             args[leftInv.args.length] = right;
-            return new Invocation(new MemberAccess(leftInv.target, "set"), new Type[0], args).refine(ctx);
+            return new Invocation(new MemberAccess(leftInv.target, "set"), leftInv.genericArgs, args).refine(ctx);
         }
 
         throw new RuntimeException("destination of assignment is not an lval: " + left);

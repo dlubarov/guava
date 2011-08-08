@@ -8,5 +8,6 @@
 
 TODO:
   definite assignment analysis
+  variance analysis
   require method return
   write a proper readme

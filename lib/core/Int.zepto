@@ -1,6 +1,19 @@
 module core;
 
 type Int {
+  #Int ++() {}
+  #Int --() {}
+  #Int +=(Int x) {}
+  #Int -=(Int x) {}
+  #Int *=(Int x) {}
+  #Int /=(Int x) {}
+  #Int %=(Int x) {}
+  #Int &=(Int x) {}
+  #Int |=(Int x) {}
+  #Int ^=(Int x) {}
+  #Int >>=(Int x) {}
+  #Int <<=(Int x) {}
+
   Int +() {}
   Int -() {}
   Int ~() {}

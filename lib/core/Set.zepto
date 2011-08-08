@@ -1,0 +1,30 @@
+module core;
+
+type Set[+T] extends Collection[T] {
+  Set[T] &(Set[T] that) {
+  }
+
+  Set[T] |(Set[T] that) {
+  }
+
+  Set[T] ^(Set[T] that) {
+  }
+
+  Int count(T elem) {
+    if (this.contains(elem))
+      return 1;
+    else
+      return 0;
+  }
+
+  Set[T] uniqueElems() {
+    return this;
+  }
+}
+
+type MutableSet[T] extends Set[T] {
+  Void +=(T elem);
+}
+
+type ImmutableSet[+T] extends Set[T] {
+}

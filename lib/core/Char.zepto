@@ -1,6 +1,13 @@
 module core;
 
 type Char {
+  Char toUpper();
+  Char toLower();
+
+  Bool isAlpha();
+  Bool isNumeric();
+  Bool isAlphaNumeric();
+
   Bool ==(Object that) {}
   Int hashCode() {}
   String toString() {}
