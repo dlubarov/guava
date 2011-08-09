@@ -34,7 +34,7 @@ public class NatMutableArray extends TObject {
                 new Method[] {
                     // Get, set
                     new NativeMethod(new RawMethodDesc(
-                            "core", "MutableArray", "get",
+                            "core", "MutableArray", "get", 0,
                             new FullTypeDesc[] {new NormalFullTypeDesc(new RawTypeDesc("core", "Int"))})) {
                         public void invoke(TObject[] stack, int bp) {
                             TObject[] arr = ((NatMutableArray) stack[bp + 1]).elems;
@@ -43,7 +43,7 @@ public class NatMutableArray extends TObject {
                         }
                     },
                     new NativeMethod(new RawMethodDesc(
-                            "core", "MutableArray", "set",
+                            "core", "MutableArray", "set", 0,
                             new FullTypeDesc[] {new NormalFullTypeDesc(new RawTypeDesc("core", "Int")),
                                                 new TypeGenericFullTypeDesc(new RawTypeDesc("core", "MutableArray"), 0)})) {
                         public void invoke(TObject[] stack, int bp) {
@@ -55,7 +55,7 @@ public class NatMutableArray extends TObject {
                     },
 
                     // Object methods
-                    new NativeMethod(new RawMethodDesc("core", "MutableArray", "==", objOnly)) {
+                    new NativeMethod(new RawMethodDesc("core", "MutableArray", "==", 0, objOnly)) {
                         public void invoke(TObject[] stack, int bp) {
                             TObject[] a = ((NatMutableArray) stack[bp + 1]).elems;
                             try {
@@ -67,8 +67,8 @@ public class NatMutableArray extends TObject {
                             }
                         }
                     },
-                    new NativeMethod(new RawMethodDesc("core", "MutableArray", "hashCode", FullTypeDesc.none),
-                            new RawMethodDesc("core", "Object", "hashCode", FullTypeDesc.none)) {
+                    new NativeMethod(new RawMethodDesc("core", "MutableArray", "hashCode", 0, FullTypeDesc.none),
+                            new RawMethodDesc("core", "Object", "hashCode", 0, FullTypeDesc.none)) {
                         public void invoke(TObject[] stack, int bp) {
                             TObject[] arr = ((NatMutableArray) stack[bp + 1]).elems;
                             int[] codes = new int[arr.length];
@@ -79,8 +79,8 @@ public class NatMutableArray extends TObject {
                             stack[bp + 1] = new NatInt(Arrays.hashCode(codes));
                         }
                     },
-                    new NativeMethod(new RawMethodDesc("core", "MutableArray", "toString", FullTypeDesc.none),
-                            new RawMethodDesc("core", "Object", "toString", FullTypeDesc.none)) {
+                    new NativeMethod(new RawMethodDesc("core", "MutableArray", "toString", 0, FullTypeDesc.none),
+                            new RawMethodDesc("core", "Object", "toString", 0, FullTypeDesc.none)) {
                         public void invoke(TObject[] stack, int bp) {
                             TObject[] arr = ((NatMutableArray) stack[bp + 1]).elems;
                             String s = "an array"; // TODO: proper toString
@@ -90,12 +90,12 @@ public class NatMutableArray extends TObject {
                 },
 
                 new HashMap<RawMethodDesc, RawMethodDesc>() {{
-                    put(new RawMethodDesc("core", "Object", "==", objOnly),
-                        new RawMethodDesc("core", "MutableArray", "==", objOnly));
-                    put(new RawMethodDesc("core", "Object", "hashCode", FullTypeDesc.none),
-                        new RawMethodDesc("core", "MutableArray", "hashCode", FullTypeDesc.none));
-                    put(new RawMethodDesc("core", "Object", "toString", FullTypeDesc.none),
-                        new RawMethodDesc("core", "MutableArray", "toString", FullTypeDesc.none));
+                    put(new RawMethodDesc("core", "Object", "==", 0, objOnly),
+                        new RawMethodDesc("core", "MutableArray", "==", 0, objOnly));
+                    put(new RawMethodDesc("core", "Object", "hashCode", 0, FullTypeDesc.none),
+                        new RawMethodDesc("core", "MutableArray", "hashCode", 0, FullTypeDesc.none));
+                    put(new RawMethodDesc("core", "Object", "toString", 0, FullTypeDesc.none),
+                        new RawMethodDesc("core", "MutableArray", "toString", 0, FullTypeDesc.none));
                 }});
         }
         

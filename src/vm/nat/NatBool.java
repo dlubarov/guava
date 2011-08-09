@@ -39,7 +39,7 @@ public class NatBool extends TObject {
             super(desc,
                 new Method[]{
                     // Prefix methods
-                    new NativeMethod(new RawMethodDesc("core", "Bool", "!", FullTypeDesc.none)) {
+                    new NativeMethod(new RawMethodDesc("core", "Bool", "!", 0, FullTypeDesc.none)) {
                         public void invoke(TObject[] stack, int bp) {
                             boolean b = ((NatBool) stack[bp + 1]).value;
                             stack[bp + 1] = new NatBool(!b);
@@ -47,21 +47,21 @@ public class NatBool extends TObject {
                     },
 
                     // Infix methods
-                    new NativeMethod(new RawMethodDesc("core", "Bool", "&", boolOnly)) {
+                    new NativeMethod(new RawMethodDesc("core", "Bool", "&", 0, boolOnly)) {
                         public void invoke(TObject[] stack, int bp) {
                             boolean a = ((NatBool) stack[bp + 1]).value;
                             boolean b = ((NatBool) stack[bp + 2]).value;
                             stack[bp + 1] = new NatBool(a & b);
                         }
                     },
-                    new NativeMethod(new RawMethodDesc("core", "Bool", "|", boolOnly)) {
+                    new NativeMethod(new RawMethodDesc("core", "Bool", "|", 0, boolOnly)) {
                         public void invoke(TObject[] stack, int bp) {
                             boolean a = ((NatBool) stack[bp + 1]).value;
                             boolean b = ((NatBool) stack[bp + 2]).value;
                             stack[bp + 1] = new NatBool(a | b);
                         }
                     },
-                    new NativeMethod(new RawMethodDesc("core", "Bool", "^", boolOnly)) {
+                    new NativeMethod(new RawMethodDesc("core", "Bool", "^", 0, boolOnly)) {
                         public void invoke(TObject[] stack, int bp) {
                             boolean a = ((NatBool) stack[bp + 1]).value;
                             boolean b = ((NatBool) stack[bp + 2]).value;
@@ -70,7 +70,7 @@ public class NatBool extends TObject {
                     },
 
                     // Object methods
-                    new NativeMethod(new RawMethodDesc("core", "Bool", "==", objOnly)) {
+                    new NativeMethod(new RawMethodDesc("core", "Bool", "==", 0, objOnly)) {
                         public void invoke(TObject[] stack, int bp) {
                             boolean a = ((NatBool) stack[bp + 1]).value;
                             try {
@@ -81,13 +81,13 @@ public class NatBool extends TObject {
                             }
                         }
                     },
-                    new NativeMethod(new RawMethodDesc("core", "Bool", "hashCode", FullTypeDesc.none)) {
+                    new NativeMethod(new RawMethodDesc("core", "Bool", "hashCode", 0, FullTypeDesc.none)) {
                         public void invoke(TObject[] stack, int bp) {
                             boolean b = ((NatBool) stack[bp + 1]).value;
                             stack[bp + 1] = new NatBool(b);
                         }
                     },
-                    new NativeMethod(new RawMethodDesc("core", "Bool", "toString", FullTypeDesc.none)) {
+                    new NativeMethod(new RawMethodDesc("core", "Bool", "toString", 0, FullTypeDesc.none)) {
                         public void invoke(TObject[] stack, int bp) {
                             boolean b = ((NatBool) stack[bp + 1]).value;
                             String s = Boolean.toString(b);
@@ -97,12 +97,12 @@ public class NatBool extends TObject {
                 },
 
                 new HashMap<RawMethodDesc, RawMethodDesc>() {{
-                    put(new RawMethodDesc("core", "Object", "==", objOnly),
-                        new RawMethodDesc("core", "Bool", "==", objOnly));
-                    put(new RawMethodDesc("core", "Object", "hashCode", FullTypeDesc.none),
-                        new RawMethodDesc("core", "Bool", "hashCode", FullTypeDesc.none));
-                    put(new RawMethodDesc("core", "Object", "toString", FullTypeDesc.none),
-                        new RawMethodDesc("core", "Bool", "toString", FullTypeDesc.none));
+                    put(new RawMethodDesc("core", "Object", "==", 0, objOnly),
+                        new RawMethodDesc("core", "Bool", "==", 0, objOnly));
+                    put(new RawMethodDesc("core", "Object", "hashCode", 0, FullTypeDesc.none),
+                        new RawMethodDesc("core", "Bool", "hashCode", 0, FullTypeDesc.none));
+                    put(new RawMethodDesc("core", "Object", "toString", 0, FullTypeDesc.none),
+                        new RawMethodDesc("core", "Bool", "toString", 0, FullTypeDesc.none));
                 }});
         }
         

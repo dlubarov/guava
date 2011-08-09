@@ -29,117 +29,117 @@ public class NatInt extends TObject {
             super(desc,
                 new Method[] {
                     // Prefix
-                    new NativeMethod(new RawMethodDesc("core", "Int", "+", FullTypeDesc.none)) {
+                    new NativeMethod(new RawMethodDesc("core", "Int", "+", 0, FullTypeDesc.none)) {
                         public void invoke(TObject[] stack, int bp) {
                             int n = ((NatInt) stack[bp + 1]).value;
                             stack[bp + 1] = new NatInt(+n);
                         }
                     },
-                    new NativeMethod(new RawMethodDesc("core", "Int", "-", FullTypeDesc.none)) {
+                    new NativeMethod(new RawMethodDesc("core", "Int", "-", 0, FullTypeDesc.none)) {
                         public void invoke(TObject[] stack, int bp) {
                             int n = ((NatInt) stack[bp + 1]).value;
                             stack[bp + 1] = new NatInt(-n);
                         }
                     },
-                    new NativeMethod(new RawMethodDesc("core", "Int", "~", FullTypeDesc.none)) {
+                    new NativeMethod(new RawMethodDesc("core", "Int", "~", 0, FullTypeDesc.none)) {
                         public void invoke(TObject[] stack, int bp) {
                             int n = ((NatInt) stack[bp + 1]).value;
                             stack[bp + 1] = new NatInt(~n);
                         }
                     },
                     // Infix
-                    new NativeMethod(new RawMethodDesc("core", "Int", "+", intOnly)) {
+                    new NativeMethod(new RawMethodDesc("core", "Int", "+", 0, intOnly)) {
                         public void invoke(TObject[] stack, int bp) {
                             int n = ((NatInt) stack[bp + 1]).value;
                             int m = ((NatInt) stack[bp + 2]).value;
                             stack[bp + 1] = new NatInt(n + m);
                         }
                     },
-                    new NativeMethod(new RawMethodDesc("core", "Int", "-", intOnly)) {
+                    new NativeMethod(new RawMethodDesc("core", "Int", "-", 0, intOnly)) {
                         public void invoke(TObject[] stack, int bp) {
                             int n = ((NatInt) stack[bp + 1]).value;
                             int m = ((NatInt) stack[bp + 2]).value;
                             stack[bp + 1] = new NatInt(n - m);
                         }
                     },
-                    new NativeMethod(new RawMethodDesc("core", "Int", "*", intOnly)) {
+                    new NativeMethod(new RawMethodDesc("core", "Int", "*", 0, intOnly)) {
                         public void invoke(TObject[] stack, int bp) {
                             int n = ((NatInt) stack[bp + 1]).value;
                             int m = ((NatInt) stack[bp + 2]).value;
                             stack[bp + 1] = new NatInt(n * m);
                         }
                     },
-                    new NativeMethod(new RawMethodDesc("core", "Int", "/", intOnly)) {
+                    new NativeMethod(new RawMethodDesc("core", "Int", "/", 0, intOnly)) {
                         public void invoke(TObject[] stack, int bp) {
                             int n = ((NatInt) stack[bp + 1]).value;
                             int m = ((NatInt) stack[bp + 2]).value;
                             stack[bp + 1] = new NatInt(n / m);
                         }
                     },
-                    new NativeMethod(new RawMethodDesc("core", "Int", "%", intOnly)) {
+                    new NativeMethod(new RawMethodDesc("core", "Int", "%", 0, intOnly)) {
                         public void invoke(TObject[] stack, int bp) {
                             int n = ((NatInt) stack[bp + 1]).value;
                             int m = ((NatInt) stack[bp + 2]).value;
                             stack[bp + 1] = new NatInt(n % m);
                         }
                     },
-                    new NativeMethod(new RawMethodDesc("core", "Int", "&", intOnly)) {
+                    new NativeMethod(new RawMethodDesc("core", "Int", "&", 0, intOnly)) {
                         public void invoke(TObject[] stack, int bp) {
                             int n = ((NatInt) stack[bp + 1]).value;
                             int m = ((NatInt) stack[bp + 2]).value;
                             stack[bp + 1] = new NatInt(n & m);
                         }
                     },
-                    new NativeMethod(new RawMethodDesc("core", "Int", "|", intOnly)) {
+                    new NativeMethod(new RawMethodDesc("core", "Int", "|", 0, intOnly)) {
                         public void invoke(TObject[] stack, int bp) {
                             int n = ((NatInt) stack[bp + 1]).value;
                             int m = ((NatInt) stack[bp + 2]).value;
                             stack[bp + 1] = new NatInt(n | m);
                         }
                     },
-                    new NativeMethod(new RawMethodDesc("core", "Int", "^", intOnly)) {
+                    new NativeMethod(new RawMethodDesc("core", "Int", "^", 0, intOnly)) {
                         public void invoke(TObject[] stack, int bp) {
                             int n = ((NatInt) stack[bp + 1]).value;
                             int m = ((NatInt) stack[bp + 2]).value;
                             stack[bp + 1] = new NatInt(n ^ m);
                         }
                     },
-                    new NativeMethod(new RawMethodDesc("core", "Int", "<<", intOnly)) {
+                    new NativeMethod(new RawMethodDesc("core", "Int", "<<", 0, intOnly)) {
                         public void invoke(TObject[] stack, int bp) {
                             int n = ((NatInt) stack[bp + 1]).value;
                             int m = ((NatInt) stack[bp + 2]).value;
                             stack[bp + 1] = new NatInt(n << m);
                         }
                     },
-                    new NativeMethod(new RawMethodDesc("core", "Int", ">>", intOnly)) {
+                    new NativeMethod(new RawMethodDesc("core", "Int", ">>", 0, intOnly)) {
                         public void invoke(TObject[] stack, int bp) {
                             int n = ((NatInt) stack[bp + 1]).value;
                             int m = ((NatInt) stack[bp + 2]).value;
                             stack[bp + 1] = new NatInt(n >> m);
                         }
                     },
-                    new NativeMethod(new RawMethodDesc("core", "Int", "<=", intOnly)) {
+                    new NativeMethod(new RawMethodDesc("core", "Int", "<=", 0, intOnly)) {
                         public void invoke(TObject[] stack, int bp) {
                             int n = ((NatInt) stack[bp + 1]).value;
                             int m = ((NatInt) stack[bp + 2]).value;
                             stack[bp + 1] = new NatBool(n <= m);
                         }
                     },
-                    new NativeMethod(new RawMethodDesc("core", "Int", ">=", intOnly)) {
+                    new NativeMethod(new RawMethodDesc("core", "Int", ">=", 0, intOnly)) {
                         public void invoke(TObject[] stack, int bp) {
                             int n = ((NatInt) stack[bp + 1]).value;
                             int m = ((NatInt) stack[bp + 2]).value;
                             stack[bp + 1] = new NatBool(n >= m);
                         }
                     },
-                    new NativeMethod(new RawMethodDesc("core", "Int", "<", intOnly)) {
+                    new NativeMethod(new RawMethodDesc("core", "Int", "<", 0, intOnly)) {
                         public void invoke(TObject[] stack, int bp) {
                             int n = ((NatInt) stack[bp + 1]).value;
                             int m = ((NatInt) stack[bp + 2]).value;
                             stack[bp + 1] = new NatBool(n < m);
                         }
                     },
-                    new NativeMethod(new RawMethodDesc("core", "Int", ">", intOnly)) {
+                    new NativeMethod(new RawMethodDesc("core", "Int", ">", 0, intOnly)) {
                         public void invoke(TObject[] stack, int bp) {
                             int n = ((NatInt) stack[bp + 1]).value;
                             int m = ((NatInt) stack[bp + 2]).value;
@@ -147,7 +147,7 @@ public class NatInt extends TObject {
                         }
                     },
                     // Object methods
-                    new NativeMethod(new RawMethodDesc("core", "Int", "==", objOnly)) {
+                    new NativeMethod(new RawMethodDesc("core", "Int", "==", 0, objOnly)) {
                         public void invoke(TObject[] stack, int bp) {
                             int n = ((NatInt) stack[bp + 1]).value;
                             try {
@@ -158,13 +158,13 @@ public class NatInt extends TObject {
                             }
                         }
                     },
-                    new NativeMethod(new RawMethodDesc("core", "Int", "hashCode", FullTypeDesc.none)) {
+                    new NativeMethod(new RawMethodDesc("core", "Int", "hashCode", 0, FullTypeDesc.none)) {
                         public void invoke(TObject[] stack, int bp) {
                             int n = ((NatInt) stack[bp + 1]).value;
                             stack[bp + 1] = new NatInt(n);
                         }
                     },
-                    new NativeMethod(new RawMethodDesc("core", "Int", "toString", FullTypeDesc.none)) {
+                    new NativeMethod(new RawMethodDesc("core", "Int", "toString", 0, FullTypeDesc.none)) {
                         public void invoke(TObject[] stack, int bp) {
                             int n = ((NatInt) stack[bp + 1]).value;
                             String s = Integer.toString(n);
@@ -173,12 +173,12 @@ public class NatInt extends TObject {
                     },
                 },
                 new HashMap<RawMethodDesc, RawMethodDesc>() {{
-                    put(new RawMethodDesc("core", "Object", "==", objOnly),
-                        new RawMethodDesc("core", "Int", "==", objOnly));
-                    put(new RawMethodDesc("core", "Object", "hashCode", FullTypeDesc.none),
-                        new RawMethodDesc("core", "Int", "hashCode", FullTypeDesc.none));
-                    put(new RawMethodDesc("core", "Object", "toString", FullTypeDesc.none),
-                        new RawMethodDesc("core", "Int", "toString", FullTypeDesc.none));
+                    put(new RawMethodDesc("core", "Object", "==", 0, objOnly),
+                        new RawMethodDesc("core", "Int", "==", 0, objOnly));
+                    put(new RawMethodDesc("core", "Object", "hashCode", 0, FullTypeDesc.none),
+                        new RawMethodDesc("core", "Int", "hashCode", 0, FullTypeDesc.none));
+                    put(new RawMethodDesc("core", "Object", "toString", 0, FullTypeDesc.none),
+                        new RawMethodDesc("core", "Int", "toString", 0, FullTypeDesc.none));
                 }});
         }
 

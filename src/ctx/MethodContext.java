@@ -14,7 +14,7 @@ public class MethodContext extends Resolver {
     public MethodContext(TypeContext typeCtx, MethodDef method) {
         this.typeCtx = typeCtx;
         this.method = method;
-        desc = new RawMethodDesc(typeCtx.desc(), method.self.name, null);
+        desc = new RawMethodDesc(typeCtx.desc(), method.self.name, 0, null);
         fixDesc();
     }
 

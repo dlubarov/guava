@@ -34,7 +34,7 @@ public class NatObject extends TObject {
         NatObjectType() {
             super(desc,
                 new Method[] {
-                    new NativeMethod(new RawMethodDesc("core", "Int", "==", objOnly)) {
+                    new NativeMethod(new RawMethodDesc("core", "Int", "==", 0, objOnly)) {
                         public void invoke(TObject[] stack, int bp) {
                             int n = ((NatObject) stack[bp + 1]).value;
                             try {
@@ -45,13 +45,13 @@ public class NatObject extends TObject {
                             }
                         }
                     },
-                    new NativeMethod(new RawMethodDesc("core", "Int", "hashCode", FullTypeDesc.none)) {
+                    new NativeMethod(new RawMethodDesc("core", "Int", "hashCode", 0, FullTypeDesc.none)) {
                         public void invoke(TObject[] stack, int bp) {
                             int n = ((NatObject) stack[bp + 1]).value;
                             stack[bp + 1] = new NatObject(n);
                         }
                     },
-                    new NativeMethod(new RawMethodDesc("core", "Int", "toString", FullTypeDesc.none)) {
+                    new NativeMethod(new RawMethodDesc("core", "Int", "toString", 0, FullTypeDesc.none)) {
                         public void invoke(TObject[] stack, int bp) {
                             int n = ((NatObject) stack[bp + 1]).value;
                             String s = Integer.toString(n);
