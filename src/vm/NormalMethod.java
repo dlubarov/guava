@@ -11,8 +11,8 @@ public class NormalMethod extends Method {
     private final int numLocals;
     private final int[] code;
 
-    public NormalMethod(RawMethodDesc desc, int numLocals, int[] code) {
-        super(desc);
+    public NormalMethod(RawMethodDesc desc, RawMethodDesc[] methodDescTable, int numLocals, int[] code) {
+        super(desc, methodDescTable);
         this.numLocals = numLocals;
         this.code = code;
     }

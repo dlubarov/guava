@@ -2,6 +2,10 @@ package vm;
 
 import common.RawMethodDesc;
 import common.RawTypeDesc;
+import vm.nat.NatBool;
+import vm.nat.NatInt;
+import vm.nat.NatMutableArray;
+import vm.nat.NatObject;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -12,6 +16,13 @@ public final class God {
     
     private static final Map<RawTypeDesc, Type> loadedTypes;
     private static final Map<RawMethodDesc, Method> loadedMethods;
+
+    private static final NativeType[] nativeTypes = {
+            NatObject.TYPE,
+            NatInt.TYPE,
+            NatBool.TYPE,
+            NatMutableArray.TYPE,
+    };
 
     static {
         loadedTypes = new HashMap<RawTypeDesc, Type>();
@@ -29,14 +40,14 @@ public final class God {
     public static Type resolveType(RawTypeDesc desc) {
         Type result = loadedTypes.get(desc);
         if (result == null)
-            throw new NoSuchElementException();
+            throw new NoSuchElementException("no such type: " + desc);
         return result;
     }
 
     public static Method resolveMethod(RawMethodDesc desc) {
         Method result = loadedMethods.get(desc);
         if (result == null)
-            throw new NoSuchElementException();
+            throw new NoSuchElementException("no such method: " + desc);
         return result;
     }
 }

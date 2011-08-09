@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class NatBool extends TObject {
-    private static final NativeType TYPE;
+    public static final NativeType TYPE;
     public static final NatBool TRUE, FALSE;
 
     static {
@@ -35,7 +35,7 @@ public class NatBool extends TObject {
         private static final FullTypeDesc[] boolOnly = new FullTypeDesc[] {new NormalFullTypeDesc(desc)};
         private static final FullTypeDesc[] objOnly = new FullTypeDesc[] {new NormalFullTypeDesc(new RawTypeDesc("core", "Object"))};
 
-        public NatBoolType() {
+        NatBoolType() {
             super(desc,
                 new Method[]{
                     // Prefix methods
@@ -45,6 +45,7 @@ public class NatBool extends TObject {
                             stack[bp + 1] = new NatBool(!b);
                         }
                     },
+
                     // Infix methods
                     new NativeMethod(new RawMethodDesc("core", "Bool", "&", boolOnly)) {
                         public void invoke(TObject[] stack, int bp) {
@@ -67,6 +68,7 @@ public class NatBool extends TObject {
                             stack[bp + 1] = new NatBool(a ^ b);
                         }
                     },
+
                     // Object methods
                     new NativeMethod(new RawMethodDesc("core", "Bool", "==", objOnly)) {
                         public void invoke(TObject[] stack, int bp) {
@@ -93,6 +95,7 @@ public class NatBool extends TObject {
                         }
                     },
                 },
+
                 new HashMap<RawMethodDesc, RawMethodDesc>() {{
                     put(new RawMethodDesc("core", "Object", "==", objOnly),
                         new RawMethodDesc("core", "Bool", "==", objOnly));

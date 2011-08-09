@@ -7,7 +7,7 @@ type MutableArray[T] extends Array[T] {
 
   T get(Int idx) {}
 
-  Void set(Int idx, T val);
+  T set(Int idx, T val);
 }
 
 type ImmutableArray[+T] extends Array[T] {

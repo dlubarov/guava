@@ -606,7 +606,23 @@ public final class Parser {
     }
 
     private ParseResult<IterationStm> parseIterationStm(int p) {
-        ;
+        p = parseString(p, "for");
+        p = optWS(p);
+        parseChar(p++, '(');
+        p = optWS(p);
+        ParseResult<TypedVar> resVar = parseTypedVar(p);
+        p = resVar.rem;
+        p = optWS(p);
+        parseChar(p++, ':');
+        p = optWS(p);
+        ParseResult<Expression> resIterable = parseExpression(p);
+        p = resIterable.rem;
+        p = optWS(p);
+        parseChar(p++, ')');
+        p = optWS(p);
+        ParseResult<Statement> resBody = parseStatement(p);
+        p = resBody.rem;
+        return new ParseResult<IterationStm>(new IterationStm(resVar.val, resIterable.val, resBody.val), p);
     }
     
     private ParseResult<ReturnStm> parseReturnStm(int p) {
@@ -656,27 +672,30 @@ public final class Parser {
             return (ParseResult) parseWhileStm(p);
         } catch (ParseException e3) {
         try {
-            return (ParseResult) parseForStm(p);
+            return (ParseResult) parseIterationStm(p);
         } catch (ParseException e4) {
         try {
-            return (ParseResult) parseReturnStm(p);
+            return (ParseResult) parseForStm(p);
         } catch (ParseException e5) {
         try {
-            return (ParseResult) parseLocalDefStm(p);
+            return (ParseResult) parseReturnStm(p);
         } catch (ParseException e6) {
         try {
-            return (ParseResult) parseExpStm(p);
+            return (ParseResult) parseLocalDefStm(p);
         } catch (ParseException e7) {
         try {
-            return (ParseResult) parseBlockStm(p);
+            return (ParseResult) parseExpStm(p);
         } catch (ParseException e8) {
+        try {
+            return (ParseResult) parseBlockStm(p);
+        } catch (ParseException e9) {
         try {
             // Try the empty statement
             parseChar(p++, ';');
             return new ParseResult<Statement>(EmptyStm.INST, p);
-        } catch (ParseException e9) {
+        } catch (ParseException e10) {
             throw new ParseException("expecting statement");
-        }}}}}}}}} // :-\
+        }}}}}}}}}} // :-\
     }
 
     private ParseResult<FieldDef> parseFieldDef(int p) {

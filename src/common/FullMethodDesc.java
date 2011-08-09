@@ -8,19 +8,19 @@ public class FullMethodDesc {
     public final RawTypeDesc owner;
     public final String name;
     public final FullTypeDesc[] genericArgs;
-    public final FullTypeDesc[] params;
+    public final FullTypeDesc[] paramTypes;
 
-    public FullMethodDesc(RawTypeDesc type, String name, FullTypeDesc[] genericArgs, FullTypeDesc[] params) {
-        this.owner = type;
+    public FullMethodDesc(RawTypeDesc owner, String name, FullTypeDesc[] genericArgs, FullTypeDesc[] paramTypes) {
+        this.owner = owner;
         this.name = name;
         this.genericArgs = genericArgs;
-        this.params = params;
+        this.paramTypes = paramTypes;
     }
 
     public String toString() {
         return String.format("%s.%s%s(%s)",
                 owner, name,
                 Arrays.toString(genericArgs),
-                implode(", ", params));
+                implode(", ", paramTypes));
     }
 }

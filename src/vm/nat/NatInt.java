@@ -6,7 +6,7 @@ import vm.*;
 import java.util.HashMap;
 
 public class NatInt extends TObject {
-    private static final NativeType TYPE;
+    public static final NativeType TYPE;
 
     static {
         TYPE = new NatIntType();
@@ -25,7 +25,7 @@ public class NatInt extends TObject {
         private static final FullTypeDesc[] intOnly = new FullTypeDesc[] {new NormalFullTypeDesc(desc)};
         private static final FullTypeDesc[] objOnly = new FullTypeDesc[] {new NormalFullTypeDesc(new RawTypeDesc("core", "Object"))};
 
-        public NatIntType() {
+        NatIntType() {
             super(desc,
                 new Method[] {
                     // Prefix

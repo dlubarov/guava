@@ -12,7 +12,7 @@ import vm.TObject;
 import java.util.HashMap;
 
 public class NatObject extends TObject {
-    private static final NativeType TYPE;
+    public static final NativeType TYPE;
 
     static {
         TYPE = new NatObjectType();
@@ -31,7 +31,7 @@ public class NatObject extends TObject {
         private static final FullTypeDesc[] intOnly = new FullTypeDesc[] {new NormalFullTypeDesc(desc)};
         private static final FullTypeDesc[] objOnly = new FullTypeDesc[] {new NormalFullTypeDesc(new RawTypeDesc("core", "Object"))};
 
-        public NatObjectType() {
+        NatObjectType() {
             super(desc,
                 new Method[] {
                     new NativeMethod(new RawMethodDesc("core", "Int", "==", objOnly)) {
@@ -59,14 +59,7 @@ public class NatObject extends TObject {
                         }
                     },
                 },
-                new HashMap<RawMethodDesc, RawMethodDesc>() {{
-                    put(new RawMethodDesc("core", "Object", "==", objOnly),
-                        new RawMethodDesc("core", "Int", "==", objOnly));
-                    put(new RawMethodDesc("core", "Object", "hashCode", FullTypeDesc.none),
-                        new RawMethodDesc("core", "Int", "hashCode", FullTypeDesc.none));
-                    put(new RawMethodDesc("core", "Object", "toString", FullTypeDesc.none),
-                        new RawMethodDesc("core", "Int", "toString", FullTypeDesc.none));
-                }});
+                new HashMap<RawMethodDesc, RawMethodDesc>());
         }
 
         public TObject rawInstance() {

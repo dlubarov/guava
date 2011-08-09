@@ -16,10 +16,20 @@ public class IterationStm extends Statement {
     }
 
     public RefineResult refine(CodeContext ctx) {
-        return null;
+        // TODO: might be better to put the real logic here, and give CodeContext
+        // a "newAnonymousLocal" method to track the iterator
+        CodeContext newCtx = ctx.addLocal(var.name);
+        return new RefineResult(
+                new rst.stm.IterationStm(
+                        ctx.resolveFull(var.type),
+                        newCtx.localIndex(var.name),
+                        iterable.refine(ctx),
+                        body.refine(newCtx).stm),
+                ctx);
     }
 
     public String toString() {
-        return String.format("for (%s : %s)\n%s", var, iterable, body);
+        return String.format("for (%s : %s)\n%s",
+                var, iterable, body);
     }
 }

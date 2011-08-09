@@ -12,7 +12,7 @@ public abstract class Type {
     protected final Method[] ownedMethods;
     protected final Map<RawMethodDesc, RawMethodDesc> vtableDescs;
     public Map<Method, Method> vtable;
-    private boolean linked = false;
+//    private boolean linked = false;
 
     public Type(RawTypeDesc desc, RawTypeDesc[] superDescs, Method[] ownedMethods, Map<RawMethodDesc, RawMethodDesc> vtableDescs) {
         this.desc = desc;
@@ -24,16 +24,19 @@ public abstract class Type {
     }
 
     public void link() {
-        if (linked)
-            return;
-        for (RawTypeDesc sup : superDescs)
-            God.resolveType(sup).link();
+//        if (linked)
+//            return;
+//        for (RawTypeDesc sup : superDescs)
+//            God.resolveType(sup).link();
         
         vtable = new HashMap<Method, Method>();
         for (Map.Entry<RawMethodDesc, RawMethodDesc> e : vtableDescs.entrySet())
             vtable.put(God.resolveMethod(e.getKey()), God.resolveMethod(e.getValue()));
 
-        linked = true;
+        for (Method m : ownedMethods)
+            m.link();
+        
+//        linked = true;
     }
 
     public abstract TObject rawInstance();
