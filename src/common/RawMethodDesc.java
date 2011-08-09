@@ -7,16 +7,25 @@ public class RawMethodDesc {
     private final String name;
     private final int numGenericParams;
     public FullTypeDesc[] paramTypes;
+    public final boolean isStatic;
 
-    public RawMethodDesc(RawTypeDesc owner, String name, int numGenericParams, FullTypeDesc[] paramTypes) {
+    public RawMethodDesc(RawTypeDesc owner, String name,
+                         int numGenericParams, FullTypeDesc[] paramTypes,
+                         boolean isStatic) {
         this.owner = owner;
         this.name = name;
         this.numGenericParams = numGenericParams;
         this.paramTypes = paramTypes;
+        this.isStatic = isStatic;
+    }
+
+    public RawMethodDesc(RawTypeDesc owner, String name,
+                         int numGenericParams, FullTypeDesc[] paramTypes) {
+        this(owner, name, numGenericParams, paramTypes, false);
     }
 
     public RawMethodDesc(String module, String owner, String name, int numGenericParams, FullTypeDesc[] paramTypes) {
-        this(new RawTypeDesc(module, owner), name, numGenericParams, paramTypes);
+        this(new RawTypeDesc(module, owner), name, numGenericParams, paramTypes, false);
     }
 
     @Override

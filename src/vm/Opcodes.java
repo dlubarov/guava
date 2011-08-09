@@ -6,20 +6,22 @@ public final class Opcodes {
     public static final int
             POP = 0,
             DUP = 1,
-            CONST_TRUE = 2,
-            CONST_FALSE = 3,
-            CONST_INT = 4,
-            GET_LOCAL = 10,
-            PUT_LOCAL = 11,
-            GET_FIELD = 12,
-            PUT_FIELD = 13,
-            INVOKE_STATIC = 14,
-            INVOKE_VIRTUAL = 15,
-            JUMP = 16,
-            JUMP_COND = 17,
-//            RETURN_VOID = 18,
-            RETURN_OBJECT = 19,
-            BOOL_NEG = 20;
+            CONST_TRUE = 10,
+            CONST_FALSE = 11,
+            CONST_INT = 12,
+            GET_LOCAL = 20,
+            PUT_LOCAL = 21,
+            GET_FIELD = 22,
+            PUT_FIELD = 23,
+            GET_STATIC_FIELD = 24,
+            PUT_STATIC_FIELD = 25,
+            INVOKE_STATIC = 30,
+            INVOKE_VIRTUAL = 31,
+            NEW = 40,
+            JUMP = 50,
+            JUMP_COND = 51,
+            BOOL_NEG = 60,
+            RETURN = 70;
 
     private static String repr(int op) {
         switch (op) {
@@ -32,13 +34,15 @@ public final class Opcodes {
             case PUT_LOCAL: return "PUT_LOCAL";
             case GET_FIELD: return "GET_FIELD";
             case PUT_FIELD: return "PUT_FIELD";
+            case GET_STATIC_FIELD: return "GET_STATIC_FIELD";
+            case PUT_STATIC_FIELD: return "PUT_STATIC_FIELD";
             case INVOKE_STATIC: return "INVOKE_STATIC";
             case INVOKE_VIRTUAL: return "INVOKE_VIRTUAL";
+            case NEW: return "NEW";
             case JUMP: return "JUMP";
             case JUMP_COND: return "JUMP_COND";
-//            case RETURN_VOID: return "RETURN_VOID";
-            case RETURN_OBJECT: return "RETURN_OBJECT";
             case BOOL_NEG: return "BOOL_NEG";
+            case RETURN: return "RETURN";
             default: return null;
         }
     }

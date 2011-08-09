@@ -1,6 +1,6 @@
 package comp;
 
-public abstract class CodeTree {
+public class CodeTree {
     private final Object[] children;
     
     public CodeTree(Object... children) {

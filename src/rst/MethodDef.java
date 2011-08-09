@@ -1,6 +1,7 @@
 package rst;
 
 import common.FullTypeDesc;
+import common.RawMethodDesc;
 import rst.stm.BlockStm;
 
 import static util.StringUtils.implode;
@@ -12,6 +13,7 @@ public class MethodDef {
     public final FullTypeDesc[] paramTypes;
     public final BlockStm body;
     public final boolean isStatic, isSealed;
+    public RawMethodDesc desc;
 
     public MethodDef(String name, FullTypeDesc retType, int numGenericParams, FullTypeDesc[] paramTypes,
                      BlockStm body, boolean isStatic, boolean isSealed) {

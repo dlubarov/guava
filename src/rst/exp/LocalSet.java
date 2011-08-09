@@ -1,7 +1,10 @@
 package rst.exp;
 
+import com.sun.org.apache.bcel.internal.generic.DUP;
 import common.FullTypeDesc;
+import comp.CodeTree;
 import rctx.CodeRCtx;
+import vm.Opcodes;
 
 public class LocalSet extends Expression {
     private final int index;
@@ -14,6 +17,10 @@ public class LocalSet extends Expression {
 
     public FullTypeDesc inferType(CodeRCtx ctx) {
         return value.inferType(ctx);
+    }
+
+    public CodeTree compile(CodeRCtx ctx) {
+        return new CodeTree(value.compile(ctx), Opcodes.DUP, Opcodes.PUT_LOCAL, index);
     }
 
     public String toString() {

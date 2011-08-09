@@ -1,9 +1,11 @@
 package rst.exp;
 
 import common.*;
+import comp.CodeTree;
 import rctx.CodeRCtx;
 import rst.MethodDef;
 import rst.TypeDef;
+import vm.Opcodes;
 
 import java.util.*;
 
@@ -73,11 +75,20 @@ public class ClassMethodInvocation extends Expression {
     public FullTypeDesc inferType(CodeRCtx ctx) {
         return getMethod(ctx).retType.withMethodGenerics(genericArgs);
     }
+
+    public CodeTree compile(CodeRCtx ctx) {
+        MethodDef method = getMethod(ctx);
+        CodeTree[] argCode = new CodeTree[args.length];
+        for (int i = 0; i < argCode.length; ++i)
+            argCode[i] = args[i].compile(ctx);
+        CodeTree allArgCode = new CodeTree((Object[]) argCode);
+        return new CodeTree(allArgCode, Opcodes.INVOKE_STATIC, ctx.getMethodIndex(method.desc));
+    }
     
     public String toString() {
         return String.format("%s.%s%s(%s)",
                 owner, methodName,
-                Arrays.toString(genericArgs),
+                genericArgs.length == 0 ? "" : Arrays.toString(genericArgs),
                 implode(", ", args));
     }
 }

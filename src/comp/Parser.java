@@ -9,6 +9,8 @@ import ctx.GlobalContext;
 import java.io.*;
 import java.util.*;
 
+import static util.StringUtils.implode;
+
 @SuppressWarnings("unchecked")
 public final class Parser {
     private final static List<String> operators;
@@ -1066,9 +1068,7 @@ public final class Parser {
             //System.out.println(src);
         }
         rst.TypeDef[] types = GlobalContext.refine(sources);
-        for (rst.TypeDef ty : types) {
-            System.out.printf("\n%s\n", ty);
-        }
+        System.out.println(implode("\n\n", types));
     }
 }
 

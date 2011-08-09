@@ -2,6 +2,7 @@ package rst.exp;
 
 import common.FullTypeDesc;
 import common.RawTypeDesc;
+import comp.CodeTree;
 import rctx.CodeRCtx;
 
 import java.util.Arrays;
@@ -32,15 +33,23 @@ public class InstanceMethodInvocationOrGet extends Expression {
         this.args = args;
     }
 
-    public FullTypeDesc inferType(CodeRCtx ctx) {
+    private InstanceMethodInvocation normalVersion(CodeRCtx ctx) {
+        return new InstanceMethodInvocation(target, memberName, genericArgs, args);
+    }
+
+    private InstanceMethodInvocation getVersion(CodeRCtx ctx) {
+        return new InstanceMethodInvocation(
+                    new InstanceFieldGet(target, memberName),
+                    "get", genericArgs, args);
+    }
+
+    private boolean isGet(CodeRCtx ctx) {
         FullTypeDesc normalMethodResult = null, getMethodResult = null;
         try {
-            normalMethodResult = new InstanceMethodInvocation(target, memberName, genericArgs, args).inferType(ctx);
+            normalMethodResult = normalVersion(ctx).inferType(ctx);
         } catch (RuntimeException e) {}
         try {
-            getMethodResult = new InstanceMethodInvocation(
-                    new InstanceFieldGet(target, memberName),
-                    "get", genericArgs, args).inferType(ctx);
+            getMethodResult = getVersion(ctx).inferType(ctx);
         } catch (RuntimeException e) {}
 
         if (normalMethodResult == null && getMethodResult == null)
@@ -48,9 +57,19 @@ public class InstanceMethodInvocationOrGet extends Expression {
         if (normalMethodResult != null && getMethodResult != null)
             throw new RuntimeException(String.format("%s is ambiguous because field and method share a name", this));
 
-        if (normalMethodResult == null)
-            return getMethodResult;
-        return normalMethodResult;
+        return normalMethodResult == null;
+    }
+
+    public FullTypeDesc inferType(CodeRCtx ctx) {
+        if (isGet(ctx))
+            return getVersion(ctx).inferType(ctx);
+        return normalVersion(ctx).inferType(ctx);
+    }
+
+    public CodeTree compile(CodeRCtx ctx) {
+        if (isGet(ctx))
+            return getVersion(ctx).compile(ctx);
+        return normalVersion(ctx).compile(ctx);
     }
     
     public String toString() {

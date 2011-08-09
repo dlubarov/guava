@@ -1,7 +1,11 @@
 package rst.exp;
 
 import common.FullTypeDesc;
+import common.NormalFullTypeDesc;
+import comp.CodeTree;
 import rctx.CodeRCtx;
+import rst.TypeDef;
+import vm.Opcodes;
 
 public class InstanceFieldSet extends Expression {
     private final Expression target;
@@ -15,10 +19,22 @@ public class InstanceFieldSet extends Expression {
     }
 
     public FullTypeDesc inferType(CodeRCtx ctx) {
-        // Other languages derive the type of an assignment from the destination, but using the source allows code like
-        // Number n; Integer x, y; x = n = y;
-        // I don't see any problems with this...
-        return value.inferType(ctx);
+        return new InstanceFieldGet(target, fieldName).inferType(ctx);
+    }
+
+    public CodeTree compile(CodeRCtx ctx) {
+        // FIXME: doesn't work with fields owned by supertypes
+        FullTypeDesc targetTypeDesc = target.inferType(ctx);
+        // TODO: this assumes generic types have no fields, which will be no longer valid when bounds are added
+        NormalFullTypeDesc normTypeDesc = (NormalFullTypeDesc) targetTypeDesc;
+        TypeDef targetType = ctx.resolve(normTypeDesc.raw);
+
+        int idx = targetType.getFieldIndex(fieldName);
+        return new CodeTree(
+                target.compile(ctx), Opcodes.DUP,
+                value.compile(ctx),
+                Opcodes.PUT_FIELD, idx,
+                Opcodes.GET_FIELD, idx);
     }
 
     public String toString() {

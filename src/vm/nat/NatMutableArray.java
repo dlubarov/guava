@@ -4,20 +4,19 @@ import common.*;
 import vm.Method;
 import vm.NativeMethod;
 import vm.NativeType;
-import vm.TObject;
+import vm.ZObject;
 
-import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.HashMap;
 
-public class NatMutableArray extends TObject {
+public class NatMutableArray extends ZObject {
     public static final NativeType TYPE;
 
     static {
         TYPE = new NatMutableArrayType();
     }
 
-    private final TObject[] elems;
+    private final ZObject[] elems;
 
     public NatMutableArray() {
         super(TYPE);
@@ -30,14 +29,14 @@ public class NatMutableArray extends TObject {
         private static final FullTypeDesc[] objOnly = new FullTypeDesc[] {new NormalFullTypeDesc(new RawTypeDesc("core", "Object"))};
         
         NatMutableArrayType() {
-            super(desc,
+            super(desc, new RawTypeDesc[] {new RawTypeDesc("core", "Array")},
                 new Method[] {
                     // Get, set
                     new NativeMethod(new RawMethodDesc(
                             "core", "MutableArray", "get", 0,
                             new FullTypeDesc[] {new NormalFullTypeDesc(new RawTypeDesc("core", "Int"))})) {
-                        public void invoke(TObject[] stack, int bp) {
-                            TObject[] arr = ((NatMutableArray) stack[bp + 1]).elems;
+                        public void invoke(ZObject[] stack, int bp) {
+                            ZObject[] arr = ((NatMutableArray) stack[bp + 1]).elems;
                             int i = ((NatInt) stack[bp + 2]).value;
                             stack[bp + 1] = arr[i];
                         }
@@ -46,20 +45,20 @@ public class NatMutableArray extends TObject {
                             "core", "MutableArray", "set", 0,
                             new FullTypeDesc[] {new NormalFullTypeDesc(new RawTypeDesc("core", "Int")),
                                                 new TypeGenericFullTypeDesc(new RawTypeDesc("core", "MutableArray"), 0)})) {
-                        public void invoke(TObject[] stack, int bp) {
-                            TObject[] arr = ((NatMutableArray) stack[bp + 1]).elems;
+                        public void invoke(ZObject[] stack, int bp) {
+                            ZObject[] arr = ((NatMutableArray) stack[bp + 1]).elems;
                             int i = ((NatInt) stack[bp + 2]).value;
-                            TObject val = stack[bp + 3];
+                            ZObject val = stack[bp + 3];
                             stack[bp + 1] = arr[i] = val;
                         }
                     },
 
                     // Object methods
                     new NativeMethod(new RawMethodDesc("core", "MutableArray", "==", 0, objOnly)) {
-                        public void invoke(TObject[] stack, int bp) {
-                            TObject[] a = ((NatMutableArray) stack[bp + 1]).elems;
+                        public void invoke(ZObject[] stack, int bp) {
+                            ZObject[] a = ((NatMutableArray) stack[bp + 1]).elems;
                             try {
-                                TObject[] b = ((NatMutableArray) stack[bp + 2]).elems;
+                                ZObject[] b = ((NatMutableArray) stack[bp + 2]).elems;
                                 // FIXME: do sequence comparison for ==
                                 stack[bp + 1] = new NatBool(a == b);
                             } catch (ClassCastException e) {
@@ -69,8 +68,8 @@ public class NatMutableArray extends TObject {
                     },
                     new NativeMethod(new RawMethodDesc("core", "MutableArray", "hashCode", 0, FullTypeDesc.none),
                             new RawMethodDesc("core", "Object", "hashCode", 0, FullTypeDesc.none)) {
-                        public void invoke(TObject[] stack, int bp) {
-                            TObject[] arr = ((NatMutableArray) stack[bp + 1]).elems;
+                        public void invoke(ZObject[] stack, int bp) {
+                            ZObject[] arr = ((NatMutableArray) stack[bp + 1]).elems;
                             int[] codes = new int[arr.length];
                             for (int i = 0; i < codes.length; ++i) {
                                 methodTable[i].invoke(stack, bp);
@@ -81,8 +80,8 @@ public class NatMutableArray extends TObject {
                     },
                     new NativeMethod(new RawMethodDesc("core", "MutableArray", "toString", 0, FullTypeDesc.none),
                             new RawMethodDesc("core", "Object", "toString", 0, FullTypeDesc.none)) {
-                        public void invoke(TObject[] stack, int bp) {
-                            TObject[] arr = ((NatMutableArray) stack[bp + 1]).elems;
+                        public void invoke(ZObject[] stack, int bp) {
+                            ZObject[] arr = ((NatMutableArray) stack[bp + 1]).elems;
                             String s = "an array"; // TODO: proper toString
                             stack[bp + 1] = null; // FIXME: create String
                         }
@@ -96,10 +95,12 @@ public class NatMutableArray extends TObject {
                         new RawMethodDesc("core", "MutableArray", "hashCode", 0, FullTypeDesc.none));
                     put(new RawMethodDesc("core", "Object", "toString", 0, FullTypeDesc.none),
                         new RawMethodDesc("core", "MutableArray", "toString", 0, FullTypeDesc.none));
-                }});
+                }},
+                
+                0);
         }
         
-        public TObject rawInstance() {
+        public ZObject rawInstance() {
             return new NatMutableArray();
         }
     }

@@ -2,9 +2,11 @@ package rst.exp;
 
 import common.FullTypeDesc;
 import common.NormalFullTypeDesc;
+import comp.CodeTree;
 import rctx.CodeRCtx;
 import rst.FieldDef;
 import rst.TypeDef;
+import vm.Opcodes;
 
 public class InstanceFieldGet extends Expression {
     private final Expression target;
@@ -21,9 +23,20 @@ public class InstanceFieldGet extends Expression {
         // TODO: this assumes generic types have no fields, which will be no longer valid when bounds are added
         NormalFullTypeDesc normTypeDesc = (NormalFullTypeDesc) targetTypeDesc;
         TypeDef targetType = ctx.resolve(normTypeDesc.raw);
+        
         FieldDef field = targetType.getField(fieldName);
-        FullTypeDesc fieldType = field.type;
-        return fieldType.withTypeGenerics(normTypeDesc.genericArgs);
+        return field.type.withTypeGenerics(normTypeDesc.genericArgs);
+    }
+
+    public CodeTree compile(CodeRCtx ctx) {
+        // FIXME: doesn't work with fields owned by supertypes
+        FullTypeDesc targetTypeDesc = target.inferType(ctx);
+        // TODO: this assumes generic types have no fields, which will be no longer valid when bounds are added
+        NormalFullTypeDesc normTypeDesc = (NormalFullTypeDesc) targetTypeDesc;
+        TypeDef targetType = ctx.resolve(normTypeDesc.raw);
+
+        return new CodeTree(target.compile(ctx), Opcodes.GET_FIELD,
+                targetType.getFieldIndex(fieldName));
     }
 
     @Override

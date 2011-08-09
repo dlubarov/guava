@@ -1,7 +1,9 @@
 package rst.exp;
 
 import common.FullTypeDesc;
+import comp.CodeTree;
 import rctx.CodeRCtx;
+import vm.Opcodes;
 
 public class LocalGet extends Expression {
     private final int index;
@@ -11,7 +13,11 @@ public class LocalGet extends Expression {
     }
 
     public FullTypeDesc inferType(CodeRCtx ctx) {
-        return ctx.localType(index);
+        return ctx.getLocalType(index);
+    }
+
+    public CodeTree compile(CodeRCtx ctx) {
+        return new CodeTree(Opcodes.GET_LOCAL, index);
     }
 
     @Override

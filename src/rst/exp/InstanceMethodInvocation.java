@@ -2,9 +2,12 @@ package rst.exp;
 
 import common.FullTypeDesc;
 import common.NormalFullTypeDesc;
+import common.RawMethodDesc;
+import comp.CodeTree;
 import rctx.CodeRCtx;
 import rst.MethodDef;
 import rst.TypeDef;
+import vm.Opcodes;
 
 import java.util.Arrays;
 
@@ -43,6 +46,16 @@ public class InstanceMethodInvocation extends Expression {
             result = result.withTypeGenerics(((NormalFullTypeDesc) target.inferType(ctx)).genericArgs);
         result = result.withMethodGenerics(genericArgs);
         return result;
+    }
+
+    public CodeTree compile(CodeRCtx ctx) {
+        MethodDef method = getMethod(ctx);
+        assert !method.isStatic;
+        CodeTree[] argCode = new CodeTree[args.length];
+        for (int i = 0; i < argCode.length; ++i)
+            argCode[i] = args[i].compile(ctx);
+        CodeTree allArgCode = new CodeTree((Object[]) argCode);
+        return new CodeTree(allArgCode, Opcodes.INVOKE_VIRTUAL, ctx.getMethodIndex(method.desc));
     }
 
     public String toString() {

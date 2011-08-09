@@ -9,12 +9,13 @@ public class NormalType extends Type {
     public final int numFields;
 
     public NormalType(RawTypeDesc desc, RawTypeDesc[] superDescs, Method[] ownedMethods,
-                      Map<RawMethodDesc, RawMethodDesc> vtableDescs, int numFields) {
-        super(desc, superDescs, ownedMethods, vtableDescs);
+                      Map<RawMethodDesc, RawMethodDesc> vtableDescs,
+                      int numFields, int numStaticFields) {
+        super(desc, superDescs, ownedMethods, vtableDescs, numStaticFields);
         this.numFields = numFields;
     }
 
-    public TObject rawInstance() {
+    public ZObject rawInstance() {
         return new NormalObject(this);
     }
 }

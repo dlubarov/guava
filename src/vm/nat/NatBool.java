@@ -7,12 +7,11 @@ import common.RawTypeDesc;
 import vm.Method;
 import vm.NativeMethod;
 import vm.NativeType;
-import vm.TObject;
+import vm.ZObject;
 
 import java.util.HashMap;
-import java.util.Map;
 
-public class NatBool extends TObject {
+public class NatBool extends ZObject {
     public static final NativeType TYPE;
     public static final NatBool TRUE, FALSE;
 
@@ -40,7 +39,7 @@ public class NatBool extends TObject {
                 new Method[]{
                     // Prefix methods
                     new NativeMethod(new RawMethodDesc("core", "Bool", "!", 0, FullTypeDesc.none)) {
-                        public void invoke(TObject[] stack, int bp) {
+                        public void invoke(ZObject[] stack, int bp) {
                             boolean b = ((NatBool) stack[bp + 1]).value;
                             stack[bp + 1] = new NatBool(!b);
                         }
@@ -48,21 +47,21 @@ public class NatBool extends TObject {
 
                     // Infix methods
                     new NativeMethod(new RawMethodDesc("core", "Bool", "&", 0, boolOnly)) {
-                        public void invoke(TObject[] stack, int bp) {
+                        public void invoke(ZObject[] stack, int bp) {
                             boolean a = ((NatBool) stack[bp + 1]).value;
                             boolean b = ((NatBool) stack[bp + 2]).value;
                             stack[bp + 1] = new NatBool(a & b);
                         }
                     },
                     new NativeMethod(new RawMethodDesc("core", "Bool", "|", 0, boolOnly)) {
-                        public void invoke(TObject[] stack, int bp) {
+                        public void invoke(ZObject[] stack, int bp) {
                             boolean a = ((NatBool) stack[bp + 1]).value;
                             boolean b = ((NatBool) stack[bp + 2]).value;
                             stack[bp + 1] = new NatBool(a | b);
                         }
                     },
                     new NativeMethod(new RawMethodDesc("core", "Bool", "^", 0, boolOnly)) {
-                        public void invoke(TObject[] stack, int bp) {
+                        public void invoke(ZObject[] stack, int bp) {
                             boolean a = ((NatBool) stack[bp + 1]).value;
                             boolean b = ((NatBool) stack[bp + 2]).value;
                             stack[bp + 1] = new NatBool(a ^ b);
@@ -71,7 +70,7 @@ public class NatBool extends TObject {
 
                     // Object methods
                     new NativeMethod(new RawMethodDesc("core", "Bool", "==", 0, objOnly)) {
-                        public void invoke(TObject[] stack, int bp) {
+                        public void invoke(ZObject[] stack, int bp) {
                             boolean a = ((NatBool) stack[bp + 1]).value;
                             try {
                                 boolean b = ((NatBool) stack[bp + 2]).value;
@@ -82,13 +81,13 @@ public class NatBool extends TObject {
                         }
                     },
                     new NativeMethod(new RawMethodDesc("core", "Bool", "hashCode", 0, FullTypeDesc.none)) {
-                        public void invoke(TObject[] stack, int bp) {
+                        public void invoke(ZObject[] stack, int bp) {
                             boolean b = ((NatBool) stack[bp + 1]).value;
                             stack[bp + 1] = new NatBool(b);
                         }
                     },
                     new NativeMethod(new RawMethodDesc("core", "Bool", "toString", 0, FullTypeDesc.none)) {
-                        public void invoke(TObject[] stack, int bp) {
+                        public void invoke(ZObject[] stack, int bp) {
                             boolean b = ((NatBool) stack[bp + 1]).value;
                             String s = Boolean.toString(b);
                             stack[bp + 1] = null; // FIXME: create String
@@ -103,10 +102,11 @@ public class NatBool extends TObject {
                         new RawMethodDesc("core", "Bool", "hashCode", 0, FullTypeDesc.none));
                     put(new RawMethodDesc("core", "Object", "toString", 0, FullTypeDesc.none),
                         new RawMethodDesc("core", "Bool", "toString", 0, FullTypeDesc.none));
-                }});
+                }},
+                0);
         }
         
-        public TObject rawInstance() {
+        public ZObject rawInstance() {
             return new NatBool(false);
         }
     }

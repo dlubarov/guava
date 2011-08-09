@@ -29,6 +29,8 @@ public class TypeDef {
         this.staticFields = staticFields;
         this.instanceFields = instanceFields;
         this.methods = methods;
+        for (MethodDef m : methods)
+            m.desc = new RawMethodDesc(desc, m.name, m.numGenericParams, m.paramTypes, m.isStatic);
         this.isAbstract = isAbstract;
         this.isSealed = isSealed;
     }
@@ -40,10 +42,24 @@ public class TypeDef {
         throw new NoSuchElementException(String.format("%s has no field named \"%s\"", desc, name));
     }
 
+    public int getFieldIndex(String name) {
+        for (int i = 0; i < instanceFields.length; ++i)
+            if (instanceFields[i].name.equals(name))
+                return i;
+        throw new NoSuchElementException(String.format("%s has no field named \"%s\"", desc, name));
+    }
+
     public FieldDef getStaticField(String name) {
         for (FieldDef f : staticFields)
             if (f.name.equals(name))
                 return f;
+        throw new NoSuchElementException(String.format("%s has no static field named \"%s\"", desc, name));
+    }
+
+    public int getStaticFieldIndex(String name) {
+        for (int i = 0; i < staticFields.length; ++i)
+            if (staticFields[i].name.equals(name))
+                return i;
         throw new NoSuchElementException(String.format("%s has no static field named \"%s\"", desc, name));
     }
 
