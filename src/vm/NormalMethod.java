@@ -97,6 +97,7 @@ public class NormalMethod extends Method {
                     if (!meth.desc.isStatic)
                         j += 1;
                     meth.invoke(stack, sp - j);
+                    sp -= j - 1;
                     break;
 
                 case INVOKE_VIRTUAL:
@@ -109,6 +110,7 @@ public class NormalMethod extends Method {
                     meth = ty.vtable.get(meth);
                     assert meth != null : "method not found in vtable of " + ty;
                     meth.invoke(stack, sp - j - 1);
+                    sp -= j;
                     break;
 
                 case NEW:
