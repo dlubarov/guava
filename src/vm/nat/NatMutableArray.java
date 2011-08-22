@@ -23,6 +23,7 @@ public class NatMutableArray extends ZObject {
         elems = null;
     }
 
+    @SuppressWarnings("serial")
     private static class NatMutableArrayType extends NativeType {
         private static final RawTypeDesc desc = new RawTypeDesc("core", "MutableArray");
         

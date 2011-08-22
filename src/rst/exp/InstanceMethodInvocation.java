@@ -2,7 +2,6 @@ package rst.exp;
 
 import common.FullTypeDesc;
 import common.NormalFullTypeDesc;
-import common.RawMethodDesc;
 import comp.CodeTree;
 import rctx.CodeRCtx;
 import rst.MethodDef;

@@ -23,7 +23,7 @@ public final class Opcodes {
             BOOL_NEG = 60,
             RETURN = 70;
 
-    private static String repr(int op) {
+    public static String repr(int op) {
         switch (op) {
             case POP: return "POP";
             case DUP: return "DUP";

@@ -19,6 +19,7 @@ public class NatInt extends ZObject {
         this.value = value;
     }
 
+    @SuppressWarnings("serial")
     private static class NatIntType extends NativeType {
         private static final RawTypeDesc desc = new RawTypeDesc("core", "Int");
 

@@ -1,6 +1,5 @@
 package rst.exp;
 
-import ast.TypeDef;
 import common.FullTypeDesc;
 import common.RawTypeDesc;
 import comp.CodeTree;

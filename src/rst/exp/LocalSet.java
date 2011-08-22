@@ -1,6 +1,5 @@
 package rst.exp;
 
-import com.sun.org.apache.bcel.internal.generic.DUP;
 import common.FullTypeDesc;
 import comp.CodeTree;
 import rctx.CodeRCtx;

@@ -1,6 +1,10 @@
 package rst.stm;
 
+import comp.CodeTree;
+
+import rctx.CodeRCtx;
 import rst.exp.Expression;
+import vm.Opcodes;
 
 import static util.StringUtils.indent;
 
@@ -13,7 +17,18 @@ public class IfElseStm extends Statement {
         this.bodyTrue = bodyTrue;
         this.bodyFalse = bodyFalse;
     }
-    
+
+    public CompilationResult compile(CodeRCtx ctx) {
+        CodeTree condCode = cond.compile(ctx);
+        CodeTree trueCode = bodyTrue.compile(ctx).code;
+        CodeTree falseCode = bodyFalse.compile(ctx).code;
+        return new CompilationResult(
+                new CodeTree(condCode,
+                        Opcodes.JUMP_COND, trueCode.size(),
+                        trueCode, falseCode),
+                ctx);
+    }
+
     public String toString() {
         StringBuilder sb = new StringBuilder("if (");
         sb.append(cond).append(')');

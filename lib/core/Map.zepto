@@ -1,6 +1,6 @@
 module core;
 
-type Map[-K, +V] extends Collection[Pair[K, V]] {
+type Map[-K, +V] extends Collection[Tuple2[K, V]] {
   V get(K key);
 }
 

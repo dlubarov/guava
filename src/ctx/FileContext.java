@@ -16,8 +16,11 @@ public class FileContext extends Resolver {
         localModule = file.module;
         wildcardImports = new HashSet<String>();
         specificImports = new HashMap<String, Set<String>>();
+        
+        // Automatic imports
         wildcardImports.add("core");
-        wildcardImports.add(file.module);
+        if (!file.module.equals("core"))
+            wildcardImports.add(file.module);
 
         Set<String> allModules = globalCtx.getLoadedModules();
         assert allModules.contains("core");

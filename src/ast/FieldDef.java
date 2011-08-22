@@ -1,17 +1,15 @@
 package ast;
 
-import ast.exp.Expression;
 import ctx.TypeContext;
+import static util.StringUtils.implode;
 
 public class FieldDef extends MemberDef {
     private final String[] quals;
     public final TypedVar self;
-    public final Expression initVal;
 
-    public FieldDef(String[] quals, TypedVar self, Expression initVal) {
+    public FieldDef(String[] quals, TypedVar self) {
         this.quals = quals;
         this.self = self;
-        this.initVal = initVal;
     }
 
     private boolean hasQualifier(String qual) {
@@ -30,15 +28,11 @@ public class FieldDef extends MemberDef {
     }
 
     public rst.FieldDef refine(TypeContext ctx) {
-        // FIXME: initial field value
-        return new rst.FieldDef(ctx.resolveFull(self.type), self.name, null,
+        return new rst.FieldDef(ctx.resolveFull(self.type), self.name,
                 isStatic(), isReadOnly());
     }
 
     public String toString() {
-        // TODO: print qualifiers
-        if (initVal == null)
-            return self.toString() + ';';
-        return String.format("%s = %s;", self, initVal);
+        return String.format("%s %s;", implode(" ", quals), self);
     }
 }

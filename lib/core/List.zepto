@@ -20,7 +20,7 @@ type NonEmptyList[+T] extends List[T] {
   }
 
   List[T] last(Int n) {
-    if (size() >= n)
+    if (this.size >= n)
       return this;
     else
       return this.tail.last(n);
@@ -45,11 +45,11 @@ type ListIterator[+T] extends Iterator[T] {
   }
 
   Maybe[T] next() {
-    if (current.isEmpty())
+    if (this.current.isEmpty())
       return new None[T]();
     else {
-      T elem = new Some(current.first());
-      current = current.last(current.size() - 1);
+      T elem = new Some(this.current.first());
+      this.current = this.current.last(this.current.size() - 1);
       return elem;
     }
   }

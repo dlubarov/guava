@@ -15,14 +15,14 @@ type Sequence[+T] extends Collection[T] {
     if (this.isEmpty())
       return new None[T]();
     else
-      return new Some[T](this[0]);
+      return new Some[T](this(0));
   }
 
   Maybe[T] last() {
     if (this.isEmpty())
       return new None[T]();
     else
-      return new Some[T](this[size() - 1]);
+      return new Some[T](this(this.size() - 1));
   }
 
   Sequence[T] first(Int n) {

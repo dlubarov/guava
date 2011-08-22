@@ -1,7 +1,6 @@
 package rst.exp;
 
 import common.FullTypeDesc;
-import common.RawTypeDesc;
 import comp.CodeTree;
 import rctx.CodeRCtx;
 

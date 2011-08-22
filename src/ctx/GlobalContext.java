@@ -18,7 +18,8 @@ public class GlobalContext {
                 typeDefs.put(src.module, typesInMod = new HashMap<String, TypeDef>());
             for (TypeDef type : src.types)
                 if (typesInMod.put(type.name, type) != null)
-                    throw new RuntimeException(String.format("two types share the same qualified name: %s.%s",
+                    throw new RuntimeException(
+                            String.format("two types share the same qualified name: %s.%s",
                                     src.module, type.name));
         }
     }
@@ -46,9 +47,15 @@ public class GlobalContext {
     public static rst.TypeDef[] refine(SourceFile[] sources) {
         GlobalContext ctx = new GlobalContext(sources);
         List<rst.TypeDef> result = new ArrayList<rst.TypeDef>();
-        for (SourceFile src : sources)
-            for (rst.TypeDef type : src.refine(new FileContext(ctx, src)))
-                result.add(type);
+        for (SourceFile src : sources) {
+            try {
+                for (rst.TypeDef type : src.refine(new FileContext(ctx, src)))
+                    result.add(type);
+            } catch (RuntimeException e) {
+                System.err.printf("Refinement error in %s:\n", src.fname);
+                throw e;
+            }
+        }
         return result.toArray(new rst.TypeDef[result.size()]);
     }
 }

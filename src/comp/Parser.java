@@ -11,7 +11,7 @@ import java.util.*;
 
 import static util.StringUtils.implode;
 
-@SuppressWarnings("unchecked")
+@SuppressWarnings({"serial"})
 public final class Parser {
     private final static List<String> operators;
 
@@ -700,13 +700,29 @@ public final class Parser {
         }}}}}}}}}} // :-\
     }
 
-    private ParseResult<FieldDef> parseFieldDef(int p) {
+    private ParseResult<MemberDef[]> parseFieldDef(int p) {
         ParseResult<String[]> resQuals = parseFieldQualifiers(p);
         p = resQuals.rem; p = optWS(p);
-        ParseResult<LocalDefStm> res = parseLocalDefStm(p);
-        if (res.val.initVal != null)
-            throw new RuntimeException("fields must be initialized in constructors");
-        return new ParseResult<FieldDef>(new FieldDef(resQuals.val, res.val.self, res.val.initVal), res.rem);
+        ParseResult<Type> resType = parseType(p);
+        p = resType.rem; p = optWS(p);
+        
+        ParseResult<String> resFirst = parseIdentifier(p);
+        p = resFirst.rem; p = optWS(p);
+        List<FieldDef> parts = new ArrayList<FieldDef>();
+        parts.add(new FieldDef(resQuals.val, new TypedVar(resType.val, resFirst.val)));
+        
+        for (;;)
+            try {
+                parseChar(p, ',');
+                int p2 = p + 1;
+                p2 = optWS(p2);
+                ParseResult<String> resNext = parseIdentifier(p2);
+                parts.add(new FieldDef(resQuals.val, new TypedVar(resType.val, resNext.val)));
+                p = optWS(resNext.rem);
+            } catch (ParseException e) {
+                parseChar(p++, ';');
+                return new ParseResult<MemberDef[]>(parts.toArray(new MemberDef[parts.size()]), p);
+            }
     }
 
     private ParseResult<TypedVar[]> parseParamList(int p) {
@@ -797,7 +813,7 @@ public final class Parser {
             }
     }
 
-    private ParseResult<MethodDef> parseMethodDef(int p) {
+    private ParseResult<MemberDef[]> parseMethodDef(int p) {
         ParseResult<String[]> resQuals = parseMethodQualifiers(p);
         p = resQuals.rem;
         p = optWS(p);
@@ -824,14 +840,14 @@ public final class Parser {
             body = resBody.val;
         }
         MethodDef def = new MethodDef(resQuals.val, resSelf.val, resGenerics.val, resParams.val, body);
-        return new ParseResult<MethodDef>(def, p);
+        return new ParseResult<MemberDef[]>(new MemberDef[] {def}, p);
     }
 
-    private ParseResult<MemberDef> parseMemberDef(int p) {
+    private ParseResult<MemberDef[]> parseMemberDef(int p) {
         try {
-            return (ParseResult) parseFieldDef(p);
+            return parseFieldDef(p);
         } catch (ParseException e) {
-            return (ParseResult) parseMethodDef(p);
+            return parseMethodDef(p);
         }
     }
 
@@ -839,8 +855,10 @@ public final class Parser {
         List<MemberDef> parts = new ArrayList<MemberDef>();
         for (;;)
             try {
-                ParseResult<MemberDef> res = parseMemberDef(parts.isEmpty() ? p : optWS(p));
-                parts.add(res.val); p = res.rem;
+                ParseResult<MemberDef[]> res = parseMemberDef(parts.isEmpty() ? p : optWS(p));
+                for (MemberDef mem : res.val)
+                    parts.add(mem);
+                p = res.rem;
             } catch (ParseException e) {
                 return new ParseResult<MemberDef[]>(parts.toArray(new MemberDef[parts.size()]), p);
             }
@@ -1046,29 +1064,8 @@ public final class Parser {
         p = optWS(resTypeDefs.rem);
         if (p != source.length())
             // FIXME: uncomment?
-            ;//throw new ParseException("expecting EOF (did not parse whole input)");
+            throw new ParseException("expecting EOF (did not parse whole input)");
         return new SourceFile(resModule.val, resImports.val, resTypeDefs.val);
-    }
-
-    public static SourceFile parseFile(String fname) throws IOException {
-        Reader r = new FileReader(fname);
-        StringBuilder sb = new StringBuilder();
-        int c;
-        while ((c = r.read()) != -1)
-            sb.append((char) c);
-        Parser p = new Parser(sb);
-        return p.parseSourceFile();
-    }
-
-    public static void main(String[] args) throws IOException {
-        SourceFile[] sources = new SourceFile[args.length];
-        for (int i = 0; i < args.length; ++i)
-            sources[i] = parseFile(args[i]);
-        for (SourceFile src : sources) {
-            //System.out.println(src);
-        }
-        rst.TypeDef[] types = GlobalContext.refine(sources);
-        System.out.println(implode("\n\n", types));
     }
 }
 

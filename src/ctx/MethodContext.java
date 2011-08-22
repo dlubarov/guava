@@ -4,8 +4,6 @@ import ast.MethodDef;
 import ast.Type;
 import common.*;
 
-import java.util.Arrays;
-
 public class MethodContext extends Resolver {
     private final TypeContext typeCtx;
     public final MethodDef method;

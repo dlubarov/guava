@@ -1,8 +1,10 @@
 package rst.stm;
 
 import common.FullTypeDesc;
-import common.RawTypeDesc;
+import comp.CodeTree;
+import rctx.CodeRCtx;
 import rst.exp.Expression;
+import vm.Opcodes;
 
 public class LocalDefStm extends Statement {
     private final FullTypeDesc type;
@@ -13,6 +15,12 @@ public class LocalDefStm extends Statement {
         this.type = type;
         this.index = index;
         this.initVal = initVal;
+    }
+
+    public CompilationResult compile(CodeRCtx ctx) {
+        return new CompilationResult(
+                new CodeTree(initVal.compile(ctx), Opcodes.PUT_LOCAL, index),
+                ctx.addLocal(index, type));
     }
 
     public String toString() {

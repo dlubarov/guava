@@ -9,6 +9,7 @@ public class SourceFile {
     public final String module;
     public final Import[] imports;
     public final TypeDef[] types;
+    public String fname;
 
     public SourceFile(String module, Import[] imports, TypeDef[] types) {
         this.module = module;

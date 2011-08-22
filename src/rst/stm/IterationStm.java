@@ -1,6 +1,7 @@
 package rst.stm;
 
 import common.FullTypeDesc;
+import rctx.CodeRCtx;
 import rst.exp.Expression;
 
 import static util.StringUtils.indent;
@@ -16,6 +17,10 @@ public class IterationStm extends Statement {
         this.varIndex = varIndex;
         this.iterable = iterable;
         this.body = body;
+    }
+    
+    public CompilationResult compile(CodeRCtx ctx) {
+        throw new RuntimeException("FIXME: impl");
     }
     
     public String toString() {

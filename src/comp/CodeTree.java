@@ -1,19 +1,20 @@
 package comp;
 
-public class CodeTree {
+public final class CodeTree {
     private final Object[] children;
+    private int[] memCode = null;
     
     public CodeTree(Object... children) {
         this.children = children;
     }
 
-    private int size() {
+    private int computeSize() {
         int res = 0;
         for (Object o : children)
             if (o instanceof Integer)
                 ++res;
             else
-                res += ((CodeTree) o).size();
+                res += ((CodeTree) o).computeSize();
         return res;
     }
 
@@ -27,9 +28,15 @@ public class CodeTree {
     }
 
     public int[] getCode() {
-        int[] code = new int[size()];
+        if (memCode != null)
+            return memCode;
+        int[] code = new int[computeSize()];
         int insnsProduced = flatten(code, 0);
         assert insnsProduced == code.length;
-        return code;
+        return memCode = code;
+    }
+    
+    public int size() {
+        return getCode().length;
     }
 }

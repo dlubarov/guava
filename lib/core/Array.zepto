@@ -1,3 +1,5 @@
+module core;
+
 abstract type Array[+T] extends Sequence[T] {
   T get(Int idx);
 }
@@ -18,6 +20,6 @@ type ImmutableArray[+T] extends Array[T] {
   }
 
   T get(Int idx) {
-    return store[idx];
+    return this.store(idx);
   }
 }
