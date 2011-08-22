@@ -1,0 +1,32 @@
+module core;
+
+type Tuple2[+A, +B] {
+  A a;
+  B b;
+
+  A first() {
+    return this.a;
+  }
+
+  B second() {
+    return this.b;
+  }
+}
+
+type Tuple3[+A, +B, +C] {
+  A a;
+  B b;
+  C c;
+
+  A first() {
+    return this.a;
+  }
+
+  B second() {
+    return this.b;
+  }
+
+  C third() {
+    return this.c;
+  }
+}
