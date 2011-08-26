@@ -206,3 +206,11 @@ type ConstantFunction2[-T1, -T2, +R] extends Function2[T1, T2, R] {
     return this.value;
   }
 }
+
+type IdentityFunction[T] extends Function1[T, T] {
+  Void init() {}
+
+  T get(T v) {
+    return v;
+  }
+}

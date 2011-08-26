@@ -104,7 +104,7 @@ public class NormalMethod extends Method {
                     i = code[ip++]; // index into method table
                     meth = methodTable[i];
                     assert !meth.desc.isStatic;
-                    j = meth.desc.paramTypes.length; // # args
+                    j = meth.desc.paramTypes.length; // # args (TODO: optimize)
                     ZObject target = stack[sp - j];
                     ty = target.type;
                     meth = ty.vtable.get(meth);

@@ -14,8 +14,10 @@ public abstract class Type {
     public Map<Method, Method> vtable;
     public ZObject[] staticFields;
 
-    public Type(RawTypeDesc desc, RawTypeDesc[] superDescs,
-                Method[] ownedMethods, Map<RawMethodDesc, RawMethodDesc> vtableDescs,
+    public Type(RawTypeDesc desc,
+                RawTypeDesc[] superDescs,
+                Method[] ownedMethods,
+                Map<RawMethodDesc, RawMethodDesc> vtableDescs,
                 int numStaticFields) {
         this.desc = desc;
         this.superDescs = superDescs;

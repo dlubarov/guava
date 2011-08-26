@@ -1,5 +1,6 @@
 module core;
 
+# A Set is a collection which contains no duplicate elements.
 type Set[+T] extends Collection[T] {
   Set[T] &(Set[T] that) {
   }

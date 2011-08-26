@@ -6,7 +6,7 @@ import common.RawTypeDesc;
 import java.util.Map;
 
 public class NormalType extends Type {
-    public final int numFields;
+    public final int numFields; // includes inherited fields
 
     public NormalType(RawTypeDesc desc, RawTypeDesc[] superDescs, Method[] ownedMethods,
                       Map<RawMethodDesc, RawMethodDesc> vtableDescs,

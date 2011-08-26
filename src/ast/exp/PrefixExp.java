@@ -14,7 +14,7 @@ public class PrefixExp extends Expression {
 
     public rst.exp.Expression refine(CodeContext ctx) {
         // "++x" is basically sugar for x.++(), so we can delegate the work
-        return new Invocation(new MemberAccess(inner, op.name()), new Type[0], new Expression[0]).refine(ctx);
+        return new Invocation(new MemberAccess(inner, op.toString()), new Type[0], new Expression[0]).refine(ctx);
     }
     
     public String toString() {

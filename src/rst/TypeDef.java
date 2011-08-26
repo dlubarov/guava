@@ -1,11 +1,10 @@
 package rst;
 
 import common.*;
-import rctx.CodeRCtx;
+import rctx.*;
+import vm.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.NoSuchElementException;
+import java.util.*;
 
 import static util.StringUtils.*;
 
@@ -103,7 +102,26 @@ public class TypeDef {
             throw new RuntimeException(String.format("ambiguous method call: %s.%s", desc, name));
         return options.get(0);
     }
-
+    
+    public NormalType compile(GlobalRCtx ctx) {
+        RawTypeDesc[] supersRaw = new RawTypeDesc[supers.length];
+        for (int i = 0; i < supersRaw.length; ++i)
+            supersRaw[i] = supers[i].raw;
+        
+        Method[] ownedMethods = new Method[methods.length];
+        for (int i = 0; i < ownedMethods.length; ++i)
+            ownedMethods[i] = methods[i].compile(new MethodRCtx(ctx));
+        
+        // FIXME: add inherited fields
+        int numFields = instanceFields.length;
+        
+        Map<RawMethodDesc, RawMethodDesc> vtableDescs = new HashMap<RawMethodDesc, RawMethodDesc>();
+        
+        return new NormalType(desc, supersRaw,
+                ownedMethods, vtableDescs,
+                numFields, staticFields.length);
+    }
+    
     public String toString() {
         StringBuilder sb = new StringBuilder("type ").append(desc);
         if (genericParamVars.length > 0) {

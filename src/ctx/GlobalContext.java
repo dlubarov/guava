@@ -23,7 +23,7 @@ public class GlobalContext {
                                     src.module, type.name));
         }
     }
-
+    
     public Set<String> getLoadedModules() {
         return typeDefs.keySet();
     }

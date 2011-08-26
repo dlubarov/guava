@@ -9,7 +9,7 @@ import java.util.*;
 public class CodeContext extends Resolver {
     private final MethodContext methodCtx;
     private final List<String> locals;
-
+    
     public CodeContext(MethodContext methodCtx) {
         this.methodCtx = methodCtx;
         locals = new ArrayList<String>();
@@ -21,12 +21,12 @@ public class CodeContext extends Resolver {
             locals.add(param.name);
         }
     }
-
+    
     public CodeContext(CodeContext src) {
         methodCtx = src.methodCtx;
         locals = new ArrayList<String>(src.locals);
     }
-
+    
     public CodeContext addLocal(String localName) {
         if (locals.contains(localName))
             throw new RuntimeException(String.format("multiple locals named \"%s\"", localName));
@@ -34,7 +34,7 @@ public class CodeContext extends Resolver {
         copy.locals.add(localName);
         return copy;
     }
-
+    
     public RawTypeDesc resolveRaw(String typeName) {
         return methodCtx.resolveRaw(typeName);
     }
