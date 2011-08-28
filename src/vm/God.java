@@ -13,15 +13,12 @@ import java.util.NoSuchElementException;
 
 public final class God {
     private God() {}
-    
+
     private static final Map<RawTypeDesc, Type> loadedTypes;
     private static final Map<RawMethodDesc, Method> loadedMethods;
 
-    private static final NativeType[] nativeTypes = {
-            NatObject.TYPE,
-            NatInt.TYPE,
-            NatBool.TYPE,
-            NatMutableArray.TYPE,
+    private static final NativeType[] nativeTypes() {
+        return new NativeType[] {NatObject.TYPE, NatInt.TYPE, NatBool.TYPE, NatMutableArray.TYPE,};
     };
 
     static {

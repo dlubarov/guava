@@ -33,6 +33,13 @@ public class TypeDef {
         this.isAbstract = isAbstract;
         this.isSealed = isSealed;
     }
+    
+    private NormalFullTypeDesc getFullDesc() {
+        FullTypeDesc[] genericArgs = new FullTypeDesc[genericParamVars.length];
+        for (int i = 0; i < genericArgs.length; ++i)
+            genericArgs[i] = new TypeGenericFullTypeDesc(desc, i);
+        return new NormalFullTypeDesc(desc, genericArgs);
+    }
 
     public FieldDef getField(String name) {
         for (FieldDef f : instanceFields)
@@ -77,6 +84,8 @@ public class TypeDef {
         for (MethodDef method : methods) {
             if (method.isStatic)
                 continue;
+            if (!method.name.equals(name))
+                continue;
             if (method.numGenericParams != methGenericArgs.length)
                 continue;
             if (method.paramTypes.length != argTypes.length)
@@ -110,9 +119,13 @@ public class TypeDef {
         
         Method[] ownedMethods = new Method[methods.length];
         for (int i = 0; i < ownedMethods.length; ++i)
-            ownedMethods[i] = methods[i].compile(new MethodRCtx(ctx));
+            try {
+                ownedMethods[i] = methods[i].compile(new MethodRCtx(ctx, getFullDesc()));
+            } catch (Throwable e) {
+                throw new RuntimeException("Compilation error in method " + methods[i].desc, e);
+            }
         
-        // FIXME: add inherited fields
+        // TODO: add inherited fields
         int numFields = instanceFields.length;
         
         Map<RawMethodDesc, RawMethodDesc> vtableDescs = new HashMap<RawMethodDesc, RawMethodDesc>();

@@ -2,18 +2,18 @@ package rctx;
 
 import java.util.*;
 
-import common.FullTypeDesc;
-import common.RawMethodDesc;
-import common.RawTypeDesc;
+import common.*;
 import rst.TypeDef;
 
 public class CodeRCtx {
-    private final MethodRCtx methodCtx;
+    public final MethodRCtx methodCtx;
     private final Map<Integer, FullTypeDesc> localTypes;
     
-    public CodeRCtx(MethodRCtx methodCtx) {
+    public CodeRCtx(MethodRCtx methodCtx, FullTypeDesc[] initLocals) {
         this.methodCtx = methodCtx;
         localTypes = new HashMap<Integer, FullTypeDesc>();
+        for (int i = 0; i < initLocals.length; ++i)
+            addLocalMutating(i, initLocals[i]);
     }
     
     public CodeRCtx(CodeRCtx source) {
@@ -26,7 +26,7 @@ public class CodeRCtx {
     }
     
     public FullTypeDesc getLocalType(int index) {
-        assert localTypes.containsKey(index) : "local index is out of bounds";
+        assert localTypes.containsKey(index) : "local index " + index + " is out of bounds";
         return localTypes.get(index);
     }
     
@@ -40,11 +40,15 @@ public class CodeRCtx {
         return methodCtx.getMethodIndex(desc);
     }
     
-    public CodeRCtx addLocal(int index, FullTypeDesc type) {
-        CodeRCtx copy = new CodeRCtx(this);
-        if (copy.localTypes.put(index, type) != null)
+    private void addLocalMutating(int index, FullTypeDesc type) {
+        if (localTypes.put(index, type) != null)
             throw new RuntimeException(String.format("two types for local %d", index));
         methodCtx.localIsUsed(index);
+    }
+    
+    public CodeRCtx addLocal(int index, FullTypeDesc type) {
+        CodeRCtx copy = new CodeRCtx(this);
+        copy.addLocalMutating(index, type);
         return copy;
     }
 }

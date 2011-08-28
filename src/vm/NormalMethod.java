@@ -21,6 +21,8 @@ public class NormalMethod extends Method {
     }
     
     public void invoke(ZObject[] stack, int bp) {
+        assert code != null : "invoke on abstract method";
+        
         int sp = bp + numLocals;
         int ip = 0, i, j;
         

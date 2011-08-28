@@ -51,9 +51,8 @@ public class GlobalContext {
             try {
                 for (rst.TypeDef type : src.refine(new FileContext(ctx, src)))
                     result.add(type);
-            } catch (RuntimeException e) {
-                System.err.printf("Refinement error in %s:\n", src.fname);
-                throw e;
+            } catch (Throwable e) {
+                throw new RuntimeException("Refinement error in file " + src.fname, e);
             }
         }
         return result.toArray(new rst.TypeDef[result.size()]);

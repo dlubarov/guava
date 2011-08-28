@@ -1,9 +1,12 @@
 package rst.exp;
 
+import java.util.*;
+
 import common.FullTypeDesc;
 import common.NormalFullTypeDesc;
 import comp.CodeTree;
 import rctx.CodeRCtx;
+import rst.*;
 import vm.Opcodes;
 
 import static util.StringUtils.implode;
@@ -17,17 +20,56 @@ public class NewObject extends Expression {
         this.args = args;
     }
 
+    private MethodDef getMethod(CodeRCtx ctx) {
+        TypeDef ownerType = ctx.resolve(type.raw);
+        FullTypeDesc[] argTypes = new FullTypeDesc[args.length];
+        for (int i = 0; i < argTypes.length; ++i)
+            argTypes[i] = args[i].inferType(ctx);
+        List<MethodDef> options = new ArrayList<MethodDef>();
+        
+        methodsearch:
+        for (MethodDef meth : ownerType.methods) {
+            if (!meth.name.equals("init"))
+                continue;
+            if (meth.isStatic)
+                continue;
+            if (meth.numGenericParams != 0)
+                continue;
+            if (meth.paramTypes.length != args.length)
+                continue;
+            for (int i = 0; i < argTypes.length; ++i)
+                if (!argTypes[i].isSubtype(meth.paramTypes[i], ctx))
+                    continue methodsearch;
+            options.add(meth);
+        }
+
+        if (options.isEmpty())
+            throw new NoSuchElementException(String.format("no matching constructor for %s.init(%s)",
+                    type.raw, implode(", ", argTypes)));
+        if (options.size() > 1)
+            throw new NoSuchElementException(String.format("multiple matching constructors for %s.init(%s)",
+                    type.raw, implode(", ", argTypes)));
+        return options.get(0);
+    }
+    
     public FullTypeDesc inferType(CodeRCtx ctx) {
         return type;
     }
-
+    
     public CodeTree compile(CodeRCtx ctx) {
+        MethodDef method = getMethod(ctx);
+        CodeTree[] argCode = new CodeTree[args.length];
+        for (int i = 0; i < argCode.length; ++i)
+            argCode[i] = args[i].compile(ctx);
+        CodeTree allArgCode = new CodeTree((Object[]) argCode);
         return new CodeTree(
-                Opcodes.NEW, ctx.getTypeIndex(type.raw), Opcodes.DUP,
-                new ClassMethodInvocation(type.raw, "init", FullTypeDesc.none, args).compile(ctx)
+                Opcodes.NEW, ctx.getTypeIndex(type.raw),
+                Opcodes.DUP, allArgCode,
+                Opcodes.INVOKE_STATIC, ctx.getMethodIndex(method.desc),
+                Opcodes.POP // discard void result of init method
         );
     }
-
+    
     public String toString() {
         return String.format("new %s(%s)", type, implode(", ", args));
     }

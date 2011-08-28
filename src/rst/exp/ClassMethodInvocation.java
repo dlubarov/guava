@@ -60,6 +60,7 @@ public class ClassMethodInvocation extends Expression {
             for (int i = 0; i < paramTypes.length; ++i)
                 if (!argTypes[i].isSubtype(paramTypes[i], ctx))
                     continue methodsearch;
+            
             options.add(meth);
         }
 

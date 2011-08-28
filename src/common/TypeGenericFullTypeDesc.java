@@ -26,12 +26,12 @@ public class TypeGenericFullTypeDesc extends GenericFullTypeDesc {
     }
 
     public boolean isSubtype(FullTypeDesc that, CodeRCtx ctx) {
-        // FIXME: generic upper bounds
+        // TODO: generic upper bounds
         return equals(that);
     }
 
     public boolean isSupertype(FullTypeDesc that, CodeRCtx ctx) {
-        // FIXME: generic lower bounds
+        // TODO: generic lower bounds
         return equals(that);
     }
 

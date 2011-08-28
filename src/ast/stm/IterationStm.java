@@ -16,8 +16,6 @@ public class IterationStm extends Statement {
     }
 
     public RefineResult refine(CodeContext ctx) {
-        // TODO: might be better to put the real logic here, and give CodeContext
-        // a "newAnonymousLocal" method to track the iterator
         CodeContext newCtx = ctx.addLocal(var.name);
         return new RefineResult(
                 new rst.stm.IterationStm(

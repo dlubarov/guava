@@ -1,11 +1,9 @@
 package rst.exp;
 
-import common.FullTypeDesc;
-import common.NormalFullTypeDesc;
+import common.*;
 import comp.CodeTree;
 import rctx.CodeRCtx;
-import rst.FieldDef;
-import rst.TypeDef;
+import rst.*;
 import vm.Opcodes;
 
 public class InstanceFieldGet extends Expression {
@@ -18,7 +16,7 @@ public class InstanceFieldGet extends Expression {
     }
 
     public FullTypeDesc inferType(CodeRCtx ctx) {
-        // FIXME: doesn't work with fields owned by supertypes
+        // TODO: doesn't work with fields owned by supertypes
         FullTypeDesc targetTypeDesc = target.inferType(ctx);
         // TODO: this assumes generic types have no fields, which will be no longer valid when bounds are added
         NormalFullTypeDesc normTypeDesc = (NormalFullTypeDesc) targetTypeDesc;
@@ -29,7 +27,7 @@ public class InstanceFieldGet extends Expression {
     }
 
     public CodeTree compile(CodeRCtx ctx) {
-        // FIXME: doesn't work with fields owned by supertypes
+        // TODO: doesn't work with fields owned by supertypes
         FullTypeDesc targetTypeDesc = target.inferType(ctx);
         // TODO: this assumes generic types have no fields, which will be no longer valid when bounds are added
         NormalFullTypeDesc normTypeDesc = (NormalFullTypeDesc) targetTypeDesc;

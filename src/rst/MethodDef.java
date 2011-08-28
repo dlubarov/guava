@@ -27,10 +27,25 @@ public class MethodDef {
     }
     
     public NormalMethod compile(MethodRCtx ctx) {
-        CompilationResult result = body.compile(new CodeRCtx(ctx));
+        int[] code;
+        if (body == null)
+            code = null;
+        else {
+            FullTypeDesc[] initLocals;
+            if (isStatic)
+                initLocals = paramTypes;
+            else {
+                initLocals = new FullTypeDesc[paramTypes.length + 1];
+                initLocals[0] = ctx.owner;
+                System.arraycopy(paramTypes, 0, initLocals, 1, paramTypes.length);
+            }
+            CodeRCtx codeCtx = new CodeRCtx(ctx, initLocals);
+            code = body.compile(codeCtx).code.getCode();
+        }
+        
         return new NormalMethod(desc,
                 ctx.getTypeTable(), ctx.getMethodTable(),
-                ctx.numLocals(), result.code.getCode());
+                ctx.numLocals(), code);
     }
 
     public String toString() {

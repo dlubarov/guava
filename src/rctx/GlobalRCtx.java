@@ -25,7 +25,11 @@ public class GlobalRCtx {
         GlobalRCtx ctx = new GlobalRCtx(allTypes);
         Type[] result = new Type[allTypes.length];
         for (int i = 0; i < result.length; ++i)
-            result[i] = allTypes[i].compile(ctx);
+            try {
+                result[i] = allTypes[i].compile(ctx);
+            } catch (Throwable e) {
+                throw new RuntimeException("Compilation error in type " + allTypes[i].desc, e);
+            }
         return result;
     }
 }

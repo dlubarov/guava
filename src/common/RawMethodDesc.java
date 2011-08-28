@@ -1,6 +1,7 @@
 package common;
 
 import java.util.Arrays;
+import static util.StringUtils.implode;
 
 public class RawMethodDesc {
     private final RawTypeDesc owner;
@@ -58,9 +59,9 @@ public class RawMethodDesc {
     }
 
     public String toString() {
-        return String.format("%s.%s%s%s",
+        return String.format("%s.%s%s(%s)",
                 owner, name,
                 genericParamString(),
-                Arrays.toString(paramTypes));
+                implode(", ", paramTypes));
     }
 }

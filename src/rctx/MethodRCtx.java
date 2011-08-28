@@ -8,12 +8,14 @@ import common.*;
 
 public class MethodRCtx {
     private final GlobalRCtx globalCtx;
+    public final NormalFullTypeDesc owner;
     private final List<RawTypeDesc> typeTable;
     private final List<RawMethodDesc> methodTable;
     private int highestLocal = -1;
     
-    public MethodRCtx(GlobalRCtx globalCtx) {
+    public MethodRCtx(GlobalRCtx globalCtx, NormalFullTypeDesc owner) {
         this.globalCtx = globalCtx;
+        this.owner = owner;
         typeTable = new ArrayList<RawTypeDesc>();
         methodTable = new ArrayList<RawMethodDesc>();
     }

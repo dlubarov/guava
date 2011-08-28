@@ -23,7 +23,8 @@ public class InstanceFieldSet extends Expression {
     }
 
     public CodeTree compile(CodeRCtx ctx) {
-        // FIXME: doesn't work with fields owned by supertypes
+        assert ctx != null : "got a null context";
+        // TODO: doesn't work with fields owned by supertypes
         FullTypeDesc targetTypeDesc = target.inferType(ctx);
         // TODO: this assumes generic types have no fields, which will be no longer valid when bounds are added
         NormalFullTypeDesc normTypeDesc = (NormalFullTypeDesc) targetTypeDesc;

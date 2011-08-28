@@ -5,6 +5,7 @@ abstract type Array[+T] extends Sequence[T] {
 }
 
 type MutableArray[T] extends Array[T] {
+  Void init();
   Void init(Collection[T] source) {}
 
   T get(Int idx) {}
@@ -16,7 +17,7 @@ type ImmutableArray[+T] extends Array[T] {
   MutableArray[T] store;
 
   Void init(Collection[T] source) {
-    this.store = new MutableArray[T](source);
+    this.store = new MutableArray[T]();
   }
 
   T get(Int idx) {
