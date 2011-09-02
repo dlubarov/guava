@@ -839,7 +839,9 @@ public final class Parser {
             p = resBody.rem;
             body = resBody.val;
         }
-        MethodDef def = new MethodDef(resQuals.val, resSelf.val, resGenerics.val, resParams.val, body);
+        // TODO: parse generic constraints
+        MethodDef def = new MethodDef(new GenericConstraint[0], resQuals.val, resSelf.val,
+                resGenerics.val, resParams.val, body);
         return new ParseResult<MemberDef[]>(new MemberDef[] {def}, p);
     }
 
@@ -1034,7 +1036,8 @@ public final class Parser {
         p = optWS(p);
         parseChar(p++, '}');
 
-        TypeDef def = new TypeDef(resQuals.val, resName.val, resGenerics.val, supers, resMembers.val);
+        // TODO: parse generic constraints
+        TypeDef def = new TypeDef(new GenericConstraint[0], resQuals.val, resName.val, resGenerics.val, supers, resMembers.val);
         return new ParseResult<TypeDef>(def, p);
     }
 

@@ -5,16 +5,21 @@ import ctx.*;
 
 import java.util.*;
 
+import rst.GenericInfo;
+
 import static util.StringUtils.*;
 
 public class TypeDef {
+    private final GenericConstraint[] genericConstraints;
     private final String[] quals;
     public final String name;
     public final GenericParamDec[] genericParams;
     public final Type[] supers;
     public final MemberDef[] members;
     
-    public TypeDef(String[] quals, String name, GenericParamDec[] genericParams, Type[] supers, MemberDef[] members) {
+    public TypeDef(GenericConstraint[] genericConstraints, String[] quals, String name,
+            GenericParamDec[] genericParams, Type[] supers, MemberDef[] members) {
+        this.genericConstraints = genericConstraints;
         this.quals = quals;
         this.name = name;
         this.genericParams = genericParams;
@@ -32,15 +37,39 @@ public class TypeDef {
     public boolean isAbstract() {
         return hasQualifier("abstract");
     }
-
+    
     public boolean isSealed() {
         return hasQualifier("sealed");
     }
-
+    
+    private final FullTypeDesc[] upperBoundsFor(String genericID, TypeContext ctx) {
+        List<FullTypeDesc> result = new ArrayList<FullTypeDesc>();
+        for (GenericConstraint con : genericConstraints)
+            if (con.genericArg.equals(genericID) && con.rel == GenericConstraintRel.SUBTYPE)
+                result.add(ctx.resolveFull(con.that));
+        if (result.isEmpty())
+            result.add(new NormalFullTypeDesc(new RawTypeDesc("core", "Object")));
+        return result.toArray(new FullTypeDesc[result.size()]);
+    }
+    
+    private final FullTypeDesc[] lowerBoundsFor(String genericID, TypeContext ctx) {
+        List<FullTypeDesc> result = new ArrayList<FullTypeDesc>();
+        for (GenericConstraint con : genericConstraints)
+            if (con.genericArg.equals(genericID) && con.rel == GenericConstraintRel.SUPTYPE)
+                result.add(ctx.resolveFull(con.that));
+        if (result.isEmpty())
+            result.add(new NormalFullTypeDesc(new RawTypeDesc("core", "Nothing")));
+        return result.toArray(new FullTypeDesc[result.size()]);
+    }
+    
     public rst.TypeDef refine(TypeContext ctx) {
-        Variance[] variances = new Variance[genericParams.length];
-        for (int i = 0; i < variances.length; ++i)
-            variances[i] = genericParams[i].var;
+        GenericInfo[] genericInfos = new GenericInfo[genericParams.length];
+        // TODO: check if any generic names in constraint list are not generic args for this type
+        for (int i = 0; i < genericInfos.length; ++i)
+            genericInfos[i] = new GenericInfo(
+                    genericParams[i].var,
+                    upperBoundsFor(genericParams[i].name, ctx),
+                    lowerBoundsFor(genericParams[i].name, ctx));
         
         List<rst.FieldDef> staticFields = new ArrayList<rst.FieldDef>();
         List<rst.FieldDef> instanceFields = new ArrayList<rst.FieldDef>();
@@ -76,7 +105,7 @@ public class TypeDef {
         
         return new rst.TypeDef(
                 new RawTypeDesc(module, name),
-                variances,
+                genericInfos,
                 supersRef,
                 staticFields.toArray(new rst.FieldDef[staticFields.size()]),
                 instanceFields.toArray(new rst.FieldDef[instanceFields.size()]),
@@ -103,6 +132,8 @@ public class TypeDef {
     
     public String toString() {
         StringBuilder sb = new StringBuilder();
+        if (genericConstraints.length != 0)
+            sb.append(Arrays.toString(genericConstraints)).append('\n');
         for (String q : quals)
             sb.append(q).append(' ');
         sb.append("type ").append(name);

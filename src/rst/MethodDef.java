@@ -14,7 +14,7 @@ public class MethodDef {
     public final BlockStm body;
     public final boolean isStatic, isSealed;
     public RawMethodDesc desc;
-
+    
     public MethodDef(String name, FullTypeDesc retType, int numGenericParams, FullTypeDesc[] paramTypes,
                      BlockStm body, boolean isStatic, boolean isSealed) {
         this.name = name;

@@ -28,21 +28,13 @@ public class GlobalContext {
         return typeDefs.keySet();
     }
     
-    // TODO: not needed?
-    public Set<RawTypeDesc> getTypeDescsFor(String module) {
-        Set<RawTypeDesc> result = new HashSet<RawTypeDesc>();
-        for (String typeName : typeDefs.get(module).keySet())
-            result.add(new RawTypeDesc(module, typeName));
-        return result;
-    }
-
     public Set<String> getTypeNamesFor(String module) {
         Map<String, TypeDef> typesByName = typeDefs.get(module);
         if (typesByName == null)
             throw new NoSuchElementException(String.format("no module named \"%s\"", module));
         return typesByName.keySet();
     }
-
+    
     // TODO: is there a more natural place for the top-level refine method?
     public static rst.TypeDef[] refine(SourceFile[] sources) {
         GlobalContext ctx = new GlobalContext(sources);

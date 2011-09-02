@@ -40,12 +40,12 @@ public class NormalFullTypeDesc extends FullTypeDesc {
         TypeDef rawType = ctx.resolve(this.raw);
 
         if (raw.equals(that.raw)) {
-            Variance[] vars = rawType.genericParamVars;
-            if (genericArgs.length != vars.length || that.genericArgs.length != vars.length)
+            int numGenericParams = rawType.genericInfos.length;
+            if (genericArgs.length != numGenericParams || that.genericArgs.length != numGenericParams)
                 throw new RuntimeException(String.format("wrong number of generic args for %s", raw));
-            for (int i = 0; i < vars.length; ++i) {
+            for (int i = 0; i < numGenericParams; ++i) {
                 FullTypeDesc thisGenArg = genericArgs[i], thatGenArg = that.genericArgs[i];
-                switch (vars[i]) {
+                switch (rawType.genericInfos[i].var) {
                     case COVARIANT:
                         if (!thisGenArg.isSubtype(thatGenArg, ctx))
                             return false;

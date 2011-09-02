@@ -10,7 +10,7 @@ import static util.StringUtils.*;
 
 public class TypeDef {
     public final RawTypeDesc desc;
-    public final Variance[] genericParamVars;
+    public final GenericInfo[] genericInfos;
     public final NormalFullTypeDesc[] supers;
     public final FieldDef[] staticFields;
     public final FieldDef[] instanceFields;
@@ -19,11 +19,11 @@ public class TypeDef {
 
     // TODO: check for cycles in inheritance somewhere
 
-    public TypeDef(RawTypeDesc desc, Variance[] genericParamVars, NormalFullTypeDesc[] supers,
+    public TypeDef(RawTypeDesc desc, GenericInfo[] genericInfos, NormalFullTypeDesc[] supers,
                    FieldDef[] staticFields, FieldDef[] instanceFields, MethodDef[] methods,
                    boolean isAbstract, boolean isSealed) {
         this.desc = desc;
-        this.genericParamVars = genericParamVars;
+        this.genericInfos = genericInfos;
         this.supers = supers;
         this.staticFields = staticFields;
         this.instanceFields = instanceFields;
@@ -35,7 +35,7 @@ public class TypeDef {
     }
     
     private NormalFullTypeDesc getFullDesc() {
-        FullTypeDesc[] genericArgs = new FullTypeDesc[genericParamVars.length];
+        FullTypeDesc[] genericArgs = new FullTypeDesc[genericInfos.length];
         for (int i = 0; i < genericArgs.length; ++i)
             genericArgs[i] = new TypeGenericFullTypeDesc(desc, i);
         return new NormalFullTypeDesc(desc, genericArgs);
@@ -77,7 +77,8 @@ public class TypeDef {
     //     <T extends Int>
     //     foo() {...}
     // }
-    public MethodDef getMatchingInstanceMethod(CodeRCtx ctx, String name, FullTypeDesc[] methGenericArgs, FullTypeDesc[] argTypes) {
+    public MethodDef getMatchingInstanceMethod(CodeRCtx ctx, String name,
+            FullTypeDesc[] methGenericArgs, FullTypeDesc[] argTypes) {
         List<MethodDef> options = new ArrayList<MethodDef>();
 
         methodsearch:
@@ -136,12 +137,19 @@ public class TypeDef {
     }
     
     public String toString() {
-        StringBuilder sb = new StringBuilder("type ").append(desc);
-        if (genericParamVars.length > 0) {
+        StringBuilder sb = new StringBuilder();
+        if (genericInfos.length > 0) {
             sb.append('[');
-            sb.append(genericParamVars[0]).append("T0");
-            for (int i = 1; i < genericParamVars.length; ++i)
-                sb.append(", ").append(genericParamVars[i]).append('T').append(i);
+            sb.append("]\n");
+        }
+        sb.append("type ").append(desc);
+        if (genericInfos.length > 0) {
+            sb.append('[');
+            sb.append(genericInfos[0].var).append("T0");
+            for (int i = 1; i < genericInfos.length; ++i)
+                sb.append(", ").append(genericInfos[i].var).append('T').append(i)
+                    .append(" ext ").append(Arrays.toString(genericInfos[i].parentTypes))
+                    .append(" sup ").append(Arrays.toString(genericInfos[i].childTypes));
             sb.append(']');
         }
         sb.append(" extends ");

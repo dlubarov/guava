@@ -1,18 +1,23 @@
 package ast;
 
+import java.util.Arrays;
+
 import ast.stm.BlockStm;
 import ctx.*;
 
 import static util.StringUtils.implode;
 
 public class MethodDef extends MemberDef {
+    private final GenericConstraint[] genericConstraints;
     private final String[] qualifiers;
     public final TypedVar self;
     public final String[] genericParams;
     public final TypedVar[] params;
     private final BlockStm body;
 
-    public MethodDef(String[] qualifiers, TypedVar self, String[] genericParams, TypedVar[] params, BlockStm body) {
+    public MethodDef(GenericConstraint[] genericConstraints, String[] qualifiers, TypedVar self,
+            String[] genericParams, TypedVar[] params, BlockStm body) {
+        this.genericConstraints = genericConstraints;
         this.qualifiers = qualifiers;
         this.self = self;
         this.genericParams = genericParams;
@@ -66,6 +71,8 @@ public class MethodDef extends MemberDef {
 
     public String toString() {
         StringBuilder sb = new StringBuilder();
+        if (genericConstraints.length != 0)
+            sb.append(Arrays.toString(genericConstraints)).append('\n');
         for (String q : qualifiers)
             sb.append(q).append(' ');
         sb.append(self);

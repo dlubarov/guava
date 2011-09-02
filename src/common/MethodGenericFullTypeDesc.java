@@ -25,11 +25,15 @@ public class MethodGenericFullTypeDesc extends FullTypeDesc {
 
     public boolean isSubtype(FullTypeDesc that, CodeRCtx ctx) {
         // TODO: generic upper bounds
+        if (that.equals(new NormalFullTypeDesc(new RawTypeDesc("core", "Object"))))
+            return true;
         return equals(that);
     }
 
     public boolean isSupertype(FullTypeDesc that, CodeRCtx ctx) {
         // TODO: generic lower bounds
+        if (equals(new NormalFullTypeDesc(new RawTypeDesc("core", "Object"))))
+            return true;
         return equals(that);
     }
 
