@@ -23,7 +23,7 @@ public class WhileStm extends Statement {
         return new CompilationResult(
                 new CodeTree(condCode, Opcodes.BOOL_NEG,
                         Opcodes.JUMP_COND, bodyCode.size() + 2,
-                        body,
+                        body.compile(ctx).code,
                         Opcodes.JUMP, -(bodyCode.size() + condCode.size() + 5)),
                 ctx);
     }

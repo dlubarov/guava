@@ -5,6 +5,10 @@ public final class CodeTree {
     private int[] memCode = null;
     
     public CodeTree(Object... children) {
+        for (Object c : children) {
+            if (!(c instanceof Integer || c instanceof CodeTree))
+                throw new RuntimeException("bad CodeTree argument: " + c.getClass());
+        }
         this.children = children;
     }
 
