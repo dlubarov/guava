@@ -1,11 +1,9 @@
 package rst.exp;
 
-import common.FullTypeDesc;
-import common.NormalFullTypeDesc;
+import common.*;
 import comp.CodeTree;
 import rctx.CodeRCtx;
-import rst.MethodDef;
-import rst.TypeDef;
+import rst.*;
 import vm.Opcodes;
 
 import java.util.Arrays;
@@ -25,22 +23,40 @@ public class InstanceMethodInvocation extends Expression {
         this.genericArgs = genericArgs;
         this.args = args;
     }
+    
+    private MethodDef getMethod(CodeRCtx ctx, FullTypeDesc[] argTypes, FullTypeDesc[] parentTypes) {
+        // FIXME: need to search up the type hierarchy for appropriate method
+        return ctx.resolve(new RawTypeDesc("core", "Object"))
+                .getMatchingInstanceMethod(ctx, methodName, FullTypeDesc.none, genericArgs, argTypes);
+    }
 
     private MethodDef getMethod(CodeRCtx ctx) {
-        FullTypeDesc targetTypeDesc = target.inferType(ctx);
-        // TODO: this assumes generic types have no methods, which will be no longer valid when bounds are added
-        NormalFullTypeDesc normTypeDesc = (NormalFullTypeDesc) targetTypeDesc;
-        TypeDef targetType = ctx.resolve(normTypeDesc.raw);
-        
         FullTypeDesc[] argTypes = new FullTypeDesc[args.length];
         for (int i = 0; i < argTypes.length; ++i)
             argTypes[i] = args[i].inferType(ctx);
-        return targetType.getMatchingInstanceMethod(ctx, methodName, genericArgs, argTypes);
+        
+        FullTypeDesc targetTypeDesc = target.inferType(ctx);
+        if (targetTypeDesc instanceof NormalFullTypeDesc) {
+            NormalFullTypeDesc normTypeDesc = (NormalFullTypeDesc) targetTypeDesc;
+            TypeDef targetType = ctx.resolve(normTypeDesc.raw);
+            return targetType.getMatchingInstanceMethod(ctx, methodName, normTypeDesc.genericArgs, genericArgs, argTypes);
+        } else if (targetTypeDesc instanceof TypeGenericFullTypeDesc) {
+            TypeGenericFullTypeDesc genericTypeDesc = (TypeGenericFullTypeDesc) targetTypeDesc;
+            RawTypeDesc ownerTypeDesc = genericTypeDesc.owner;
+            TypeDef ownerType = ctx.resolve(ownerTypeDesc);
+            GenericInfo genericInfo = ownerType.genericInfos[genericTypeDesc.index];
+            return getMethod(ctx, argTypes, genericInfo.parentTypes);
+        } else if (targetTypeDesc instanceof MethodGenericFullTypeDesc) {
+            return null; // FIXME: impl
+        } else
+            throw new RuntimeException("shouldn't get here");
     }
 
     public FullTypeDesc inferType(CodeRCtx ctx) {
         FullTypeDesc targetType = target.inferType(ctx);
-        FullTypeDesc result = getMethod(ctx).retType;
+        MethodDef meth = getMethod(ctx);
+        System.out.println(this.methodName + ": " + meth.desc);
+        FullTypeDesc result = meth.retType;
         if (targetType instanceof NormalFullTypeDesc)
             result = result.withTypeGenerics(((NormalFullTypeDesc) target.inferType(ctx)).genericArgs);
         result = result.withMethodGenerics(genericArgs);

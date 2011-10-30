@@ -2,6 +2,7 @@ package rst;
 
 import common.*;
 import rctx.*;
+import util.StringUtils;
 import vm.*;
 
 import java.util.*;
@@ -78,8 +79,8 @@ public class TypeDef {
     //     foo() {...}
     // }
     public MethodDef getMatchingInstanceMethod(CodeRCtx ctx, String name,
-            FullTypeDesc[] methGenericArgs, FullTypeDesc[] argTypes) {
-        List<MethodDef> options = new ArrayList<MethodDef>();
+            FullTypeDesc[] typeGenericArgs, FullTypeDesc[] methGenericArgs, FullTypeDesc[] argTypes) {
+        Set<MethodDef> options = new HashSet<MethodDef>();
 
         methodsearch:
         for (MethodDef method : methods) {
@@ -92,9 +93,13 @@ public class TypeDef {
             if (method.paramTypes.length != argTypes.length)
                 continue;
 
-            for (int i = 0; i < argTypes.length; ++i)
-                if (!argTypes[i].isSubtype(method.paramTypes[i], ctx))
+            for (int i = 0; i < argTypes.length; ++i) {
+                FullTypeDesc paramType = method.paramTypes[i];
+                paramType = paramType.withTypeGenerics(typeGenericArgs);
+                paramType = paramType.withMethodGenerics(methGenericArgs);
+                if (!argTypes[i].isSubtype(paramType, ctx))
                     continue methodsearch;
+            }
 
             options.add(method);
         }
@@ -103,14 +108,20 @@ public class TypeDef {
         if (options.isEmpty())
             for (NormalFullTypeDesc superDesc : supers) {
                 TypeDef superType = ctx.resolve(superDesc.raw);
-                options.add(superType.getMatchingInstanceMethod(ctx, name, methGenericArgs, argTypes));
+                // FIXME: need to find where method was originally declared, e.g. if two supertypes override Object.hashCode
+                try {
+                    options.add(superType.getMatchingInstanceMethod(ctx, name, typeGenericArgs, methGenericArgs, argTypes));
+                } catch (NoSuchElementException e) {}
             }
         
         if (options.isEmpty())
-            throw new NoSuchElementException(String.format("%s.%s", desc, name));
+            throw new NoSuchElementException(String.format("%s.%s(%s)", desc, name, StringUtils.implode(", ", argTypes)));
         if (options.size() > 1)
             throw new RuntimeException(String.format("ambiguous method call: %s.%s", desc, name));
-        return options.get(0);
+        
+        for (MethodDef m : options)
+            return m;
+        throw new RuntimeException("can't get here");
     }
     
     public NormalType compile(GlobalRCtx ctx) {

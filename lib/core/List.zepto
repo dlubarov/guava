@@ -32,6 +32,8 @@ type NonEmptyList[+T] extends List[T] {
 }
 
 type EmptyList[+T] extends List[T] {
+  Void init() {}
+
   Iterator[T] iterator() {
     return new EmptyIterator[T]();
   }

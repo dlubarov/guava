@@ -1,12 +1,13 @@
 package common;
 
 import rctx.CodeRCtx;
+import rst.*;
 
 public class TypeGenericFullTypeDesc extends GenericFullTypeDesc {
     // TODO: Can we get rid of owner? Would fix hack in MethodContext.
-    // See also MethodGenericFullTypeDesc
-    private final RawTypeDesc owner;
-    private final int index;
+    // See also MethodGenericFullTypeDesc.
+    public final RawTypeDesc owner;
+    public final int index;
     
     public TypeGenericFullTypeDesc(RawTypeDesc owner, int index) {
         this.owner = owner;
@@ -26,12 +27,20 @@ public class TypeGenericFullTypeDesc extends GenericFullTypeDesc {
     }
     
     public boolean isSubtype(FullTypeDesc that, CodeRCtx ctx) {
-        // TODO: generic upper bounds
+        TypeDef type = ctx.resolve(owner);
+        GenericInfo info = type.genericInfos[index];
+        for (FullTypeDesc par : info.parentTypes)
+            if (par.isSubtype(that, ctx))
+                return true;
         return equals(that);
     }
     
     public boolean isSupertype(FullTypeDesc that, CodeRCtx ctx) {
-        // TODO: generic lower bounds
+        TypeDef type = ctx.resolve(owner);
+        GenericInfo info = type.genericInfos[index];
+        for (FullTypeDesc child : info.childTypes)
+            if (child.isSupertype(that, ctx))
+                return true;
         return equals(that);
     }
     

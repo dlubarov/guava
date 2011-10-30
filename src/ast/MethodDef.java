@@ -1,6 +1,10 @@
 package ast;
 
-import java.util.Arrays;
+import java.util.*;
+
+import rst.GenericInfo;
+
+import common.*;
 
 import ast.stm.BlockStm;
 import ctx.*;
@@ -39,8 +43,36 @@ public class MethodDef extends MemberDef {
     public boolean isSealed() {
         return hasQualifier("sealed");
     }
+    
+    private final FullTypeDesc[] upperBoundsFor(String genericID, MethodContext ctx) {
+        List<FullTypeDesc> result = new ArrayList<FullTypeDesc>();
+        for (GenericConstraint con : genericConstraints)
+            if (con.genericArg.equals(genericID) && con.rel == GenericConstraintRel.SUBTYPE)
+                result.add(ctx.resolveFull(con.that));
+        if (result.isEmpty())
+            result.add(new NormalFullTypeDesc(new RawTypeDesc("core", "Object")));
+        return result.toArray(new FullTypeDesc[result.size()]);
+    }
+    
+    private final FullTypeDesc[] lowerBoundsFor(String genericID, MethodContext ctx) {
+        List<FullTypeDesc> result = new ArrayList<FullTypeDesc>();
+        for (GenericConstraint con : genericConstraints)
+            if (con.genericArg.equals(genericID) && con.rel == GenericConstraintRel.SUPTYPE)
+                result.add(ctx.resolveFull(con.that));
+        if (result.isEmpty())
+            result.add(new NormalFullTypeDesc(new RawTypeDesc("core", "Nothing")));
+        return result.toArray(new FullTypeDesc[result.size()]);
+    }
 
     public rst.MethodDef refine(MethodContext ctx) {
+        GenericInfo[] genericInfos = new GenericInfo[genericParams.length];
+        // TODO: check if any generic names in constraint list are not generic args for this type
+        for (int i = 0; i < genericInfos.length; ++i)
+            genericInfos[i] = new GenericInfo(
+                    Variance.NONVARIANT, // TODO: variance doesn't really apply, should there be a separate class besides GenericInfo?
+                    upperBoundsFor(genericParams[i], ctx),
+                    lowerBoundsFor(genericParams[i], ctx));
+        
         Type[] paramTypes = new Type[params.length];
         for (int i = 0; i < paramTypes.length; ++i)
             paramTypes[i] = params[i].type;
