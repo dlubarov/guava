@@ -1,6 +1,6 @@
 package rst.stm;
 
-import com.sun.xml.internal.ws.org.objectweb.asm.Opcodes;
+import vm.Opcodes;
 import comp.CodeTree;
 
 import rctx.CodeRCtx;
