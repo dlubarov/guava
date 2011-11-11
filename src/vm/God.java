@@ -18,7 +18,7 @@ public final class God {
     private static final Map<RawMethodDesc, Method> loadedMethods;
 
     private static final NativeType[] nativeTypes() {
-        return new NativeType[] {NatObject.TYPE, NatInt.TYPE, NatBool.TYPE, NatMutableArray.TYPE,};
+        return new NativeType[] {NatObject.TYPE, NatInt.TYPE, NatBool.TYPE, NatMutableArray.TYPE};
     };
 
     static {
@@ -46,5 +46,12 @@ public final class God {
         if (result == null)
             throw new NoSuchElementException("no such method: " + desc);
         return result;
+    }
+    
+    public static void linkAll(Type[] types) {
+        for (Type type : nativeTypes())
+            type.link();
+        for (Type type : types)
+            type.link();
     }
 }

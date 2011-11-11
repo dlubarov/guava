@@ -4,7 +4,10 @@ import static util.StringUtils.implode;
 
 import java.io.*;
 
+import common.RawMethodDesc;
+
 import rctx.GlobalRCtx;
+import vm.God;
 
 import ast.SourceFile;
 import ctx.GlobalContext;
@@ -39,12 +42,25 @@ public class Main {
             System.out.println(implode("\n\n", sources));
 
         System.out.println("Refining...");
-        rst.TypeDef[] allTypes = GlobalContext.refine(sources);
+        rst.TypeDef[] allTypeDefs = GlobalContext.refine(sources);
         if (PRINT_RST)
-            System.out.println(implode("\n\n", allTypes));
+            System.out.println(implode("\n\n", allTypeDefs));
 
         System.out.println("Compiling...");
-        GlobalRCtx.compile(allTypes);
+        vm.Type[] allTypes = GlobalRCtx.compile(allTypeDefs);
+        
+        System.out.println("Linking...");
+        God.linkAll(allTypes);
+        
+        for (vm.Type type : allTypes) {
+            for (vm.Method meth : type.ownedMethods) {
+                RawMethodDesc desc = meth.desc;
+                if (desc.name.equals("main") && desc.isStatic) {
+                    System.out.printf("Running %s.main...\n", type.desc);
+                    meth.invoke();
+                }
+            }
+        }
 
         System.out.println("All done.");
     }

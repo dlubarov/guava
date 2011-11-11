@@ -55,7 +55,6 @@ public class InstanceMethodInvocation extends Expression {
     public FullTypeDesc inferType(CodeRCtx ctx) {
         FullTypeDesc targetType = target.inferType(ctx);
         MethodDef meth = getMethod(ctx);
-        System.out.println(this.methodName + ": " + meth.desc);
         FullTypeDesc result = meth.retType;
         if (targetType instanceof NormalFullTypeDesc)
             result = result.withTypeGenerics(((NormalFullTypeDesc) target.inferType(ctx)).genericArgs);

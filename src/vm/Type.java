@@ -9,7 +9,7 @@ import java.util.Map;
 public abstract class Type {
     public final RawTypeDesc desc;
     private final RawTypeDesc[] superDescs;
-    protected final Method[] ownedMethods;
+    public final Method[] ownedMethods;
     protected final Map<RawMethodDesc, RawMethodDesc> vtableDescs;
     public Map<Method, Method> vtable;
     public ZObject[] staticFields;

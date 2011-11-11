@@ -20,8 +20,11 @@ public abstract class Method {
     }
 
     public void link() {
+        typeTable = new Type[typeDescTable.length];
         for (int i = 0; i < typeTable.length; ++i)
             typeTable[i] = God.resolveType(typeDescTable[i]);
+
+        methodTable = new Method[methodDescTable.length];
         for (int i = 0; i < methodTable.length; ++i)
             methodTable[i] = God.resolveMethod(methodDescTable[i]);
     }
@@ -33,7 +36,12 @@ public abstract class Method {
         try {
             invoke(new ZObject[10000], -1);
         } catch (ArrayIndexOutOfBoundsException e) {
-            throw new RuntimeException("stack size exceeded");
+            throw new RuntimeException("stack size might have been exceeded?", e);
         }
+    }
+    
+    @Override
+    public String toString() {
+        return desc.toString();
     }
 }

@@ -4,9 +4,9 @@ import java.util.Arrays;
 import static util.StringUtils.implode;
 
 public class RawMethodDesc {
-    private final RawTypeDesc owner;
-    private final String name;
-    private final int numGenericParams;
+    public final RawTypeDesc owner;
+    public final String name;
+    public final int numGenericParams;
     public FullTypeDesc[] paramTypes;
     public final boolean isStatic;
 
@@ -35,7 +35,8 @@ public class RawMethodDesc {
             RawMethodDesc that = (RawMethodDesc) o;
             return owner.equals(that.owner) && name.equals(that.name)
                     && numGenericParams == that.numGenericParams
-                    && Arrays.equals(paramTypes, that.paramTypes);
+                    && Arrays.equals(paramTypes, that.paramTypes)
+                    && isStatic == that.isStatic;
         } catch (ClassCastException e) {
             return false;
         }
@@ -43,7 +44,7 @@ public class RawMethodDesc {
 
     @Override
     public int hashCode() {
-        return Arrays.hashCode(new Object[] {owner, name, numGenericParams, paramTypes});
+        return Arrays.hashCode(new Object[] {owner, name, numGenericParams, paramTypes.length});
     }
 
     private String genericParamString() {
@@ -59,7 +60,8 @@ public class RawMethodDesc {
     }
 
     public String toString() {
-        return String.format("%s.%s%s(%s)",
+        return String.format("%s%s.%s%s(%s)",
+                isStatic? "static " : "",
                 owner, name,
                 genericParamString(),
                 implode(", ", paramTypes));
