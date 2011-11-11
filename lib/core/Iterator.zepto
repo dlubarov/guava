@@ -2,10 +2,6 @@ module core;
 
 type Iterator[+T] {
   Maybe[T] next();
-
-  Bool hasNext() {
-    return this.next().isSomething();
-  }
 }
 
 type EmptyIterator[+T] extends Iterator[T] {

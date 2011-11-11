@@ -42,7 +42,7 @@ type Collection[+T] extends Iterable[T] {
     return result;
   }
 
-  Collection[T] filter(Predicate1[T] p) {
+  Collection[T] filter(Function1[T, Bool] p) {
     List[T] result = new EmptyList[T]();
     for (T elem : this)
       if (p(elem))

@@ -4,11 +4,16 @@ type Maybe[+T] extends Iterable[T] {
   Bool isSomething();
 
   T get();
+
   T getOr(T default);
 }
 
 type Some[+T] extends Maybe[T] {
   T value;
+
+  Void init(T value) {
+    this.value = value;
+  }
 
   Bool isSomething() {
     return true;
@@ -28,6 +33,8 @@ type Some[+T] extends Maybe[T] {
 }
 
 type None[+T] extends Maybe[T] {
+  Void init() {}
+
   Bool isSomething() {
     return false;
   }

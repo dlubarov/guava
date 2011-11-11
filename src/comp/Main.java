@@ -10,8 +10,8 @@ import ast.SourceFile;
 import ctx.GlobalContext;
 
 public class Main {
-    private static final boolean PRINT_AST = false, PRINT_RST = true;
-    
+    private static final boolean PRINT_AST = false, PRINT_RST = false;
+
     private static SourceFile parseFile(String fname) throws IOException {
         Reader r = new FileReader(fname);
         StringBuilder sb = new StringBuilder();
@@ -37,15 +37,15 @@ public class Main {
         }
         if (PRINT_AST)
             System.out.println(implode("\n\n", sources));
-        
+
         System.out.println("Refining...");
         rst.TypeDef[] allTypes = GlobalContext.refine(sources);
         if (PRINT_RST)
             System.out.println(implode("\n\n", allTypes));
-        
+
         System.out.println("Compiling...");
         GlobalRCtx.compile(allTypes);
-        
+
         System.out.println("All done.");
     }
 }

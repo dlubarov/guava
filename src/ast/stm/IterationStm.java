@@ -19,6 +19,9 @@ public class IterationStm extends Statement {
     }
 
     public RefineResult refine(CodeContext ctx) {
+        // FIXME: implement foreach
+        if (1+1==2) return new BlockStm().refine(ctx);
+        
         Type iteratorType = new Type("Iterator", new Type[] {var.type});
         String iterableName = "@iterable_" + uniqueID;
         

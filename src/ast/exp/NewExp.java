@@ -23,7 +23,7 @@ public class NewExp extends Expression {
         } catch (ClassCastException e) {
             throw new RuntimeException(String.format("cannot instantiate %s", type));
         }
-        
+
         rst.exp.Expression[] argsRef = new rst.exp.Expression[args.length];
         for (int i = 0; i < argsRef.length; ++i)
             argsRef[i] = args[i].refine(ctx);
