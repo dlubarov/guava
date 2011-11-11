@@ -52,7 +52,7 @@ public class InstanceMethodInvocationOrGet extends Expression {
         } catch (RuntimeException e) {}
 
         if (normalMethodResult == null && getMethodResult == null)
-            throw new NoSuchElementException(String.format("method not found: %s", this));
+            throw new NoSuchElementException(String.format("method %s not found in %s", memberName, this));
         if (normalMethodResult != null && getMethodResult != null)
             throw new RuntimeException(String.format("%s is ambiguous because field and method share a name", this));
 

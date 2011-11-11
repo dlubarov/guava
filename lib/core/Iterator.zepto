@@ -5,6 +5,8 @@ type Iterator[+T] {
 }
 
 type EmptyIterator[+T] extends Iterator[T] {
+  Void init() {}
+
   Maybe[T] next() {
     return new None[T]();
   }
@@ -13,6 +15,10 @@ type EmptyIterator[+T] extends Iterator[T] {
 type SingletonIterator[+T] extends Iterator[T] {
   T value;
   Bool used;
+
+  Void init(T value) {
+    this.value = value;
+  }
 
   Maybe[T] next() {
     if (this.used)

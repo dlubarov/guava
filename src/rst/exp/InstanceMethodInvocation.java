@@ -47,7 +47,7 @@ public class InstanceMethodInvocation extends Expression {
             GenericInfo genericInfo = ownerType.genericInfos[genericTypeDesc.index];
             return getMethod(ctx, argTypes, genericInfo.parentTypes);
         } else if (targetTypeDesc instanceof MethodGenericFullTypeDesc) {
-            return null; // FIXME: impl
+            throw new RuntimeException("FIXME: impl");
         } else
             throw new RuntimeException("shouldn't get here");
     }

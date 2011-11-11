@@ -50,9 +50,9 @@ type ListIterator[+T] extends Iterator[T] {
     if (this.current.isEmpty())
       return new None[T]();
     else {
-      T elem = new Some(this.current.first());
+      T elem = this.current.first();
       this.current = this.current.last(this.current.size() - 1);
-      return elem;
+      return new Some[T](elem);
     }
   }
 }

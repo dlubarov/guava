@@ -28,8 +28,11 @@ type Sequence[+T] extends Collection[T] {
   Sequence[T] first(Int n) {
     List[T] result = new EmptyList[T]();
     Iterator[T] iter = this.iterator();
-    while (iter.hasNext() & result.size() < n)
-      result = new NonEmptyList(iter.next().get(), result);
+    Maybe[T] current = iter.next();
+    while (current.isSomething() & result.size() < n) {
+      result = new NonEmptyList[T](current.get(), result);
+      current = iter.next();
+    }
     return result.reverse();
   }
 
@@ -40,10 +43,12 @@ type Sequence[+T] extends Collection[T] {
   Maybe[Int] firstIndexOf(T elem) {
     Iterator[T] iter = this.iterator();
     Int i = 0;
-    while (iter.hasNext()) {
-      if (iter.next().get() == elem)
+    Maybe[T] current = iter.next();
+    while (current.isSomething()) {
+      if (current.get() == elem)
         return i;
       i = i + 1;
+      current = iter.next();
     }
     return new None[Int]();
   }

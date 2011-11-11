@@ -38,7 +38,7 @@ public class NewObject extends Expression {
             if (meth.paramTypes.length != args.length)
                 continue;
             for (int i = 0; i < argTypes.length; ++i)
-                if (!argTypes[i].isSubtype(meth.paramTypes[i], ctx))
+                if (!argTypes[i].isSubtype(meth.paramTypes[i].withTypeGenerics(type.genericArgs), ctx))
                     continue methodsearch;
             options.add(meth);
         }
