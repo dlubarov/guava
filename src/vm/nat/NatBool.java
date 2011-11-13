@@ -84,7 +84,7 @@ public class NatBool extends ZObject {
                     new NativeMethod(new RawMethodDesc("core", "Bool", "hashCode", 0, FullTypeDesc.none)) {
                         public void invoke(ZObject[] stack, int bp) {
                             boolean b = ((NatBool) stack[bp + 1]).value;
-                            stack[bp + 1] = new NatBool(b);
+                            stack[bp + 1] = new NatInt(b? 1 : 0);
                         }
                     },
                     new NativeMethod(new RawMethodDesc("core", "Bool", "toString", 0, FullTypeDesc.none)) {

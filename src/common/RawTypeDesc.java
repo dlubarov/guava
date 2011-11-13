@@ -23,7 +23,7 @@ public class RawTypeDesc {
     public int hashCode() {
         return module.hashCode() * 31 + name.hashCode();
     }
-    
+
     public String toString() {
         return String.format("%s.%s", module, name);
     }

@@ -31,7 +31,7 @@ public class Invocation extends Expression {
         rst.exp.Expression[] argsRef = new rst.exp.Expression[args.length];
         for (int i = 0; i < argsRef.length; ++i)
             argsRef[i] = args[i].refine(ctx);
-        
+
         if (target instanceof MemberAccess) {
             MemberAccess memberAcc = (MemberAccess) target;
             Expression owner = memberAcc.target;
@@ -51,7 +51,7 @@ public class Invocation extends Expression {
                 // class get, e.g. MyClass(...)
                 return new ClassMethodInvocation(ctx.resolveRaw(typeName), "get", genericArgsRef, argsRef);
         }
-        
+
         // Must be a get call, such as getArray()(index)
         return new InstanceMethodInvocation(target.refine(ctx), "get", genericArgsRef, argsRef);
     }

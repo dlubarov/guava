@@ -23,7 +23,7 @@ public class SourceFile {
             result[i] = types[i].refine(new TypeContext(ctx, types[i]));
         return result;
     }
-    
+
     public String toString() {
         return String.format("module %s;\n\n%s%s%s",
                 module,

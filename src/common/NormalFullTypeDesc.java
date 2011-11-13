@@ -8,7 +8,7 @@ import java.util.Arrays;
 public class NormalFullTypeDesc extends FullTypeDesc {
     public final RawTypeDesc raw;
     public final FullTypeDesc[] genericArgs;
-    
+
     public NormalFullTypeDesc(RawTypeDesc raw, FullTypeDesc[] genericArgs) {
         this.raw = raw;
         this.genericArgs = genericArgs;

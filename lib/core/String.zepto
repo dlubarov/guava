@@ -1,10 +1,10 @@
 module core;
 
 type String extends Sequence[Char] {
-  ImmutableArray[Char] store;
+  MutableArray[Char] store;
 
   Void init(Sequence[Char] source) {
-    this.store = new ImmutableArray[Char](source);
+    this.store = new MutableArray[Char](source);
   }
 
   Iterator[Char] iterator() {

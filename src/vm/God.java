@@ -17,7 +17,7 @@ public final class God {
     private static final Map<RawTypeDesc, Type> loadedTypes;
     private static final Map<RawMethodDesc, Method> loadedMethods;
 
-    private static final NativeType[] nativeTypes() {
+    public static final NativeType[] nativeTypes() {
         return new NativeType[] {NatObject.TYPE, NatInt.TYPE, NatBool.TYPE, NatMutableArray.TYPE};
     };
 

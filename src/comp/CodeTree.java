@@ -3,7 +3,7 @@ package comp;
 public final class CodeTree {
     private final Object[] children;
     private int[] memCode = null;
-    
+
     public CodeTree(Object... children) {
         for (Object c : children) {
             if (!(c instanceof Integer || c instanceof CodeTree))
@@ -39,7 +39,7 @@ public final class CodeTree {
         assert insnsProduced == code.length;
         return memCode = code;
     }
-    
+
     public int size() {
         return getCode().length;
     }

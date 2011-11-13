@@ -124,7 +124,11 @@ public class TypeDef {
         throw new RuntimeException("can't get here");
     }
     
-    public NormalType compile(GlobalRCtx ctx) {
+    public Type compile(GlobalRCtx ctx) {
+        for (NativeType type : God.nativeTypes())
+            if (type.desc.equals(desc))
+                return type;
+
         RawTypeDesc[] supersRaw = new RawTypeDesc[supers.length];
         for (int i = 0; i < supersRaw.length; ++i)
             supersRaw[i] = supers[i].raw;

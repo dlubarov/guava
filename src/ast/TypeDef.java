@@ -16,7 +16,7 @@ public class TypeDef {
     public final GenericParamDec[] genericParams;
     public final Type[] supers;
     public final MemberDef[] members;
-    
+
     public TypeDef(GenericConstraint[] genericConstraints, String[] quals, String name,
             GenericParamDec[] genericParams, Type[] supers, MemberDef[] members) {
         this.genericConstraints = genericConstraints;
@@ -37,11 +37,11 @@ public class TypeDef {
     public boolean isAbstract() {
         return hasQualifier("abstract");
     }
-    
+
     public boolean isSealed() {
         return hasQualifier("sealed");
     }
-    
+
     private final FullTypeDesc[] upperBoundsFor(String genericID, TypeContext ctx) {
         List<FullTypeDesc> result = new ArrayList<FullTypeDesc>();
         for (GenericConstraint con : genericConstraints)
@@ -51,7 +51,7 @@ public class TypeDef {
             result.add(new NormalFullTypeDesc(new RawTypeDesc("core", "Object")));
         return result.toArray(new FullTypeDesc[result.size()]);
     }
-    
+
     private final FullTypeDesc[] lowerBoundsFor(String genericID, TypeContext ctx) {
         List<FullTypeDesc> result = new ArrayList<FullTypeDesc>();
         for (GenericConstraint con : genericConstraints)
@@ -61,7 +61,7 @@ public class TypeDef {
             result.add(new NormalFullTypeDesc(new RawTypeDesc("core", "Nothing")));
         return result.toArray(new FullTypeDesc[result.size()]);
     }
-    
+
     public rst.TypeDef refine(TypeContext ctx) {
         GenericInfo[] genericInfos = new GenericInfo[genericParams.length];
         // TODO: check if any generic names in constraint list are not generic args for this type
@@ -70,7 +70,7 @@ public class TypeDef {
                     genericParams[i].var,
                     upperBoundsFor(genericParams[i].name, ctx),
                     lowerBoundsFor(genericParams[i].name, ctx));
-        
+
         List<rst.FieldDef> staticFields = new ArrayList<rst.FieldDef>();
         List<rst.FieldDef> instanceFields = new ArrayList<rst.FieldDef>();
         List<rst.MethodDef> methods = new ArrayList<rst.MethodDef>();
@@ -102,7 +102,7 @@ public class TypeDef {
                     throw new RuntimeException(String.format("why would you want to extend %s? preposterous!", supersRaw[i]));
                 }
         }
-        
+
         return new rst.TypeDef(
                 new RawTypeDesc(module, name),
                 genericInfos,
@@ -129,7 +129,7 @@ public class TypeDef {
             return false;
         }
     }
-    
+
     public String toString() {
         StringBuilder sb = new StringBuilder();
         if (genericConstraints.length != 0)

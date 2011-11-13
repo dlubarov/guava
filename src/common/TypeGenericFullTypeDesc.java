@@ -8,12 +8,12 @@ public class TypeGenericFullTypeDesc extends GenericFullTypeDesc {
     // See also MethodGenericFullTypeDesc.
     public final RawTypeDesc owner;
     public final int index;
-    
+
     public TypeGenericFullTypeDesc(RawTypeDesc owner, int index) {
         this.owner = owner;
         this.index = index;
     }
-    
+
     public FullTypeDesc withTypeGenerics(FullTypeDesc[] typeGenerics) {
         try {
             return typeGenerics[index];
@@ -21,11 +21,11 @@ public class TypeGenericFullTypeDesc extends GenericFullTypeDesc {
             throw new RuntimeException("too few generic args for " + owner);
         }
     }
-    
+
     public FullTypeDesc withMethodGenerics(FullTypeDesc[] methodGenerics) {
         return this;
     }
-    
+
     public boolean isSubtype(FullTypeDesc that, CodeRCtx ctx) {
         TypeDef type = ctx.resolve(owner);
         GenericInfo info = type.genericInfos[index];
@@ -34,7 +34,7 @@ public class TypeGenericFullTypeDesc extends GenericFullTypeDesc {
                 return true;
         return equals(that);
     }
-    
+
     public boolean isSupertype(FullTypeDesc that, CodeRCtx ctx) {
         TypeDef type = ctx.resolve(owner);
         GenericInfo info = type.genericInfos[index];
@@ -43,7 +43,7 @@ public class TypeGenericFullTypeDesc extends GenericFullTypeDesc {
                 return true;
         return equals(that);
     }
-    
+
     @Override
     public boolean equals(Object o) {
         try {
@@ -53,12 +53,12 @@ public class TypeGenericFullTypeDesc extends GenericFullTypeDesc {
             return false;
         }
     }
-    
+
     @Override
     public int hashCode() {
         return owner.hashCode() * 31 + index;
     }
-    
+
     public String toString() {
         return String.format("T%d", index);
     }

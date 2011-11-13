@@ -1,6 +1,8 @@
 module core;
 
 type Char {
+  Void init(Int i);
+
   Char toUpper();
   Char toLower();
 

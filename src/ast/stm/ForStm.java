@@ -27,7 +27,7 @@ public class ForStm extends Statement {
                 new BlockStm(a, new WhileStm(bb, new BlockStm(body, new ExpStm(cc)))).refine(ctx).stm,
                 ctx);
     }
-    
+
     public String toString() {
         StringBuilder sb = new StringBuilder("for (").append(a);
         if (b != null)

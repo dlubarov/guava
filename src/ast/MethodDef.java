@@ -43,7 +43,7 @@ public class MethodDef extends MemberDef {
     public boolean isSealed() {
         return hasQualifier("sealed");
     }
-    
+
     private final FullTypeDesc[] upperBoundsFor(String genericID, MethodContext ctx) {
         List<FullTypeDesc> result = new ArrayList<FullTypeDesc>();
         for (GenericConstraint con : genericConstraints)
@@ -53,7 +53,7 @@ public class MethodDef extends MemberDef {
             result.add(new NormalFullTypeDesc(new RawTypeDesc("core", "Object")));
         return result.toArray(new FullTypeDesc[result.size()]);
     }
-    
+
     private final FullTypeDesc[] lowerBoundsFor(String genericID, MethodContext ctx) {
         List<FullTypeDesc> result = new ArrayList<FullTypeDesc>();
         for (GenericConstraint con : genericConstraints)
@@ -72,7 +72,7 @@ public class MethodDef extends MemberDef {
                     Variance.NONVARIANT, // TODO: variance doesn't really apply, should there be a separate class besides GenericInfo?
                     upperBoundsFor(genericParams[i], ctx),
                     lowerBoundsFor(genericParams[i], ctx));
-        
+
         Type[] paramTypes = new Type[params.length];
         for (int i = 0; i < paramTypes.length; ++i)
             paramTypes[i] = params[i].type;
