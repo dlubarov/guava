@@ -5,8 +5,35 @@
      /___\___| .__/ \__\___/ 
      ========|_|=============
 
+Zepto is a modern OOP language with a powerful, expressive type system.
+
+Zepto has native types, but no primitive types. For example, a Char object is
+implemented as a native type for efficiency. But unlike a Java char, Char has
+methods, inherits from object, and can be used as a generic argument.
+
+Zepto also has array types, but to the programmer, they look no different from
+any other types. Although MutableArray is a native type, it fits nicely into the
+type hierarchy: it extends Array, which extends Sequence, which extends
+Collection, etc.
+
+As in Scala, Zepto lets you specify the variance of generic parameters. So an
+Array[Char] is also an Array[Object], and an Ordering[Sequence] is also an
+Ordering[Array].
+
+Zepto supports operator overloading. The expression "x + y" is just syntactic
+sugar for "x.+(y)". You can also invoke instance methods statically, so
+"Object.==(a, b)" will always perform an identity comparison even if a's type
+implements its own "==" method.
+
+Zepto has no null references. Instead, it has a Maybe type similar to Haskell's
+Maybe or Scala's Option.
+
+
 TODO:
   definite assignment analysis
   variance analysis
   require method return
   write a proper readme
+  sealed types, final methods
+  public, private
+  exceptions

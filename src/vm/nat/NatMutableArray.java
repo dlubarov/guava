@@ -1,12 +1,9 @@
 package vm.nat;
 
 import common.*;
-import vm.Method;
-import vm.NativeMethod;
-import vm.NativeType;
-import vm.ZObject;
+import vm.*;
 
-import java.util.HashMap;
+import java.util.*;
 
 public class NatMutableArray extends ZObject {
     public static final NativeType TYPE;
@@ -15,7 +12,7 @@ public class NatMutableArray extends ZObject {
         TYPE = new NatMutableArrayType();
     }
 
-    private final ZObject[] elems;
+    private ZObject[] elems;
 
     public NatMutableArray() {
         super(TYPE);
@@ -36,9 +33,36 @@ public class NatMutableArray extends ZObject {
                     new NativeMethod(
                             new RawMethodDesc("core", "MutableArray", "init", 0,
                                     new FullTypeDesc[] {new NormalFullTypeDesc(descColl, new FullTypeDesc[] {new TypeGenericFullTypeDesc(desc, 0)})}),
-                            new RawTypeDesc[0], new RawMethodDesc[0]) {
+                            new RawTypeDesc[0],
+                            new RawMethodDesc[] {
+                                new RawMethodDesc("core", "Collection", "iterator", 0, FullTypeDesc.none),
+                                new RawMethodDesc("core", "Iterator", "next", 0, FullTypeDesc.none),
+                                new RawMethodDesc("core", "Maybe", "isSomething", 0, FullTypeDesc.none),
+                                new RawMethodDesc("core", "Maybe", "get", 0, FullTypeDesc.none),
+                            }) {
                         public void invoke(ZObject[] stack, int bp) {
-                            throw new RuntimeException("TODO: impl");
+                            NatMutableArray arr = (NatMutableArray) stack[bp + 1];
+                            ZObject source = stack[bp + 2];
+                            Method meth = methodTable[0]; // Collection.iterator
+                            meth = source.type.vtable.get(meth);
+                            meth.invoke(stack, bp);
+                            ZObject iter = stack[bp + 1];
+                            
+                            meth = methodTable[1]; // Iterator.next
+                            meth = iter.type.vtable.get(meth);
+                            List<ZObject> buffer = new ArrayList<ZObject>();
+                            for (;;) {
+                                meth.invoke(stack, bp);
+                                ZObject maybeNext = stack[bp + 1];
+                                maybeNext.type.vtable.get(methodTable[2]).invoke(stack, bp);
+                                boolean isSomething = ((NatBool) stack[bp + 1]).value;
+                                if (isSomething) {
+                                    maybeNext.type.vtable.get(methodTable[3]).invoke(stack, bp);
+                                    buffer.add(stack[bp + 1]);
+                                } else
+                                    break;
+                            }
+                            arr.elems = buffer.toArray(new ZObject[buffer.size()]);
                         }
                     },
                     

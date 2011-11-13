@@ -145,6 +145,7 @@ public class TypeDef {
         int numFields = instanceFields.length;
         
         Map<RawMethodDesc, RawMethodDesc> vtableDescs = new HashMap<RawMethodDesc, RawMethodDesc>();
+        // FIXME IMPORTANT: populate vtable
         
         return new NormalType(desc, supersRaw,
                 ownedMethods, vtableDescs,
