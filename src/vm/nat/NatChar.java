@@ -57,7 +57,7 @@ public class NatChar extends ZObject {
                             stack[bp + 1] = new NatChar(Character.toUpperCase(c));
                         }
                     },
-                    
+
                     // Category check methods
                     new NativeMethod(new RawMethodDesc("core", "Char", "isLetter", 0, FullTypeDesc.none)) {
                         public void invoke(ZObject[] stack, int bp) {
@@ -71,7 +71,7 @@ public class NatChar extends ZObject {
                             stack[bp + 1] = new NatBool(Character.isDigit(c));
                         }
                     },
-                        
+
                     // Object methods
                     new NativeMethod(new RawMethodDesc("core", "Char", "==", 0, objOnly)) {
                         public void invoke(ZObject[] stack, int bp) {

@@ -14,7 +14,7 @@ import static util.StringUtils.implode;
 public class NewObject extends Expression {
     private final NormalFullTypeDesc type;
     private final Expression[] args;
-    
+
     public NewObject(NormalFullTypeDesc type, Expression[] args) {
         this.type = type;
         this.args = args;
@@ -26,7 +26,7 @@ public class NewObject extends Expression {
         for (int i = 0; i < argTypes.length; ++i)
             argTypes[i] = args[i].inferType(ctx);
         List<MethodDef> options = new ArrayList<MethodDef>();
-        
+
         methodsearch:
         for (MethodDef meth : ownerType.methods) {
             if (!meth.name.equals("init"))
@@ -51,11 +51,11 @@ public class NewObject extends Expression {
                     type.raw, implode(", ", argTypes)));
         return options.get(0);
     }
-    
+
     public FullTypeDesc inferType(CodeRCtx ctx) {
         return type;
     }
-    
+
     public CodeTree compile(CodeRCtx ctx) {
         MethodDef method = getMethod(ctx);
         CodeTree[] argCode = new CodeTree[args.length];
@@ -69,7 +69,7 @@ public class NewObject extends Expression {
                 Opcodes.POP // discard void result of init method
         );
     }
-    
+
     public String toString() {
         return String.format("new %s(%s)", type, implode(", ", args));
     }

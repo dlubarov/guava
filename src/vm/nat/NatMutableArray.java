@@ -22,10 +22,10 @@ public class NatMutableArray extends ZObject {
     @SuppressWarnings("serial")
     private static class NatMutableArrayType extends NativeType {
         private static final RawTypeDesc desc = new RawTypeDesc("core", "MutableArray");
-        
+
         private static final FullTypeDesc[] objOnly = new FullTypeDesc[] {new NormalFullTypeDesc(new RawTypeDesc("core", "Object"))};
         private static final RawTypeDesc descColl = new RawTypeDesc("core", "Collection");
-        
+
         NatMutableArrayType() {
             super(desc, new RawTypeDesc[] {new RawTypeDesc("core", "Array")},
                 new Method[] {
@@ -47,7 +47,7 @@ public class NatMutableArray extends ZObject {
                             meth = source.type.vtable.get(meth);
                             meth.invoke(stack, bp);
                             ZObject iter = stack[bp + 1];
-                            
+
                             meth = methodTable[1]; // Iterator.next
                             meth = iter.type.vtable.get(meth);
                             List<ZObject> buffer = new ArrayList<ZObject>();
@@ -65,7 +65,7 @@ public class NatMutableArray extends ZObject {
                             arr.elems = buffer.toArray(new ZObject[buffer.size()]);
                         }
                     },
-                    
+
                     // Get, set
                     new NativeMethod(new RawMethodDesc(
                             "core", "MutableArray", "get", 0,
@@ -131,10 +131,10 @@ public class NatMutableArray extends ZObject {
 //                    put(new RawMethodDesc("core", "Object", "toString", 0, FullTypeDesc.none),
 //                        new RawMethodDesc("core", "MutableArray", "toString", 0, FullTypeDesc.none));
                 }},
-                
+
                 0);
         }
-        
+
         public ZObject rawInstance() {
             return new NatMutableArray();
         }

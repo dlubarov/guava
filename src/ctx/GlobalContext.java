@@ -9,7 +9,7 @@ import java.util.*;
 public class GlobalContext {
     // Type definitions indexed by module, then by type name
     private final Map<String, Map<String, TypeDef>> typeDefs;
-    
+
     public GlobalContext(SourceFile[] sources) {
         typeDefs = new HashMap<String, Map<String, TypeDef>>();
         for (SourceFile src : sources) {
@@ -23,18 +23,18 @@ public class GlobalContext {
                                     src.module, type.name));
         }
     }
-    
+
     public Set<String> getLoadedModules() {
         return typeDefs.keySet();
     }
-    
+
     public Set<String> getTypeNamesFor(String module) {
         Map<String, TypeDef> typesByName = typeDefs.get(module);
         if (typesByName == null)
             throw new NoSuchElementException(String.format("no module named \"%s\"", module));
         return typesByName.keySet();
     }
-    
+
     // TODO: is there a more natural place for the top-level refine method?
     public static rst.TypeDef[] refine(SourceFile[] sources) {
         GlobalContext ctx = new GlobalContext(sources);

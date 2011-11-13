@@ -60,7 +60,7 @@ public class ClassMethodInvocation extends Expression {
             for (int i = 0; i < paramTypes.length; ++i)
                 if (!argTypes[i].isSubtype(paramTypes[i], ctx))
                     continue methodsearch;
-            
+
             options.add(meth);
         }
 
@@ -85,7 +85,7 @@ public class ClassMethodInvocation extends Expression {
         CodeTree allArgCode = new CodeTree((Object[]) argCode);
         return new CodeTree(allArgCode, Opcodes.INVOKE_STATIC, ctx.getMethodIndex(method.desc));
     }
-    
+
     public String toString() {
         return String.format("%s.%s%s(%s)",
                 owner, methodName,

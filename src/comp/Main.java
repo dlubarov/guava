@@ -48,10 +48,10 @@ public class Main {
 
         System.out.println("Compiling...");
         vm.Type[] allTypes = GlobalRCtx.compile(allTypeDefs);
-        
+
         System.out.println("Linking...");
         God.linkAll(allTypes);
-        
+
         for (vm.Type type : allTypes) {
             for (vm.Method meth : type.ownedMethods) {
                 RawMethodDesc desc = meth.desc;

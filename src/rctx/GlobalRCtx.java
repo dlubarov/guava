@@ -9,17 +9,17 @@ import common.RawTypeDesc;
 
 public class GlobalRCtx {
     private final Map<RawTypeDesc, TypeDef> allTypesByDesc;
-    
+
     public GlobalRCtx(TypeDef[] allTypes) {
         allTypesByDesc = new HashMap<RawTypeDesc, TypeDef>();
         for (TypeDef type : allTypes)
             allTypesByDesc.put(type.desc, type);
     }
-    
+
     public TypeDef resolve(RawTypeDesc desc) {
         return allTypesByDesc.get(desc);
     }
-    
+
     // TODO: is there a more natural place for the top-level compile method?
     public static Type[] compile(TypeDef[] allTypes) {
         GlobalRCtx ctx = new GlobalRCtx(allTypes);

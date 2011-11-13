@@ -23,7 +23,7 @@ public class InstanceMethodInvocation extends Expression {
         this.genericArgs = genericArgs;
         this.args = args;
     }
-    
+
     private MethodDef getMethod(CodeRCtx ctx, FullTypeDesc[] argTypes, FullTypeDesc[] parentTypes) {
         // FIXME: need to search up the type hierarchy for appropriate method
         return ctx.resolve(new RawTypeDesc("core", "Object"))
@@ -34,7 +34,7 @@ public class InstanceMethodInvocation extends Expression {
         FullTypeDesc[] argTypes = new FullTypeDesc[args.length];
         for (int i = 0; i < argTypes.length; ++i)
             argTypes[i] = args[i].inferType(ctx);
-        
+
         FullTypeDesc targetTypeDesc = target.inferType(ctx);
         if (targetTypeDesc instanceof NormalFullTypeDesc) {
             NormalFullTypeDesc normTypeDesc = (NormalFullTypeDesc) targetTypeDesc;

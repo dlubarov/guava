@@ -23,7 +23,7 @@ public class InstanceMethodInvocationOrGet extends Expression {
     private final String memberName;
     private final FullTypeDesc[] genericArgs;
     private final Expression[] args;
-    
+
     public InstanceMethodInvocationOrGet(Expression target, String memberName,
                                          FullTypeDesc[] genericArgs, Expression[] args) {
         this.target = target;
@@ -70,7 +70,7 @@ public class InstanceMethodInvocationOrGet extends Expression {
             return getVersion(ctx).compile(ctx);
         return normalVersion(ctx).compile(ctx);
     }
-    
+
     public String toString() {
         return String.format("%s.%s%s(%s)",
                 target, memberName,

@@ -17,13 +17,13 @@ public class NormalMethod extends Method {
         this.numLocals = numLocals;
         this.code = code;
     }
-    
+
     public void invoke(ZObject[] stack, int bp) {
         assert code != null : "invoke on abstract method";
-        
+
         int sp = bp + numLocals;
         int ip = 0, i, j;
-        
+
         for (;;) {
             int op = code[ip++];
             ZObject a, b;

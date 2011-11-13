@@ -106,7 +106,7 @@ public class NatBool extends ZObject {
                 }},
                 0);
         }
-        
+
         public ZObject rawInstance() {
             return new NatBool(false);
         }

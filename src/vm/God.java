@@ -45,7 +45,7 @@ public final class God {
             throw new NoSuchElementException("no such method: " + desc);
         return result;
     }
-    
+
     public static void linkAll(Type[] types) {
         for (Type type : nativeTypes())
             type.link();

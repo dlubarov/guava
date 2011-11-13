@@ -14,7 +14,7 @@ public class MethodDef {
     public final BlockStm body;
     public final boolean isStatic, isSealed;
     public RawMethodDesc desc;
-    
+
     public MethodDef(String name, FullTypeDesc retType, int numGenericParams, FullTypeDesc[] paramTypes,
                      BlockStm body, boolean isStatic, boolean isSealed) {
         this.name = name;
@@ -25,7 +25,7 @@ public class MethodDef {
         this.isStatic = isStatic;
         this.isSealed = isSealed;
     }
-    
+
     public NormalMethod compile(MethodRCtx ctx) {
         int[] code;
         if (body == null)
@@ -42,7 +42,7 @@ public class MethodDef {
             CodeRCtx codeCtx = new CodeRCtx(ctx, initLocals);
             code = body.compile(codeCtx).code.getCode();
         }
-        
+
         return new NormalMethod(desc,
                 ctx.getTypeTable(), ctx.getMethodTable(),
                 ctx.numLocals(), code);
@@ -54,7 +54,7 @@ public class MethodDef {
             sb.append("static ");
         if (isSealed)
             sb.append("sealed ");
-        
+
         sb.append(retType).append(' ').append(name);
 
         if (numGenericParams > 0) {
@@ -63,7 +63,7 @@ public class MethodDef {
                 sb.append(", T").append(i);
             sb.append(']');
         }
-        
+
         sb.append('(');
         for (int i = 0; i < paramTypes.length; ++i) {
             if (i != 0)

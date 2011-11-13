@@ -34,7 +34,7 @@ public class TypeDef {
         this.isAbstract = isAbstract;
         this.isSealed = isSealed;
     }
-    
+
     private NormalFullTypeDesc getFullDesc() {
         FullTypeDesc[] genericArgs = new FullTypeDesc[genericInfos.length];
         for (int i = 0; i < genericArgs.length; ++i)
@@ -113,17 +113,17 @@ public class TypeDef {
                     options.add(superType.getMatchingInstanceMethod(ctx, name, typeGenericArgs, methGenericArgs, argTypes));
                 } catch (NoSuchElementException e) {}
             }
-        
+
         if (options.isEmpty())
             throw new NoSuchElementException(String.format("%s.%s(%s)", desc, name, StringUtils.implode(", ", argTypes)));
         if (options.size() > 1)
             throw new RuntimeException(String.format("ambiguous method call: %s.%s", desc, name));
-        
+
         for (MethodDef m : options)
             return m;
         throw new RuntimeException("can't get here");
     }
-    
+
     public Type compile(GlobalRCtx ctx) {
         for (NativeType type : God.nativeTypes())
             if (type.desc.equals(desc))
@@ -132,7 +132,7 @@ public class TypeDef {
         RawTypeDesc[] supersRaw = new RawTypeDesc[supers.length];
         for (int i = 0; i < supersRaw.length; ++i)
             supersRaw[i] = supers[i].raw;
-        
+
         Method[] ownedMethods = new Method[methods.length];
         for (int i = 0; i < ownedMethods.length; ++i)
             try {
@@ -140,22 +140,23 @@ public class TypeDef {
             } catch (Throwable e) {
                 throw new RuntimeException("Compilation error in method " + methods[i].desc, e);
             }
-        
+
         // TODO: add inherited fields
         int numFields = instanceFields.length;
-        
+
         Map<RawMethodDesc, RawMethodDesc> vtableDescs = new HashMap<RawMethodDesc, RawMethodDesc>();
         // FIXME IMPORTANT: populate vtable
-        
+
         return new NormalType(desc, supersRaw,
                 ownedMethods, vtableDescs,
                 numFields, staticFields.length);
     }
-    
+
     public String toString() {
         StringBuilder sb = new StringBuilder();
         if (genericInfos.length > 0) {
             sb.append('[');
+            // TODO: finish toString
             sb.append("]\n");
         }
         sb.append("type ").append(desc);

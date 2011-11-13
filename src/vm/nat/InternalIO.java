@@ -12,11 +12,11 @@ public class InternalIO extends ZObject {
     static {
         TYPE = new InternalIOType();
     }
-    
+
     public InternalIO() {
         super(TYPE);
     }
-    
+
     private static class InternalIOType extends NativeType {
         private static final RawTypeDesc desc = new RawTypeDesc("core", "InternalIO");
         private static final RawTypeDesc descStr = new RawTypeDesc("core", "String");

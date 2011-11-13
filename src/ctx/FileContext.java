@@ -16,7 +16,7 @@ public class FileContext extends Resolver {
         localModule = file.module;
         wildcardImports = new HashSet<String>();
         specificImports = new HashMap<String, Set<String>>();
-        
+
         // Automatic imports
         wildcardImports.add("core");
         if (!file.module.equals("core"))

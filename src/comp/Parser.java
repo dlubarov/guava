@@ -27,9 +27,9 @@ public final class Parser {
             }
         });
     }
-    
+
     private final CharSequence source;
-    
+
     public Parser(CharSequence source) {
         this.source = preprocess(source);
     }
@@ -78,7 +78,7 @@ public final class Parser {
             throw new ParseException("expecting whitespace");
         return optWS(p);
     }
-    
+
     private ParseResult<String> parseIdentifier(int p) {
         char c = next(p++);
         if (!Character.isJavaIdentifierStart(c))
@@ -97,7 +97,7 @@ public final class Parser {
         try {
             return parseIdentifier(p);
         } catch (ParseException e) {}
-        
+
         for (String op : operators)
             try {
                 p = parseString(p, op);
@@ -159,7 +159,7 @@ public final class Parser {
             return new ParseResult<Expression>(LitBool.FALSE, p);
         }
     }
-    
+
     private ParseResult<Expression> parseLitChar(int p) {
         parseChar(p++, '\'');
         char c = next(p++);
@@ -200,7 +200,7 @@ public final class Parser {
         p = resArgs.rem;
         return new ParseResult<Expression>(new NewExp(resType.val, resArgs.val), p);
     }
-    
+
     private ParseResult<Expression> parseAtom(int p) {
         try {
             return parseParenExp(p);
@@ -243,7 +243,7 @@ public final class Parser {
             return new ParseResult<Expression[]>(parts.toArray(new Expression[parts.size()]), p);
         }
     }
-    
+
     private ParseResult<Expression> parseChain(int p) {
         ParseResult<Expression> resBase = parseAtom(p);
         Expression val = resBase.val;
@@ -263,7 +263,7 @@ public final class Parser {
             val = new Invocation(val, genericArgs, resArgs.val);
             p = resArgs.rem;
         } catch (ParseException e) {}
-        
+
         for (;;)
             try {
                 int p2 = optWS(p);
@@ -454,7 +454,7 @@ public final class Parser {
                 return new ParseResult<Expression>(val, p);
             }
     }
-    
+
     private ParseResult<Expression> parseXorExp(int p) {
         ParseResult<Expression> resFirst = parseAndExp(p);
         Expression val = resFirst.val;
@@ -471,7 +471,7 @@ public final class Parser {
                 return new ParseResult<Expression>(val, p);
             }
     }
-    
+
     private ParseResult<Expression> parseIorExp(int p) {
         ParseResult<Expression> resFirst = parseXorExp(p);
         Expression val = resFirst.val;
@@ -619,7 +619,7 @@ public final class Parser {
         } catch (ParseException e) {
             c = null;
         }
-        
+
         parseChar(p++, ')');
         p = optWS(p);
         ParseResult<Statement> resBody = parseStatement(p);
@@ -646,7 +646,7 @@ public final class Parser {
         p = resBody.rem;
         return new ParseResult<IterationStm>(new IterationStm(resVar.val, resIterable.val, resBody.val), p);
     }
-    
+
     private ParseResult<ReturnStm> parseReturnStm(int p) {
         p = parseString(p, "return");
         p = optWS(p);
@@ -725,12 +725,12 @@ public final class Parser {
         p = resQuals.rem; p = optWS(p);
         ParseResult<Type> resType = parseType(p);
         p = resType.rem; p = optWS(p);
-        
+
         ParseResult<String> resFirst = parseIdentifier(p);
         p = resFirst.rem; p = optWS(p);
         List<FieldDef> parts = new ArrayList<FieldDef>();
         parts.add(new FieldDef(resQuals.val, new TypedVar(resType.val, resFirst.val)));
-        
+
         for (;;)
             try {
                 parseChar(p, ',');
@@ -837,7 +837,7 @@ public final class Parser {
         ParseResult<String[]> resQuals = parseMethodQualifiers(p);
         p = resQuals.rem;
         p = optWS(p);
-        
+
         ParseResult<TypedVar> resSelf = parseTypedVarAllowOps(p);
         p = resSelf.rem;
         p = optWS(p);
@@ -845,7 +845,7 @@ public final class Parser {
         ParseResult<String[]> resGenerics = parseNonvariantGenericParamDecList(p);
         p = resGenerics.rem;
         p = optWS(p);
-        
+
         ParseResult<TypedVar[]> resParams = parseParamList(p);
         p = resParams.rem;
         p = optWS(p);
@@ -917,7 +917,7 @@ public final class Parser {
         } catch (ParseException e) {
             return new ParseResult<Variance>(Variance.NONVARIANT, p);
         }
-        
+
         if (c == '+')
             return new ParseResult<Variance>(Variance.COVARIANT, p + 1);
         if (c == '-')
@@ -1095,7 +1095,7 @@ public final class Parser {
 class ParseResult<T> {
     public final T val;
     public final int rem;
-    
+
     public ParseResult(T val, int rem) {
         this.val = val;
         this.rem = rem;
@@ -1110,11 +1110,11 @@ class ParseException extends RuntimeException {
     public ParseException() {
         super();
     }
-    
+
     public ParseException(String message) {
         super(message);
     }
-    
+
     public ParseException(String format, Object... args) {
         super(String.format(format, args));
     }

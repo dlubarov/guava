@@ -11,7 +11,7 @@ public class LitBool extends Expression {
     private final boolean value;
 
     public static final LitBool TRUE = new LitBool(true), FALSE = new LitBool(false);
-    
+
     private LitBool(boolean value) {
         this.value = value;
     }

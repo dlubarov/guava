@@ -14,7 +14,7 @@ public class FieldDef {
         this.isStatic = isStatic;
         this.isReadOnly = isReadOnly;
     }
-    
+
     public String toString() {
         return String.format("%s %s;", type, name);
     }

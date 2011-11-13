@@ -8,7 +8,7 @@ public abstract class Method {
 
     private final RawTypeDesc[] typeDescTable;
     protected Type[] typeTable;
-    
+
     private final RawMethodDesc[] methodDescTable;
     public Method[] methodTable;
 
@@ -39,7 +39,7 @@ public abstract class Method {
             throw new RuntimeException("stack size might have been exceeded?", e);
         }
     }
-    
+
     @Override
     public String toString() {
         return desc.toString();

@@ -2,7 +2,7 @@ package util;
 
 public final class StringUtils {
     private StringUtils() {}
-    
+
     public static String implode(String glue, Object[] parts) {
         StringBuilder sb = new StringBuilder();
         boolean first = true;
@@ -15,7 +15,7 @@ public final class StringUtils {
         }
         return sb.toString();
     }
-    
+
     public static String implode(char glue, Object[] parts) {
         return implode(Character.toString(glue), parts);
     }

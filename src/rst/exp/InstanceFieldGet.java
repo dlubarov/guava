@@ -21,7 +21,7 @@ public class InstanceFieldGet extends Expression {
         // TODO: this assumes generic types have no fields, which will be no longer valid when bounds are added
         NormalFullTypeDesc normTypeDesc = (NormalFullTypeDesc) targetTypeDesc;
         TypeDef targetType = ctx.resolve(normTypeDesc.raw);
-        
+
         FieldDef field = targetType.getField(fieldName);
         return field.type.withTypeGenerics(normTypeDesc.genericArgs);
     }
