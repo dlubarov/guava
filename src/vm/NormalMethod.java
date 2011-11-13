@@ -1,9 +1,7 @@
 package vm;
 
-import common.RawMethodDesc;
-import common.RawTypeDesc;
-import vm.nat.NatBool;
-import vm.nat.NatInt;
+import common.*;
+import vm.nat.*;
 
 import static vm.Opcodes.*;
 
@@ -44,6 +42,10 @@ public class NormalMethod extends Method {
 
                 case CONST_INT:
                     stack[++sp] = new NatInt(code[ip++]);
+                    break;
+
+                case CONST_CHAR:
+                    stack[++sp] = new NatChar((char) code[ip++]);
                     break;
 
                 case CONST_TRUE:

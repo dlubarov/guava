@@ -2,10 +2,7 @@ package vm;
 
 import common.RawMethodDesc;
 import common.RawTypeDesc;
-import vm.nat.NatBool;
-import vm.nat.NatInt;
-import vm.nat.NatMutableArray;
-import vm.nat.NatObject;
+import vm.nat.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -18,7 +15,8 @@ public final class God {
     private static final Map<RawMethodDesc, Method> loadedMethods;
 
     public static final NativeType[] nativeTypes() {
-        return new NativeType[] {NatObject.TYPE, NatInt.TYPE, NatBool.TYPE, NatMutableArray.TYPE};
+        return new NativeType[] {NatObject.TYPE, NatInt.TYPE, NatBool.TYPE, NatChar.TYPE,
+                NatMutableArray.TYPE, InternalIO.TYPE};
     };
 
     static {

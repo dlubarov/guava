@@ -19,13 +19,14 @@ public class InternalIO extends ZObject {
     
     private static class InternalIOType extends NativeType {
         private static final RawTypeDesc desc = new RawTypeDesc("core", "InternalIO");
+        private static final RawTypeDesc descStr = new RawTypeDesc("core", "String");
 
         InternalIOType() {
             super(desc,
                     new Method[] {
                         new NativeMethod(
-                                new RawMethodDesc(desc, "stdout", 0, null, true),
-                                new RawTypeDesc[] {new RawTypeDesc("core", "String")},
+                                new RawMethodDesc(desc, "stdout", 0, new FullTypeDesc[] {new NormalFullTypeDesc(descStr)}, true),
+                                new RawTypeDesc[] {descStr},
                                 new RawMethodDesc[] {}) {
                             public void invoke(ZObject[] stack, int bp) {
                                 NormalObject s = (NormalObject) stack[bp + 1];

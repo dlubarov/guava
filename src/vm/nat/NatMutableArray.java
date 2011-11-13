@@ -6,7 +6,6 @@ import vm.NativeMethod;
 import vm.NativeType;
 import vm.ZObject;
 
-import java.util.Arrays;
 import java.util.HashMap;
 
 public class NatMutableArray extends ZObject {
@@ -38,11 +37,11 @@ public class NatMutableArray extends ZObject {
                             new RawMethodDesc("core", "MutableArray", "init", 0,
                                     new FullTypeDesc[] {new NormalFullTypeDesc(descColl, new FullTypeDesc[] {new TypeGenericFullTypeDesc(desc, 0)})}),
                             new RawTypeDesc[0], new RawMethodDesc[0]) {
-                        @Override
                         public void invoke(ZObject[] stack, int bp) {
                             throw new RuntimeException("TODO: impl");
                         }
                     },
+                    
                     // Get, set
                     new NativeMethod(new RawMethodDesc(
                             "core", "MutableArray", "get", 0,

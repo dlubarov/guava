@@ -6,9 +6,8 @@ type Char {
   Char toUpper();
   Char toLower();
 
-  Bool isAlpha();
-  Bool isNumeric();
-  Bool isAlphaNumeric();
+  Bool isLetter();
+  Bool isDigit();
 
   Bool ==(Object that) {}
   Int hashCode() {}
