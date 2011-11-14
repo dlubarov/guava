@@ -1,0 +1,5 @@
+module core;
+
+type Console {
+  static Void stdout(String s) {}
+}
