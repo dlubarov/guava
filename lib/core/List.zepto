@@ -37,6 +37,10 @@ type EmptyList[+T] extends List[T] {
   Iterator[T] iterator() {
     return new EmptyIterator[T]();
   }
+
+  Int size() {
+    return 0;
+  }
 }
 
 type ListIterator[+T] extends Iterator[T] {

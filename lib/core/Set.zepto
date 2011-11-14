@@ -1,15 +1,12 @@
 module core;
 
 # A Set is a collection which contains no duplicate elements.
-type Set[+T] extends Collection[T] {
-  Set[T] &(Set[T] that) {
-  }
+abstract type Set[+T] extends Collection[T] {
+  Set[T] &(Set[T] that);
 
-  Set[T] |(Set[T] that) {
-  }
+  Set[T] |(Set[T] that);
 
-  Set[T] ^(Set[T] that) {
-  }
+  Set[T] ^(Set[T] that);
 
   Int count(T elem) {
     if (this.contains(elem))
@@ -23,9 +20,9 @@ type Set[+T] extends Collection[T] {
   }
 }
 
-type MutableSet[T] extends Set[T] {
+abstract type MutableSet[T] extends Set[T] {
   Void +=(T elem);
 }
 
-type ImmutableSet[+T] extends Set[T] {
+abstract type ImmutableSet[+T] extends Set[T] {
 }

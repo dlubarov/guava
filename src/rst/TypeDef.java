@@ -97,7 +97,7 @@ public class TypeDef {
                 FullTypeDesc paramType = method.paramTypes[i];
                 paramType = paramType.withTypeGenerics(typeGenericArgs);
                 paramType = paramType.withMethodGenerics(methGenericArgs);
-                if (!argTypes[i].isSubtype(paramType, ctx))
+                if (!argTypes[i].isSubtype(paramType, ctx.methodCtx.globalCtx))
                     continue methodsearch;
             }
 
@@ -124,11 +124,55 @@ public class TypeDef {
         throw new RuntimeException("can't get here");
     }
 
-    public Type compile(GlobalRCtx ctx) {
-        for (NativeType type : God.nativeTypes())
-            if (type.desc.equals(desc))
-                return type;
+    protected Set<RawMethodDesc> findAllInstanceMethods(GlobalRCtx ctx) {
+        Set<RawMethodDesc> result = new HashSet<RawMethodDesc>();
+        for (MethodDef m : methods)
+            if (!m.isStatic)
+                result.add(m.desc);
+        for (NormalFullTypeDesc sup : supers) {
+            TypeDef supType = ctx.resolve(sup.raw);
+            Set<RawMethodDesc> supMeths = supType.findAllInstanceMethods(ctx);
+            for (RawMethodDesc m : supMeths)
+                result.add(m.withTypeGenerics(sup.genericArgs));
+        }
+        return result;
+    }
 
+    protected RawMethodDesc myImplementationOf(GlobalRCtx ctx, RawMethodDesc method, FullTypeDesc[] myGenericArgs) {
+        // If I implement this method myself, return my implementation
+        for (MethodDef m : methods) {
+            if (m.desc.withTypeGenerics(myGenericArgs).canOverride(ctx, method)) {
+                if (m.body == null) {
+                    if (!isAbstract)
+                        throw new RuntimeException("no implementation of " + method);
+                } else
+                    return m.desc;
+            }
+        }
+        // Otherwise, check my supertypes for an implementation
+        List<RawMethodDesc> impls = new ArrayList<RawMethodDesc>();
+        for (NormalFullTypeDesc sup : supers) {
+            FullTypeDesc[] newGenericArgs = new FullTypeDesc[sup.genericArgs.length];
+            for (int i = 0; i < newGenericArgs.length; ++i)
+                newGenericArgs[i] = sup.genericArgs[i].withTypeGenerics(myGenericArgs);
+            RawMethodDesc impl = ctx.resolve(sup.raw).myImplementationOf(ctx, method, newGenericArgs);
+            if (impl != null) impls.add(impl);
+        }
+        if (impls.isEmpty())
+            return null;
+        if (impls.size() > 1)
+            throw new RuntimeException(String.format("%s inherits multiple implementations of %s", desc, method));
+        return impls.get(0);
+    }
+    
+    protected RawMethodDesc myImplementationOf(GlobalRCtx ctx, RawMethodDesc method) {
+        FullTypeDesc[] myGenericArgs = new FullTypeDesc[genericInfos.length];
+        for (int i = 0; i < myGenericArgs.length; ++i)
+            myGenericArgs[i] = new TypeGenericFullTypeDesc(desc, i);
+        return myImplementationOf(ctx, method, myGenericArgs);
+    }
+
+    public Type compile(GlobalRCtx ctx) {
         RawTypeDesc[] supersRaw = new RawTypeDesc[supers.length];
         for (int i = 0; i < supersRaw.length; ++i)
             supersRaw[i] = supers[i].raw;
@@ -145,7 +189,15 @@ public class TypeDef {
         int numFields = instanceFields.length;
 
         Map<RawMethodDesc, RawMethodDesc> vtableDescs = new HashMap<RawMethodDesc, RawMethodDesc>();
-        // FIXME IMPORTANT: populate vtable
+        Set<RawMethodDesc> allMyMethods = findAllInstanceMethods(ctx);
+        for (RawMethodDesc m : allMyMethods)
+            vtableDescs.put(m, myImplementationOf(ctx, m));
+
+        for (NativeType type : God.nativeTypes())
+            if (type.desc.equals(desc)) {
+                // TODO: update native type to include non-empty methods, vtable
+                return type;
+            }
 
         return new NormalType(desc, supersRaw,
                 ownedMethods, vtableDescs,

@@ -58,7 +58,7 @@ public class ClassMethodInvocation extends Expression {
 
             // Check that argument types match
             for (int i = 0; i < paramTypes.length; ++i)
-                if (!argTypes[i].isSubtype(paramTypes[i], ctx))
+                if (!argTypes[i].isSubtype(paramTypes[i], ctx.methodCtx.globalCtx))
                     continue methodsearch;
 
             options.add(meth);

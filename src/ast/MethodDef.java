@@ -6,7 +6,8 @@ import rst.GenericInfo;
 
 import common.*;
 
-import ast.stm.BlockStm;
+import ast.exp.LitVoid;
+import ast.stm.*;
 import ctx.*;
 
 import static util.StringUtils.implode;
@@ -27,6 +28,11 @@ public class MethodDef extends MemberDef {
         this.genericParams = genericParams;
         this.params = params;
         this.body = body;
+    }
+    
+    private boolean isVoid() {
+        String retType = self.type.name;
+        return retType.equals("Void") || retType.equals("core.Void");
     }
 
     private boolean hasQualifier(String qual) {
@@ -76,11 +82,18 @@ public class MethodDef extends MemberDef {
         Type[] paramTypes = new Type[params.length];
         for (int i = 0; i < paramTypes.length; ++i)
             paramTypes[i] = params[i].type;
+
+        rst.stm.BlockStm refBody = null;
+        if (body != null) {
+            BlockStm tweakedBody = body;
+            if (isVoid())
+                tweakedBody = new BlockStm(body, new ReturnStm(LitVoid.SINGLETON));
+            refBody = (rst.stm.BlockStm) tweakedBody.refine(new CodeContext(ctx)).stm;
+        }
+
         return new rst.MethodDef(self.name, ctx.resolveFull(self.type),
                 genericParams.length, ctx.resolveAllFull(paramTypes),
-                body == null
-                    ? null
-                    : (rst.stm.BlockStm) body.refine(new CodeContext(ctx)).stm,
+                refBody,
                 isStatic(),
                 isSealed());
     }

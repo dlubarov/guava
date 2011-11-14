@@ -10,7 +10,8 @@ public class FullMethodDesc {
     public final FullTypeDesc[] genericArgs;
     public final FullTypeDesc[] paramTypes;
 
-    public FullMethodDesc(RawTypeDesc owner, String name, FullTypeDesc[] genericArgs, FullTypeDesc[] paramTypes) {
+    public FullMethodDesc(RawTypeDesc owner, String name, FullTypeDesc[] genericArgs,
+            FullTypeDesc[] paramTypes) {
         this.owner = owner;
         this.name = name;
         this.genericArgs = genericArgs;

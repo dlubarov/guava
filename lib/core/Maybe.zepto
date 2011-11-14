@@ -1,6 +1,6 @@
 module core;
 
-type Maybe[+T] extends Iterable[T] {
+abstract type Maybe[+T] extends Iterable[T] {
   Bool isSomething();
 
   T get();

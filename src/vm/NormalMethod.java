@@ -5,6 +5,7 @@ import vm.nat.*;
 import vm.ty.*;
 
 import static vm.Opcodes.*;
+import static java.lang.System.out;
 
 public class NormalMethod extends Method {
 //    private final int numGenericParams;
@@ -22,15 +23,45 @@ public class NormalMethod extends Method {
     public void invoke(ZObject[] stack, int bp, ConcreteType[] genericArgs) {
         assert code != null : "invoke on abstract method";
 
+        try {
         int sp = bp + numLocals;
+        System.out.println("INVOKING " + desc);
         int ip = 0, i, j;
+        ZObject a, b;
         ConcreteType[] ctypes;
+        
+        for (i = 0; i < (desc.isStatic? 0 : 1) + desc.paramTypes.length; ++i) {
+            assert stack[bp + i + 1] != null : "argument " + i + " is null in " + desc;
+        }
 
         for (;;) {
             int op = code[ip++];
-            ZObject a, b;
             Type ty;
             Method meth;
+            if (true) { // if debugging
+                out.printf("                                                   (bp=%d, sp=%d)\r", bp, sp);
+                out.printf("    %s", Opcodes.repr(op));
+                switch (op) {
+                    case GET_LOCAL:
+                        out.printf(" %d", code[ip]);
+                        break;
+                    case PUT_LOCAL:
+                        out.printf(" %d", code[ip]);
+                        break;
+                    case GET_FIELD:
+                        out.printf(" %d", code[ip]);
+                        break;
+                    case PUT_FIELD:
+                        out.printf(" %d", code[ip]);
+                        break;
+                    case INVOKE_STATIC:
+                    case INVOKE_VIRTUAL:
+                        Method m = methodTable[code[ip]];
+                        out.printf(" %s.%s", m.desc.owner, m.desc.name);
+                        break;
+                }
+                out.println();
+            }
 
             switch (op) {
                 case POP:
@@ -61,11 +92,13 @@ public class NormalMethod extends Method {
                 case GET_LOCAL:
                     i = code[ip++];
                     stack[++sp] = stack[bp + i + 1];
+                    System.out.printf("  local %d (%d) retrieved: %s", i, bp+i+1, stack[bp+i+1].getClass());
                     break;
 
                 case PUT_LOCAL:
                     i = code[ip++];
                     stack[bp + i + 1] = stack[sp--];
+                    System.out.printf("  local %d (%d) set to %s", i, bp+i+1, stack[bp+i+1].getClass());
                     break;
 
                 case GET_FIELD:
@@ -76,8 +109,8 @@ public class NormalMethod extends Method {
 
                 case PUT_FIELD:
                     i = code[ip++];
-                    a = stack[sp--]; // target
                     b = stack[sp--]; // new field value
+                    a = stack[sp--]; // target
                     ((NormalObject) a).fields[i] = b;
                     break;
 
@@ -112,7 +145,7 @@ public class NormalMethod extends Method {
                     j = meth.desc.paramTypes.length; // # args
                     if (!meth.desc.isStatic)
                         j += 1;
-                    meth.invoke(stack, sp - j, ctypes);
+                    meth.invoke(stack, sp - j - 1, ctypes);
                     sp -= j - 1;
                     break;
 
@@ -133,9 +166,10 @@ public class NormalMethod extends Method {
                     j = meth.desc.paramTypes.length; // # args (TODO: optimize)
                     a = stack[sp - j]; // target
                     ty = a.type.rawType;
+                    assert ty.vtable.containsKey(meth) : "method " + meth.desc
+                            + " not found in vtable of " + ty.desc;
                     meth = ty.vtable.get(meth);
-                    assert meth != null : "method not found in vtable of " + ty;
-                    meth.invoke(stack, sp - j - 1, ctypes);
+                    meth.invoke(stack, sp - j - 1, ctypes); // FIXME: off by 1?
                     sp -= j;
                     break;
 
@@ -152,7 +186,7 @@ public class NormalMethod extends Method {
 
                     for (j = 0; j < ctypes.length; ++j)
                         ctypes[j] = fty.genericArgs[j].toConcrete(a, this, genericArgs);
-                    stack[++ip] = ty.rawInstance(ctypes);
+                    stack[++sp] = ty.rawInstance(ctypes);
                     break;
 
                 case JUMP:
@@ -174,6 +208,9 @@ public class NormalMethod extends Method {
                     stack[bp + 1] = stack[sp];
                     return;
             }
+        }
+        } catch (Exception e) {
+            throw new RuntimeException("exception in " + desc, e);
         }
     }
 }

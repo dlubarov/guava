@@ -8,7 +8,7 @@ import vm.ty.*;
 import common.*;
 
 public class MethodRCtx {
-    private final GlobalRCtx globalCtx;
+    public final GlobalRCtx globalCtx;
     public final NormalFullTypeDesc owner;
     private final List<RawTypeDesc> typeTable;
     private final List<RawMethodDesc> methodTable;

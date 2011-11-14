@@ -171,6 +171,7 @@ public class NatInt extends ZObject {
                             int n = ((NatInt) stack[bp + 1]).value;
                             String s = Integer.toString(n);
                             stack[bp + 1] = null; // FIXME: create String
+                            throw new RuntimeException("impl");
                         }
                     },
                 },

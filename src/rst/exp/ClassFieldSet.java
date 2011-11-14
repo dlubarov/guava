@@ -26,7 +26,7 @@ public class ClassFieldSet extends Expression {
         int fieldIdx = ownerType.getStaticFieldIndex(fieldName);
         return new CodeTree(
                 value.compile(ctx),
-                Opcodes.PUT_FIELD,
+                Opcodes.PUT_STATIC_FIELD,
                 ctx.getTypeIndex(owner),
                 fieldIdx,
                 new ClassFieldGet(owner, fieldName).compile(ctx));

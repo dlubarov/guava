@@ -1,6 +1,6 @@
 module core;
 
-type Sequence[+T] extends Collection[T] {
+abstract type Sequence[+T] extends Collection[T] {
   T get(Int idx) {
     # TODO bounds check
     Iterator[T] iter = this.iterator();

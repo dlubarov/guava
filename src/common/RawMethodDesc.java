@@ -1,6 +1,8 @@
 package common;
 
 import java.util.Arrays;
+
+import rctx.GlobalRCtx;
 import static util.StringUtils.implode;
 
 public class RawMethodDesc {
@@ -27,6 +29,26 @@ public class RawMethodDesc {
 
     public RawMethodDesc(String module, String owner, String name, int numGenericParams, FullTypeDesc[] paramTypes) {
         this(new RawTypeDesc(module, owner), name, numGenericParams, paramTypes, false);
+    }
+
+    public RawMethodDesc withTypeGenerics(FullTypeDesc[] typeGenerics) {
+        FullTypeDesc[] newParamTypes = new FullTypeDesc[paramTypes.length];
+        for (int i = 0; i < newParamTypes.length; ++i)
+            newParamTypes[i] = paramTypes[i].withTypeGenerics(typeGenerics);
+        return new RawMethodDesc(owner, name, numGenericParams, newParamTypes, isStatic);
+    }
+
+    public boolean canOverride(GlobalRCtx ctx, RawMethodDesc m) {
+        if (isStatic || m.isStatic)
+            return false;
+        if (!owner.equals(m.owner) || !name.equals(m.name))
+            return false;
+        if (numGenericParams != m.numGenericParams)
+            return false;
+        for (int i = 0; i < paramTypes.length; ++i)
+            if (!m.paramTypes[i].isSubtype(paramTypes[i], ctx))
+                return false;
+        return true;
     }
 
     @Override

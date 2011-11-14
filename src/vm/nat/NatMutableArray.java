@@ -120,6 +120,7 @@ public class NatMutableArray extends ZObject {
 //                            ZObject[] arr = ((NatMutableArray) stack[bp + 1]).elems;
 //                            String s = "an array"; // TODO: proper toString
 //                            stack[bp + 1] = null; // FIXME: create String
+//                            throw new RuntimeException("impl");
 //                        }
 //                    },
                 },

@@ -93,6 +93,7 @@ public class NatBool extends ZObject {
                             boolean b = ((NatBool) stack[bp + 1]).value;
                             String s = Boolean.toString(b);
                             stack[bp + 1] = null; // FIXME: create String
+                            throw new RuntimeException("impl");
                         }
                     },
                 },

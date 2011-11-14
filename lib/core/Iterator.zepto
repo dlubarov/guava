@@ -1,6 +1,6 @@
 module core;
 
-type Iterator[+T] {
+abstract type Iterator[+T] {
   Maybe[T] next();
 }
 

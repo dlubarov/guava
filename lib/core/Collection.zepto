@@ -1,6 +1,6 @@
 module core;
 
-type Collection[+T] extends Iterable[T] {
+abstract type Collection[+T] extends Iterable[T] {
   Int size() {
     Int result = 0;
     for (T elem : this)

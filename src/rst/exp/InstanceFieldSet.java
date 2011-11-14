@@ -22,7 +22,7 @@ public class InstanceFieldSet extends Expression {
         return new InstanceFieldGet(target, fieldName).inferType(ctx);
     }
 
-    public CodeTree compile(CodeRCtx ctx) {
+    public CodeTree compileHelper(CodeRCtx ctx, boolean giveResult) {
         assert ctx != null : "got a null context";
         // TODO: doesn't work with fields owned by supertypes
         FullTypeDesc targetTypeDesc = target.inferType(ctx);
@@ -31,11 +31,25 @@ public class InstanceFieldSet extends Expression {
         TypeDef targetType = ctx.resolve(normTypeDesc.raw);
 
         int idx = targetType.getFieldIndex(fieldName);
-        return new CodeTree(
+
+        if (giveResult)
+            return new CodeTree(
                 target.compile(ctx), Opcodes.DUP,
                 value.compile(ctx),
                 Opcodes.PUT_FIELD, idx,
                 Opcodes.GET_FIELD, idx);
+        else
+            return new CodeTree(
+                target.compile(ctx), value.compile(ctx),
+                Opcodes.PUT_FIELD, idx);
+    }
+
+    public CodeTree compile(CodeRCtx ctx) {
+        return compileHelper(ctx, true);
+    }
+
+    public CodeTree compileNoResult(CodeRCtx ctx) {
+        return compileHelper(ctx, false);
     }
 
     public String toString() {

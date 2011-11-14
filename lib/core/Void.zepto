@@ -1,3 +1,11 @@
 module core;
 
-type Void {}
+type Void {
+  static Void SINGLETON;
+
+  static Void init() {
+    Void.SINGLETON = new Void();
+  }
+
+  Void init() {}
+}

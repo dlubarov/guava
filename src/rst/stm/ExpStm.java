@@ -1,8 +1,5 @@
 package rst.stm;
 
-import vm.Opcodes;
-import comp.CodeTree;
-
 import rctx.CodeRCtx;
 import rst.exp.Expression;
 
@@ -14,9 +11,7 @@ public class ExpStm extends Statement {
     }
 
     public CompilationResult compile(CodeRCtx ctx) {
-        return new CompilationResult(
-                new CodeTree(exp.compile(ctx), Opcodes.POP),
-                ctx);
+        return new CompilationResult(exp.compileNoResult(ctx), ctx);
     }
 
     public String toString() {

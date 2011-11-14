@@ -37,7 +37,7 @@ public class NewObject extends Expression {
             if (meth.paramTypes.length != args.length)
                 continue;
             for (int i = 0; i < argTypes.length; ++i)
-                if (!argTypes[i].isSubtype(meth.paramTypes[i].withTypeGenerics(type.genericArgs), ctx))
+                if (!argTypes[i].isSubtype(meth.paramTypes[i].withTypeGenerics(type.genericArgs), ctx.methodCtx.globalCtx))
                     continue methodsearch;
             options.add(meth);
         }
@@ -56,6 +56,8 @@ public class NewObject extends Expression {
     }
 
     public CodeTree compile(CodeRCtx ctx) {
+        if (ctx.resolve(type.raw).isAbstract)
+            throw new RuntimeException("instantiation of abstract type " + type.raw);
         MethodDef method = getMethod(ctx);
         CodeTree[] argCode = new CodeTree[args.length];
         for (int i = 0; i < argCode.length; ++i)
@@ -64,7 +66,7 @@ public class NewObject extends Expression {
         return new CodeTree(
                 Opcodes.NEW, ctx.getFullTypeIndex(type),
                 Opcodes.DUP, allArgCode,
-                Opcodes.INVOKE_STATIC, ctx.getMethodIndex(method.desc),
+                Opcodes.INVOKE_STATIC, ctx.getMethodIndex(method.desc), 0,
                 Opcodes.POP // discard void result of init method
         );
     }

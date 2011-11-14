@@ -90,6 +90,7 @@ public class NatChar extends ZObject {
                             char c = ((NatChar) stack[bp + 1]).value;
                             String s = Character.toString(c);
                             stack[bp + 1] = null; // FIXME: create String
+                            throw new RuntimeException("impl");
                         }
                     },
                 },

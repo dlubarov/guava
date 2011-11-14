@@ -1,13 +1,13 @@
 module core;
 
 type Char {
-  Void init(Int i);
+  Void init(Int i) {}
 
-  Char toUpper();
-  Char toLower();
+  Char toUpper() {}
+  Char toLower() {}
 
-  Bool isLetter();
-  Bool isDigit();
+  Bool isLetter() {}
+  Bool isDigit() {}
 
   Bool ==(Object that) {}
   Int hashCode() {}

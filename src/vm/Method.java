@@ -14,7 +14,8 @@ public abstract class Method {
 
     public final FullType[] fullTypeTable;
 
-    public Method(RawMethodDesc desc, RawTypeDesc[] typeDescTable, RawMethodDesc[] methodDescTable, FullType[] fullTypeTable) {
+    public Method(RawMethodDesc desc, RawTypeDesc[] typeDescTable, RawMethodDesc[] methodDescTable,
+            FullType[] fullTypeTable) {
         this.desc = desc;
         this.typeDescTable = typeDescTable;
         this.methodDescTable = methodDescTable;

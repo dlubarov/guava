@@ -42,7 +42,8 @@ public final class God {
     public static Method resolveMethod(RawMethodDesc desc) {
         Method result = loadedMethods.get(desc);
         if (result == null)
-            throw new NoSuchElementException("no such method: " + desc);
+            //throw new NoSuchElementException("no such method: " + desc);
+            loadedMethods.put(desc, result = new AbstractMethod(desc));
         return result;
     }
 

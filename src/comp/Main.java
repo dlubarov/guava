@@ -14,7 +14,7 @@ import ast.SourceFile;
 import ctx.GlobalContext;
 
 public class Main {
-    private static final boolean PRINT_AST = false, PRINT_RST = false;
+    private static final boolean PRINT_AST = false, PRINT_RST = false, PRINT_CODE = true;
 
     private static SourceFile parseFile(String fname) throws IOException {
         Reader r = new FileReader(fname);

@@ -1,7 +1,7 @@
 package rst;
 
-import common.FullTypeDesc;
-import common.RawMethodDesc;
+import common.*;
+import comp.CodeTree;
 import rctx.*;
 import rst.stm.*;
 import vm.NormalMethod;
@@ -40,7 +40,8 @@ public class MethodDef {
                 System.arraycopy(paramTypes, 0, initLocals, 1, paramTypes.length);
             }
             CodeRCtx codeCtx = new CodeRCtx(ctx, initLocals);
-            code = body.compile(codeCtx).code.getCode();
+            CodeTree codeTree = body.compile(codeCtx).code;
+            code = codeTree.getCode();
         }
 
         return new NormalMethod(desc,

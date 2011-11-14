@@ -1,6 +1,6 @@
 package common;
 
-import rctx.CodeRCtx;
+import rctx.*;
 import rst.TypeDef;
 
 import java.util.Arrays;
@@ -32,7 +32,7 @@ public class NormalFullTypeDesc extends FullTypeDesc {
         return new NormalFullTypeDesc(raw, newGenericArgs);
     }
 
-    public boolean isSubtype(FullTypeDesc td, CodeRCtx ctx) {
+    public boolean isSubtype(FullTypeDesc td, GlobalRCtx ctx) {
         if (td instanceof TypeGenericFullTypeDesc || td instanceof MethodGenericFullTypeDesc)
             return td.isSupertype(this, ctx);
 
@@ -69,7 +69,7 @@ public class NormalFullTypeDesc extends FullTypeDesc {
         }
     }
 
-    public boolean isSupertype(FullTypeDesc td, CodeRCtx ctx) {
+    public boolean isSupertype(FullTypeDesc td, GlobalRCtx ctx) {
         return td.isSubtype(this, ctx);
     }
 

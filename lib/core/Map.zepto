@@ -1,13 +1,13 @@
 module core;
 
-type Map[-K, +V] extends Collection[Tuple2[K, V]] {
+abstract type Map[-K, +V] extends Collection[Tuple2[K, V]] {
   Maybe[V] get(K key);
 }
 
-type MutableMap[K, V] extends Map[K, V] {
+abstract type MutableMap[K, V] extends Map[K, V] {
   # Returns the given val, NOT the old val (as Java's Map would)
   V set(K key, V val);
 }
 
-type ImmutableMap[-K, +V] extends Map[K, V] {
+abstract type ImmutableMap[-K, +V] extends Map[K, V] {
 }

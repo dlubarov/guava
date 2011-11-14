@@ -43,6 +43,7 @@ public class NatObject extends ZObject {
                         public void invoke(ZObject[] stack, int bp, ConcreteType[] genericArgs) {
                             ZObject obj = stack[bp + 1];
                             stack[bp + 1] = null; // FIXME: create String
+                            throw new RuntimeException("impl");
                         }
                     },
                 },

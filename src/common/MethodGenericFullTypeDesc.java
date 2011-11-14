@@ -1,6 +1,6 @@
 package common;
 
-import rctx.CodeRCtx;
+import rctx.*;
 
 public class MethodGenericFullTypeDesc extends FullTypeDesc {
     public final RawMethodDesc owner;
@@ -23,14 +23,14 @@ public class MethodGenericFullTypeDesc extends FullTypeDesc {
         }
     }
 
-    public boolean isSubtype(FullTypeDesc that, CodeRCtx ctx) {
+    public boolean isSubtype(FullTypeDesc that, GlobalRCtx ctx) {
         // TODO: generic upper bounds
         if (that.equals(new NormalFullTypeDesc(new RawTypeDesc("core", "Object"))))
             return true;
         return equals(that);
     }
 
-    public boolean isSupertype(FullTypeDesc that, CodeRCtx ctx) {
+    public boolean isSupertype(FullTypeDesc that, GlobalRCtx ctx) {
         // TODO: generic lower bounds
         if (equals(new NormalFullTypeDesc(new RawTypeDesc("core", "Object"))))
             return true;
@@ -53,6 +53,6 @@ public class MethodGenericFullTypeDesc extends FullTypeDesc {
     }
 
     public String toString() {
-        return String.format("M%d", index);
+        return String.format("%s.%s:M%d", owner.owner.name, owner.name, index);
     }
 }

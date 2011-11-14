@@ -1,6 +1,6 @@
 package common;
 
-import rctx.CodeRCtx;
+import rctx.*;
 import rst.*;
 
 public class TypeGenericFullTypeDesc extends GenericFullTypeDesc {
@@ -26,7 +26,7 @@ public class TypeGenericFullTypeDesc extends GenericFullTypeDesc {
         return this;
     }
 
-    public boolean isSubtype(FullTypeDesc that, CodeRCtx ctx) {
+    public boolean isSubtype(FullTypeDesc that, GlobalRCtx ctx) {
         TypeDef type = ctx.resolve(owner);
         GenericInfo info = type.genericInfos[index];
         for (FullTypeDesc par : info.parentTypes)
@@ -35,7 +35,7 @@ public class TypeGenericFullTypeDesc extends GenericFullTypeDesc {
         return equals(that);
     }
 
-    public boolean isSupertype(FullTypeDesc that, CodeRCtx ctx) {
+    public boolean isSupertype(FullTypeDesc that, GlobalRCtx ctx) {
         TypeDef type = ctx.resolve(owner);
         GenericInfo info = type.genericInfos[index];
         for (FullTypeDesc child : info.childTypes)
@@ -60,6 +60,6 @@ public class TypeGenericFullTypeDesc extends GenericFullTypeDesc {
     }
 
     public String toString() {
-        return String.format("T%d", index);
+        return String.format("%s:T%d", owner.name, index);
     }
 }
