@@ -114,4 +114,9 @@ public class NatBool extends ZObject {
             return new NatBool(false);
         }
     }
+    
+    @Override
+    public String toString() {
+        return Boolean.toString(value);
+    }
 }

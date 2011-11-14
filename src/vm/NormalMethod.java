@@ -29,10 +29,9 @@ public class NormalMethod extends Method {
         int ip = 0, i, j;
         ZObject a, b;
         ConcreteType[] ctypes;
-        
-        for (i = 0; i < (desc.isStatic? 0 : 1) + desc.paramTypes.length; ++i) {
+
+        for (i = 0; i < (desc.isStatic? 0 : 1) + desc.paramTypes.length; ++i)
             assert stack[bp + i + 1] != null : "argument " + i + " is null in " + desc;
-        }
 
         for (;;) {
             int op;
@@ -217,6 +216,7 @@ public class NormalMethod extends Method {
 
                 case RETURN:
                     stack[bp + 1] = stack[sp];
+//                    System.out.println("RETURNING " + stack[sp] + " from " + desc);
                     return;
             }
         }

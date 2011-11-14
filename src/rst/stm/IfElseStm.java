@@ -24,8 +24,9 @@ public class IfElseStm extends Statement {
         CodeTree falseCode = bodyFalse.compile(ctx).code;
         return new CompilationResult(
                 new CodeTree(condCode,
-                        Opcodes.JUMP_COND, trueCode.size(),
-                        trueCode, falseCode),
+                        Opcodes.JUMP_COND, falseCode.size() + 2,
+                        falseCode, Opcodes.JUMP, trueCode.size(),
+                        trueCode),
                 ctx);
     }
 

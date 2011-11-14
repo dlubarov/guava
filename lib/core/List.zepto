@@ -37,6 +37,10 @@ type NonEmptyList[+T] extends List[T] {
   Int size() {
     return this.size;
   }
+
+  Bool isEmpty() {
+    return false;
+  }
 }
 
 type EmptyList[+T] extends List[T] {
@@ -44,12 +48,16 @@ type EmptyList[+T] extends List[T] {
 
   List[T] tail() {}
 
-  Iterator[T] iterator() {
-    return new EmptyIterator[T]();
-  }
+  #Iterator[T] iterator() {
+  #  return new EmptyIterator[T]();
+  #}
 
   Int size() {
     return 0;
+  }
+
+  Bool isEmpty() {
+    return true;
   }
 }
 
@@ -65,7 +73,7 @@ type ListIterator[+T] extends Iterator[T] {
       return new None[T]();
     else {
       T elem = this.current.first();
-      this.current = this.current.last(this.current.size() - 1);
+      this.current = this.current.tail();
       return new Some[T](elem);
     }
   }

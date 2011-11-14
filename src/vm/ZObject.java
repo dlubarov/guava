@@ -8,4 +8,9 @@ public abstract class ZObject {
     public ZObject(ConcreteType type) {
         this.type = type;
     }
+
+    @Override
+    public String toString() {
+        return String.format("%s@%d", type.toString(), System.identityHashCode(this));
+    }
 }

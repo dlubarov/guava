@@ -16,7 +16,7 @@ public final class God {
 
     public static final NativeType[] nativeTypes() {
         return new NativeType[] {NatObject.TYPE, NatInt.TYPE, NatBool.TYPE, NatChar.TYPE,
-                NatMutableArray.TYPE, InternalIO.TYPE};
+                NatMutableArray.TYPE, Console.TYPE};
     };
 
     static {

@@ -13,7 +13,7 @@ public class NatMutableArray extends ZObject {
         TYPE = new NatMutableArrayType();
     }
 
-    private ZObject[] elems;
+    public ZObject[] elems;
 
     public NatMutableArray(ConcreteType[] genericArgs) {
         super(new ConcreteType(TYPE, genericArgs));
@@ -43,23 +43,23 @@ public class NatMutableArray extends ZObject {
                             }) {
                         public void invoke(ZObject[] stack, int bp, ConcreteType[] genericArgs) {
                             NatMutableArray arr = (NatMutableArray) stack[bp + 1];
-                            System.out.println("INVOKE init " + arr);
                             ZObject source = stack[bp + 2];
                             Method meth = methodTable[0]; // Collection.iterator
                             meth = source.type.rawType.vtable.get(meth);
                             meth.invoke(stack, bp + 1, ConcreteType.NONE);
                             ZObject iter = stack[bp + 2];
-                            System.out.println(iter.type);
 
                             meth = methodTable[1]; // Iterator.next
                             meth = iter.type.rawType.vtable.get(meth);
                             List<ZObject> buffer = new ArrayList<ZObject>();
                             for (;;) {
+                                stack[bp + 1] = iter;
                                 meth.invoke(stack, bp, ConcreteType.NONE);
                                 ZObject maybeNext = stack[bp + 1];
                                 maybeNext.type.rawType.vtable.get(methodTable[2]).invoke(stack, bp, ConcreteType.NONE);
                                 boolean isSomething = ((NatBool) stack[bp + 1]).value;
                                 if (isSomething) {
+                                    stack[bp + 1] = maybeNext;
                                     maybeNext.type.rawType.vtable.get(methodTable[3]).invoke(stack, bp, ConcreteType.NONE);
                                     buffer.add(stack[bp + 1]);
                                 } else
@@ -67,7 +67,6 @@ public class NatMutableArray extends ZObject {
                             }
 
                             arr.elems = buffer.toArray(new ZObject[buffer.size()]);
-                            System.out.println(arr.elems.length);
                         }
                     },
 
@@ -96,7 +95,6 @@ public class NatMutableArray extends ZObject {
                     // Size
                     new NativeMethod(new RawMethodDesc("core", "MutableArray", "size", 0, FullTypeDesc.none)) {
                         public void invoke(ZObject[] stack, int bp, ConcreteType[] genericArgs) {
-                            System.out.println("INVOKE size " + stack[bp + 1]);
                             ZObject[] arr = ((NatMutableArray) stack[bp + 1]).elems;
                             stack[bp + 1] = new NatInt(arr.length);
                         }
