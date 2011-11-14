@@ -16,6 +16,7 @@ public abstract class Method {
 
     public Method(RawMethodDesc desc, RawTypeDesc[] typeDescTable, RawMethodDesc[] methodDescTable,
             FullType[] fullTypeTable) {
+        assert desc != null;
         this.desc = desc;
         this.typeDescTable = typeDescTable;
         this.methodDescTable = methodDescTable;

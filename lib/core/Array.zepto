@@ -2,6 +2,10 @@ module core;
 
 abstract type Array[+T] extends Sequence[T] {
   T get(Int idx);
+
+  Iterator[T] iterator() {
+    return new ArrayIterator[T](this);
+  }
 }
 
 type MutableArray[T] extends Array[T] {
@@ -10,6 +14,8 @@ type MutableArray[T] extends Array[T] {
   T get(Int idx) {}
 
   T set(Int idx, T val) {}
+
+  Int size() {}
 }
 
 type ImmutableArray[+T] extends Array[T] {
@@ -21,5 +27,23 @@ type ImmutableArray[+T] extends Array[T] {
 
   T get(Int idx) {
     return this.store(idx);
+  }
+}
+
+type ArrayIterator[+T] extends Iterator[T] {
+  Array[T] source;
+  Int index;
+
+  Void init(Array[T] source) {
+    this.source = source;
+    this.index = 0;
+  }
+
+  Maybe[T] next() {
+    if (this.index >= this.source.size())
+      return new None[T]();
+    T result = this.source(this.index);
+    this.index = this.index + 1;
+    return new Some[T](result);
   }
 }

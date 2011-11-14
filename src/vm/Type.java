@@ -13,7 +13,7 @@ public abstract class Type {
     private final RawTypeDesc[] superDescs;
     private final Type[] superTypes;
     public final Method[] ownedMethods;
-    protected final Map<RawMethodDesc, RawMethodDesc> vtableDescs;
+    public Map<RawMethodDesc, RawMethodDesc> vtableDescs;
     public Map<Method, Method> vtable;
     public ZObject[] staticFields;
 
@@ -39,10 +39,16 @@ public abstract class Type {
         for (Method m : ownedMethods)
             m.link();
 
-        vtable = new HashMap<Method, Method>();
-        for (Map.Entry<RawMethodDesc, RawMethodDesc> e : vtableDescs.entrySet())
-            vtable.put(God.resolveMethod(e.getKey()), God.resolveMethod(e.getValue()));
+        if (vtableDescs != null) { // if not abstract
+            vtable = new HashMap<Method, Method>();
+            for (Map.Entry<RawMethodDesc, RawMethodDesc> e : vtableDescs.entrySet())
+                vtable.put(God.resolveMethod(e.getKey()), God.resolveMethod(e.getValue()));
+        }
     }
 
     public abstract ZObject rawInstance(ConcreteType[] genericArgs);
+
+    public String toString() {
+        return desc.toString();
+    }
 }

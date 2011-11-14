@@ -15,8 +15,8 @@ public class NatMutableArray extends ZObject {
 
     private ZObject[] elems;
 
-    public NatMutableArray() {
-        super(new ConcreteType(TYPE));
+    public NatMutableArray(ConcreteType[] genericArgs) {
+        super(new ConcreteType(TYPE, genericArgs));
         elems = null;
     }
 
@@ -43,11 +43,13 @@ public class NatMutableArray extends ZObject {
                             }) {
                         public void invoke(ZObject[] stack, int bp, ConcreteType[] genericArgs) {
                             NatMutableArray arr = (NatMutableArray) stack[bp + 1];
+                            System.out.println("INVOKE init " + arr);
                             ZObject source = stack[bp + 2];
                             Method meth = methodTable[0]; // Collection.iterator
                             meth = source.type.rawType.vtable.get(meth);
-                            meth.invoke(stack, bp, ConcreteType.NONE);
-                            ZObject iter = stack[bp + 1];
+                            meth.invoke(stack, bp + 1, ConcreteType.NONE);
+                            ZObject iter = stack[bp + 2];
+                            System.out.println(iter.type);
 
                             meth = methodTable[1]; // Iterator.next
                             meth = iter.type.rawType.vtable.get(meth);
@@ -63,7 +65,9 @@ public class NatMutableArray extends ZObject {
                                 } else
                                     break;
                             }
+
                             arr.elems = buffer.toArray(new ZObject[buffer.size()]);
+                            System.out.println(arr.elems.length);
                         }
                     },
 
@@ -86,6 +90,15 @@ public class NatMutableArray extends ZObject {
                             int i = ((NatInt) stack[bp + 2]).value;
                             ZObject val = stack[bp + 3];
                             stack[bp + 1] = arr[i] = val;
+                        }
+                    },
+
+                    // Size
+                    new NativeMethod(new RawMethodDesc("core", "MutableArray", "size", 0, FullTypeDesc.none)) {
+                        public void invoke(ZObject[] stack, int bp, ConcreteType[] genericArgs) {
+                            System.out.println("INVOKE size " + stack[bp + 1]);
+                            ZObject[] arr = ((NatMutableArray) stack[bp + 1]).elems;
+                            stack[bp + 1] = new NatInt(arr.length);
                         }
                     },
 
@@ -132,14 +145,18 @@ public class NatMutableArray extends ZObject {
 //                        new RawMethodDesc("core", "MutableArray", "hashCode", 0, FullTypeDesc.none));
 //                    put(new RawMethodDesc("core", "Object", "toString", 0, FullTypeDesc.none),
 //                        new RawMethodDesc("core", "MutableArray", "toString", 0, FullTypeDesc.none));
+                    put(new RawMethodDesc("core", "Collection", "size", 0, FullTypeDesc.none),
+                        new RawMethodDesc("core", "MutableArray", "size", 0, FullTypeDesc.none));
+                    put(new RawMethodDesc("core", "Iterable", "iterator", 0, FullTypeDesc.none),
+                        new RawMethodDesc("core", "Array", "iterator", 0, FullTypeDesc.none));
                 }},
 
                 0);
         }
 
         public ZObject rawInstance(ConcreteType[] genericArgs) {
-            assert genericArgs.length == 0;
-            return new NatMutableArray();
+            assert genericArgs.length == 1;
+            return new NatMutableArray(genericArgs);
         }
     }
 }

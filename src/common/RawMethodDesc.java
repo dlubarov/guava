@@ -41,9 +41,11 @@ public class RawMethodDesc {
     public boolean canOverride(GlobalRCtx ctx, RawMethodDesc m) {
         if (isStatic || m.isStatic)
             return false;
-        if (!owner.equals(m.owner) || !name.equals(m.name))
+        if (!name.equals(m.name))
             return false;
         if (numGenericParams != m.numGenericParams)
+            return false;
+        if (paramTypes.length != m.paramTypes.length)
             return false;
         for (int i = 0; i < paramTypes.length; ++i)
             if (!m.paramTypes[i].isSubtype(paramTypes[i], ctx))

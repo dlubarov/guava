@@ -39,6 +39,8 @@ type None[+T] extends Maybe[T] {
     return false;
   }
 
+  T get() {}
+
   T getOr(T default) {
     return default;
   }

@@ -25,7 +25,7 @@ public class NormalMethod extends Method {
 
         try {
         int sp = bp + numLocals;
-        System.out.println("INVOKING " + desc);
+//        System.out.println("INVOKING " + desc);
         int ip = 0, i, j;
         ZObject a, b;
         ConcreteType[] ctypes;
@@ -35,11 +35,19 @@ public class NormalMethod extends Method {
         }
 
         for (;;) {
-            int op = code[ip++];
+            int op;
+            try {
+                op = code[ip++];
+            } catch (ArrayIndexOutOfBoundsException e) {
+                throw new RuntimeException("fell off bottom of code: ip=" + (ip-1) + ", code len=" + code.length);
+            }
             Type ty;
             Method meth;
-            if (true) { // if debugging
-                out.printf("                                                   (bp=%d, sp=%d)\r", bp, sp);
+            if (false) { // if debugging
+                out.printf("    (bp=%d, sp=%d) [", bp, sp);
+                for (i = 0; i <= sp; ++i)
+                    out.printf(" %s ", stack[i] == null? null : stack[i].type.rawType.desc);
+                out.print("]\n");
                 out.printf("    %s", Opcodes.repr(op));
                 switch (op) {
                     case GET_LOCAL:
@@ -58,6 +66,9 @@ public class NormalMethod extends Method {
                     case INVOKE_VIRTUAL:
                         Method m = methodTable[code[ip]];
                         out.printf(" %s.%s", m.desc.owner, m.desc.name);
+                        break;
+                    case CONST_INT:
+                        out.printf(" %d", code[ip]);
                         break;
                 }
                 out.println();
@@ -92,13 +103,13 @@ public class NormalMethod extends Method {
                 case GET_LOCAL:
                     i = code[ip++];
                     stack[++sp] = stack[bp + i + 1];
-                    System.out.printf("  local %d (%d) retrieved: %s", i, bp+i+1, stack[bp+i+1].getClass());
+//                    System.out.printf("  local %d (%d) retrieved: %s", i, bp+i+1, stack[bp+i+1].getClass());
                     break;
 
                 case PUT_LOCAL:
                     i = code[ip++];
                     stack[bp + i + 1] = stack[sp--];
-                    System.out.printf("  local %d (%d) set to %s", i, bp+i+1, stack[bp+i+1].getClass());
+//                    System.out.printf("  local %d (%d) set to %s", i, bp+i+1, stack[bp+i+1].getClass());
                     break;
 
                 case GET_FIELD:
@@ -145,7 +156,7 @@ public class NormalMethod extends Method {
                     j = meth.desc.paramTypes.length; // # args
                     if (!meth.desc.isStatic)
                         j += 1;
-                    meth.invoke(stack, sp - j - 1, ctypes);
+                    meth.invoke(stack, sp - j, ctypes);
                     sp -= j - 1;
                     break;
 

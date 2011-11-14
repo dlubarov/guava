@@ -132,8 +132,11 @@ public class TypeDef {
         for (NormalFullTypeDesc sup : supers) {
             TypeDef supType = ctx.resolve(sup.raw);
             Set<RawMethodDesc> supMeths = supType.findAllInstanceMethods(ctx);
-            for (RawMethodDesc m : supMeths)
-                result.add(m.withTypeGenerics(sup.genericArgs));
+            for (RawMethodDesc m : supMeths) {
+                m = m.withTypeGenerics(sup.genericArgs);
+                result.add(m);
+                result.add(new RawMethodDesc(desc, m.name, m.numGenericParams, m.paramTypes, false));
+            }
         }
         return result;
     }
@@ -177,26 +180,35 @@ public class TypeDef {
         for (int i = 0; i < supersRaw.length; ++i)
             supersRaw[i] = supers[i].raw;
 
+        // TODO: add inherited fields
+        int numFields = instanceFields.length;
+
+        Map<RawMethodDesc, RawMethodDesc> vtableDescs = null;
+        if (!isAbstract) {
+            vtableDescs = new HashMap<RawMethodDesc, RawMethodDesc>();
+            Set<RawMethodDesc> allMyMethods = findAllInstanceMethods(ctx);
+            for (RawMethodDesc m : allMyMethods) {
+                RawMethodDesc impl = myImplementationOf(ctx, m);
+                if (impl == null)
+                    throw new RuntimeException(String.format("%s does not implement %s", desc, m));
+                else
+                    vtableDescs.put(m, impl);
+            }
+        }
+
+        for (NativeType type : God.nativeTypes())
+            if (type.desc.equals(desc)) {
+                // TODO: update native type to include non-empty methods, vtable
+                type.vtableDescs = vtableDescs;
+                return type;
+            }
+
         Method[] ownedMethods = new Method[methods.length];
         for (int i = 0; i < ownedMethods.length; ++i)
             try {
                 ownedMethods[i] = methods[i].compile(new MethodRCtx(ctx, getFullDesc()));
             } catch (Throwable e) {
                 throw new RuntimeException("Compilation error in method " + methods[i].desc, e);
-            }
-
-        // TODO: add inherited fields
-        int numFields = instanceFields.length;
-
-        Map<RawMethodDesc, RawMethodDesc> vtableDescs = new HashMap<RawMethodDesc, RawMethodDesc>();
-        Set<RawMethodDesc> allMyMethods = findAllInstanceMethods(ctx);
-        for (RawMethodDesc m : allMyMethods)
-            vtableDescs.put(m, myImplementationOf(ctx, m));
-
-        for (NativeType type : God.nativeTypes())
-            if (type.desc.equals(desc)) {
-                // TODO: update native type to include non-empty methods, vtable
-                return type;
             }
 
         return new NormalType(desc, supersRaw,

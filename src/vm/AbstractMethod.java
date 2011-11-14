@@ -5,7 +5,6 @@ import common.*;
 import vm.ty.*;
 
 public class AbstractMethod extends Method {
-
     public AbstractMethod(RawMethodDesc desc) {
         super(desc, null, null, null);
     }
