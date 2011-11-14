@@ -1,9 +1,11 @@
 package vm;
 
-public abstract class ZObject {
-    public final Type type;
+import vm.ty.ConcreteType;
 
-    public ZObject(Type type) {
+public abstract class ZObject {
+    public final ConcreteType type;
+
+    public ZObject(ConcreteType type) {
         this.type = type;
     }
 }

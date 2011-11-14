@@ -2,8 +2,7 @@ package rst.exp;
 
 import java.util.*;
 
-import common.FullTypeDesc;
-import common.NormalFullTypeDesc;
+import common.*;
 import comp.CodeTree;
 import rctx.CodeRCtx;
 import rst.*;
@@ -63,7 +62,7 @@ public class NewObject extends Expression {
             argCode[i] = args[i].compile(ctx);
         CodeTree allArgCode = new CodeTree((Object[]) argCode);
         return new CodeTree(
-                Opcodes.NEW, ctx.getTypeIndex(type.raw),
+                Opcodes.NEW, ctx.getFullTypeIndex(type),
                 Opcodes.DUP, allArgCode,
                 Opcodes.INVOKE_STATIC, ctx.getMethodIndex(method.desc),
                 Opcodes.POP // discard void result of init method

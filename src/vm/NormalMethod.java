@@ -2,6 +2,7 @@ package vm;
 
 import common.*;
 import vm.nat.*;
+import vm.ty.*;
 
 import static vm.Opcodes.*;
 
@@ -11,18 +12,19 @@ public class NormalMethod extends Method {
     private final int[] code;
 
     public NormalMethod(RawMethodDesc desc,
-                        RawTypeDesc[] typeDescTable, RawMethodDesc[] methodDescTable,
+                        RawTypeDesc[] typeDescTable, RawMethodDesc[] methodDescTable, FullType[] fullTypeTable,
                         int numLocals, int[] code) {
-        super(desc, typeDescTable, methodDescTable);
+        super(desc, typeDescTable, methodDescTable, fullTypeTable);
         this.numLocals = numLocals;
         this.code = code;
     }
 
-    public void invoke(ZObject[] stack, int bp) {
+    public void invoke(ZObject[] stack, int bp, ConcreteType[] genericArgs) {
         assert code != null : "invoke on abstract method";
 
         int sp = bp + numLocals;
         int ip = 0, i, j;
+        ConcreteType[] ctypes;
 
         for (;;) {
             int op = code[ip++];
@@ -97,10 +99,20 @@ public class NormalMethod extends Method {
                 case INVOKE_STATIC:
                     i = code[ip++]; // index into method table
                     meth = methodTable[i];
+
+                    i = code[ip++]; // num generic args
+                    ctypes = new ConcreteType[i];
+                    if (desc.isStatic)
+                        a = null;
+                    else
+                        a = stack[bp + 1];
+                    for (j = 0; j < i; ++j)
+                        ctypes[j] = fullTypeTable[code[ip++]].toConcrete(a, this, genericArgs);
+
                     j = meth.desc.paramTypes.length; // # args
                     if (!meth.desc.isStatic)
                         j += 1;
-                    meth.invoke(stack, sp - j);
+                    meth.invoke(stack, sp - j, ctypes);
                     sp -= j - 1;
                     break;
 
@@ -108,19 +120,39 @@ public class NormalMethod extends Method {
                     i = code[ip++]; // index into method table
                     meth = methodTable[i];
                     assert !meth.desc.isStatic;
+
+                    i = code[ip++]; // num generic args
+                    ctypes = new ConcreteType[i];
+                    if (desc.isStatic)
+                        a = null;
+                    else
+                        a = stack[bp + 1];
+                    for (j = 0; j < i; ++j)
+                        ctypes[j] = fullTypeTable[code[ip++]].toConcrete(a, this, genericArgs);
+
                     j = meth.desc.paramTypes.length; // # args (TODO: optimize)
-                    ZObject target = stack[sp - j];
-                    ty = target.type;
+                    a = stack[sp - j]; // target
+                    ty = a.type.rawType;
                     meth = ty.vtable.get(meth);
                     assert meth != null : "method not found in vtable of " + ty;
-                    meth.invoke(stack, sp - j - 1);
+                    meth.invoke(stack, sp - j - 1, ctypes);
                     sp -= j;
                     break;
 
                 case NEW:
                     i = code[ip++];
-                    ty = typeTable[i];
-                    stack[++ip] = ty.rawInstance();
+                    ExternalType fty = (ExternalType) fullTypeTable[i];
+                    ty = typeTable[fty.tableIndex];
+                    ctypes = new ConcreteType[fty.genericArgs.length];
+
+                    if (desc.isStatic)
+                        a = null;
+                    else
+                        a = stack[bp + 1];
+
+                    for (j = 0; j < ctypes.length; ++j)
+                        ctypes[j] = fty.genericArgs[j].toConcrete(a, this, genericArgs);
+                    stack[++ip] = ty.rawInstance(ctypes);
                     break;
 
                 case JUMP:

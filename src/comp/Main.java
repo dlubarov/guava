@@ -8,6 +8,7 @@ import common.RawMethodDesc;
 
 import rctx.GlobalRCtx;
 import vm.God;
+import vm.ty.ConcreteType;
 
 import ast.SourceFile;
 import ctx.GlobalContext;
@@ -55,9 +56,9 @@ public class Main {
         for (vm.Type type : allTypes) {
             for (vm.Method meth : type.ownedMethods) {
                 RawMethodDesc desc = meth.desc;
-                if (desc.name.equals("main") && desc.isStatic) {
+                if (desc.name.equals("main") && desc.isStatic && desc.numGenericParams == 0) {
                     System.out.printf("Running %s.main...\n", type.desc);
-                    meth.invoke();
+                    meth.invoke(ConcreteType.NONE);
                 }
             }
         }

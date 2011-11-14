@@ -3,8 +3,8 @@ package common;
 import rctx.CodeRCtx;
 
 public class MethodGenericFullTypeDesc extends FullTypeDesc {
-    private final RawMethodDesc owner;
-    private final int index;
+    public final RawMethodDesc owner;
+    public final int index;
 
     public MethodGenericFullTypeDesc(RawMethodDesc owner, int index) {
         this.owner = owner;

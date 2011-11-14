@@ -2,6 +2,7 @@ package vm.nat;
 
 import common.*;
 import vm.*;
+import vm.ty.ConcreteType;
 
 import java.util.*;
 
@@ -15,7 +16,7 @@ public class NatMutableArray extends ZObject {
     private ZObject[] elems;
 
     public NatMutableArray() {
-        super(TYPE);
+        super(new ConcreteType(TYPE));
         elems = null;
     }
 
@@ -40,24 +41,24 @@ public class NatMutableArray extends ZObject {
                                 new RawMethodDesc("core", "Maybe", "isSomething", 0, FullTypeDesc.none),
                                 new RawMethodDesc("core", "Maybe", "get", 0, FullTypeDesc.none),
                             }) {
-                        public void invoke(ZObject[] stack, int bp) {
+                        public void invoke(ZObject[] stack, int bp, ConcreteType[] genericArgs) {
                             NatMutableArray arr = (NatMutableArray) stack[bp + 1];
                             ZObject source = stack[bp + 2];
                             Method meth = methodTable[0]; // Collection.iterator
-                            meth = source.type.vtable.get(meth);
-                            meth.invoke(stack, bp);
+                            meth = source.type.rawType.vtable.get(meth);
+                            meth.invoke(stack, bp, ConcreteType.NONE);
                             ZObject iter = stack[bp + 1];
 
                             meth = methodTable[1]; // Iterator.next
-                            meth = iter.type.vtable.get(meth);
+                            meth = iter.type.rawType.vtable.get(meth);
                             List<ZObject> buffer = new ArrayList<ZObject>();
                             for (;;) {
-                                meth.invoke(stack, bp);
+                                meth.invoke(stack, bp, ConcreteType.NONE);
                                 ZObject maybeNext = stack[bp + 1];
-                                maybeNext.type.vtable.get(methodTable[2]).invoke(stack, bp);
+                                maybeNext.type.rawType.vtable.get(methodTable[2]).invoke(stack, bp, ConcreteType.NONE);
                                 boolean isSomething = ((NatBool) stack[bp + 1]).value;
                                 if (isSomething) {
-                                    maybeNext.type.vtable.get(methodTable[3]).invoke(stack, bp);
+                                    maybeNext.type.rawType.vtable.get(methodTable[3]).invoke(stack, bp, ConcreteType.NONE);
                                     buffer.add(stack[bp + 1]);
                                 } else
                                     break;
@@ -70,7 +71,7 @@ public class NatMutableArray extends ZObject {
                     new NativeMethod(new RawMethodDesc(
                             "core", "MutableArray", "get", 0,
                             new FullTypeDesc[] {new NormalFullTypeDesc(new RawTypeDesc("core", "Int"))})) {
-                        public void invoke(ZObject[] stack, int bp) {
+                        public void invoke(ZObject[] stack, int bp, ConcreteType[] genericArgs) {
                             ZObject[] arr = ((NatMutableArray) stack[bp + 1]).elems;
                             int i = ((NatInt) stack[bp + 2]).value;
                             stack[bp + 1] = arr[i];
@@ -80,7 +81,7 @@ public class NatMutableArray extends ZObject {
                             "core", "MutableArray", "set", 0,
                             new FullTypeDesc[] {new NormalFullTypeDesc(new RawTypeDesc("core", "Int")),
                                                 new TypeGenericFullTypeDesc(new RawTypeDesc("core", "MutableArray"), 0)})) {
-                        public void invoke(ZObject[] stack, int bp) {
+                        public void invoke(ZObject[] stack, int bp, ConcreteType[] genericArgs) {
                             ZObject[] arr = ((NatMutableArray) stack[bp + 1]).elems;
                             int i = ((NatInt) stack[bp + 2]).value;
                             ZObject val = stack[bp + 3];
@@ -135,7 +136,8 @@ public class NatMutableArray extends ZObject {
                 0);
         }
 
-        public ZObject rawInstance() {
+        public ZObject rawInstance(ConcreteType[] genericArgs) {
+            assert genericArgs.length == 0;
             return new NatMutableArray();
         }
     }

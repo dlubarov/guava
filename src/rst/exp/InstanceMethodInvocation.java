@@ -69,8 +69,14 @@ public class InstanceMethodInvocation extends Expression {
         for (int i = 0; i < argCode.length; ++i)
             argCode[i] = args[i].compile(ctx);
         CodeTree allArgCode = new CodeTree((Object[]) argCode);
+
+        Integer[] genericArgIndices = new Integer[genericArgs.length];
+        for (int i = 0; i < genericArgIndices.length; ++i)
+            genericArgIndices[i] = ctx.getFullTypeIndex(genericArgs[i]);
+
         return new CodeTree(target.compile(ctx), allArgCode,
-                Opcodes.INVOKE_VIRTUAL, ctx.getMethodIndex(method.desc));
+                Opcodes.INVOKE_VIRTUAL, ctx.getMethodIndex(method.desc),
+                genericArgIndices.length, new CodeTree((Object[]) genericArgIndices));
     }
 
     public String toString() {

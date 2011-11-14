@@ -40,6 +40,11 @@ public class CodeRCtx {
         return methodCtx.getMethodIndex(desc);
     }
 
+    // Get the index of a complete (parameterized) type in the current method's table
+    public int getFullTypeIndex(FullTypeDesc desc) {
+        return methodCtx.getFullTypeIndex(desc);
+    }
+
     private void addLocalMutating(int index, FullTypeDesc type) {
         if (localTypes.put(index, type) != null)
             throw new RuntimeException(String.format("two types for local %d", index));

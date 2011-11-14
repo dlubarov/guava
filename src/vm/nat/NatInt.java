@@ -2,6 +2,7 @@ package vm.nat;
 
 import common.*;
 import vm.*;
+import vm.ty.ConcreteType;
 
 import java.util.HashMap;
 
@@ -15,7 +16,7 @@ public class NatInt extends ZObject {
     public final int value;
 
     public NatInt(int value) {
-        super(TYPE);
+        super(new ConcreteType(TYPE));
         this.value = value;
     }
 
@@ -31,117 +32,117 @@ public class NatInt extends ZObject {
                 new Method[] {
                     // Prefix
                     new NativeMethod(new RawMethodDesc("core", "Int", "+", 0, FullTypeDesc.none)) {
-                        public void invoke(ZObject[] stack, int bp) {
+                        public void invoke(ZObject[] stack, int bp, ConcreteType[] genericArgs) {
                             int n = ((NatInt) stack[bp + 1]).value;
                             stack[bp + 1] = new NatInt(+n);
                         }
                     },
                     new NativeMethod(new RawMethodDesc("core", "Int", "-", 0, FullTypeDesc.none)) {
-                        public void invoke(ZObject[] stack, int bp) {
+                        public void invoke(ZObject[] stack, int bp, ConcreteType[] genericArgs) {
                             int n = ((NatInt) stack[bp + 1]).value;
                             stack[bp + 1] = new NatInt(-n);
                         }
                     },
                     new NativeMethod(new RawMethodDesc("core", "Int", "~", 0, FullTypeDesc.none)) {
-                        public void invoke(ZObject[] stack, int bp) {
+                        public void invoke(ZObject[] stack, int bp, ConcreteType[] genericArgs) {
                             int n = ((NatInt) stack[bp + 1]).value;
                             stack[bp + 1] = new NatInt(~n);
                         }
                     },
                     // Infix
                     new NativeMethod(new RawMethodDesc("core", "Int", "+", 0, intOnly)) {
-                        public void invoke(ZObject[] stack, int bp) {
+                        public void invoke(ZObject[] stack, int bp, ConcreteType[] genericArgs) {
                             int n = ((NatInt) stack[bp + 1]).value;
                             int m = ((NatInt) stack[bp + 2]).value;
                             stack[bp + 1] = new NatInt(n + m);
                         }
                     },
                     new NativeMethod(new RawMethodDesc("core", "Int", "-", 0, intOnly)) {
-                        public void invoke(ZObject[] stack, int bp) {
+                        public void invoke(ZObject[] stack, int bp, ConcreteType[] genericArgs) {
                             int n = ((NatInt) stack[bp + 1]).value;
                             int m = ((NatInt) stack[bp + 2]).value;
                             stack[bp + 1] = new NatInt(n - m);
                         }
                     },
                     new NativeMethod(new RawMethodDesc("core", "Int", "*", 0, intOnly)) {
-                        public void invoke(ZObject[] stack, int bp) {
+                        public void invoke(ZObject[] stack, int bp, ConcreteType[] genericArgs) {
                             int n = ((NatInt) stack[bp + 1]).value;
                             int m = ((NatInt) stack[bp + 2]).value;
                             stack[bp + 1] = new NatInt(n * m);
                         }
                     },
                     new NativeMethod(new RawMethodDesc("core", "Int", "/", 0, intOnly)) {
-                        public void invoke(ZObject[] stack, int bp) {
+                        public void invoke(ZObject[] stack, int bp, ConcreteType[] genericArgs) {
                             int n = ((NatInt) stack[bp + 1]).value;
                             int m = ((NatInt) stack[bp + 2]).value;
                             stack[bp + 1] = new NatInt(n / m);
                         }
                     },
                     new NativeMethod(new RawMethodDesc("core", "Int", "%", 0, intOnly)) {
-                        public void invoke(ZObject[] stack, int bp) {
+                        public void invoke(ZObject[] stack, int bp, ConcreteType[] genericArgs) {
                             int n = ((NatInt) stack[bp + 1]).value;
                             int m = ((NatInt) stack[bp + 2]).value;
                             stack[bp + 1] = new NatInt(n % m);
                         }
                     },
                     new NativeMethod(new RawMethodDesc("core", "Int", "&", 0, intOnly)) {
-                        public void invoke(ZObject[] stack, int bp) {
+                        public void invoke(ZObject[] stack, int bp, ConcreteType[] genericArgs) {
                             int n = ((NatInt) stack[bp + 1]).value;
                             int m = ((NatInt) stack[bp + 2]).value;
                             stack[bp + 1] = new NatInt(n & m);
                         }
                     },
                     new NativeMethod(new RawMethodDesc("core", "Int", "|", 0, intOnly)) {
-                        public void invoke(ZObject[] stack, int bp) {
+                        public void invoke(ZObject[] stack, int bp, ConcreteType[] genericArgs) {
                             int n = ((NatInt) stack[bp + 1]).value;
                             int m = ((NatInt) stack[bp + 2]).value;
                             stack[bp + 1] = new NatInt(n | m);
                         }
                     },
                     new NativeMethod(new RawMethodDesc("core", "Int", "^", 0, intOnly)) {
-                        public void invoke(ZObject[] stack, int bp) {
+                        public void invoke(ZObject[] stack, int bp, ConcreteType[] genericArgs) {
                             int n = ((NatInt) stack[bp + 1]).value;
                             int m = ((NatInt) stack[bp + 2]).value;
                             stack[bp + 1] = new NatInt(n ^ m);
                         }
                     },
                     new NativeMethod(new RawMethodDesc("core", "Int", "<<", 0, intOnly)) {
-                        public void invoke(ZObject[] stack, int bp) {
+                        public void invoke(ZObject[] stack, int bp, ConcreteType[] genericArgs) {
                             int n = ((NatInt) stack[bp + 1]).value;
                             int m = ((NatInt) stack[bp + 2]).value;
                             stack[bp + 1] = new NatInt(n << m);
                         }
                     },
                     new NativeMethod(new RawMethodDesc("core", "Int", ">>", 0, intOnly)) {
-                        public void invoke(ZObject[] stack, int bp) {
+                        public void invoke(ZObject[] stack, int bp, ConcreteType[] genericArgs) {
                             int n = ((NatInt) stack[bp + 1]).value;
                             int m = ((NatInt) stack[bp + 2]).value;
                             stack[bp + 1] = new NatInt(n >> m);
                         }
                     },
                     new NativeMethod(new RawMethodDesc("core", "Int", "<=", 0, intOnly)) {
-                        public void invoke(ZObject[] stack, int bp) {
+                        public void invoke(ZObject[] stack, int bp, ConcreteType[] genericArgs) {
                             int n = ((NatInt) stack[bp + 1]).value;
                             int m = ((NatInt) stack[bp + 2]).value;
                             stack[bp + 1] = new NatBool(n <= m);
                         }
                     },
                     new NativeMethod(new RawMethodDesc("core", "Int", ">=", 0, intOnly)) {
-                        public void invoke(ZObject[] stack, int bp) {
+                        public void invoke(ZObject[] stack, int bp, ConcreteType[] genericArgs) {
                             int n = ((NatInt) stack[bp + 1]).value;
                             int m = ((NatInt) stack[bp + 2]).value;
                             stack[bp + 1] = new NatBool(n >= m);
                         }
                     },
                     new NativeMethod(new RawMethodDesc("core", "Int", "<", 0, intOnly)) {
-                        public void invoke(ZObject[] stack, int bp) {
+                        public void invoke(ZObject[] stack, int bp, ConcreteType[] genericArgs) {
                             int n = ((NatInt) stack[bp + 1]).value;
                             int m = ((NatInt) stack[bp + 2]).value;
                             stack[bp + 1] = new NatBool(n < m);
                         }
                     },
                     new NativeMethod(new RawMethodDesc("core", "Int", ">", 0, intOnly)) {
-                        public void invoke(ZObject[] stack, int bp) {
+                        public void invoke(ZObject[] stack, int bp, ConcreteType[] genericArgs) {
                             int n = ((NatInt) stack[bp + 1]).value;
                             int m = ((NatInt) stack[bp + 2]).value;
                             stack[bp + 1] = new NatBool(n > m);
@@ -149,7 +150,7 @@ public class NatInt extends ZObject {
                     },
                     // Object methods
                     new NativeMethod(new RawMethodDesc("core", "Int", "==", 0, objOnly)) {
-                        public void invoke(ZObject[] stack, int bp) {
+                        public void invoke(ZObject[] stack, int bp, ConcreteType[] genericArgs) {
                             int n = ((NatInt) stack[bp + 1]).value;
                             try {
                                 int m = ((NatInt) stack[bp + 2]).value;
@@ -160,13 +161,13 @@ public class NatInt extends ZObject {
                         }
                     },
                     new NativeMethod(new RawMethodDesc("core", "Int", "hashCode", 0, FullTypeDesc.none)) {
-                        public void invoke(ZObject[] stack, int bp) {
+                        public void invoke(ZObject[] stack, int bp, ConcreteType[] genericArgs) {
                             int n = ((NatInt) stack[bp + 1]).value;
                             stack[bp + 1] = new NatInt(n);
                         }
                     },
                     new NativeMethod(new RawMethodDesc("core", "Int", "toString", 0, FullTypeDesc.none)) {
-                        public void invoke(ZObject[] stack, int bp) {
+                        public void invoke(ZObject[] stack, int bp, ConcreteType[] genericArgs) {
                             int n = ((NatInt) stack[bp + 1]).value;
                             String s = Integer.toString(n);
                             stack[bp + 1] = null; // FIXME: create String
@@ -184,7 +185,8 @@ public class NatInt extends ZObject {
                 0);
         }
 
-        public ZObject rawInstance() {
+        public ZObject rawInstance(ConcreteType[] genericArgs) {
+            assert genericArgs.length == 0;
             return new NatInt(0);
         }
     }

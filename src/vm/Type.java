@@ -6,9 +6,12 @@ import common.RawTypeDesc;
 import java.util.HashMap;
 import java.util.Map;
 
+import vm.ty.ConcreteType;
+
 public abstract class Type {
     public final RawTypeDesc desc;
     private final RawTypeDesc[] superDescs;
+    private final Type[] superTypes;
     public final Method[] ownedMethods;
     protected final Map<RawMethodDesc, RawMethodDesc> vtableDescs;
     public Map<Method, Method> vtable;
@@ -21,6 +24,7 @@ public abstract class Type {
                 int numStaticFields) {
         this.desc = desc;
         this.superDescs = superDescs;
+        this.superTypes = new Type[superDescs.length];
         this.ownedMethods = ownedMethods;
         this.vtableDescs = vtableDescs;
         vtable = null;
@@ -29,13 +33,16 @@ public abstract class Type {
     }
 
     public void link() {
-        vtable = new HashMap<Method, Method>();
-        for (Map.Entry<RawMethodDesc, RawMethodDesc> e : vtableDescs.entrySet())
-            vtable.put(God.resolveMethod(e.getKey()), God.resolveMethod(e.getValue()));
+        for (int i = 0; i < superDescs.length; ++i)
+            superTypes[i] = God.resolveType(superDescs[i]);
 
         for (Method m : ownedMethods)
             m.link();
+
+        vtable = new HashMap<Method, Method>();
+        for (Map.Entry<RawMethodDesc, RawMethodDesc> e : vtableDescs.entrySet())
+            vtable.put(God.resolveMethod(e.getKey()), God.resolveMethod(e.getValue()));
     }
 
-    public abstract ZObject rawInstance();
+    public abstract ZObject rawInstance(ConcreteType[] genericArgs);
 }

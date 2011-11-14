@@ -8,6 +8,7 @@ import vm.Method;
 import vm.NativeMethod;
 import vm.NativeType;
 import vm.ZObject;
+import vm.ty.ConcreteType;
 
 import java.util.HashMap;
 
@@ -24,7 +25,7 @@ public class NatBool extends ZObject {
     public final boolean value;
 
     public NatBool(boolean value) {
-        super(TYPE);
+        super(new ConcreteType(TYPE));
         this.value = value;
     }
 
@@ -40,7 +41,7 @@ public class NatBool extends ZObject {
                 new Method[]{
                     // Prefix methods
                     new NativeMethod(new RawMethodDesc("core", "Bool", "!", 0, FullTypeDesc.none)) {
-                        public void invoke(ZObject[] stack, int bp) {
+                        public void invoke(ZObject[] stack, int bp, ConcreteType[] genericArgs) {
                             boolean b = ((NatBool) stack[bp + 1]).value;
                             stack[bp + 1] = new NatBool(!b);
                         }
@@ -48,21 +49,21 @@ public class NatBool extends ZObject {
 
                     // Infix methods
                     new NativeMethod(new RawMethodDesc("core", "Bool", "&", 0, boolOnly)) {
-                        public void invoke(ZObject[] stack, int bp) {
+                        public void invoke(ZObject[] stack, int bp, ConcreteType[] genericArgs) {
                             boolean a = ((NatBool) stack[bp + 1]).value;
                             boolean b = ((NatBool) stack[bp + 2]).value;
                             stack[bp + 1] = new NatBool(a & b);
                         }
                     },
                     new NativeMethod(new RawMethodDesc("core", "Bool", "|", 0, boolOnly)) {
-                        public void invoke(ZObject[] stack, int bp) {
+                        public void invoke(ZObject[] stack, int bp, ConcreteType[] genericArgs) {
                             boolean a = ((NatBool) stack[bp + 1]).value;
                             boolean b = ((NatBool) stack[bp + 2]).value;
                             stack[bp + 1] = new NatBool(a | b);
                         }
                     },
                     new NativeMethod(new RawMethodDesc("core", "Bool", "^", 0, boolOnly)) {
-                        public void invoke(ZObject[] stack, int bp) {
+                        public void invoke(ZObject[] stack, int bp, ConcreteType[] genericArgs) {
                             boolean a = ((NatBool) stack[bp + 1]).value;
                             boolean b = ((NatBool) stack[bp + 2]).value;
                             stack[bp + 1] = new NatBool(a ^ b);
@@ -71,7 +72,7 @@ public class NatBool extends ZObject {
 
                     // Object methods
                     new NativeMethod(new RawMethodDesc("core", "Bool", "==", 0, objOnly)) {
-                        public void invoke(ZObject[] stack, int bp) {
+                        public void invoke(ZObject[] stack, int bp, ConcreteType[] genericArgs) {
                             boolean a = ((NatBool) stack[bp + 1]).value;
                             try {
                                 boolean b = ((NatBool) stack[bp + 2]).value;
@@ -82,13 +83,13 @@ public class NatBool extends ZObject {
                         }
                     },
                     new NativeMethod(new RawMethodDesc("core", "Bool", "hashCode", 0, FullTypeDesc.none)) {
-                        public void invoke(ZObject[] stack, int bp) {
+                        public void invoke(ZObject[] stack, int bp, ConcreteType[] genericArgs) {
                             boolean b = ((NatBool) stack[bp + 1]).value;
                             stack[bp + 1] = new NatInt(b? 1 : 0);
                         }
                     },
                     new NativeMethod(new RawMethodDesc("core", "Bool", "toString", 0, FullTypeDesc.none)) {
-                        public void invoke(ZObject[] stack, int bp) {
+                        public void invoke(ZObject[] stack, int bp, ConcreteType[] genericArgs) {
                             boolean b = ((NatBool) stack[bp + 1]).value;
                             String s = Boolean.toString(b);
                             stack[bp + 1] = null; // FIXME: create String
@@ -107,7 +108,8 @@ public class NatBool extends ZObject {
                 0);
         }
 
-        public ZObject rawInstance() {
+        public ZObject rawInstance(ConcreteType[] genericArgs) {
+            assert genericArgs.length == 0;
             return new NatBool(false);
         }
     }

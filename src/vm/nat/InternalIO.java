@@ -5,6 +5,7 @@ import java.util.HashMap;
 import common.*;
 
 import vm.*;
+import vm.ty.ConcreteType;
 
 public class InternalIO extends ZObject {
     public static final NativeType TYPE;
@@ -14,7 +15,7 @@ public class InternalIO extends ZObject {
     }
 
     public InternalIO() {
-        super(TYPE);
+        super(new ConcreteType(TYPE));
     }
 
     private static class InternalIOType extends NativeType {
@@ -28,7 +29,7 @@ public class InternalIO extends ZObject {
                                 new RawMethodDesc(desc, "stdout", 0, new FullTypeDesc[] {new NormalFullTypeDesc(descStr)}, true),
                                 new RawTypeDesc[] {descStr},
                                 new RawMethodDesc[] {}) {
-                            public void invoke(ZObject[] stack, int bp) {
+                            public void invoke(ZObject[] stack, int bp, ConcreteType[] genericArgs) {
                                 NormalObject s = (NormalObject) stack[bp + 1];
                                 NatMutableArray arr = (NatMutableArray) s.fields[0];
                                 throw new RuntimeException("FIXME: finish implementing");
@@ -38,7 +39,7 @@ public class InternalIO extends ZObject {
                     0);
         }
 
-        public ZObject rawInstance() {
+        public ZObject rawInstance(ConcreteType[] genericArgs) {
             throw new RuntimeException("InternalIO should never be instantiated");
         }
     }
