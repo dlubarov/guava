@@ -4,8 +4,6 @@ import common.*;
 import vm.*;
 import vm.ty.ConcreteType;
 
-import java.util.HashMap;
-
 public class NatBool extends ZObject {
     public static final NativeType TYPE;
     public static final NatBool TRUE, FALSE;
@@ -23,7 +21,6 @@ public class NatBool extends ZObject {
         this.value = value;
     }
 
-    @SuppressWarnings("serial")
     private static class NatBoolType extends NativeType {
         private static final RawTypeDesc desc = new RawTypeDesc("core", "Bool");
 
@@ -90,15 +87,6 @@ public class NatBool extends ZObject {
                         }
                     },
                 },
-
-                new HashMap<RawMethodDesc, RawMethodDesc>() {{
-                    put(new RawMethodDesc("core", "Object", "==", 0, objOnly),
-                        new RawMethodDesc("core", "Bool", "==", 0, objOnly));
-                    put(new RawMethodDesc("core", "Object", "hashCode", 0, FullTypeDesc.NONE),
-                        new RawMethodDesc("core", "Bool", "hashCode", 0, FullTypeDesc.NONE));
-                    put(new RawMethodDesc("core", "Object", "toString", 0, FullTypeDesc.NONE),
-                        new RawMethodDesc("core", "Bool", "toString", 0, FullTypeDesc.NONE));
-                }},
                 0);
         }
 

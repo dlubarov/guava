@@ -1,7 +1,5 @@
 package vm.nat;
 
-import java.util.HashMap;
-
 import common.*;
 
 import vm.*;
@@ -39,7 +37,6 @@ public class Console extends ZObject {
                                 //TODO: return void (likewise for other native methods?)
                             }}
                     },
-                    new HashMap<RawMethodDesc, RawMethodDesc>(),
                     0);
         }
 

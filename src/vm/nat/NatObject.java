@@ -4,8 +4,6 @@ import common.*;
 import vm.*;
 import vm.ty.ConcreteType;
 
-import java.util.HashMap;
-
 public class NatObject extends ZObject {
     public static final NativeType TYPE;
 
@@ -18,7 +16,7 @@ public class NatObject extends ZObject {
     }
 
     private static class NatObjectType extends NativeType {
-        private static final RawTypeDesc desc = new RawTypeDesc("core", "Int");
+        private static final RawTypeDesc desc = new RawTypeDesc("core", "Object");
 
         private static final FullTypeDesc[] objOnly = new FullTypeDesc[] {new NormalFullTypeDesc(new RawTypeDesc("core", "Object"))};
 
@@ -47,7 +45,6 @@ public class NatObject extends ZObject {
                         }
                     },
                 },
-                new HashMap<RawMethodDesc, RawMethodDesc>(),
                 0);
         }
 

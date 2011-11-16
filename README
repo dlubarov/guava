@@ -30,6 +30,7 @@ Maybe or Scala's Option.
 
 
 TODO:
+  non-native methods for native types
   definite assignment analysis
   variance analysis
   require method return

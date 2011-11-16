@@ -15,8 +15,10 @@ public final class God {
     private static Type stringType; // stored here for easy, efficient access from native code
 
     public static final NativeType[] nativeTypes() {
-        return new NativeType[] {NatObject.TYPE, NatInt.TYPE, NatBool.TYPE, NatChar.TYPE,
-                NatMutableArray.TYPE, Console.TYPE};
+        return new NativeType[] {
+                NatObject.TYPE, NatInt.TYPE, NatBool.TYPE, NatChar.TYPE,
+                NatMutableArray.TYPE, Console.TYPE
+        };
     };
 
     static {

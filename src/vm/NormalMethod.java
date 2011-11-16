@@ -183,6 +183,9 @@ public class NormalMethod extends Method {
                     j = meth.desc.paramTypes.length; // # args (TODO: optimize)
                     a = stack[sp - j]; // target
                     ty = a.type.rawType;
+                    assert ty.vtable != null : String.format(
+                            "%s has null vtable (from %s, invoking %s)",
+                            ty.desc, desc, meth.desc);
                     assert ty.vtable.containsKey(meth) : "method " + meth.desc
                             + " not found in vtable of " + ty.desc;
                     meth = ty.vtable.get(meth);

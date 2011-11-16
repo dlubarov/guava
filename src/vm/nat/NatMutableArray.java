@@ -24,7 +24,6 @@ public class NatMutableArray extends ZObject {
         this(genericArgs, null);
     }
 
-    @SuppressWarnings("serial")
     private static class NatMutableArrayType extends NativeType {
         private static final RawTypeDesc desc = new RawTypeDesc("core", "MutableArray");
         private static final RawTypeDesc descColl = new RawTypeDesc("core", "Collection");
@@ -102,14 +101,6 @@ public class NatMutableArray extends ZObject {
                         }
                     },
                 },
-
-                new HashMap<RawMethodDesc, RawMethodDesc>() {{
-                    put(new RawMethodDesc("core", "Collection", "size", 0, FullTypeDesc.NONE),
-                        new RawMethodDesc("core", "MutableArray", "size", 0, FullTypeDesc.NONE));
-                    put(new RawMethodDesc("core", "Iterable", "iterator", 0, FullTypeDesc.NONE),
-                        new RawMethodDesc("core", "Array", "iterator", 0, FullTypeDesc.NONE));
-                }},
-
                 0);
         }
 

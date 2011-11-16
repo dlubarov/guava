@@ -197,7 +197,7 @@ public class TypeDef {
 
         for (NativeType type : God.nativeTypes())
             if (type.desc.equals(desc)) {
-                // TODO: update native type to include non-empty methods, vtable
+                // TODO: update native type to include non-empty methods
                 type.vtableDescs = vtableDescs;
                 return type;
             }

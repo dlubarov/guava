@@ -4,8 +4,6 @@ import common.*;
 import vm.*;
 import vm.ty.ConcreteType;
 
-import java.util.HashMap;
-
 public class NatInt extends ZObject {
     public static final NativeType TYPE;
 
@@ -20,7 +18,6 @@ public class NatInt extends ZObject {
         this.value = value;
     }
 
-    @SuppressWarnings("serial")
     private static class NatIntType extends NativeType {
         private static final RawTypeDesc desc = new RawTypeDesc("core", "Int");
 
@@ -174,14 +171,6 @@ public class NatInt extends ZObject {
                         }
                     },
                 },
-                new HashMap<RawMethodDesc, RawMethodDesc>() {{
-                    put(new RawMethodDesc("core", "Object", "==", 0, objOnly),
-                        new RawMethodDesc("core", "Int", "==", 0, objOnly));
-                    put(new RawMethodDesc("core", "Object", "hashCode", 0, FullTypeDesc.NONE),
-                        new RawMethodDesc("core", "Int", "hashCode", 0, FullTypeDesc.NONE));
-                    put(new RawMethodDesc("core", "Object", "toString", 0, FullTypeDesc.NONE),
-                        new RawMethodDesc("core", "Int", "toString", 0, FullTypeDesc.NONE));
-                }},
                 0);
         }
 
