@@ -40,13 +40,13 @@ public class NatChar extends ZObject {
                         }
                     },
                     // Char conversion methods
-                    new NativeMethod(new RawMethodDesc("core", "Char", "toLower", 0, FullTypeDesc.none)) {
+                    new NativeMethod(new RawMethodDesc("core", "Char", "toLower", 0, FullTypeDesc.NONE)) {
                         public void invoke(ZObject[] stack, int bp, ConcreteType[] genericArgs) {
                             char c = ((NatChar) stack[bp + 1]).value;
                             stack[bp + 1] = new NatChar(Character.toLowerCase(c));
                         }
                     },
-                    new NativeMethod(new RawMethodDesc("core", "Char", "toUpper", 0, FullTypeDesc.none)) {
+                    new NativeMethod(new RawMethodDesc("core", "Char", "toUpper", 0, FullTypeDesc.NONE)) {
                         public void invoke(ZObject[] stack, int bp, ConcreteType[] genericArgs) {
                             char c = ((NatChar) stack[bp + 1]).value;
                             stack[bp + 1] = new NatChar(Character.toUpperCase(c));
@@ -54,13 +54,13 @@ public class NatChar extends ZObject {
                     },
 
                     // Category check methods
-                    new NativeMethod(new RawMethodDesc("core", "Char", "isLetter", 0, FullTypeDesc.none)) {
+                    new NativeMethod(new RawMethodDesc("core", "Char", "isLetter", 0, FullTypeDesc.NONE)) {
                         public void invoke(ZObject[] stack, int bp, ConcreteType[] genericArgs) {
                             char c = ((NatChar) stack[bp + 1]).value;
                             stack[bp + 1] = new NatBool(Character.isLetter(c));
                         }
                     },
-                    new NativeMethod(new RawMethodDesc("core", "Char", "isDigit", 0, FullTypeDesc.none)) {
+                    new NativeMethod(new RawMethodDesc("core", "Char", "isDigit", 0, FullTypeDesc.NONE)) {
                         public void invoke(ZObject[] stack, int bp, ConcreteType[] genericArgs) {
                             char c = ((NatChar) stack[bp + 1]).value;
                             stack[bp + 1] = new NatBool(Character.isDigit(c));
@@ -79,13 +79,13 @@ public class NatChar extends ZObject {
                             }
                         }
                     },
-                    new NativeMethod(new RawMethodDesc("core", "Char", "hashCode", 0, FullTypeDesc.none)) {
+                    new NativeMethod(new RawMethodDesc("core", "Char", "hashCode", 0, FullTypeDesc.NONE)) {
                         public void invoke(ZObject[] stack, int bp, ConcreteType[] genericArgs) {
                             char c = ((NatChar) stack[bp + 1]).value;
                             stack[bp + 1] = new NatInt(new Character(c).hashCode());
                         }
                     },
-                    new NativeMethod(new RawMethodDesc("core", "Char", "toString", 0, FullTypeDesc.none)) {
+                    new NativeMethod(new RawMethodDesc("core", "Char", "toString", 0, FullTypeDesc.NONE)) {
                         public void invoke(ZObject[] stack, int bp, ConcreteType[] genericArgs) {
                             char c = ((NatChar) stack[bp + 1]).value;
                             String s = Character.toString(c);
@@ -97,10 +97,10 @@ public class NatChar extends ZObject {
                 new HashMap<RawMethodDesc, RawMethodDesc>() {{
                     put(new RawMethodDesc("core", "Object", "==", 0, objOnly),
                         new RawMethodDesc("core", "Char", "==", 0, objOnly));
-                    put(new RawMethodDesc("core", "Object", "hashCode", 0, FullTypeDesc.none),
-                        new RawMethodDesc("core", "Char", "hashCode", 0, FullTypeDesc.none));
-                    put(new RawMethodDesc("core", "Object", "toString", 0, FullTypeDesc.none),
-                        new RawMethodDesc("core", "Char", "toString", 0, FullTypeDesc.none));
+                    put(new RawMethodDesc("core", "Object", "hashCode", 0, FullTypeDesc.NONE),
+                        new RawMethodDesc("core", "Char", "hashCode", 0, FullTypeDesc.NONE));
+                    put(new RawMethodDesc("core", "Object", "toString", 0, FullTypeDesc.NONE),
+                        new RawMethodDesc("core", "Char", "toString", 0, FullTypeDesc.NONE));
                 }},
                 0);
         }

@@ -45,6 +45,11 @@ public class CodeRCtx {
         return methodCtx.getFullTypeIndex(desc);
     }
 
+    // Get the index of a string literal in this method's literal pool
+    public int getStringIndex(String s) {
+        return methodCtx.getStringIndex(s);
+    }
+
     private void addLocalMutating(int index, FullTypeDesc type) {
         if (localTypes.put(index, type) != null)
             throw new RuntimeException(String.format("two types for local %d", index));

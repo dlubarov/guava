@@ -40,7 +40,7 @@ public class NatBool extends ZObject {
             super(desc,
                 new Method[]{
                     // Prefix methods
-                    new NativeMethod(new RawMethodDesc("core", "Bool", "!", 0, FullTypeDesc.none)) {
+                    new NativeMethod(new RawMethodDesc("core", "Bool", "!", 0, FullTypeDesc.NONE)) {
                         public void invoke(ZObject[] stack, int bp, ConcreteType[] genericArgs) {
                             boolean b = ((NatBool) stack[bp + 1]).value;
                             stack[bp + 1] = new NatBool(!b);
@@ -82,13 +82,13 @@ public class NatBool extends ZObject {
                             }
                         }
                     },
-                    new NativeMethod(new RawMethodDesc("core", "Bool", "hashCode", 0, FullTypeDesc.none)) {
+                    new NativeMethod(new RawMethodDesc("core", "Bool", "hashCode", 0, FullTypeDesc.NONE)) {
                         public void invoke(ZObject[] stack, int bp, ConcreteType[] genericArgs) {
                             boolean b = ((NatBool) stack[bp + 1]).value;
                             stack[bp + 1] = new NatInt(b? 1 : 0);
                         }
                     },
-                    new NativeMethod(new RawMethodDesc("core", "Bool", "toString", 0, FullTypeDesc.none)) {
+                    new NativeMethod(new RawMethodDesc("core", "Bool", "toString", 0, FullTypeDesc.NONE)) {
                         public void invoke(ZObject[] stack, int bp, ConcreteType[] genericArgs) {
                             boolean b = ((NatBool) stack[bp + 1]).value;
                             String s = Boolean.toString(b);
@@ -101,10 +101,10 @@ public class NatBool extends ZObject {
                 new HashMap<RawMethodDesc, RawMethodDesc>() {{
                     put(new RawMethodDesc("core", "Object", "==", 0, objOnly),
                         new RawMethodDesc("core", "Bool", "==", 0, objOnly));
-                    put(new RawMethodDesc("core", "Object", "hashCode", 0, FullTypeDesc.none),
-                        new RawMethodDesc("core", "Bool", "hashCode", 0, FullTypeDesc.none));
-                    put(new RawMethodDesc("core", "Object", "toString", 0, FullTypeDesc.none),
-                        new RawMethodDesc("core", "Bool", "toString", 0, FullTypeDesc.none));
+                    put(new RawMethodDesc("core", "Object", "hashCode", 0, FullTypeDesc.NONE),
+                        new RawMethodDesc("core", "Bool", "hashCode", 0, FullTypeDesc.NONE));
+                    put(new RawMethodDesc("core", "Object", "toString", 0, FullTypeDesc.NONE),
+                        new RawMethodDesc("core", "Bool", "toString", 0, FullTypeDesc.NONE));
                 }},
                 0);
         }

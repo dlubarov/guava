@@ -32,14 +32,14 @@ public class NatObject extends ZObject {
                             stack[bp + 1] = new NatBool(obj1 == obj2);
                         }
                     },
-                    new NativeMethod(new RawMethodDesc("core", "Object", "hashCode", 0, FullTypeDesc.none)) {
+                    new NativeMethod(new RawMethodDesc("core", "Object", "hashCode", 0, FullTypeDesc.NONE)) {
                         public void invoke(ZObject[] stack, int bp, ConcreteType[] genericArgs) {
                             ZObject obj = stack[bp + 1];
                             int hash = obj.hashCode();
                             stack[bp + 1] = new NatInt(hash);
                         }
                     },
-                    new NativeMethod(new RawMethodDesc("core", "Object", "toString", 0, FullTypeDesc.none)) {
+                    new NativeMethod(new RawMethodDesc("core", "Object", "toString", 0, FullTypeDesc.NONE)) {
                         public void invoke(ZObject[] stack, int bp, ConcreteType[] genericArgs) {
                             ZObject obj = stack[bp + 1];
                             stack[bp + 1] = null; // FIXME: create String

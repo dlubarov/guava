@@ -27,7 +27,7 @@ public class InstanceMethodInvocation extends Expression {
     private MethodDef getMethod(CodeRCtx ctx, FullTypeDesc[] argTypes, FullTypeDesc[] parentTypes) {
         // FIXME: need to search up the type hierarchy for appropriate method
         return ctx.resolve(new RawTypeDesc("core", "Object"))
-                .getMatchingInstanceMethod(ctx, methodName, FullTypeDesc.none, genericArgs, argTypes);
+                .getMatchingInstanceMethod(ctx, methodName, FullTypeDesc.NONE, genericArgs, argTypes);
     }
 
     private MethodDef getMethod(CodeRCtx ctx) {

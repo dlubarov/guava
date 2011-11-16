@@ -13,6 +13,7 @@ public class MethodRCtx {
     private final List<RawTypeDesc> typeTable;
     private final List<RawMethodDesc> methodTable;
     private final List<FullType> fullTypeTable;
+    private final List<String> stringTable;
     private int highestLocal = -1;
 
     public MethodRCtx(GlobalRCtx globalCtx, NormalFullTypeDesc owner) {
@@ -21,6 +22,7 @@ public class MethodRCtx {
         typeTable = new ArrayList<RawTypeDesc>();
         methodTable = new ArrayList<RawMethodDesc>();
         fullTypeTable = new ArrayList<FullType>();
+        stringTable = new ArrayList<String>();
     }
 
     public TypeDef resolve(RawTypeDesc desc) {
@@ -31,8 +33,8 @@ public class MethodRCtx {
     public int getTypeIndex(RawTypeDesc desc) {
         int idx = typeTable.indexOf(desc);
         if (idx == -1) {
+            idx = typeTable.size();
             typeTable.add(desc);
-            return typeTable.size() - 1;
         }
         return idx;
     }
@@ -41,8 +43,8 @@ public class MethodRCtx {
     public int getMethodIndex(RawMethodDesc desc) {
         int idx = methodTable.indexOf(desc);
         if (idx == -1) {
+            idx = methodTable.size();
             methodTable.add(desc);
-            return methodTable.size() - 1;
         }
         return idx;
     }
@@ -67,8 +69,17 @@ public class MethodRCtx {
         FullType type = toVMType(desc);
         int idx = fullTypeTable.indexOf(type);
         if (idx == -1) {
+            idx = fullTypeTable.size();
             fullTypeTable.add(type);
-            return fullTypeTable.size() - 1;
+        }
+        return idx;
+    }
+
+    public int getStringIndex(String s) {
+        int idx = stringTable.indexOf(s);
+        if (idx == -1) {
+            idx = stringTable.size();
+            stringTable.add(s);
         }
         return idx;
     }
@@ -83,6 +94,10 @@ public class MethodRCtx {
 
     public FullType[] getFullTypeTable() {
         return fullTypeTable.toArray(new FullType[fullTypeTable.size()]);
+    }
+
+    public String[] getStringTabale() {
+        return stringTable.toArray(new String[stringTable.size()]);
     }
 
     public void localIsUsed(int index) {

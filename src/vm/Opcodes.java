@@ -10,6 +10,7 @@ public final class Opcodes {
             CONST_FALSE = 11,
             CONST_INT = 12,
             CONST_CHAR = 13,
+            CONST_STRING = 14,
             GET_LOCAL = 20,
             PUT_LOCAL = 21,
             GET_FIELD = 22,
@@ -32,6 +33,7 @@ public final class Opcodes {
             case CONST_FALSE: return "CONST_FALSE";
             case CONST_INT: return "CONST_INT";
             case CONST_CHAR: return "CONST_CHAR";
+            case CONST_STRING: return "CONST_STRING";
             case GET_LOCAL: return "GET_LOCAL";
             case PUT_LOCAL: return "PUT_LOCAL";
             case GET_FIELD: return "GET_FIELD";

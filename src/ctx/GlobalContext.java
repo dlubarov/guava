@@ -2,7 +2,6 @@ package ctx;
 
 import ast.*;
 import ast.TypeDef;
-import common.RawTypeDesc;
 
 import java.util.*;
 

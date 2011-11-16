@@ -45,7 +45,8 @@ public class MethodDef {
         }
 
         return new NormalMethod(desc,
-                ctx.getTypeTable(), ctx.getMethodTable(), ctx.getFullTypeTable(),
+                ctx.getTypeTable(), ctx.getMethodTable(),
+                ctx.getFullTypeTable(), ctx.getStringTabale(),
                 ctx.numLocals(), code);
     }
 

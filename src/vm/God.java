@@ -1,18 +1,18 @@
 package vm;
 
-import common.RawMethodDesc;
-import common.RawTypeDesc;
+import common.*;
 import vm.nat.*;
+import vm.ty.ConcreteType;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.NoSuchElementException;
+import java.util.*;
 
 public final class God {
     private God() {}
 
     private static final Map<RawTypeDesc, Type> loadedTypes;
     private static final Map<RawMethodDesc, Method> loadedMethods;
+
+    public static Type stringType; // stored here for easy, efficient access from native code
 
     public static final NativeType[] nativeTypes() {
         return new NativeType[] {NatObject.TYPE, NatInt.TYPE, NatBool.TYPE, NatChar.TYPE,
@@ -26,6 +26,8 @@ public final class God {
 
     public static void newType(Type type) {
         loadedTypes.put(type.desc, type);
+        if (type.desc.equals(new RawTypeDesc("core", "String")))
+            stringType = type;
     }
 
     public static void newMethod(Method meth) {
@@ -48,10 +50,15 @@ public final class God {
         return result;
     }
 
-    public static void linkAll(Type[] types) {
-        for (Type type : nativeTypes())
+    public static void initialize() {
+        // Link all types
+        for (Type type : loadedTypes.values())
             type.link();
-        for (Type type : types)
-            type.link();
+
+        // Run static initializers
+        for (Type type : loadedTypes.values())
+            for (Method m : type.ownedMethods)
+                if (m.desc.equals(new RawMethodDesc(type.desc, "init", 0, FullTypeDesc.NONE, true)))
+                    m.invoke(ConcreteType.NONE);
     }
 }

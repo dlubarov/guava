@@ -9,13 +9,16 @@ import static java.lang.System.out;
 
 public class NormalMethod extends Method {
 //    private final int numGenericParams;
+    private final String[] stringTable;
     private final int numLocals;
     private final int[] code;
 
     public NormalMethod(RawMethodDesc desc,
-                        RawTypeDesc[] typeDescTable, RawMethodDesc[] methodDescTable, FullType[] fullTypeTable,
+                        RawTypeDesc[] typeDescTable, RawMethodDesc[] methodDescTable,
+                        FullType[] fullTypeTable, String[] stringTable,
                         int numLocals, int[] code) {
         super(desc, typeDescTable, methodDescTable, fullTypeTable);
+        this.stringTable = stringTable;
         this.numLocals = numLocals;
         this.code = code;
     }
@@ -25,7 +28,8 @@ public class NormalMethod extends Method {
 
         try {
         int sp = bp + numLocals;
-//        System.out.println("INVOKING " + desc);
+        if (comp.Main.PRINT_TRACE)
+            System.out.println("INVOKING " + desc);
         int ip = 0, i, j;
         ZObject a, b;
         ConcreteType[] ctypes;
@@ -42,7 +46,7 @@ public class NormalMethod extends Method {
             }
             Type ty;
             Method meth;
-            if (false) { // if debugging
+            if (comp.Main.PRINT_TRACE) { // if debugging
                 out.printf("    (bp=%d, sp=%d) [", bp, sp);
                 for (i = 0; i <= sp; ++i)
                     out.printf(" %s ", stack[i] == null? null : stack[i].type.rawType.desc);
@@ -99,16 +103,26 @@ public class NormalMethod extends Method {
                     stack[++sp] = NatBool.FALSE;
                     break;
 
+                case CONST_STRING:
+                    String s = stringTable[code[ip++]];
+                    NatChar[] chars = new NatChar[s.length()];
+                    for (i = 0; i < chars.length; ++i)
+                        chars[i] = new NatChar(s.charAt(i));
+                    NatMutableArray charArray = new NatMutableArray(
+                            new ConcreteType[] {new ConcreteType(NatChar.TYPE)},
+                            chars);
+                    Type stringType = God.stringType;
+                    stack[++sp] = new NormalObject(new ConcreteType(stringType), new ZObject[] {charArray});
+                    break;
+
                 case GET_LOCAL:
                     i = code[ip++];
                     stack[++sp] = stack[bp + i + 1];
-//                    System.out.printf("  local %d (%d) retrieved: %s", i, bp+i+1, stack[bp+i+1].getClass());
                     break;
 
                 case PUT_LOCAL:
                     i = code[ip++];
                     stack[bp + i + 1] = stack[sp--];
-//                    System.out.printf("  local %d (%d) set to %s", i, bp+i+1, stack[bp+i+1].getClass());
                     break;
 
                 case GET_FIELD:
@@ -216,7 +230,8 @@ public class NormalMethod extends Method {
 
                 case RETURN:
                     stack[bp + 1] = stack[sp];
-//                    System.out.println("RETURNING " + stack[sp] + " from " + desc);
+                    if (comp.Main.PRINT_TRACE)
+                        System.out.println("RETURNING " + stack[sp] + " from " + desc);
                     return;
             }
         }

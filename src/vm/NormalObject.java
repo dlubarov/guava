@@ -5,8 +5,12 @@ import vm.ty.ConcreteType;
 public class NormalObject extends ZObject {
     public final ZObject[] fields;
 
-    public NormalObject(ConcreteType type) {
+    public NormalObject(ConcreteType type, ZObject[] fields) {
         super(type);
-        fields = new ZObject[((NormalType) type.rawType).numFields];
+        this.fields = fields;
+    }
+
+    public NormalObject(ConcreteType type) {
+        this(type, new ZObject[((NormalType) type.rawType).numFields]);
     }
 }

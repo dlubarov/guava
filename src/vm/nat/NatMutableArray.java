@@ -15,9 +15,13 @@ public class NatMutableArray extends ZObject {
 
     public ZObject[] elems;
 
-    public NatMutableArray(ConcreteType[] genericArgs) {
+    public NatMutableArray(ConcreteType[] genericArgs, ZObject[] contents) {
         super(new ConcreteType(TYPE, genericArgs));
-        elems = null;
+        elems = contents;
+    }
+
+    public NatMutableArray(ConcreteType[] genericArgs) {
+        this(genericArgs, null);
     }
 
     @SuppressWarnings("serial")
@@ -36,10 +40,10 @@ public class NatMutableArray extends ZObject {
                                     new FullTypeDesc[] {new NormalFullTypeDesc(descColl, new FullTypeDesc[] {new TypeGenericFullTypeDesc(desc, 0)})}),
                             new RawTypeDesc[0],
                             new RawMethodDesc[] {
-                                new RawMethodDesc("core", "Collection", "iterator", 0, FullTypeDesc.none),
-                                new RawMethodDesc("core", "Iterator", "next", 0, FullTypeDesc.none),
-                                new RawMethodDesc("core", "Maybe", "isSomething", 0, FullTypeDesc.none),
-                                new RawMethodDesc("core", "Maybe", "get", 0, FullTypeDesc.none),
+                                new RawMethodDesc("core", "Collection", "iterator", 0, FullTypeDesc.NONE),
+                                new RawMethodDesc("core", "Iterator", "next", 0, FullTypeDesc.NONE),
+                                new RawMethodDesc("core", "Maybe", "isSomething", 0, FullTypeDesc.NONE),
+                                new RawMethodDesc("core", "Maybe", "get", 0, FullTypeDesc.NONE),
                             }) {
                         public void invoke(ZObject[] stack, int bp, ConcreteType[] genericArgs) {
                             NatMutableArray arr = (NatMutableArray) stack[bp + 1];
@@ -93,7 +97,7 @@ public class NatMutableArray extends ZObject {
                     },
 
                     // Size
-                    new NativeMethod(new RawMethodDesc("core", "MutableArray", "size", 0, FullTypeDesc.none)) {
+                    new NativeMethod(new RawMethodDesc("core", "MutableArray", "size", 0, FullTypeDesc.NONE)) {
                         public void invoke(ZObject[] stack, int bp, ConcreteType[] genericArgs) {
                             ZObject[] arr = ((NatMutableArray) stack[bp + 1]).elems;
                             stack[bp + 1] = new NatInt(arr.length);
@@ -143,10 +147,10 @@ public class NatMutableArray extends ZObject {
 //                        new RawMethodDesc("core", "MutableArray", "hashCode", 0, FullTypeDesc.none));
 //                    put(new RawMethodDesc("core", "Object", "toString", 0, FullTypeDesc.none),
 //                        new RawMethodDesc("core", "MutableArray", "toString", 0, FullTypeDesc.none));
-                    put(new RawMethodDesc("core", "Collection", "size", 0, FullTypeDesc.none),
-                        new RawMethodDesc("core", "MutableArray", "size", 0, FullTypeDesc.none));
-                    put(new RawMethodDesc("core", "Iterable", "iterator", 0, FullTypeDesc.none),
-                        new RawMethodDesc("core", "Array", "iterator", 0, FullTypeDesc.none));
+                    put(new RawMethodDesc("core", "Collection", "size", 0, FullTypeDesc.NONE),
+                        new RawMethodDesc("core", "MutableArray", "size", 0, FullTypeDesc.NONE));
+                    put(new RawMethodDesc("core", "Iterable", "iterator", 0, FullTypeDesc.NONE),
+                        new RawMethodDesc("core", "Array", "iterator", 0, FullTypeDesc.NONE));
                 }},
 
                 0);

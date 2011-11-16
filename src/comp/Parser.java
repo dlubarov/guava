@@ -160,24 +160,41 @@ public final class Parser {
         }
     }
 
+    private char parseEscapedChar(char c) {
+        switch (c) {
+            case 'n': return '\n';
+            case 'r': return '\r';
+            case '\\': return '\\';
+            case 't': return '\t';
+            case '"': return '"';
+            case '\'': return '\'';
+            case '0': return '\0';
+            default: throw new ParseException(String.format("'%c' cannot be escaped", c));
+        }
+    }
+
     private ParseResult<Expression> parseLitChar(int p) {
         parseChar(p++, '\'');
         char c = next(p++);
         if (c == '\'')
             throw new ParseException("bad character literal");
-        if (c == '\\') {
-            c = next(p++);
-            switch (c) {
-                case 'n': c = '\n'; break;
-                case 'r': c = '\r'; break;
-                case '\\': c = '\\'; break;
-                case 't': c = '\t'; break;
-                case '0': c = '\0'; break;
-                default: throw new ParseException("bad character literal");
-            }
-        }
+        if (c == '\\')
+            c = parseEscapedChar(next(p++));
         parseChar(p++, '\'');
         return new ParseResult<Expression>(new LitChar(c), p);
+    }
+
+    private ParseResult<Expression> parseLitString(int p) {
+        parseChar(p++, '"');
+        StringBuilder sb = new StringBuilder();
+        for (;;) {
+            char c = next(p++);
+            if (c == '"')
+                return new ParseResult<Expression>(new LitString(sb.toString()), p);
+            if (c == '\\')
+                c = parseEscapedChar(next(p++));
+            sb.append(c);
+        }
     }
 
     private ParseResult<Expression> parseParenExp(int p) {
@@ -215,11 +232,14 @@ public final class Parser {
             return parseLitChar(p);
         } catch (ParseException e4) {
         try {
-            return parseConstructor(p);
+            return parseLitString(p);
         } catch (ParseException e5) {
+        try {
+            return parseConstructor(p);
+        } catch (ParseException e6) {
             ParseResult<String> resId = parseIdentifier(p);
             return new ParseResult<Expression>(new VarExp(resId.val), resId.rem);
-        }}}}}
+        }}}}}}
     }
 
     private ParseResult<Expression[]> parseArgumentList(int p) {

@@ -31,19 +31,19 @@ public class NatInt extends ZObject {
             super(desc,
                 new Method[] {
                     // Prefix
-                    new NativeMethod(new RawMethodDesc("core", "Int", "+", 0, FullTypeDesc.none)) {
+                    new NativeMethod(new RawMethodDesc("core", "Int", "+", 0, FullTypeDesc.NONE)) {
                         public void invoke(ZObject[] stack, int bp, ConcreteType[] genericArgs) {
                             int n = ((NatInt) stack[bp + 1]).value;
                             stack[bp + 1] = new NatInt(+n);
                         }
                     },
-                    new NativeMethod(new RawMethodDesc("core", "Int", "-", 0, FullTypeDesc.none)) {
+                    new NativeMethod(new RawMethodDesc("core", "Int", "-", 0, FullTypeDesc.NONE)) {
                         public void invoke(ZObject[] stack, int bp, ConcreteType[] genericArgs) {
                             int n = ((NatInt) stack[bp + 1]).value;
                             stack[bp + 1] = new NatInt(-n);
                         }
                     },
-                    new NativeMethod(new RawMethodDesc("core", "Int", "~", 0, FullTypeDesc.none)) {
+                    new NativeMethod(new RawMethodDesc("core", "Int", "~", 0, FullTypeDesc.NONE)) {
                         public void invoke(ZObject[] stack, int bp, ConcreteType[] genericArgs) {
                             int n = ((NatInt) stack[bp + 1]).value;
                             stack[bp + 1] = new NatInt(~n);
@@ -160,13 +160,13 @@ public class NatInt extends ZObject {
                             }
                         }
                     },
-                    new NativeMethod(new RawMethodDesc("core", "Int", "hashCode", 0, FullTypeDesc.none)) {
+                    new NativeMethod(new RawMethodDesc("core", "Int", "hashCode", 0, FullTypeDesc.NONE)) {
                         public void invoke(ZObject[] stack, int bp, ConcreteType[] genericArgs) {
                             int n = ((NatInt) stack[bp + 1]).value;
                             stack[bp + 1] = new NatInt(n);
                         }
                     },
-                    new NativeMethod(new RawMethodDesc("core", "Int", "toString", 0, FullTypeDesc.none)) {
+                    new NativeMethod(new RawMethodDesc("core", "Int", "toString", 0, FullTypeDesc.NONE)) {
                         public void invoke(ZObject[] stack, int bp, ConcreteType[] genericArgs) {
                             int n = ((NatInt) stack[bp + 1]).value;
                             String s = Integer.toString(n);
@@ -178,10 +178,10 @@ public class NatInt extends ZObject {
                 new HashMap<RawMethodDesc, RawMethodDesc>() {{
                     put(new RawMethodDesc("core", "Object", "==", 0, objOnly),
                         new RawMethodDesc("core", "Int", "==", 0, objOnly));
-                    put(new RawMethodDesc("core", "Object", "hashCode", 0, FullTypeDesc.none),
-                        new RawMethodDesc("core", "Int", "hashCode", 0, FullTypeDesc.none));
-                    put(new RawMethodDesc("core", "Object", "toString", 0, FullTypeDesc.none),
-                        new RawMethodDesc("core", "Int", "toString", 0, FullTypeDesc.none));
+                    put(new RawMethodDesc("core", "Object", "hashCode", 0, FullTypeDesc.NONE),
+                        new RawMethodDesc("core", "Int", "hashCode", 0, FullTypeDesc.NONE));
+                    put(new RawMethodDesc("core", "Object", "toString", 0, FullTypeDesc.NONE),
+                        new RawMethodDesc("core", "Int", "toString", 0, FullTypeDesc.NONE));
                 }},
                 0);
         }

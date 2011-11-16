@@ -14,7 +14,7 @@ import ast.SourceFile;
 import ctx.GlobalContext;
 
 public class Main {
-    private static final boolean
+    public static final boolean
         PRINT_AST = false,
         PRINT_RST = false,
         PRINT_CODE = false,
@@ -55,7 +55,7 @@ public class Main {
         vm.Type[] allTypes = GlobalRCtx.compile(allTypeDefs);
 
         System.out.println("Linking...");
-        God.linkAll(allTypes);
+        God.initialize();
 
         for (vm.Type type : allTypes) {
             for (vm.Method meth : type.ownedMethods) {
