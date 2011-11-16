@@ -42,6 +42,6 @@ type ArrayIterator[+T] extends Iterator[T] {
       return new None[T]();
     T result = this.source(this.index);
     this.index = this.index + 1;
-    return new Some[T](result);
+    return Some[T](result);
   }
 }

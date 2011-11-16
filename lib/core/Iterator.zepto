@@ -25,7 +25,7 @@ type SingletonIterator[+T] extends Iterator[T] {
       new None[T]();
     else {
       this.used = true;
-      return new Some[T](this.value);
+      return Some[T](this.value);
     }
   }
 }

@@ -41,7 +41,7 @@ public class NatMutableArray extends ZObject {
                                     new FullTypeDesc[] {new NormalFullTypeDesc(descColl, new FullTypeDesc[] {new TypeGenericFullTypeDesc(desc, 0)})}),
                             new RawTypeDesc[0],
                             new RawMethodDesc[] {
-                                new RawMethodDesc("core", "Collection", "iterator", 0, FullTypeDesc.NONE),
+                                new RawMethodDesc("core", "Iterable", "iterator", 0, FullTypeDesc.NONE),
                                 new RawMethodDesc("core", "Iterator", "next", 0, FullTypeDesc.NONE),
                                 new RawMethodDesc("core", "Maybe", "isSomething", 0, FullTypeDesc.NONE),
                                 new RawMethodDesc("core", "Maybe", "get", 0, FullTypeDesc.NONE),
@@ -51,6 +51,9 @@ public class NatMutableArray extends ZObject {
                             ZObject source = stack[bp + 2];
                             Method meth = methodTable[0]; // Collection.iterator
                             meth = source.type.rawType.vtable.get(meth);
+                            assert meth != null :
+                                source.type.rawType + " has no Collection.iterator in vtable:\n" +
+                                util.StringUtils.implode("\n", source.type.rawType.vtable.entrySet().toArray());
                             meth.invoke(stack, bp + 1, ConcreteType.NONE);
                             ZObject iter = stack[bp + 2];
 

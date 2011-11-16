@@ -49,7 +49,9 @@ public class NormalFullTypeDesc extends FullTypeDesc {
         if (raw.equals(that.raw)) {
             int numGenericParams = rawType.genericInfos.length;
             if (genericArgs.length != numGenericParams || that.genericArgs.length != numGenericParams)
-                throw new RuntimeException(String.format("wrong number of generic args for %s", raw));
+                throw new RuntimeException(String.format(
+                        "wrong number of generic args for %s seen when comparing %s to %s",
+                        raw, this, td));
             for (int i = 0; i < numGenericParams; ++i) {
                 FullTypeDesc thisGenArg = genericArgs[i], thatGenArg = that.genericArgs[i];
                 switch (rawType.genericInfos[i].var) {

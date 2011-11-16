@@ -1,39 +1,53 @@
 module core;
 
 abstract type List[+T] extends Sequence[T] {
-  List[T] tail();
+  static List[U] get[U](Collection[U] source) {
+    List[U] result = new EmptyList[U]();
+    for (U elem : source)
+      result = new NonEmptyList[U](elem, result);
+    return result.reverse();
+  }
+
+  List[T] rest();
+
+  List[T] last(Int n);
+
+  List[T] reverse() {
+    List[T] result = new EmptyList[T]();
+    for (T elem : this)
+      result = new NonEmptyList[T](elem, result);
+    return result;
+  }
 
   Iterator[T] iterator() {
     return new ListIterator[T](this);
   }
-
-  List[T] last(Int n);
 }
 
 type NonEmptyList[+T] extends List[T] {
   T head;
-  List[T] rest;
+  List[T] tail;
   Int size;
 
-  Void init(T head, List[T] rest) {
+  Void init(T head, List[T] tail) {
     this.head = head;
-    this.rest = rest;
-    this.size = rest.size() + 1;
+    this.tail = tail;
+    this.size = tail.size() + 1;
   }
 
   T first() {
     return this.head;
   }
 
-  List[T] tail() {
-    return this.rest;
+  List[T] rest() {
+    return this.tail;
   }
 
   List[T] last(Int n) {
     if (this.size >= n)
       return this;
     else
-      return this.rest.last(n);
+      return this.tail.last(n);
   }
 
   Int size() {
@@ -48,13 +62,9 @@ type NonEmptyList[+T] extends List[T] {
 type EmptyList[+T] extends List[T] {
   Void init() {}
 
-  List[T] tail() {}
+  List[T] rest() {}
 
   List[T] last(Int n) {}
-
-  #Iterator[T] iterator() {
-  #  return new EmptyIterator[T]();
-  #}
 
   Int size() {
     return 0;
@@ -77,8 +87,8 @@ type ListIterator[+T] extends Iterator[T] {
       return new None[T]();
     else {
       T elem = this.current.first();
-      this.current = this.current.tail();
-      return new Some[T](elem);
+      this.current = this.current.rest();
+      return Some[T](elem);
     }
   }
 }

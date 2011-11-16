@@ -7,6 +7,16 @@ type String extends Sequence[Char] {
     this.store = new MutableArray[Char](source);
   }
 
+  String +(Object o) {
+    String that = o.toString();
+    Sequence[Char] seq = Sequence.+(this, that);
+    return new String(seq);
+  }
+
+  String format(Sequence[Object] args) {
+    # TODO: implement
+  }
+
   Iterator[Char] iterator() {
     return this.store.iterator();
   }

@@ -4,8 +4,6 @@ import rctx.*;
 import rst.*;
 
 public class TypeGenericFullTypeDesc extends GenericFullTypeDesc {
-    // TODO: Can we get rid of owner? Would fix hack in MethodContext.
-    // See also MethodGenericFullTypeDesc.
     public final RawTypeDesc owner;
     public final int index;
 

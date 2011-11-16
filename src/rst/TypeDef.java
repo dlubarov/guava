@@ -123,7 +123,7 @@ public class TypeDef {
         throw new RuntimeException("can't get here");
     }
 
-    private FullTypeDesc inMyGenerics(TypeGenericFullTypeDesc tgDesc, FullTypeDesc[] myGenerics, GlobalRCtx ctx) {
+    public FullTypeDesc inMyGenerics(TypeGenericFullTypeDesc tgDesc, FullTypeDesc[] myGenerics, GlobalRCtx ctx) {
         if (tgDesc.owner.equals(desc))
             return myGenerics[tgDesc.index];
         for (NormalFullTypeDesc sup : supers) {
@@ -151,14 +151,14 @@ public class TypeDef {
         return result;
     }
 
-    private FullTypeDesc inMyGenerics(TypeGenericFullTypeDesc tgDesc, GlobalRCtx ctx) {
+    public FullTypeDesc inMyGenerics(TypeGenericFullTypeDesc tgDesc, GlobalRCtx ctx) {
         FullTypeDesc[] myGenerics = new FullTypeDesc[genericInfos.length];
         for (int i = 0; i < myGenerics.length; ++i)
             myGenerics[i] = new TypeGenericFullTypeDesc(desc, i);
         return inMyGenerics(tgDesc, myGenerics, ctx);
     }
 
-    private RawMethodDesc inMyGenerics(RawMethodDesc m, GlobalRCtx ctx) {
+    public RawMethodDesc inMyGenerics(RawMethodDesc m, GlobalRCtx ctx) {
         TypeDef ownerType = ctx.resolve(m.owner);
         FullTypeDesc[] newGenericArgs = new FullTypeDesc[ownerType.genericInfos.length];
         for (int i = 0; i < newGenericArgs.length; ++i)

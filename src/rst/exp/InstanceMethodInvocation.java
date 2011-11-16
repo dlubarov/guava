@@ -25,7 +25,8 @@ public class InstanceMethodInvocation extends Expression {
     }
 
     private MethodDef getMethod(CodeRCtx ctx, FullTypeDesc[] argTypes, FullTypeDesc[] parentTypes) {
-        // FIXME: need to search up the type hierarchy for appropriate method
+        // FIXME: need to search up the type hierarchy for appropriate method.
+        // This temporary fix only searches Object, ignoring other generic upper bounds.
         return ctx.resolve(new RawTypeDesc("core", "Object"))
                 .getMatchingInstanceMethod(ctx, methodName, FullTypeDesc.NONE, genericArgs, argTypes);
     }
@@ -76,13 +77,8 @@ public class InstanceMethodInvocation extends Expression {
         for (int i = 0; i < genericArgIndices.length; ++i)
             genericArgIndices[i] = ctx.getFullTypeIndex(genericArgs[i]);
 
-        FullTypeDesc targetType = target.inferType(ctx);
-        RawMethodDesc methodDesc = method.desc;
-//        if (targetType instanceof NormalFullTypeDesc)
-//            methodDesc = methodDesc.withTypeGenerics(((NormalFullTypeDesc) targetType).genericArgs);
-
         return new CodeTree(target.compile(ctx), allArgCode,
-                Opcodes.INVOKE_VIRTUAL, ctx.getMethodIndex(methodDesc),
+                Opcodes.INVOKE_VIRTUAL, ctx.getMethodIndex(method.desc),
                 genericArgIndices.length, new CodeTree((Object[]) genericArgIndices));
     }
 

@@ -17,11 +17,35 @@ public class ClassMethodInvocation extends Expression {
     private final FullTypeDesc[] genericArgs;
     private final Expression[] args;
 
-    public ClassMethodInvocation(RawTypeDesc owner, String methodName, FullTypeDesc[] genericArgs, Expression[] args) {
+    public ClassMethodInvocation(RawTypeDesc owner, String methodName,
+            FullTypeDesc[] genericArgs, Expression[] args) {
         this.owner = owner;
         this.methodName = methodName;
         this.genericArgs = genericArgs;
         this.args = args;
+    }
+
+    // Retrieves the implicit type-level generic args for a static invocation
+    // of an instance method.
+    private FullTypeDesc[] typeGenericArgs(CodeRCtx ctx) {
+        TypeDef ownerType = ctx.resolve(owner);
+        int n = ownerType.genericInfos.length;
+        if (n == 0)
+            return FullTypeDesc.NONE;
+        FullTypeDesc thisType = args[0].inferType(ctx);
+        if (!(thisType instanceof NormalFullTypeDesc))
+            throw new RuntimeException(String.format(
+                    "%s has type %s, which has no generic arguments",
+                    args[0], thisType));
+        NormalFullTypeDesc thisNormType = (NormalFullTypeDesc) thisType;
+        TypeDef thisTypeDef = ctx.resolve(thisNormType.raw);
+        FullTypeDesc[] result = new FullTypeDesc[n];
+        for (int i = 0; i < result.length; ++i)
+            result[i] = thisTypeDef.inMyGenerics(
+                    new TypeGenericFullTypeDesc(owner, i),
+                    thisNormType.genericArgs,
+                    ctx.methodCtx.globalCtx);
+        return result;
     }
 
     private MethodDef getMethod(CodeRCtx ctx) {
@@ -41,11 +65,17 @@ public class ClassMethodInvocation extends Expression {
             // Fetch the method's parameter types
             FullTypeDesc[] paramTypes;
             if (meth.isStatic)
-                paramTypes = meth.paramTypes;
+                paramTypes = meth.paramTypes.clone();
             else {
+                // Static invocation of instance method must have at least one argument ("this")
+                if (args.length == 0)
+                    continue;
+                FullTypeDesc[] typeGenericArgs = typeGenericArgs(ctx);
                 paramTypes = new FullTypeDesc[meth.paramTypes.length + 1];
-                paramTypes[0] = new NormalFullTypeDesc(owner); // "this"
+                paramTypes[0] = new NormalFullTypeDesc(owner, typeGenericArgs); // "this"
                 System.arraycopy(meth.paramTypes, 0, paramTypes, 1, meth.paramTypes.length);
+                for (int i = 1; i < paramTypes.length; ++i)
+                    paramTypes[i] = paramTypes[i].withTypeGenerics(typeGenericArgs);
             }
 
             // Check for correct number of arguments
@@ -58,8 +88,14 @@ public class ClassMethodInvocation extends Expression {
 
             // Check that argument types match
             for (int i = 0; i < paramTypes.length; ++i)
+                try {
                 if (!argTypes[i].isSubtype(paramTypes[i], ctx.methodCtx.globalCtx))
                     continue methodsearch;
+                } catch (RuntimeException e) {
+                    throw new RuntimeException(String.format(
+                            "error matching %s against %s",
+                            argTypes[i], paramTypes[i]), e);
+                }
 
             options.add(meth);
         }
@@ -74,7 +110,13 @@ public class ClassMethodInvocation extends Expression {
     }
 
     public FullTypeDesc inferType(CodeRCtx ctx) {
-        return getMethod(ctx).retType.withMethodGenerics(genericArgs);
+        MethodDef meth = getMethod(ctx);
+        FullTypeDesc retType = meth.retType;
+        if (meth.isStatic)
+            retType = retType.withMethodGenerics(genericArgs);
+        else
+            retType = retType.withGenerics(typeGenericArgs(ctx), genericArgs);
+        return retType;
     }
 
     public CodeTree compile(CodeRCtx ctx) {
