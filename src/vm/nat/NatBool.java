@@ -1,13 +1,7 @@
 package vm.nat;
 
-import common.FullTypeDesc;
-import common.NormalFullTypeDesc;
-import common.RawMethodDesc;
-import common.RawTypeDesc;
-import vm.Method;
-import vm.NativeMethod;
-import vm.NativeType;
-import vm.ZObject;
+import common.*;
+import vm.*;
 import vm.ty.ConcreteType;
 
 import java.util.HashMap;
@@ -92,8 +86,7 @@ public class NatBool extends ZObject {
                         public void invoke(ZObject[] stack, int bp, ConcreteType[] genericArgs) {
                             boolean b = ((NatBool) stack[bp + 1]).value;
                             String s = Boolean.toString(b);
-                            stack[bp + 1] = null; // FIXME: create String
-                            throw new RuntimeException("impl");
+                            stack[bp + 1] = God.makeString(s);
                         }
                     },
                 },

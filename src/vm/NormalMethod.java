@@ -105,14 +105,7 @@ public class NormalMethod extends Method {
 
                 case CONST_STRING:
                     String s = stringTable[code[ip++]];
-                    NatChar[] chars = new NatChar[s.length()];
-                    for (i = 0; i < chars.length; ++i)
-                        chars[i] = new NatChar(s.charAt(i));
-                    NatMutableArray charArray = new NatMutableArray(
-                            new ConcreteType[] {new ConcreteType(NatChar.TYPE)},
-                            chars);
-                    Type stringType = God.stringType;
-                    stack[++sp] = new NormalObject(new ConcreteType(stringType), new ZObject[] {charArray});
+                    stack[++sp] = God.makeString(s);
                     break;
 
                 case GET_LOCAL:

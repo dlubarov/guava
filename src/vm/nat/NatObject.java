@@ -42,8 +42,8 @@ public class NatObject extends ZObject {
                     new NativeMethod(new RawMethodDesc("core", "Object", "toString", 0, FullTypeDesc.NONE)) {
                         public void invoke(ZObject[] stack, int bp, ConcreteType[] genericArgs) {
                             ZObject obj = stack[bp + 1];
-                            stack[bp + 1] = null; // FIXME: create String
-                            throw new RuntimeException("impl");
+                            String s = obj.type.toString() + "@" + System.identityHashCode(obj);
+                            stack[bp + 1] = God.makeString(s);
                         }
                     },
                 },

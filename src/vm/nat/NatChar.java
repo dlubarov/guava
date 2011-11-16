@@ -89,8 +89,7 @@ public class NatChar extends ZObject {
                         public void invoke(ZObject[] stack, int bp, ConcreteType[] genericArgs) {
                             char c = ((NatChar) stack[bp + 1]).value;
                             String s = Character.toString(c);
-                            stack[bp + 1] = null; // FIXME: create String
-                            throw new RuntimeException("impl");
+                            stack[bp + 1] = God.makeString(s);
                         }
                     },
                 },
