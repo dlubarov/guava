@@ -1,5 +1,6 @@
 package rst.stm;
 
+import common.FullTypeDesc;
 import comp.CodeTree;
 import rctx.CodeRCtx;
 import rst.exp.Expression;
@@ -13,6 +14,12 @@ public class ReturnStm extends Statement {
     }
 
     public CompilationResult compile(CodeRCtx ctx) {
+        FullTypeDesc valueType = value.inferType(ctx);
+        FullTypeDesc expectedType = ctx.methodCtx.meth.retType;
+        if (!valueType.isSubtype(expectedType, ctx.methodCtx.globalCtx))
+            throw new RuntimeException(String.format(
+                    "returning %s, expected %s",
+                    valueType, expectedType));
         return new CompilationResult(new CodeTree(value.compile(ctx), Opcodes.RETURN), ctx);
     }
 

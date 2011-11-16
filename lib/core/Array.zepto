@@ -1,8 +1,6 @@
 module core;
 
 abstract type Array[+T] extends Sequence[T] {
-  T get(Int idx);
-
   Iterator[T] iterator() {
     return new ArrayIterator[T](this);
   }

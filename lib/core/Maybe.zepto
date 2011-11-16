@@ -2,6 +2,7 @@ module core;
 
 abstract type Maybe[+T] extends Iterable[T] {
   Bool isSomething();
+  Bool isNothing();
 
   T get();
 
@@ -15,8 +16,16 @@ type Some[+T] extends Maybe[T] {
     this.value = value;
   }
 
+  static Some[T] get[T](T value) {
+    return new Some[T](value);
+  }
+
   Bool isSomething() {
     return true;
+  }
+
+  Bool isNothing() {
+    return false;
   }
 
   T get() {
@@ -37,6 +46,10 @@ type None[+T] extends Maybe[T] {
 
   Bool isSomething() {
     return false;
+  }
+
+  Bool isNothing() {
+    return true;
   }
 
   T get() {}

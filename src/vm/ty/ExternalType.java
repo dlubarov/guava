@@ -34,4 +34,9 @@ public class ExternalType extends FullType {
     public int hashCode() {
         return tableIndex + Arrays.hashCode(genericArgs);
     }
+
+    @Override
+    public String toString() {
+        return String.format("TABLE%d%s", tableIndex, Arrays.toString(genericArgs));
+    }
 }

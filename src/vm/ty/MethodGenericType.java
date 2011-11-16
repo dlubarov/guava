@@ -26,4 +26,8 @@ public class MethodGenericType extends FullType {
     public int hashCode() {
         return index;
     }
+
+    @Override public String toString() {
+        return String.format("M%d", index);
+    }
 }

@@ -29,7 +29,11 @@ public class NatMutableArray extends ZObject {
         private static final RawTypeDesc descColl = new RawTypeDesc("core", "Collection");
 
         NatMutableArrayType() {
-            super(desc, new RawTypeDesc[] {new RawTypeDesc("core", "Array")},
+            super(desc, new NormalFullTypeDesc[] {
+                    new NormalFullTypeDesc(
+                            new RawTypeDesc("core", "Array"),
+                            new FullTypeDesc[] {new TypeGenericFullTypeDesc(desc, 0)})
+                    },
                 new Method[] {
                     // Constructor
                     new NativeMethod(

@@ -10,7 +10,7 @@ import java.util.NoSuchElementException;
 import static util.StringUtils.implode;
 
 /*
- * This awkward class exists because in the AST-to-RST transformation
+ * This awkward class exists because in the AST-to-RST transformation,
  * the Invocation class can't differentiate
  *     foo.method(arg) // instance method invocation
  *     foo.field(idx) // indexing into a collection, or anything with "get"
@@ -51,14 +51,19 @@ public class InstanceMethodInvocationOrGet extends Expression {
             getMethodResult = getVersion(ctx).inferType(ctx);
         } catch (RuntimeException e) {}
 
-        if (normalMethodResult == null && getMethodResult == null)
+        if (normalMethodResult == null && getMethodResult == null) {
+            FullTypeDesc[] argTypes = new FullTypeDesc[args.length];
+            for (int i = 0; i < argTypes.length; ++i)
+                argTypes[i] = args[i].inferType(ctx);
             throw new NoSuchElementException(String.format(
-                    "method %s not found in %s %s",
-                    memberName, target.inferType(ctx), this));
+                    "%s(%s) not defined for type %s in %s",
+                    memberName, implode(", ", argTypes),
+                    target.inferType(ctx), this));
+        }
         if (normalMethodResult != null && getMethodResult != null)
             throw new RuntimeException(String.format(
-                    "%s is ambiguous because field and method share a name",
-                    this));
+                    "%s is ambiguous because a field and a method share the name %s",
+                    this, memberName));
 
         return normalMethodResult == null;
     }

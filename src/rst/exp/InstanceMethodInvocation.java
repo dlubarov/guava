@@ -76,8 +76,13 @@ public class InstanceMethodInvocation extends Expression {
         for (int i = 0; i < genericArgIndices.length; ++i)
             genericArgIndices[i] = ctx.getFullTypeIndex(genericArgs[i]);
 
+        FullTypeDesc targetType = target.inferType(ctx);
+        RawMethodDesc methodDesc = method.desc;
+//        if (targetType instanceof NormalFullTypeDesc)
+//            methodDesc = methodDesc.withTypeGenerics(((NormalFullTypeDesc) targetType).genericArgs);
+
         return new CodeTree(target.compile(ctx), allArgCode,
-                Opcodes.INVOKE_VIRTUAL, ctx.getMethodIndex(method.desc),
+                Opcodes.INVOKE_VIRTUAL, ctx.getMethodIndex(methodDesc),
                 genericArgIndices.length, new CodeTree((Object[]) genericArgIndices));
     }
 

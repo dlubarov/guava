@@ -2,7 +2,7 @@ package rctx;
 
 import java.util.*;
 
-import rst.TypeDef;
+import rst.*;
 import vm.ty.*;
 
 import common.*;
@@ -10,15 +10,18 @@ import common.*;
 public class MethodRCtx {
     public final GlobalRCtx globalCtx;
     public final NormalFullTypeDesc owner;
+    public final MethodDef meth;
     private final List<RawTypeDesc> typeTable;
     private final List<RawMethodDesc> methodTable;
     private final List<FullType> fullTypeTable;
     private final List<String> stringTable;
     private int highestLocal = -1;
 
-    public MethodRCtx(GlobalRCtx globalCtx, NormalFullTypeDesc owner) {
+    public MethodRCtx(GlobalRCtx globalCtx, NormalFullTypeDesc owner, MethodDef meth) {
         this.globalCtx = globalCtx;
         this.owner = owner;
+        this.meth = meth;
+
         typeTable = new ArrayList<RawTypeDesc>();
         methodTable = new ArrayList<RawMethodDesc>();
         fullTypeTable = new ArrayList<FullType>();
@@ -57,7 +60,8 @@ public class MethodRCtx {
                 genericArgs[i] = toVMType(ndesc.genericArgs[i]);
             return new ExternalType(getTypeIndex(ndesc.raw), genericArgs);
         } else if (desc instanceof TypeGenericFullTypeDesc) {
-            return new TypeGenericType(((TypeGenericFullTypeDesc) desc).index);
+            TypeGenericFullTypeDesc tgDesc = (TypeGenericFullTypeDesc) desc;
+            return new TypeGenericType(getTypeIndex(tgDesc.owner), tgDesc.index);
         } else if (desc instanceof MethodGenericFullTypeDesc) {
             return new MethodGenericType(((MethodGenericFullTypeDesc) desc).index);
         } else

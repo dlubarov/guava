@@ -21,15 +21,26 @@ Array[Char] is also an Array[Object], and an Ordering[Sequence] is also an
 Ordering[Array].
 
 Zepto supports operator overloading. The expression "x + y" is just syntactic
-sugar for "x.+(y)". You can also invoke instance methods statically, so
-"Object.==(a, b)" will always perform an identity comparison even if a's type
-implements its own "==" method.
+sugar for "x.+(y)". Types can also overload the subscript operator by
+implementing "get" and/or "set" methods. For example, the type MutableArray[T]
+contains methods which look like this:
+  T get(Int idx);
+  T set(Int idx, T val);
+
+You can even implement static get and set methods to make a type name behave
+like a map. This is useful for writing pseudoconstructors which, unlike real
+constructors, may perform interning.
+
+Instance methods can be invoked statically. "Object.==(a, b)" will always
+perform an identity comparison, whether or not a's type implements its own "=="
+method.
 
 Zepto has no null references. Instead, it has a Maybe type similar to Haskell's
 Maybe or Scala's Option.
 
 
 TODO:
+  right-associative : (cons) operator
   non-native methods for native types
   definite assignment analysis
   variance analysis

@@ -21,7 +21,7 @@ public class NatObject extends ZObject {
         private static final FullTypeDesc[] objOnly = new FullTypeDesc[] {new NormalFullTypeDesc(new RawTypeDesc("core", "Object"))};
 
         NatObjectType() {
-            super(desc, new RawTypeDesc[0],
+            super(desc, new NormalFullTypeDesc[0],
                 new Method[] {
                     new NativeMethod(new RawMethodDesc("core", "Object", "==", 0, objOnly)) {
                         public void invoke(ZObject[] stack, int bp, ConcreteType[] genericArgs) {

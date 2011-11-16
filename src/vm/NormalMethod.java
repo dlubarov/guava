@@ -184,10 +184,11 @@ public class NormalMethod extends Method {
                     a = stack[sp - j]; // target
                     ty = a.type.rawType;
                     assert ty.vtable != null : String.format(
-                            "%s has null vtable (from %s, invoking %s)",
-                            ty.desc, desc, meth.desc);
-                    assert ty.vtable.containsKey(meth) : "method " + meth.desc
-                            + " not found in vtable of " + ty.desc;
+                            "%s has null vtable", ty.desc);
+                    assert ty.vtable.containsKey(meth) : String.format(
+                            "method %s not found in vtable of %s; vtable contains\n%s",
+                            meth.desc, ty.desc,
+                            util.StringUtils.implode("\n", ty.vtable.entrySet().toArray()));
                     meth = ty.vtable.get(meth);
                     meth.invoke(stack, sp - j - 1, ctypes); // FIXME: off by 1?
                     sp -= j;
@@ -205,7 +206,14 @@ public class NormalMethod extends Method {
                         a = stack[bp + 1];
 
                     for (j = 0; j < ctypes.length; ++j)
-                        ctypes[j] = fty.genericArgs[j].toConcrete(a, this, genericArgs);
+                        try {
+                            ctypes[j] = fty.genericArgs[j].toConcrete(a, this, genericArgs);
+                        } catch (ArrayIndexOutOfBoundsException e) {
+                            throw new RuntimeException(String.format(
+                                    "can't instantiate %s",
+                                    ty),
+                                    e);
+                        }
                     stack[++sp] = ty.rawInstance(ctypes);
                     break;
 

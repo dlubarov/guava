@@ -8,14 +8,11 @@ abstract type Sequence[+T] extends Collection[T] {
       iter.next();
       idx = idx - 1;
     }
-    return iter.next();
+    return iter.next().get();
   }
 
   T first() {
-    if (this.isEmpty())
-      return new None[T]();
-    else
-      return new Some[T](this(0));
+    return this(0);
   }
 
   Maybe[T] last() {
@@ -46,7 +43,7 @@ abstract type Sequence[+T] extends Collection[T] {
     Maybe[T] current = iter.next();
     while (current.isSomething()) {
       if (current.get() == elem)
-        return i;
+        return Some[Int](i);
       i = i + 1;
       current = iter.next();
     }
@@ -54,6 +51,10 @@ abstract type Sequence[+T] extends Collection[T] {
   }
 
   Maybe[Int] lastIndexOf(T elem) {
+    Maybe[Int] i = this.reverse().firstIndexOf(elem);
+    if (i.isNothing())
+      return i;
+    return Some[Int](this.size() - 1 - i.get());
   }
 
   Sequence[T] reverse() {

@@ -6,6 +6,8 @@ abstract type List[+T] extends Sequence[T] {
   Iterator[T] iterator() {
     return new ListIterator[T](this);
   }
+
+  List[T] last(Int n);
 }
 
 type NonEmptyList[+T] extends List[T] {
@@ -47,6 +49,8 @@ type EmptyList[+T] extends List[T] {
   Void init() {}
 
   List[T] tail() {}
+
+  List[T] last(Int n) {}
 
   #Iterator[T] iterator() {
   #  return new EmptyIterator[T]();

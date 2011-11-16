@@ -48,7 +48,7 @@ public class Invocation extends Expression {
         if (target instanceof VarExp) {
             String typeName = ((VarExp) target).id;
             if (ctx.hasRawType(typeName))
-                // class get, e.g. MyClass(...)
+                // class get, e.g. MyClass[Int](...)
                 return new ClassMethodInvocation(ctx.resolveRaw(typeName), "get", genericArgsRef, argsRef);
         }
 
