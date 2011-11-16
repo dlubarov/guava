@@ -11,7 +11,7 @@ abstract type Sequence[+T] extends Collection[T] {
     return iter.next();
   }
 
-  Maybe[T] first() {
+  T first() {
     if (this.isEmpty())
       return new None[T]();
     else
@@ -59,7 +59,7 @@ abstract type Sequence[+T] extends Collection[T] {
   Sequence[T] reverse() {
     List[T] result = new EmptyList[T]();
     for (T elem : this)
-      result = new NonEmptyList(elem, result);
+      result = new NonEmptyList[T](elem, result);
     return result;
   }
 }

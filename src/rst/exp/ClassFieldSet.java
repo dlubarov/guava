@@ -24,6 +24,15 @@ public class ClassFieldSet extends Expression {
     public CodeTree compile(CodeRCtx ctx) {
         rst.TypeDef ownerType = ctx.resolve(owner);
         int fieldIdx = ownerType.getStaticFieldIndex(fieldName);
+
+        // Type checking
+        FullTypeDesc valueType = value.inferType(ctx),
+                     expectedType = ownerType.staticFields[fieldIdx].type;
+        if (!valueType.isSubtype(expectedType, ctx.methodCtx.globalCtx))
+            throw new RuntimeException(String.format(
+                    "rval (%s) has type %s, does not match static field type %s",
+                    value, valueType, expectedType));
+
         return new CodeTree(
                 value.compile(ctx),
                 Opcodes.PUT_STATIC_FIELD,

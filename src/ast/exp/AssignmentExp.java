@@ -1,6 +1,5 @@
 package ast.exp;
 
-import ast.Type;
 import ctx.CodeContext;
 import rst.exp.*;
 

@@ -56,9 +56,11 @@ public class InstanceMethodInvocation extends Expression {
         FullTypeDesc targetType = target.inferType(ctx);
         MethodDef meth = getMethod(ctx);
         FullTypeDesc result = meth.retType;
+
+        FullTypeDesc[] typeGenerics = null;
         if (targetType instanceof NormalFullTypeDesc)
-            result = result.withTypeGenerics(((NormalFullTypeDesc) target.inferType(ctx)).genericArgs);
-        result = result.withMethodGenerics(genericArgs);
+            typeGenerics = ((NormalFullTypeDesc) targetType).genericArgs;
+        result = result.withGenerics(typeGenerics, genericArgs);
         return result;
     }
 

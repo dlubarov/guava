@@ -30,7 +30,14 @@ public class InstanceFieldSet extends Expression {
         NormalFullTypeDesc normTypeDesc = (NormalFullTypeDesc) targetTypeDesc;
         TypeDef targetType = ctx.resolve(normTypeDesc.raw);
 
+        // Type checking
         int idx = targetType.getFieldIndex(fieldName);
+        FullTypeDesc valueType = value.inferType(ctx),
+                     expectedType = targetType.instanceFields[idx].type;
+        if (!valueType.isSubtype(expectedType, ctx.methodCtx.globalCtx))
+            throw new RuntimeException(String.format(
+                    "rval (%s) has type %s, does not match field type %s",
+                    value, valueType, expectedType));
 
         if (giveResult)
             return new CodeTree(

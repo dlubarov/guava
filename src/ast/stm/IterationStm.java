@@ -19,32 +19,39 @@ public class IterationStm extends Statement {
     }
 
     public RefineResult refine(CodeContext ctx) {
-        // FIXME: implement foreach
-        if (1+1==2) return new BlockStm().refine(ctx);
-
         Type iteratorType = new Type("Iterator", new Type[] {var.type});
-        String iterableName = "@iterable_" + uniqueID;
+        String iteratorName = "@iterator_" + uniqueID;
+
+        Type maybeType = new Type("Maybe", new Type[] {var.type});
+        String maybeName = "@maybeElem_" + uniqueID;
 
         Statement equiv = new BlockStm(
                 new LocalDefStm(
-                        new TypedVar(iteratorType, iterableName),
+                        new TypedVar(iteratorType, iteratorName),
                         new Invocation(
                                 new MemberAccess(iterable, "iterator"),
-                                new Type[0],
-                                new Expression[0])),
+                                new Type[0], new Expression[0])),
+                new LocalDefStm(
+                        new TypedVar(maybeType, maybeName),
+                        new Invocation(
+                                new MemberAccess(new VarExp(iteratorName), "next"),
+                                new Type[0], new Expression[0])),
                 new WhileStm(
                         new Invocation(
-                                new MemberAccess(new VarExp(iterableName), "hasNext"),
-                                new Type[0],
-                                new Expression[0]),
+                                new MemberAccess(new VarExp(maybeName), "isSomething"),
+                                new Type[0], new Expression[0]),
                         new BlockStm(
                                 new LocalDefStm(
                                         var,
                                         new Invocation(
-                                                new MemberAccess(new VarExp(iterableName), "next"),
-                                                new Type[0],
-                                                new Expression[0])),
-                                body))
+                                                new MemberAccess(new VarExp(maybeName), "get"),
+                                                new Type[0], new Expression[0])),
+                                body,
+                                new ExpStm(new AssignmentExp(
+                                        new VarExp(maybeName),
+                                        new Invocation(
+                                                new MemberAccess(new VarExp(iteratorName), "next"),
+                                                new Type[0], new Expression[0])))))
         );
         return equiv.refine(ctx);
     }

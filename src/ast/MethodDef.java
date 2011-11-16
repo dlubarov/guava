@@ -29,7 +29,7 @@ public class MethodDef extends MemberDef {
         this.params = params;
         this.body = body;
     }
-    
+
     private boolean isVoid() {
         String retType = self.type.name;
         return retType.equals("Void") || retType.equals("core.Void");

@@ -1,5 +1,7 @@
 package common;
 
+import java.util.Arrays;
+
 import rctx.*;
 
 public class MethodGenericFullTypeDesc extends FullTypeDesc {
@@ -19,7 +21,19 @@ public class MethodGenericFullTypeDesc extends FullTypeDesc {
         try {
             return methodGenerics[index];
         } catch (ArrayIndexOutOfBoundsException e) {
-            throw new RuntimeException("too few generic args for " + owner);
+            throw new RuntimeException(String.format(
+                    "too few generic args for %s; given %s",
+                    owner, Arrays.toString(methodGenerics)));
+        }
+    }
+
+    public FullTypeDesc withGenerics(FullTypeDesc[] typeGenerics, FullTypeDesc[] methodGenerics) {
+        try {
+            return methodGenerics[index];
+        } catch (ArrayIndexOutOfBoundsException e) {
+            throw new RuntimeException(String.format(
+                    "too few generic args for %s; given %s",
+                    owner, Arrays.toString(methodGenerics)));
         }
     }
 

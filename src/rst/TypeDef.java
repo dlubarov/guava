@@ -95,8 +95,7 @@ public class TypeDef {
 
             for (int i = 0; i < argTypes.length; ++i) {
                 FullTypeDesc paramType = method.paramTypes[i];
-                paramType = paramType.withTypeGenerics(typeGenericArgs);
-                paramType = paramType.withMethodGenerics(methGenericArgs);
+                paramType = paramType.withGenerics(typeGenericArgs, methGenericArgs);
                 if (!argTypes[i].isSubtype(paramType, ctx.methodCtx.globalCtx))
                     continue methodsearch;
             }
@@ -167,7 +166,7 @@ public class TypeDef {
             throw new RuntimeException(String.format("%s inherits multiple implementations of %s", desc, method));
         return impls.get(0);
     }
-    
+
     protected RawMethodDesc myImplementationOf(GlobalRCtx ctx, RawMethodDesc method) {
         FullTypeDesc[] myGenericArgs = new FullTypeDesc[genericInfos.length];
         for (int i = 0; i < myGenericArgs.length; ++i)
@@ -241,6 +240,7 @@ public class TypeDef {
         }
         sb.append(" {");
         if (staticFields.length + instanceFields.length + methods.length > 0) {
+            // TODO: this adds no space between static fields and method defs
             sb.append('\n').append(indent(implode('\n', staticFields)));
             if (staticFields.length > 0 && instanceFields.length > 0)
                 sb.append("\n\n");

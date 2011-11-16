@@ -31,15 +31,17 @@ abstract type Collection[+T] extends Iterable[T] {
     List[U] result = new EmptyList[U]();
     for (T elem : this)
       result = new NonEmptyList[U](f(elem), result);
-    return result;
+    return result.reverse();
   }
 
   Collection[U] map[U](Function1[T, Maybe[U]] f) {
     List[U] result = new EmptyList[U]();
-    for (T elem : this)
-      if (f(elem).isSomething())
-        result = new NonEmptyList[U](f(elem).get(), result);
-    return result;
+    for (T elem : this) {
+      Maybe[U] mappedElem = f(elem);
+      if (mappedElem.isSomething())
+        result = new NonEmptyList[U](mappedElem.get(), result);
+    }
+    return result.reverse();
   }
 
   Collection[T] filter(Function1[T, Bool] p) {

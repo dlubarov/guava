@@ -19,6 +19,12 @@ public class LocalSet extends Expression {
     }
 
     public CodeTree compile(CodeRCtx ctx) {
+        FullTypeDesc valueType = value.inferType(ctx), expectedType = ctx.getLocalType(index);
+        if (!valueType.isSubtype(expectedType, ctx.methodCtx.globalCtx))
+            throw new RuntimeException(String.format(
+                    "rval (%s) has type %s, does not match local type %s",
+                    value, valueType, expectedType));
+
         return new CodeTree(value.compile(ctx), Opcodes.DUP, Opcodes.PUT_LOCAL, index);
     }
 

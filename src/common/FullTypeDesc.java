@@ -7,6 +7,7 @@ public abstract class FullTypeDesc {
 
     public abstract FullTypeDesc withTypeGenerics(FullTypeDesc[] typeGenerics);
     public abstract FullTypeDesc withMethodGenerics(FullTypeDesc[] methodGenerics);
+    public abstract FullTypeDesc withGenerics(FullTypeDesc[] typeGenerics, FullTypeDesc[] methodGenerics);
 
     public abstract boolean isSubtype(FullTypeDesc that, GlobalRCtx ctx);
     public abstract boolean isSupertype(FullTypeDesc that, GlobalRCtx ctx);

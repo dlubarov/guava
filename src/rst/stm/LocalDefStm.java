@@ -18,6 +18,9 @@ public class LocalDefStm extends Statement {
     }
 
     public CompilationResult compile(CodeRCtx ctx) {
+        FullTypeDesc initValType = initVal.inferType(ctx);
+        if (!initValType.isSubtype(type, ctx.methodCtx.globalCtx))
+            throw new RuntimeException(String.format("%s has type %s, not %s", initVal, initValType, type));
         return new CompilationResult(
                 new CodeTree(initVal.compile(ctx), Opcodes.PUT_LOCAL, index),
                 ctx.addLocal(index, type));

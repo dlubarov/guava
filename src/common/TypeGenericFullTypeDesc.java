@@ -26,6 +26,14 @@ public class TypeGenericFullTypeDesc extends GenericFullTypeDesc {
         return this;
     }
 
+    public FullTypeDesc withGenerics(FullTypeDesc[] typeGenerics, FullTypeDesc[] methodGenerics) {
+        try {
+            return typeGenerics[index];
+        } catch (ArrayIndexOutOfBoundsException e) {
+            throw new RuntimeException("too few generic args for " + owner);
+        }
+    }
+
     public boolean isSubtype(FullTypeDesc that, GlobalRCtx ctx) {
         TypeDef type = ctx.resolve(owner);
         GenericInfo info = type.genericInfos[index];

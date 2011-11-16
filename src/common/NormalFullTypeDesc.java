@@ -32,6 +32,13 @@ public class NormalFullTypeDesc extends FullTypeDesc {
         return new NormalFullTypeDesc(raw, newGenericArgs);
     }
 
+    public NormalFullTypeDesc withGenerics(FullTypeDesc[] typeGenerics, FullTypeDesc[] methodGenerics) {
+        FullTypeDesc[] newGenericArgs = new FullTypeDesc[genericArgs.length];
+        for (int i = 0; i < newGenericArgs.length; ++i)
+            newGenericArgs[i] = genericArgs[i].withGenerics(typeGenerics, methodGenerics);
+        return new NormalFullTypeDesc(raw, newGenericArgs);
+    }
+
     public boolean isSubtype(FullTypeDesc td, GlobalRCtx ctx) {
         if (td instanceof TypeGenericFullTypeDesc || td instanceof MethodGenericFullTypeDesc)
             return td.isSupertype(this, ctx);
