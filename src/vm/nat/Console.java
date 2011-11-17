@@ -24,7 +24,7 @@ public class Console extends ZObject {
             super(desc,
                     new Method[] {
                         new NativeMethod(
-                                new RawMethodDesc(desc, "stdout", 0, new FullTypeDesc[] {new NormalFullTypeDesc(descStr)}, true),
+                                new RawMethodDesc(desc, "outString", 0, new FullTypeDesc[] {new NormalFullTypeDesc(descStr)}, true),
                                 new RawTypeDesc[] {descStr},
                                 new RawMethodDesc[] {}) {
                             public void invoke(ZObject[] stack, int bp, ConcreteType[] genericArgs) {
@@ -34,8 +34,23 @@ public class Console extends ZObject {
                                     char c = ((NatChar) o).value;
                                     System.out.print(c);
                                 }
-                                //TODO: return void (likewise for other native methods?)
-                            }}
+                                // TODO: return void (likewise for other native methods?)
+                            }
+                        },
+                        new NativeMethod(
+                                new RawMethodDesc(desc, "errString", 0, new FullTypeDesc[] {new NormalFullTypeDesc(descStr)}, true),
+                                new RawTypeDesc[] {descStr},
+                                new RawMethodDesc[] {}) {
+                            public void invoke(ZObject[] stack, int bp, ConcreteType[] genericArgs) {
+                                NormalObject s = (NormalObject) stack[bp + 1];
+                                NatMutableArray arr = (NatMutableArray) s.fields[0];
+                                for (ZObject o : arr.elems) {
+                                    char c = ((NatChar) o).value;
+                                    System.err.print(c);
+                                }
+                                // TODO: return void (likewise for other native methods?)
+                            }
+                        },
                     },
                     0);
         }

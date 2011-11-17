@@ -13,6 +13,10 @@ type String extends Sequence[Char] {
     return new String(seq);
   }
 
+  String *(Int n) {
+    return new String(Sequence.*(this, n));
+  }
+
   String format(Sequence[Object] args) {
     # TODO: implement
   }

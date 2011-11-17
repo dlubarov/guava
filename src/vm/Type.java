@@ -12,7 +12,7 @@ public abstract class Type {
     private final NormalFullTypeDesc[] superDescs;
     private SuperCompoundType[] superTypes;
 
-    public final Method[] ownedMethods;
+    public Method[] ownedMethods;
 
     public Map<RawMethodDesc, RawMethodDesc> vtableDescs;
     public Map<Method, Method> vtable;

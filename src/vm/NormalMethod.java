@@ -8,7 +8,6 @@ import static vm.Opcodes.*;
 import static java.lang.System.out;
 
 public class NormalMethod extends Method {
-//    private final int numGenericParams;
     private final String[] stringTable;
     private final int numLocals;
     private final int[] code;
@@ -190,7 +189,7 @@ public class NormalMethod extends Method {
                             meth.desc, ty.desc,
                             util.StringUtils.implode("\n", ty.vtable.entrySet().toArray()));
                     meth = ty.vtable.get(meth);
-                    meth.invoke(stack, sp - j - 1, ctypes); // FIXME: off by 1?
+                    meth.invoke(stack, sp - j - 1, ctypes);
                     sp -= j;
                     break;
 

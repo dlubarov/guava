@@ -11,7 +11,7 @@ public class NatInt extends ZObject {
         TYPE = new NatIntType();
     }
 
-    public final int value;
+    public int value;
 
     public NatInt(int value) {
         super(new ConcreteType(TYPE));
@@ -22,11 +22,21 @@ public class NatInt extends ZObject {
         private static final RawTypeDesc desc = new RawTypeDesc("core", "Int");
 
         private static final FullTypeDesc[] intOnly = new FullTypeDesc[] {new NormalFullTypeDesc(desc)};
+        private static final FullTypeDesc[] charOnly = new FullTypeDesc[] {new NormalFullTypeDesc(new RawTypeDesc("core", "Char"))};
         private static final FullTypeDesc[] objOnly = new FullTypeDesc[] {new NormalFullTypeDesc(new RawTypeDesc("core", "Object"))};
 
         NatIntType() {
             super(desc,
                 new Method[] {
+                    // Constructors
+                    new NativeMethod(new RawMethodDesc("core", "Int", "init", 0, charOnly)) {
+                        public void invoke(ZObject[] stack, int bp, ConcreteType[] genericArgs) {
+                            NatInt i = (NatInt) stack[bp + 1];
+                            char c = ((NatChar) stack[bp + 2]).value;
+                            i.value = c;
+                            // TODO: return unit
+                        }
+                    },
                     // Prefix
                     new NativeMethod(new RawMethodDesc("core", "Int", "+", 0, FullTypeDesc.NONE)) {
                         public void invoke(ZObject[] stack, int bp, ConcreteType[] genericArgs) {

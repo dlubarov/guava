@@ -40,12 +40,14 @@ Maybe or Scala's Option.
 
 
 TODO:
+  require method return
+  additional loop stms
+    forever {...}
+    repeat (n) {...}
   right-associative : (cons) operator
-  non-native methods for native types
+  sealed types, final methods
   definite assignment analysis
   variance analysis
-  require method return
-  write a proper readme
-  sealed types, final methods
   public, private
   exceptions
+  write a proper readme

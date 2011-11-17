@@ -32,8 +32,8 @@ public class NatChar extends ZObject {
                         public void invoke(ZObject[] stack, int bp, ConcreteType[] genericArgs) {
                             NatChar c = (NatChar) stack[bp + 1];
                             int i = ((NatInt) stack[bp + 2]).value;
-                            // TODO: return unit
                             c.value = (char) i;
+                            // TODO: return unit
                         }
                     },
                     // Char conversion methods

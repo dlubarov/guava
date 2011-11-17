@@ -214,7 +214,20 @@ public class TypeDef {
 
         for (NativeType type : God.nativeTypes())
             if (type.desc.equals(desc)) {
-                // TODO: update native type to include non-empty methods
+                // Combine native and non-native methods
+                Method[] nativeMethods = type.ownedMethods;
+                Method[] allMethods = new Method[methods.length];
+                L:
+                for (int i = 0; i < allMethods.length; ++i) {
+                    for (Method natMeth : nativeMethods)
+                        if (natMeth.desc.equals(methods[i].desc)) {
+                            allMethods[i] = natMeth;
+                            continue L;
+                        }
+                    allMethods[i] = methods[i].compile(new MethodRCtx(ctx, getFullDesc(), methods[i]));
+                }
+                type.ownedMethods = allMethods;
+
                 type.vtableDescs = vtableDescs;
                 return type;
             }

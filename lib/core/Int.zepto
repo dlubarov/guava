@@ -1,6 +1,10 @@
 module core;
 
+# All of the following methods are implemented with native code.
+
 type Int {
+  Void init(Char c) {}
+
   #Int ++() {}
   #Int --() {}
   #Int +=(Int x) {}

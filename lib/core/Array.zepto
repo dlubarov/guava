@@ -7,13 +7,21 @@ abstract type Array[+T] extends Sequence[T] {
 }
 
 type MutableArray[T] extends Array[T] {
-  Void init(Collection[T] source) {}
+  Void init(Collection[T] source) {
+    # native code
+  }
 
-  T get(Int idx) {}
+  T get(Int idx) {
+    # native code
+  }
 
-  T set(Int idx, T val) {}
+  T set(Int idx, T val) {
+    # native code
+  }
 
-  Int size() {}
+  Int size() {
+    # native code
+  }
 }
 
 type ImmutableArray[+T] extends Array[T] {

@@ -24,7 +24,16 @@ public class ForStm extends Statement {
         Expression bb = b == null ? LitBool.TRUE : b;
         Expression cc = c == null ? LitBool.TRUE : c; // could be any exp without side effects
         return new RefineResult(
-                new BlockStm(a, new WhileStm(bb, new BlockStm(body, new ExpStm(cc)))).refine(ctx).stm,
+                new BlockStm(
+                        a,
+                        new WhileStm(
+                                bb,
+                                new BlockStm(
+                                        body,
+                                        new ExpStm(cc)
+                                )
+                        )
+                ).refine(ctx).stm,
                 ctx);
     }
 
