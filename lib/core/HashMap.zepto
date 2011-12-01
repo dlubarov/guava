@@ -1,0 +1,66 @@
+module core;
+
+type MutableHashMap[K, V] extends MutableMap[K, V] {
+  MutableArray[List[Tuple2[K, V]]] data;
+
+  Void init() {
+    # Begin with one empty bin
+    List[Tuple2[K, V]] bin = new EmptyList[Tuple2[K, V]]();
+    List[List[Tuple2[K, V]]] initData = new EmptyList[List[Tuple2[K, V]]]();
+    initData = new NonEmptyList[List[Tuple2[K, V]]](bin, initData);
+    this.data = new MutableArray[List[Tuple2[K, V]]](initData);
+  }
+
+  Int indexFor(K key) {
+    return key.hashCode() % this.data.size();
+  }
+
+  List[Tuple2[K, V]] binFor(K key) {
+    return this.data(this.indexFor(key));
+  }
+
+  Maybe[V] get(K key) {
+    for (Tuple2[K, V] pair : this.binFor(key))
+      if (pair.first() == key)
+        return Some[V](pair.second());
+    return None[V]();
+  }
+
+  V set(K key, V val) {
+    # FIXME: double num bins if necessary
+    List[Tuple2[K, V]] bin = this.binFor(key);
+    if (false) {
+      # FIXME: overwrite
+    } else {
+      bin = new NonEmptyList[Tuple2[K, V]](new Tuple2[K, V](key, val), bin);
+      this.data(this.indexFor(key)) = bin;
+    }
+    return val;
+  }
+
+  Iterator[Tuple2[K, V]] iterator() {
+    return new HashMapIterator[K, V](this);
+  }
+}
+
+type HashMapIterator[K, +V] extends Iterator[Tuple2[K, V]] {
+  Iterator[List[Tuple2[K, V]]] binIter;
+  Iterator[Tuple2[K, V]] pairIter;
+
+  Void init(MutableHashMap[K, V] map) {
+    this.binIter = map.data.iterator();
+    this.pairIter = new EmptyIterator[Tuple2[K, V]]();
+  }
+
+  Maybe[Tuple2[K, V]] next() {
+    Maybe[Tuple2[K, V]] pair = this.pairIter.next();
+    if (pair.isSomething())
+      return pair;
+
+    Maybe[List[Tuple2[K, V]]] nextBin = this.binIter.next();
+    if (nextBin.isNothing())
+      return pair; # exhausted
+    this.pairIter = nextBin.get().iterator();
+    return this.next();
+  }
+}

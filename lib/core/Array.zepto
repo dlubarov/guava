@@ -1,12 +1,13 @@
 module core;
 
+# An array is a fixed-length sequence with fast random access.
 abstract type Array[+T] extends Sequence[T] {
   Iterator[T] iterator() {
     return new ArrayIterator[T](this);
   }
 }
 
-type MutableArray[T] extends Array[T] {
+type MutableArray[T] extends Array[T], MutableSequence[T] {
   Void init(Collection[T] source) {
     # native code
   }

@@ -1,5 +1,7 @@
 package rst.exp;
 
+import java.util.NoSuchElementException;
+
 import common.*;
 import comp.CodeTree;
 import rctx.CodeRCtx;
@@ -19,6 +21,8 @@ public class InstanceFieldGet extends Expression {
         // TODO: doesn't work with fields owned by supertypes
         FullTypeDesc targetTypeDesc = target.inferType(ctx);
         // TODO: this assumes generic types have no fields, which will be no longer valid when bounds are added
+        if (!(targetTypeDesc instanceof NormalFullTypeDesc))
+            throw new NoSuchElementException("TODO");
         NormalFullTypeDesc normTypeDesc = (NormalFullTypeDesc) targetTypeDesc;
         TypeDef targetType = ctx.resolve(normTypeDesc.raw);
 

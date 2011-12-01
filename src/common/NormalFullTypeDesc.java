@@ -18,6 +18,17 @@ public class NormalFullTypeDesc extends FullTypeDesc {
         this(raw, new FullTypeDesc[0]);
     }
 
+    // Find this type's generic args for some (non-strict) supertype
+    public FullTypeDesc[] genericsFor(RawTypeDesc superTypeDesc, GlobalRCtx ctx) {
+        TypeDef myType = ctx.resolve(raw);
+        TypeDef superType = ctx.resolve(superTypeDesc);
+        int n = superType.genericInfos.length;
+        FullTypeDesc[] result = new FullTypeDesc[n];
+        for (int i = 0; i < n; ++i)
+            result[i] = myType.inMyGenerics(new TypeGenericFullTypeDesc(superTypeDesc, i), genericArgs, ctx);
+        return result;
+    }
+
     public NormalFullTypeDesc withTypeGenerics(FullTypeDesc[] typeGenerics) {
         FullTypeDesc[] newGenericArgs = new FullTypeDesc[genericArgs.length];
         for (int i = 0; i < newGenericArgs.length; ++i)

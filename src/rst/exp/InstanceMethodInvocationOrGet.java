@@ -46,10 +46,10 @@ public class InstanceMethodInvocationOrGet extends Expression {
         FullTypeDesc normalMethodResult = null, getMethodResult = null;
         try {
             normalMethodResult = normalVersion(ctx).inferType(ctx);
-        } catch (RuntimeException e) {}
+        } catch (NoSuchElementException e) {}
         try {
             getMethodResult = getVersion(ctx).inferType(ctx);
-        } catch (RuntimeException e) {}
+        } catch (NoSuchElementException e) {}
 
         if (normalMethodResult == null && getMethodResult == null) {
             FullTypeDesc[] argTypes = new FullTypeDesc[args.length];

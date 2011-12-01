@@ -1,7 +1,21 @@
 module core;
 
-abstract type Map[-K, +V] extends Collection[Tuple2[K, V]] {
+abstract type Map[K, +V] extends Collection[Tuple2[K, V]] {
   Maybe[V] get(K key);
+
+  Collection[K] keys() {
+    List[K] result = new EmptyList[K]();
+    for (Tuple2[K, V] pair : this)
+      result = new NonEmptyList[K](pair.first(), result);
+    return result;
+  }
+
+  Collection[V] values() {
+    List[V] result = new EmptyList[V]();
+    for (Tuple2[K, V] pair : this)
+      result = new NonEmptyList[V](pair.second(), result);
+    return result;
+  }
 }
 
 abstract type MutableMap[K, V] extends Map[K, V] {
@@ -9,5 +23,5 @@ abstract type MutableMap[K, V] extends Map[K, V] {
   V set(K key, V val);
 }
 
-abstract type ImmutableMap[-K, +V] extends Map[K, V] {
+abstract type ImmutableMap[K, +V] extends Map[K, V] {
 }

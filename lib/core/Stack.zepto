@@ -1,0 +1,14 @@
+module core;
+
+abstract type Stack[+T] extends Sequence[T] {
+  T getBack();
+}
+
+abstract type MutableStack[T] extends Stack[T] {
+  Void pushBack(T item);
+
+  T popBack();
+}
+
+abstract type ImmutableStack[+T] extends Stack[T] {
+}

@@ -27,6 +27,7 @@ public class ClassMethodInvocation extends Expression {
 
     // Retrieves the implicit type-level generic args for a static invocation
     // of an instance method.
+    // TODO: this duplicates logic in NormalFullTypeDesc.genericsFor
     private FullTypeDesc[] typeGenericArgs(CodeRCtx ctx) {
         TypeDef ownerType = ctx.resolve(owner);
         int n = ownerType.genericInfos.length;

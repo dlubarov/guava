@@ -44,6 +44,7 @@ TODO:
   additional loop stms
     forever {...}
     repeat (n) {...}
+  test generic bounds, incl. methods
   right-associative : (cons) operator
   sealed types, final methods
   definite assignment analysis

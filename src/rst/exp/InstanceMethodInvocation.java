@@ -40,7 +40,8 @@ public class InstanceMethodInvocation extends Expression {
         if (targetTypeDesc instanceof NormalFullTypeDesc) {
             NormalFullTypeDesc normTypeDesc = (NormalFullTypeDesc) targetTypeDesc;
             TypeDef targetType = ctx.resolve(normTypeDesc.raw);
-            return targetType.getMatchingInstanceMethod(ctx, methodName, normTypeDesc.genericArgs, genericArgs, argTypes);
+            return targetType.getMatchingInstanceMethod(ctx,
+                    methodName, normTypeDesc.genericArgs, genericArgs, argTypes);
         } else if (targetTypeDesc instanceof TypeGenericFullTypeDesc) {
             TypeGenericFullTypeDesc genericTypeDesc = (TypeGenericFullTypeDesc) targetTypeDesc;
             RawTypeDesc ownerTypeDesc = genericTypeDesc.owner;
@@ -58,10 +59,15 @@ public class InstanceMethodInvocation extends Expression {
         MethodDef meth = getMethod(ctx);
         FullTypeDesc result = meth.retType;
 
-        FullTypeDesc[] typeGenerics = null;
-        if (targetType instanceof NormalFullTypeDesc)
-            typeGenerics = ((NormalFullTypeDesc) targetType).genericArgs;
+        FullTypeDesc[] typeGenerics = FullTypeDesc.NONE;
+        if (targetType instanceof NormalFullTypeDesc) {
+            NormalFullTypeDesc ntd = (NormalFullTypeDesc) targetType;
+            typeGenerics = ntd.genericsFor(
+                    meth.desc.owner,
+                    ctx.methodCtx.globalCtx);
+        }
         result = result.withGenerics(typeGenerics, genericArgs);
+
         return result;
     }
 

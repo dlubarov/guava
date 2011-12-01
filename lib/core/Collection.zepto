@@ -29,8 +29,10 @@ abstract type Collection[+T] extends Iterable[T] {
 
   Collection[U] map[U](Function1[T, U] f) {
     List[U] result = new EmptyList[U]();
-    for (T elem : this)
-      result = new NonEmptyList[U](f(elem), result);
+    for (T elem : this) {
+      U mapped = f(elem);
+      result = new NonEmptyList[U](mapped, result);
+    }
     return result.reverse();
   }
 

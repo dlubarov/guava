@@ -107,7 +107,7 @@ public class TypeDef {
         if (options.isEmpty())
             for (NormalFullTypeDesc superDesc : supers) {
                 TypeDef superType = ctx.resolve(superDesc.raw);
-                // FIXME: need to find where method was originally declared, e.g. if two supertypes override Object.hashCode
+                // FIXME: can't just pass on typeGenericArgs, need to convert to super's generic args
                 try {
                     options.add(superType.getMatchingInstanceMethod(ctx, name, typeGenericArgs, methGenericArgs, argTypes));
                 } catch (NoSuchElementException e) {}
@@ -115,8 +115,16 @@ public class TypeDef {
 
         if (options.isEmpty())
             throw new NoSuchElementException(String.format("%s.%s(%s)", desc, name, StringUtils.implode(", ", argTypes)));
-        if (options.size() > 1)
-            throw new RuntimeException(String.format("ambiguous method call: %s.%s", desc, name));
+
+        // TODO: If there are multiple options, I think any should work as their vtable entries
+        // should point to the same methods. But need to think about this more to be sure.
+//        if (options.size() > 1) {
+//            List<RawMethodDesc> optDescs = new ArrayList<RawMethodDesc>();
+//            for (MethodDef opt : options)
+//                optDescs.add(opt.desc);
+//            throw new RuntimeException(String.format("ambiguous method call %s.%s; options are %s",
+//                    desc, name, optDescs));
+//        }
 
         for (MethodDef m : options)
             return m;
@@ -151,6 +159,8 @@ public class TypeDef {
         return result;
     }
 
+    // For example, if we have a type BitSet extending Iterator[Bool],
+    // then BitSet.inMyGenerics(Iterator:T0) returns Bool
     public FullTypeDesc inMyGenerics(TypeGenericFullTypeDesc tgDesc, GlobalRCtx ctx) {
         FullTypeDesc[] myGenerics = new FullTypeDesc[genericInfos.length];
         for (int i = 0; i < myGenerics.length; ++i)
@@ -176,7 +186,7 @@ public class TypeDef {
         Map<RawMethodDesc, RawMethodDesc> result = new HashMap<RawMethodDesc, RawMethodDesc>();
         for (RawMethodDesc meth : allMethods) {
             RawMethodDesc methMyGen = inMyGenerics(meth, ctx);
-            List<RawMethodDesc> options = new ArrayList<RawMethodDesc>();
+            Set<RawMethodDesc> options = new HashSet<RawMethodDesc>();
             for (MethodDef m : methods)
                 if (m.desc.canOverride(ctx, methMyGen))
                     options.add(m.body == null? null : m.desc);
@@ -189,11 +199,12 @@ public class TypeDef {
                 }
             if (options.size() > 1)
                 throw new RuntimeException(String.format(
-                        "type %s has multiple implementations of method %s",
-                        desc, meth));
+                        "type %s has multiple implementations of method %s: %s",
+                        desc, meth, options));
             if (options.isEmpty())
                 options.add(null);
-            result.put(meth, options.get(0));
+            for (RawMethodDesc onlyOption : options)
+                result.put(meth, onlyOption);
         }
         return cachedTable = result;
     }

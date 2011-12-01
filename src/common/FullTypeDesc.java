@@ -11,4 +11,7 @@ public abstract class FullTypeDesc {
 
     public abstract boolean isSubtype(FullTypeDesc that, GlobalRCtx ctx);
     public abstract boolean isSupertype(FullTypeDesc that, GlobalRCtx ctx);
+
+    public abstract boolean equals(Object o);
+    public abstract int hashCode();
 }

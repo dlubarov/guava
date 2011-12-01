@@ -39,10 +39,18 @@ type Some[+T] extends Maybe[T] {
   Iterator[T] iterator() {
     return new SingletonIterator[T](this.value);
   }
+
+  String toString() {
+    return "Some(" + this.value.toString() + ")";
+  }
 }
 
 type None[+T] extends Maybe[T] {
   Void init() {}
+
+  static None[U] get[U]() {
+    return new None[U]();
+  }
 
   Bool isSomething() {
     return false;
@@ -60,5 +68,9 @@ type None[+T] extends Maybe[T] {
 
   Iterator[T] iterator() {
     return new EmptyIterator[T]();
+  }
+
+  String toString() {
+    return "None";
   }
 }

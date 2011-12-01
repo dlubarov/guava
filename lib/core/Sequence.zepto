@@ -81,3 +81,9 @@ abstract type Sequence[+T] extends Collection[T] {
     return result.reverse();
   }
 }
+
+abstract type MutableSequence[T] extends Sequence[T] {
+  T set(Int idx, T val);
+}
+
+abstract type ImmutableSequence[+T] extends Sequence[T] {}
