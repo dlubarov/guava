@@ -8,10 +8,10 @@ public abstract class NativeType extends Type {
         super(desc, superDescs, ownedMethods, null, numStaticFields);
     }
 
-    protected NativeType(RawTypeDesc desc, Method[] ownerMethods,
+    protected NativeType(RawTypeDesc desc, Method[] ownedMethods,
                          int numStaticFields) {
         this(desc,
                 new NormalFullTypeDesc[] {new NormalFullTypeDesc(new RawTypeDesc("core", "Object"))},
-                ownerMethods, numStaticFields);
+                ownedMethods, numStaticFields);
     }
 }

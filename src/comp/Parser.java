@@ -31,13 +31,7 @@ public final class Parser {
     private final CharSequence source;
 
     public Parser(CharSequence source) {
-        this.source = preprocess(source);
-    }
-
-    private CharSequence preprocess(CharSequence source) {
-        // TODO: strip comments (but be careful with quotes)
-        // (or, just treat comments like WS as other languages do)
-        return source;
+        this.source = source;
     }
 
     private char next(int p) {
