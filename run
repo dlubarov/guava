@@ -1,0 +1,4 @@
+set -e
+
+cd out
+java -ea comp.Main ../lib/**/*.zepto
