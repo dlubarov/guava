@@ -1,11 +1,11 @@
-package common;
+package a.gen;
 
-public enum Variance {
-    COVARIANT("+"), NONVARIANT(""), CONTRAVARIANT("-");
+public enum GenericConstraintRel {
+    SUBTYPE("<"), SUPERTYPE(">");
 
     private final String s;
 
-    private Variance(String s) {
+    private GenericConstraintRel(String s) {
         this.s = s;
     }
 

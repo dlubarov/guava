@@ -1,11 +1,11 @@
 package common;
 
-public enum Variance {
-    COVARIANT("+"), NONVARIANT(""), CONTRAVARIANT("-");
+public enum MethodVisibility {
+    PUBLIC("public "), MODULE(""), PRIVATE("private ");
 
     private final String s;
 
-    private Variance(String s) {
+    private MethodVisibility(String s) {
         this.s = s;
     }
 

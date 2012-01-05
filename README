@@ -37,18 +37,3 @@ method.
 
 Zepto has no null references. Instead, it has a Maybe type similar to Haskell's
 Maybe or Scala's Option.
-
-
-TODO:
-  require method return
-  additional loop stms
-    forever {...}
-    repeat (n) {...}
-  test generic bounds, incl. methods
-  right-associative : (cons) operator
-  sealed types, final methods
-  definite assignment analysis
-  variance analysis
-  public, private
-  exceptions
-  write a proper readme

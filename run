@@ -1,4 +1,4 @@
 set -e
 
 cd out
-java -ea comp.Main ../lib/**/*.zepto
+java -ea Main ../lib/**/*.zepto
