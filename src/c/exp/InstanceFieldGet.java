@@ -21,7 +21,8 @@ public class InstanceFieldGet extends Expression {
         Set<FieldDef> options = new HashSet<FieldDef>();
         for (ParameterizedType concreteSuper : targetType.getConcreteSupertypes(ctx.type, ctx.method))
             try {
-                options.add(ctx.project.resolve(concreteSuper.rawType).getInstanceField(fieldName));
+                TypeDef superDef = ctx.project.resolve(concreteSuper.rawType);
+                options.add(superDef.getInstanceField(fieldName));
             } catch (NoSuchElementException e) {}
         if (options.isEmpty())
             throw new NiftyException("%s has no field named %s", target, fieldName);

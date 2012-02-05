@@ -1,7 +1,12 @@
 package c.exp;
 
 import static util.StringUtils.implode;
-import c.CodeContext;
+
+import java.util.*;
+
+import common.NiftyException;
+
+import c.*;
 import c.ty.*;
 
 public class InstanceMethodInvocation extends Expression {
@@ -18,13 +23,39 @@ public class InstanceMethodInvocation extends Expression {
         this.args = args;
     }
 
-    // TODO: be sure to use returnType.withGenericArgs(...)
+    private MethodDef getMethod(CodeContext ctx) {
+        Type targetType = target.inferType(ctx);
+        Type[] argTypes = new Type[args.length];
+        for (int i = 0; i < argTypes.length; ++i)
+            argTypes[i] = args[i].inferType(ctx);
+        Set<MethodDef> options = new HashSet<MethodDef>();
+        for (ParameterizedType concreteSuper : targetType.getConcreteSupertypes(ctx.type, ctx.method))
+            try {
+                TypeDef superDef = ctx.project.resolve(concreteSuper.rawType);
+                options.add(superDef.getInstanceMethod(methodName, genericArgs, argTypes, ctx));
+            } catch (NoSuchElementException e) {}
+        if (options.isEmpty())
+            throw new NoSuchElementException(String.format("%s has no method named %s", target, methodName));
+        if (options.size() > 1)
+            throw new NiftyException("%s inherits multiple methods named %s", target, methodName);
+        return options.iterator().next();
+    }
+
+    // Tests whether the method being invoked actually exists.
+    public boolean isValid(CodeContext ctx) {
+        try {
+            getMethod(ctx);
+            return true;
+        } catch (NoSuchElementException e) {
+            return false;
+        }
+    }
+
     @Override
     public Type inferType(CodeContext ctx) {
-        Type targetType = target.inferType(ctx);
-        ParameterizedType[] concreteSuperTypes = targetType.getConcreteSupertypes(ctx.type, ctx.method);
-        assert concreteSuperTypes.length > 0 : "list of concrete supertypes should at least contain core.Top";
-        return null;
+        MethodDef method = getMethod(ctx);
+        ParameterizedType targetAsMethodOwner = target.inferType(ctx).asSupertype(method.owner, ctx);
+        return method.returnType.withGenericArgs(targetAsMethodOwner.genericArgs, genericArgs);
     }
 
     @Override
