@@ -16,6 +16,12 @@ public class ConcreteType {
         this.genericArgs = genericArgs;
     }
 
+    // Construct a concrete type with no generic arguments.
+    public ConcreteType(TypeDef rawType) {
+        this(rawType, NONE);
+        assert rawType.genericVariances.length == 0 : rawType + " requires generic arguments";
+    }
+
     public boolean isSubtype(ConcreteType that) {
         SuperType[] myGenericArgsForThat = rawType.superGenerics.get(that.rawType);
         if (myGenericArgsForThat == null)

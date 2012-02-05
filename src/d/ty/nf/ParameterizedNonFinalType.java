@@ -15,7 +15,7 @@ public class ParameterizedNonFinalType extends NonFinalType {
     }
 
     @Override
-    public ConcreteType toConcrete(ZObject object, ConcreteType[] methodGenericArgs) {
+    public ConcreteType toConcrete(BaseObject object, ConcreteType[] methodGenericArgs) {
         ConcreteType[] concreteGenericArgs = new ConcreteType[genericArgs.length];
         for (int i = 0; i < concreteGenericArgs.length; ++i)
             concreteGenericArgs[i] = genericArgs[i].toConcrete(object, methodGenericArgs);

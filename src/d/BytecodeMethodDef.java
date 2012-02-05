@@ -5,6 +5,7 @@ import static d.Opcodes.*;
 import java.util.Map;
 
 import common.*;
+import d.nat.NativeInt;
 import d.ty.ConcreteType;
 import d.ty.desc.TypeDesc;
 
@@ -22,9 +23,9 @@ public class BytecodeMethodDef extends ConcreteMethodDef {
     }
 
     @Override
-    public void invoke(ZObject[] stack, int bp, ConcreteType[] genericArgs) {
+    public void invoke(BaseObject[] stack, int bp, ConcreteType[] genericArgs) {
         int sp = bp + numLocals, ip = 0, op, i, j;
-        ZObject a, b;
+        BaseObject a, b;
 
         for (;;) {
             try {
@@ -44,7 +45,7 @@ public class BytecodeMethodDef extends ConcreteMethodDef {
                     break;
 
                 case CONST_INT:
-                    stack[++sp] = null; // FIXME: incomplete
+                    stack[++sp] = new NativeInt(code[ip++]);
                     break;
 
                 case CONST_CHAR:

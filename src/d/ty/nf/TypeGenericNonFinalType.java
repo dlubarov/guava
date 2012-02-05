@@ -13,7 +13,7 @@ public class TypeGenericNonFinalType extends NonFinalType {
     }
 
     @Override
-    public ConcreteType toConcrete(ZObject object, ConcreteType[] methodGenericArgs) {
+    public ConcreteType toConcrete(BaseObject object, ConcreteType[] methodGenericArgs) {
         return object.getGenericArg(genericOwner, index);
     }
 

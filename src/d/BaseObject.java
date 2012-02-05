@@ -2,10 +2,10 @@ package d;
 
 import d.ty.ConcreteType;
 
-public abstract class ZObject {
+public abstract class BaseObject {
     public final ConcreteType type;
 
-    public ZObject(ConcreteType type) {
+    public BaseObject(ConcreteType type) {
         this.type = type;
     }
 

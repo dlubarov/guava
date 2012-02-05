@@ -4,9 +4,9 @@ import common.*;
 
 import d.*;
 
-public abstract class NativeTypeDef extends TypeDef {
+public final class NativeTypeDef extends TypeDef {
     public NativeTypeDef(RawType desc, Variance[] genericVariances,
-            ConcreteMethodDef[] staticMethods, MethodDef[] instanceMethods) {
+            NativeMethodDef[] staticMethods, NativeMethodDef[] instanceMethods) {
         super(desc, genericVariances, staticMethods, instanceMethods, null, null);
     }
 }

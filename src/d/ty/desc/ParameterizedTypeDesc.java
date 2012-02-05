@@ -16,6 +16,10 @@ public class ParameterizedTypeDesc extends TypeDesc {
         this.genericArgs = genericArgs;
     }
 
+    public ParameterizedTypeDesc(RawType rawType) {
+        this(rawType, TypeDesc.NONE);
+    }
+
     @Override
     public NonFinalType toNonFinal(TypeDef owner) {
         NonFinalType[] nonFinalGenericArgs = new NonFinalType[genericArgs.length];

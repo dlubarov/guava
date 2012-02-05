@@ -1,9 +1,14 @@
 package common;
 
 public class RawType {
+    public static final RawType[] NONE = new RawType[0];
+
     public static final RawType
         coreTop = new RawType("core", "Top"),
         coreBottom = new RawType("core", "Bottom"),
+        coreInt = new RawType("core", "Int"),
+        coreChar = new RawType("core", "Char"),
+        coreBool = new RawType("core", "Bool"),
         coreIterable = new RawType("core", "Iterable"),
         coreCollection = new RawType("core", "Collection"),
         coreSequence = new RawType("core", "Sequence"),

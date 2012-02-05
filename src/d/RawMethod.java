@@ -6,6 +6,8 @@ import common.RawType;
 import d.ty.desc.TypeDesc;
 
 public class RawMethod {
+    public static final RawMethod[] NONE = new RawMethod[0];
+
     public final boolean isStatic;
     public final RawType owner;
     public final String name;

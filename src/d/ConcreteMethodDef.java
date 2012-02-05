@@ -43,11 +43,11 @@ public abstract class ConcreteMethodDef extends MethodDef {
         methodDescTable = null;
     }
 
-    public abstract void invoke(ZObject[] stack, int bp, ConcreteType[] genericArgs);
+    public abstract void invoke(BaseObject[] stack, int bp, ConcreteType[] genericArgs);
 
     public final void invoke(ConcreteType[] genericArgs) {
         try {
-            invoke(new ZObject[1000], -1, genericArgs);
+            invoke(new BaseObject[1000], -1, genericArgs);
         } catch (ArrayIndexOutOfBoundsException e) {
             throw new RuntimeException("possible stack overflow", e);
         }

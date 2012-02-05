@@ -1,6 +1,6 @@
 package d.ty.nf;
 
-import d.ZObject;
+import d.BaseObject;
 import d.ty.ConcreteType;
 
 /*
@@ -9,7 +9,7 @@ import d.ty.ConcreteType;
  * This allows them to efficiently turn themselves into concrete types when needed.
  */
 public abstract class NonFinalType {
-    public abstract ConcreteType toConcrete(ZObject object, ConcreteType[] methodGenericArgs);
+    public abstract ConcreteType toConcrete(BaseObject object, ConcreteType[] methodGenericArgs);
 
     @Override
     public abstract String toString();

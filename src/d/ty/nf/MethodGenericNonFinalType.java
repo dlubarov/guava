@@ -1,6 +1,6 @@
 package d.ty.nf;
 
-import d.ZObject;
+import d.BaseObject;
 import d.ty.ConcreteType;
 
 public class MethodGenericNonFinalType extends NonFinalType {
@@ -11,7 +11,7 @@ public class MethodGenericNonFinalType extends NonFinalType {
     }
 
     @Override
-    public ConcreteType toConcrete(ZObject object, ConcreteType[] methodGenericArgs) {
+    public ConcreteType toConcrete(BaseObject object, ConcreteType[] methodGenericArgs) {
         return methodGenericArgs[index];
     }
 
