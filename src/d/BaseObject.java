@@ -4,9 +4,11 @@ import d.ty.ConcreteType;
 
 public abstract class BaseObject {
     public final ConcreteType type;
+    public final BaseObject[] fields;
 
     public BaseObject(ConcreteType type) {
         this.type = type;
+        fields = new BaseObject[type.rawType.numInstanceFields];
     }
 
     public ConcreteType getGenericArg(TypeDef genericOwner, int index) {

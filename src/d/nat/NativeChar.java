@@ -7,23 +7,44 @@ import d.ty.ConcreteType;
 import d.ty.desc.*;
 
 public class NativeChar extends NativeObject {
-    public final static NativeTypeDef TYPE;
+    public static final NativeTypeDef TYPE;
 
-    public final char value;
+    public char value;
 
     public NativeChar(char value) {
         super(new ConcreteType(TYPE));
         this.value = value;
     }
 
+    public NativeChar() {
+        this('\0');
+    }
+
     static {
         TYPE = new NativeTypeDef(
                 RawType.coreChar,
                 Variance.NONE,
+                0, 0,
+
+                // static methods
+                new NativeMethodDef[] {
+                },
 
                 // instance methods
                 new NativeMethodDef[] {
-                        new NativeMethodDef(new RawMethod(false, RawType.coreChar, "equals", 0, TypeDesc.coreTopOnly)) {
+                        // Constructors
+                        new NativeMethodDef(new RawMethod(false, RawType.coreChar, "init", 0, TypeDesc.coreIntOnly)) {
+                            @Override
+                            public void invoke(BaseObject[] stack, int bp, ConcreteType[] genericArgs) {
+                                NativeChar c = (NativeChar) stack[bp + 1];
+                                int ord = ((NativeInt) stack[bp + 2]).value;
+                                c.value = (char) ord;
+                                stack[bp + 1] = VMUtils.getVoid();
+                            }
+                        },
+
+                        // ==, hashCode
+                        new NativeMethodDef(new RawMethod(false, RawType.coreChar, "==", 0, TypeDesc.coreTopOnly)) {
                             @Override
                             public void invoke(BaseObject[] stack, int bp, ConcreteType[] genericArgs) {
                                 char c = ((NativeChar) stack[bp + 1]).value;
@@ -43,10 +64,11 @@ public class NativeChar extends NativeObject {
                                 stack[bp + 1] = new NativeInt(c);
                             }
                         },
-                },
-
-                // static methods
-                new NativeMethodDef[] {
-                });
+                }) {
+            @Override
+            public BaseObject rawInstance(ConcreteType type) {
+                return new NativeChar();
+            }
+        };
     }
 }

@@ -3,10 +3,24 @@ package d.nat;
 import common.*;
 
 import d.*;
+import d.ty.ConcreteType;
 
-public final class NativeTypeDef extends TypeDef {
+public abstract class NativeTypeDef extends TypeDef {
     public NativeTypeDef(RawType desc, Variance[] genericVariances,
+            int numStaticFields, int numInstanceFields,
             NativeMethodDef[] staticMethods, NativeMethodDef[] instanceMethods) {
-        super(desc, genericVariances, staticMethods, instanceMethods, null, null);
+        super(desc, genericVariances,
+                numStaticFields, numInstanceFields,
+                staticMethods, instanceMethods,
+                null, null);
+
+        // Verify that static and instance methods are correctly labeled as such.
+        for (NativeMethodDef m : staticMethods)
+            assert m.desc.isStatic;
+        for (NativeMethodDef m : instanceMethods)
+            assert !m.desc.isStatic;
     }
+
+    @Override
+    public abstract BaseObject rawInstance(ConcreteType type);
 }

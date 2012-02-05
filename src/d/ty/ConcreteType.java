@@ -2,7 +2,7 @@ package d.ty;
 
 import java.util.Arrays;
 
-import d.TypeDef;
+import d.*;
 import d.ty.sup.SuperType;
 
 public class ConcreteType {
@@ -49,6 +49,10 @@ public class ConcreteType {
 
         // If we got here, the generic arguments all fit
         return true;
+    }
+
+    public BaseObject rawInstance() {
+        return rawType.rawInstance(this);
     }
 
     @Override

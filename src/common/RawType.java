@@ -6,13 +6,17 @@ public class RawType {
     public static final RawType
         coreTop = new RawType("core", "Top"),
         coreBottom = new RawType("core", "Bottom"),
+        coreVoid = new RawType("core", "Void"),
         coreInt = new RawType("core", "Int"),
         coreChar = new RawType("core", "Char"),
         coreBool = new RawType("core", "Bool"),
-        coreIterable = new RawType("core", "Iterable"),
+        coreMutableArray = new RawType("core", "MutableArray"),
+        coreEnumerable = new RawType("core", "Enumerable"),
         coreCollection = new RawType("core", "Collection"),
         coreSequence = new RawType("core", "Sequence"),
-        coreSource = new RawType("core", "Source");
+        coreSource = new RawType("core", "Source"),
+        coreString = new RawType("core", "String"),
+        coreConsole = new RawType("core", "Console");
 
     public final String module, name;
 

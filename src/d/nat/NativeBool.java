@@ -7,7 +7,9 @@ import d.ty.ConcreteType;
 import d.ty.desc.*;
 
 public class NativeBool extends NativeObject {
-    public final static NativeTypeDef TYPE;
+    public static final NativeBool TRUE = new NativeBool(true), FALSE = new NativeBool(false);
+
+    public static final NativeTypeDef TYPE;
 
     public final boolean value;
 
@@ -16,13 +18,23 @@ public class NativeBool extends NativeObject {
         this.value = value;
     }
 
+    public NativeBool() {
+        this(false);
+    }
+
     static {
         TYPE = new NativeTypeDef(
                 RawType.coreBool,
                 Variance.NONE,
+                0, 0,
+
+                // static methods
+                new NativeMethodDef[] {
+                },
 
                 // instance methods
                 new NativeMethodDef[] {
+                        // Unary
                         new NativeMethodDef(new RawMethod(false, RawType.coreBool, "!", 0, TypeDesc.NONE)) {
                             @Override
                             public void invoke(BaseObject[] stack, int bp, ConcreteType[] genericArgs) {
@@ -57,7 +69,8 @@ public class NativeBool extends NativeObject {
                             }
                         },
 
-                        new NativeMethodDef(new RawMethod(false, RawType.coreBool, "equals", 0, TypeDesc.coreTopOnly)) {
+                        // ==, hashCode, toString
+                        new NativeMethodDef(new RawMethod(false, RawType.coreBool, "==", 0, TypeDesc.coreTopOnly)) {
                             @Override
                             public void invoke(BaseObject[] stack, int bp, ConcreteType[] genericArgs) {
                                 boolean c = ((NativeBool) stack[bp + 1]).value;
@@ -77,10 +90,12 @@ public class NativeBool extends NativeObject {
                                 stack[bp + 1] = new NativeInt(b ? 1 : 0);
                             }
                         },
-                },
-
-                // static methods
-                new NativeMethodDef[] {
-                });
+                })
+        {
+            @Override
+            public BaseObject rawInstance(ConcreteType type) {
+                return new NativeBool();
+            }
+        };
     }
 }

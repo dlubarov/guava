@@ -18,7 +18,9 @@ public abstract class ConcreteMethodDef extends MethodDef {
     public final MethodDef[] methodTable;
 
     public ConcreteMethodDef(RawMethod desc,
-            RawType[] typeDescTable, TypeDesc[] fullTypeDescTable, RawMethod[] methodDescTable,
+            RawType[] typeDescTable,
+            TypeDesc[] fullTypeDescTable,
+            RawMethod[] methodDescTable,
             Map<RawMethod, RawMethod> vDescTable) {
         super(desc);
         this.rawTypeDescTable = typeDescTable;

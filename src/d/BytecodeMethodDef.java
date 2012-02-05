@@ -5,19 +5,26 @@ import static d.Opcodes.*;
 import java.util.Map;
 
 import common.*;
-import d.nat.NativeInt;
+import d.nat.*;
 import d.ty.ConcreteType;
 import d.ty.desc.TypeDesc;
+import d.ty.nf.NonFinalType;
 
 public class BytecodeMethodDef extends ConcreteMethodDef {
+    public final String[] stringTable;
+
     private final int numLocals;
     private final int[] code;
 
     public BytecodeMethodDef(RawMethod desc,
-            RawType[] typeDescTable, TypeDesc[] fullTypeDescTable, RawMethod[] methodDescTable,
+            RawType[] typeDescTable,
+            TypeDesc[] fullTypeDescTable,
+            RawMethod[] methodDescTable,
+            String[] stringTable,
             Map<RawMethod, RawMethod> vDescTable,
             int numLocals, int[] bytecode) {
         super(desc, typeDescTable, fullTypeDescTable, methodDescTable, vDescTable);
+        this.stringTable = stringTable;
         this.numLocals = numLocals;
         this.code = bytecode;
     }
@@ -49,51 +56,55 @@ public class BytecodeMethodDef extends ConcreteMethodDef {
                     break;
 
                 case CONST_CHAR:
-                    stack[++sp] = null; // FIXME: incomplete
+                    stack[++sp] = new NativeChar((char) code[ip++]);
                     break;
 
                 case CONST_TRUE:
-                    stack[++sp] = null; // FIXME: incomplete
+                    stack[++sp] = NativeBool.TRUE;
                     break;
 
                 case CONST_FALSE:
-                    stack[++sp] = null; // FIXME: incomplete
+                    stack[++sp] = NativeBool.FALSE;
                     break;
 
                 case CONST_STRING:
-                    stack[++sp] = null; // FIXME: incomplete
+                    stack[++sp] = VMUtils.makeString(stringTable[ip++]);
                     break;
 
                 case GET_LOCAL:
                     i = code[ip++]; // local index
-                    stack[++sp] = null; // FIXME: incomplete
+                    stack[++sp] = stack[bp + i + 1];
                     break;
 
                 case PUT_LOCAL:
                     i = code[ip++]; // local index
-                    // FIXME: incomplete
+                    stack[bp + i + 1] = stack[sp--];
                     break;
 
                 case GET_STATIC_FIELD:
                     i = code[ip++]; // index into type table
                     j = code[ip++]; // static field index
-                    // FIXME: incomplete
+                    stack[++sp] = rawTypeTable[i].staticFields[j];
                     break;
 
                 case PUT_STATIC_FIELD:
+                    a = stack[sp--];
                     i = code[ip++]; // index into type table
                     j = code[ip++]; // static field index
-                    // FIXME: incomplete
+                    rawTypeTable[i].staticFields[j] = a;
                     break;
 
                 case GET_INSTANCE_FIELD:
+                    a = stack[sp--]; // target
                     i = code[ip++]; // index into field table
-                    // FIXME: incomplete
+                    stack[++sp] = a.fields[i];
                     break;
 
                 case PUT_INSTANCE_FIELD:
+                    b = stack[sp--]; // new field value
+                    a = stack[sp--]; // target
                     i = code[ip++]; // index into field table
-                    // FIXME: incomplete
+                    a.fields[i] = b;
                     break;
 
                 case INVOKE_STATIC:
@@ -107,8 +118,9 @@ public class BytecodeMethodDef extends ConcreteMethodDef {
                     break;
 
                 case NEW:
-                    i = code[ip++]; // index into type table
-                    // FIXME: incomplete
+                    i = code[ip++]; // index into full type table
+                    a = desc.isStatic ? null : stack[bp + 1]; // current object
+                    stack[++sp] = fullTypeTable[i].toConcrete(a, genericArgs).rawInstance();
                     break;
 
                 case JUMP:
@@ -118,12 +130,12 @@ public class BytecodeMethodDef extends ConcreteMethodDef {
 
                 case JUMP_COND:
                     i = code[ip++];
-                    if (true) // FIXME: read bool from stack
+                    if (((NativeBool) stack[sp--]).value)
                         ip += i;
                     break;
 
                 case BOOL_NEG:
-                    // FIXME: incomplete
+                    stack[sp] = new NativeBool(!((NativeBool) stack[sp]).value);
                     break;
 
                 case RETURN:

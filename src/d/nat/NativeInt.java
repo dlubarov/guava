@@ -7,19 +7,28 @@ import d.ty.ConcreteType;
 import d.ty.desc.*;
 
 public class NativeInt extends NativeObject {
-    public final static NativeTypeDef TYPE;
+    public static final NativeTypeDef TYPE;
 
-    public final int value;
+    public int value;
 
     public NativeInt(int value) {
         super(new ConcreteType(TYPE));
         this.value = value;
     }
 
+    public NativeInt() {
+        this(0);
+    }
+
     static {
         TYPE = new NativeTypeDef(
                 RawType.coreInt,
                 Variance.NONE,
+                2, 0,
+
+                // static methods
+                new NativeMethodDef[] {
+                },
 
                 // instance methods
                 new NativeMethodDef[] {
@@ -167,10 +176,16 @@ public class NativeInt extends NativeObject {
                                 // And Int is immutable, so we don't need to clone it.
                             }
                         },
-                },
+                })
+        {
+            @Override
+            public BaseObject rawInstance(ConcreteType type) {
+                return new NativeInt();
+            }
+        };
 
-                // static methods
-                new NativeMethodDef[] {
-                });
+        // TODO: less fragile way?
+        TYPE.staticFields[0] = new NativeInt(Integer.MIN_VALUE);
+        TYPE.staticFields[1] = new NativeInt(Integer.MAX_VALUE);
     }
 }

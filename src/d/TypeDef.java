@@ -3,12 +3,16 @@ package d;
 import java.util.*;
 
 import common.*;
+import d.ty.ConcreteType;
 import d.ty.desc.TypeDesc;
 import d.ty.sup.*;
 
 public class TypeDef {
     public final RawType desc;
     public final Variance[] genericVariances;
+
+    public final BaseObject[] staticFields;
+    public final int numInstanceFields;
 
     public final ConcreteMethodDef[] staticMethods;
     public final MethodDef[] instanceMethods;
@@ -20,11 +24,15 @@ public class TypeDef {
     public final Map<TypeDef, SuperType[]> superGenerics;
 
     public TypeDef(RawType desc, Variance[] genericVariances,
+            int numStaticFields, int numInstanceFields,
             ConcreteMethodDef[] staticMethods, MethodDef[] instanceMethods,
             Map<RawMethod, RawMethod> virtualMethodDescTable,
             Map<RawType, TypeDesc[]> superGenericDescs) {
         this.desc = desc;
         this.genericVariances = genericVariances;
+
+        this.staticFields = new BaseObject[numStaticFields];
+        this.numInstanceFields = numInstanceFields;
 
         this.staticMethods = staticMethods;
         this.instanceMethods = instanceMethods;
@@ -60,6 +68,10 @@ public class TypeDef {
         }
         virtualMethodDescTable = null;
         superGenericDescs = null;
+    }
+
+    public BaseObject rawInstance(ConcreteType type) {
+        return new NormalObject(type);
     }
 
     @Override
