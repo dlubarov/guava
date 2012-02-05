@@ -1,7 +1,8 @@
 package c.exp;
 
 import static util.StringUtils.implode;
-import c.ty.Type;
+import c.CodeContext;
+import c.ty.*;
 
 public class InstanceMethodInvocation extends Expression {
     public final Expression target;
@@ -18,6 +19,13 @@ public class InstanceMethodInvocation extends Expression {
     }
 
     // TODO: be sure to use returnType.withGenericArgs(...)
+    @Override
+    public Type inferType(CodeContext ctx) {
+        Type targetType = target.inferType(ctx);
+        ParameterizedType[] concreteSuperTypes = targetType.getConcreteSupertypes(ctx.type, ctx.method);
+        assert concreteSuperTypes.length > 0 : "list of concrete supertypes should at least contain core.Top";
+        return null;
+    }
 
     @Override
     public String toString() {

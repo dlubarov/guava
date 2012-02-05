@@ -34,10 +34,7 @@ public class ParameterizedType extends Type {
     @Override
     public Type[] getSupertypes(TypeDef typeCtx, MethodDef methodCtx) {
         assert rawType.equals(typeCtx.desc);
-        Type[] result = new Type[typeCtx.parents.length];
-        for (int i = 0; i < typeCtx.parents.length; ++i)
-            result[i] = typeCtx.parents[i].withGenericArgs(genericArgs, null);
-        return result;
+        return typeCtx.parentsWithGenerics(genericArgs);
     }
 
     @Override
@@ -82,21 +79,13 @@ public class ParameterizedType extends Type {
         return super.isSubtype(that, typeCtx, methodCtx);
     }
 
+    @Override
     public ParameterizedType asSupertype(RawType supertype, CodeContext ctx) {
+        // If we're tying to convert myself to myself, well, return myself.
         if (rawType.equals(supertype))
             return this;
-        TypeDef rawTypeDef = ctx.project.resolve(rawType);
-        Set<ParameterizedType> supertypes = new HashSet<ParameterizedType>();
-        for (ParameterizedType parent : rawTypeDef.parentsWithGenerics(genericArgs))
-            try {
-                supertypes.add(parent.asSupertype(supertype, ctx));
-            } catch (IllegalArgumentException e) {}
-        if (supertypes.isEmpty())
-            throw new IllegalArgumentException(String.format(
-                    "supertype %s not found for %s", supertype, this));
-        return (ParameterizedType) TypeUtils.intersectionNoBottom(
-                supertypes.toArray(new ParameterizedType[supertypes.size()]),
-                ctx.type, ctx.method);
+        // Otherwise, search my parent types as usual.
+        return super.asSupertype(supertype, ctx);
     }
 
     @Override

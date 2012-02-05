@@ -17,7 +17,7 @@ public class TypeDef {
     public final TypeGenericInfo[] genericInfos;
     public final ParameterizedType[] parents;
     public final FieldDef[] staticFieldDefs, instanceFieldDefs;
-    public final MethodDef[] staticMethodDefs, instanceMethodDefs;
+    public final MethodDef[] staticMethodDefs, instanceMethodDefs, allMethodDefs;
 
     public TypeDef(TypeVisibility visibility, boolean isAbstract, boolean isSealed,
             RawType desc, TypeGenericInfo[] genericInfos, ParameterizedType[] parents,
@@ -29,10 +29,15 @@ public class TypeDef {
         this.desc = desc;
         this.genericInfos = genericInfos;
         this.parents = parents;
+
         this.staticFieldDefs = staticFieldDefs;
         this.instanceFieldDefs = instanceFieldDefs;
         this.staticMethodDefs = staticMethodDefs;
         this.instanceMethodDefs = instanceMethodDefs;
+
+        allMethodDefs = new MethodDef[staticMethodDefs.length + instanceMethodDefs.length];
+        System.arraycopy(staticMethodDefs, 0, allMethodDefs, 0, staticMethodDefs.length);
+        System.arraycopy(instanceMethodDefs, 0, allMethodDefs, staticMethodDefs.length, instanceMethodDefs.length);
     }
 
     public ParameterizedType[] parentsWithGenerics(Type[] myGenerics) {
@@ -54,21 +59,96 @@ public class TypeDef {
         return staticFieldDefs[getStaticFieldIndex(name)];
     }
 
+    public MethodDef getStaticMethod(String name, Type[] genericArgs, Type[] argTypes, CodeContext ctx) {
+        Set<MethodDef> options = new HashSet<MethodDef>();
+
+        methodSearch:
+        for (MethodDef method : allMethodDefs) {
+            if (!name.equals(method.name))
+                continue;
+
+            // TODO: allow static invocation of instance methods
+            if (!method.isStatic)
+                continue;
+
+            if (genericArgs.length != method.genericInfos.length)
+                continue;
+
+            Type[] expectedTypes = method.paramTypes;
+            if (argTypes.length != expectedTypes.length)
+                continue;
+
+            for (int i = 0; i < expectedTypes.length; ++i) {
+                Type expectedType = expectedTypes[i];
+                Type expectedTypeWithGens = expectedType.withGenericArgs(null, genericArgs);
+                // TODO: enforce generic bounds
+                if (!argTypes[i].isSubtype(expectedTypeWithGens, null, ctx.method))
+                    continue methodSearch;
+            }
+        }
+
+        // There should be exactly one matching method, which we return.
+        if (options.isEmpty())
+            throw new NoSuchElementException("no matching static method found");
+        if (options.size() > 1)
+            throw new NiftyException("ambiguous static method call %s", name);
+        return options.iterator().next();
+    }
+
     public FieldDef getInstanceField(String name) {
         Set<FieldDef> options = new HashSet<FieldDef>();
+
+        // Search my own fields
         for (FieldDef field : instanceFieldDefs)
             if (field.name.equals(name))
                 options.add(field);
 
+        // Search my parents' fields
         for (ParameterizedType parent : parents)
             try {
                 options.add(owner.resolve(parent.rawType).getInstanceField(name));
             } catch (NoSuchElementException e) {}
 
+        // There should be exactly one matching field
         if (options.isEmpty())
             throw new NoSuchElementException(desc + " has no instance field named " + name);
         if (options.size() > 1)
-            throw new RuntimeException(desc + " inherits multiple fields named " + name);
+            throw new NiftyException("%s has multiple fields named %s", desc, name);
+        return options.iterator().next();
+    }
+
+    public MethodDef getInstanceMethod(String name, Type[] genericArgs, Type[] argTypes, CodeContext ctx) {
+        Set<MethodDef> options = new HashSet<MethodDef>();
+
+        // Search my own methods
+        methodSearch:
+        for (MethodDef meth : instanceMethodDefs) {
+            if (!name.equals(meth.name))
+                continue;
+            if (genericArgs.length != meth.genericInfos.length)
+                continue;
+            if (argTypes.length != meth.paramTypes.length)
+                continue;
+            for (int i = 0; i < argTypes.length; ++i)
+                if (!argTypes[i].isSubtype(meth.paramTypes[i], ctx))
+                    continue methodSearch;
+            options.add(meth);
+        }
+
+        // Search my parents' methods
+        if (options.isEmpty())
+            for (ParameterizedType parent : parents)
+                try {
+                    TypeDef parentDef = owner.resolve(parent.rawType);
+                    MethodDef meth = parentDef.getInstanceMethod(name, genericArgs, argTypes, ctx);
+                    options.add(meth);
+                } catch (NoSuchElementException e) {}
+
+        // There should be exactly one matching method
+        if (options.isEmpty())
+            throw new NoSuchElementException(desc + " has no instance method named " + name);
+        if (options.size() > 1)
+            throw new RuntimeException(desc + " has multiple instance methods matching " + name);
         return options.iterator().next();
     }
 

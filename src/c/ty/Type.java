@@ -2,6 +2,7 @@ package c.ty;
 
 import java.util.*;
 
+import common.RawType;
 import c.*;
 
 public abstract class Type {
@@ -9,9 +10,9 @@ public abstract class Type {
 
     public abstract Type withGenericArgs(Type[] typeGenericArgs, Type[] methodGenericArgs);
 
-    public abstract Type[] getSupertypes(TypeDef typeCtx, MethodDef methodCtx);
+    protected abstract Type[] getSupertypes(TypeDef typeCtx, MethodDef methodCtx);
 
-    public abstract Type[] getSubtypes(TypeDef typeCtx, MethodDef methodCtx);
+    protected abstract Type[] getSubtypes(TypeDef typeCtx, MethodDef methodCtx);
 
     public final ParameterizedType[] getConcreteSupertypes(TypeDef typeCtx, MethodDef methodCtx) {
         Set<ParameterizedType> result = new HashSet<ParameterizedType>();
@@ -20,6 +21,7 @@ public abstract class Type {
                 result.add((ParameterizedType) supertype);
             else for (Type grandfatherType : supertype.getSupertypes(typeCtx, methodCtx))
                 result.addAll(Arrays.asList(grandfatherType.getConcreteSupertypes(typeCtx, methodCtx)));
+        assert !result.isEmpty() : "list of concrete supertypes should at least contain core.Top";
         return result.toArray(new ParameterizedType[result.size()]);
     }
 
@@ -45,6 +47,23 @@ public abstract class Type {
 
     public final boolean isSupertype(Type that, CodeContext ctx) {
         return isSupertype(that, ctx.type, ctx.method);
+    }
+
+    // Convert this to some supertype. Useful for getting the generic arguments associated with
+    // some supertype. If we call String.asSupertype(Sequence), we should get Sequence[Char].
+    public ParameterizedType asSupertype(RawType supertype, CodeContext ctx) {
+        // Different concrete supertypes may have different parameterizations.
+        Set<ParameterizedType> parameterizations = new HashSet<ParameterizedType>();
+        for (ParameterizedType concreteSuper : getConcreteSupertypes(ctx.type, ctx.method))
+            try {
+                parameterizations.add(concreteSuper.asSupertype(supertype, ctx));
+            } catch (IllegalArgumentException e) {}
+        if (parameterizations.isEmpty())
+            throw new IllegalArgumentException(String.format(
+                    "supertype %s not found for %s", supertype, this));
+        return (ParameterizedType) TypeUtils.intersectionNoBottom(
+                parameterizations.toArray(new ParameterizedType[parameterizations.size()]),
+                ctx.type, ctx.method);
     }
 
     @Override

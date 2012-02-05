@@ -16,30 +16,25 @@ public class InstanceFieldGet extends Expression {
         this.fieldName = fieldName;
     }
 
+    private FieldDef getField(CodeContext ctx) {
+        Type targetType = target.inferType(ctx);
+        Set<FieldDef> options = new HashSet<FieldDef>();
+        for (ParameterizedType concreteSuper : targetType.getConcreteSupertypes(ctx.type, ctx.method))
+            try {
+                options.add(ctx.project.resolve(concreteSuper.rawType).getInstanceField(fieldName));
+            } catch (NoSuchElementException e) {}
+        if (options.isEmpty())
+            throw new NiftyException("%s has no field named %s", target, fieldName);
+        if (options.size() > 1)
+            throw new NiftyException("%s inherits multiple fields named %s", target, fieldName);
+        return options.iterator().next();
+    }
+
     @Override
     public Type inferType(CodeContext ctx) {
-        Type targetType = target.inferType(ctx);
-        ParameterizedType[] concreteSuperTypes = targetType.getConcreteSupertypes(ctx.type, ctx.method);
-        assert concreteSuperTypes.length > 0 : "list of concrete supertypes should at least contain core.Top";
-
-        Set<Type> requiredTypes = new HashSet<Type>();
-        for (ParameterizedType concreteSuperType : concreteSuperTypes) {
-            try {
-                TypeDef superTypeDef = ctx.project.resolve(concreteSuperType.rawType);
-                FieldDef fieldDef = superTypeDef.getInstanceField(fieldName);
-                Type[] genericArgs = concreteSuperType.asSupertype(fieldDef.owner, ctx).genericArgs;
-                Type fieldType = fieldDef.type.withGenericArgs(genericArgs, null);
-                requiredTypes.add(fieldType);
-            } catch (NoSuchElementException e) {}
-        }
-
-        try {
-            return TypeUtils.intersectionNoBottom(
-                    requiredTypes.toArray(new Type[requiredTypes.size()]),
-                    ctx.type, ctx.method);
-        } catch (IllegalArgumentException e) {
-            throw new NiftyException("what type should %s's %s field have?", targetType, fieldName);
-        }
+        FieldDef field = getField(ctx);
+        ParameterizedType targetAsFieldOwner = target.inferType(ctx).asSupertype(field.owner, ctx);
+        return field.type.withGenericArgs(targetAsFieldOwner.genericArgs, null);
     }
 
     @Override

@@ -2,6 +2,8 @@ package c;
 
 import java.util.*;
 
+import common.RawType;
+
 import c.ty.*;
 
 public final class TypeUtils {
@@ -18,7 +20,8 @@ public final class TypeUtils {
         Type result = types[0];
         for (Type type : types)
             if (!type.equals(result))
-                throw new RuntimeException("sorry, my dumb code can only union identical types");
+                return new ParameterizedType(RawType.coreTop);
+                //throw new RuntimeException("sorry, my dumb code can only union identical types");
         return result;
     }
 
