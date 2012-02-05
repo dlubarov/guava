@@ -24,7 +24,7 @@ public class NativeInt extends NativeObject {
         TYPE = new NativeTypeDef(
                 RawType.coreInt,
                 Variance.NONE,
-                2, 0,
+                2, new String[0],
 
                 // static methods
                 new NativeMethodDef[] {

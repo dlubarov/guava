@@ -26,7 +26,7 @@ public class NativeBool extends NativeObject {
         TYPE = new NativeTypeDef(
                 RawType.coreBool,
                 Variance.NONE,
-                0, 0,
+                0, new String[0],
 
                 // static methods
                 new NativeMethodDef[] {

@@ -8,7 +8,6 @@ import common.*;
 import d.nat.*;
 import d.ty.ConcreteType;
 import d.ty.desc.TypeDesc;
-import d.ty.nf.NonFinalType;
 
 public class BytecodeMethodDef extends ConcreteMethodDef {
     public final String[] stringTable;
@@ -24,15 +23,18 @@ public class BytecodeMethodDef extends ConcreteMethodDef {
             Map<RawMethod, RawMethod> vDescTable,
             int numLocals, int[] bytecode) {
         super(desc, typeDescTable, fullTypeDescTable, methodDescTable, vDescTable);
+
+        for (int i = 0; i < stringTable.length; ++i)
+            stringTable[i] = stringTable[i].intern();
         this.stringTable = stringTable;
+
         this.numLocals = numLocals;
         this.code = bytecode;
     }
 
     @Override
     public void invoke(BaseObject[] stack, int bp, ConcreteType[] genericArgs) {
-        int sp = bp + numLocals, ip = 0, op, i, j;
-        BaseObject a, b;
+        int sp = bp + numLocals, ip = 0, op;
 
         for (;;) {
             try {
@@ -46,10 +48,11 @@ public class BytecodeMethodDef extends ConcreteMethodDef {
                     --sp;
                     break;
 
-                case DUP:
-                    a = stack[sp];
+                case DUP: {
+                    BaseObject a = stack[sp];
                     stack[++sp] = a;
                     break;
+                }
 
                 case CONST_INT:
                     stack[++sp] = new NativeInt(code[ip++]);
@@ -71,68 +74,114 @@ public class BytecodeMethodDef extends ConcreteMethodDef {
                     stack[++sp] = VMUtils.makeString(stringTable[ip++]);
                     break;
 
-                case GET_LOCAL:
-                    i = code[ip++]; // local index
+                case GET_LOCAL: {
+                    int i = code[ip++]; // local index
                     stack[++sp] = stack[bp + i + 1];
                     break;
+                }
 
-                case PUT_LOCAL:
-                    i = code[ip++]; // local index
+                case PUT_LOCAL: {
+                    int i = code[ip++]; // local index
                     stack[bp + i + 1] = stack[sp--];
                     break;
+                }
 
-                case GET_STATIC_FIELD:
-                    i = code[ip++]; // index into type table
-                    j = code[ip++]; // static field index
+                case GET_STATIC_FIELD: {
+                    int i = code[ip++]; // index into type table
+                    int j = code[ip++]; // static field index
                     stack[++sp] = rawTypeTable[i].staticFields[j];
                     break;
+                }
 
-                case PUT_STATIC_FIELD:
-                    a = stack[sp--];
-                    i = code[ip++]; // index into type table
-                    j = code[ip++]; // static field index
+                case PUT_STATIC_FIELD: {
+                    BaseObject a = stack[sp--];
+                    int i = code[ip++]; // index into type table
+                    int j = code[ip++]; // static field index
                     rawTypeTable[i].staticFields[j] = a;
                     break;
+                }
 
-                case GET_INSTANCE_FIELD:
-                    a = stack[sp--]; // target
-                    i = code[ip++]; // index into field table
+                case GET_INSTANCE_FIELD: {
+                    int i = code[ip++]; // index into string table
+                    String fieldName = stringTable[i];
+                    assert fieldName.intern() == fieldName : "String in literal pool wasn't interned.";
+
+                    BaseObject a = stack[sp--]; // target
+                    i = a.type.rawType.virtualFieldTable.get(fieldName); // field index
                     stack[++sp] = a.fields[i];
                     break;
+                }
 
-                case PUT_INSTANCE_FIELD:
-                    b = stack[sp--]; // new field value
-                    a = stack[sp--]; // target
-                    i = code[ip++]; // index into field table
+                case PUT_INSTANCE_FIELD: {
+                    int i = code[ip++]; // index into string table
+                    String fieldName = stringTable[i];
+                    assert fieldName.intern() == fieldName : "String in literal pool wasn't interned.";
+
+                    BaseObject b = stack[sp--]; // new field value
+                    BaseObject a = stack[sp--]; // target
+                    i = a.type.rawType.virtualFieldTable.get(fieldName); // field index
                     a.fields[i] = b;
                     break;
+                }
 
-                case INVOKE_STATIC:
-                    i = code[ip++]; // index into method table
-                    // FIXME: incomplete
+                case INVOKE_STATIC: {
+                    int i = code[ip++]; // index into method table
+                    ConcreteMethodDef m = (ConcreteMethodDef) methodTable[i];
+                    BaseObject a = desc.isStatic ? null : stack[bp + 1]; // current object
+
+                    // Create array of generic arguments.
+                    i = code[ip++]; // # generic args
+                    ConcreteType[] newGenericArgs = new ConcreteType[i];
+                    for (int j = 0; j < i; ++j)
+                        newGenericArgs[j] = fullTypeTable[code[ip++]].toConcrete(a, genericArgs);
+
+                    // Invoke the method.
+                    i = m.desc.paramTypes.length;
+                    if (!m.desc.isStatic)
+                        ++i;
+                    m.invoke(stack, sp - i, newGenericArgs);
+                    sp -= i - 1;
                     break;
+                }
 
-                case INVOKE_VIRTUAL:
-                    i = code[ip++]; // index into method table
-                    // FIXME: incomplete
+                case INVOKE_VIRTUAL: {
+                    int i = code[ip++]; // index into method table
+                    MethodDef m = methodTable[i];
+                    assert !m.desc.isStatic : "virtual execution of static method";
+                    BaseObject a = desc.isStatic ? null : stack[bp + 1]; // current object
+
+                    // Create array of generic arguments.
+                    i = code[ip++]; // # generic args
+                    ConcreteType[] newGenericArgs = new ConcreteType[i];
+                    for (int j = 0; j < i; ++j)
+                        newGenericArgs[j] = fullTypeTable[code[ip++]].toConcrete(a, genericArgs);
+
+                    i = m.desc.paramTypes.length; // # args
+                    a = stack[sp - i]; // target
+                    TypeDef targetOwner = a.type.rawType;
+                    targetOwner.virtualMethodTable.get(m).invoke(stack, sp - i - 1, newGenericArgs);
                     break;
+                }
 
-                case NEW:
-                    i = code[ip++]; // index into full type table
-                    a = desc.isStatic ? null : stack[bp + 1]; // current object
+                case NEW: {
+                    int i = code[ip++]; // index into full type table
+                    BaseObject a = desc.isStatic ? null : stack[bp + 1]; // current object
                     stack[++sp] = fullTypeTable[i].toConcrete(a, genericArgs).rawInstance();
                     break;
+                }
 
-                case JUMP:
-                    i = code[ip++];
+                case JUMP: {
+                    int i = code[ip++];
                     ip += i;
                     break;
+                }
 
-                case JUMP_COND:
-                    i = code[ip++];
+                case JUMP_COND: {
+                    int i = code[ip++];
                     if (((NativeBool) stack[sp--]).value)
                         ip += i;
                     break;
+                }
 
                 case BOOL_NEG:
                     stack[sp] = new NativeBool(!((NativeBool) stack[sp]).value);

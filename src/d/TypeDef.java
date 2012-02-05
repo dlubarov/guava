@@ -17,25 +17,34 @@ public class TypeDef {
     public final ConcreteMethodDef[] staticMethods;
     public final MethodDef[] instanceMethods;
 
+    public final IdentityHashMap<String, Integer> virtualFieldTable;
+
     public Map<RawMethod, RawMethod> virtualMethodDescTable;
     public final Map<MethodDef, ConcreteMethodDef> virtualMethodTable;
 
     public Map<RawType, TypeDesc[]> superGenericDescs;
     public final Map<TypeDef, SuperType[]> superGenerics;
 
-    public TypeDef(RawType desc, Variance[] genericVariances,
-            int numStaticFields, int numInstanceFields,
-            ConcreteMethodDef[] staticMethods, MethodDef[] instanceMethods,
+    public TypeDef(RawType desc,
+            Variance[] genericVariances,
+            int numStaticFields,
+            String[] allInstanceFields,
+            ConcreteMethodDef[] staticMethods,
+            MethodDef[] instanceMethods,
             Map<RawMethod, RawMethod> virtualMethodDescTable,
             Map<RawType, TypeDesc[]> superGenericDescs) {
         this.desc = desc;
         this.genericVariances = genericVariances;
 
         this.staticFields = new BaseObject[numStaticFields];
-        this.numInstanceFields = numInstanceFields;
+        numInstanceFields = allInstanceFields.length;
 
         this.staticMethods = staticMethods;
         this.instanceMethods = instanceMethods;
+
+        this.virtualFieldTable = new IdentityHashMap<String, Integer>();
+        for (int i = 0; i < numInstanceFields; ++i)
+            virtualFieldTable.put(allInstanceFields[i].intern(), i);
 
         this.virtualMethodDescTable = virtualMethodDescTable;
         virtualMethodTable = new HashMap<MethodDef, ConcreteMethodDef>();

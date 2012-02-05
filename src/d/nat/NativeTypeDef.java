@@ -7,10 +7,10 @@ import d.ty.ConcreteType;
 
 public abstract class NativeTypeDef extends TypeDef {
     public NativeTypeDef(RawType desc, Variance[] genericVariances,
-            int numStaticFields, int numInstanceFields,
+            int numStaticFields, String[] allInstanceFields,
             NativeMethodDef[] staticMethods, NativeMethodDef[] instanceMethods) {
         super(desc, genericVariances,
-                numStaticFields, numInstanceFields,
+                numStaticFields, allInstanceFields,
                 staticMethods, instanceMethods,
                 null, null);
 

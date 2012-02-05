@@ -20,7 +20,7 @@ public class NativeObject extends BaseObject {
         TOP_TYPE = new NativeTypeDef(
                 RawType.coreTop,
                 Variance.NONE,
-                0, 0,
+                0, new String[0],
 
                 // static methods
                 new NativeMethodDef[] {},
