@@ -6,7 +6,7 @@ public class TypeGenericParam {
     public final Variance var;
     public final String name;
 
-    TypeGenericParam(Variance var, String name) {
+    public TypeGenericParam(Variance var, String name) {
         this.var = var;
         this.name = name;
     }
