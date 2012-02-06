@@ -77,7 +77,7 @@ public class ForEach extends Statement {
 
     @Override
     public String toString() {
-        String header = String.format("for (%s %s : %s)",
+        String header = String.format("foreach (%s %s in %s)",
                 elemType, elemName, iterable);
         if (body instanceof Block)
             return header + " " + body;

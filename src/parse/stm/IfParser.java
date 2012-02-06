@@ -15,19 +15,15 @@ public class IfParser extends Parser<Statement> {
     @Override
     public Success<Statement> parse(String s, int p) {
         // Parse "if".
-        if (!StringUtils.containsAt(s, "if", p))
+        Success<String> resIf = IdentifierParser.singleton.parse(s, p);
+        if (resIf == null || !resIf.value.equals("if"))
             return null;
-        p += "if".length();
-        boolean spaceAfterIf = optWS(s, p) != p;
+        p = resIf.rem;
         p = optWS(s, p);
 
         // Parse the '('.
-        if (s.charAt(p) != '(') {
-            if (spaceAfterIf) // certainly a syntax error
-                throw new NiftyException("Missing opening parenthesis after 'if'.");
-            return null; // could be valid code, e.g. ifSomethingDoSomething();
-        }
-        ++p;
+        if (s.charAt(p++) != '(')
+            throw new NiftyException("Missing opening parenthesis after 'if'.");
         p = optWS(s, p);
 
         // Parse the condition.
@@ -38,9 +34,8 @@ public class IfParser extends Parser<Statement> {
         p = optWS(s, p);
 
         // Parse the ')'.
-        if (s.charAt(p) != ')')
+        if (s.charAt(p++) != ')')
             throw new NiftyException("Missing closing parenthesis after condition expression of if statement.");
-        ++p;
         p = optWS(s, p);
 
         // Parse the body.

@@ -14,9 +14,8 @@ public class BlockParser extends Parser<Statement> {
     @Override
     public Success<Statement> parse(String s, int p) {
         // Parse "{".
-        if (s.charAt(p) != '{')
+        if (s.charAt(p++) != '{')
             return null;
-        ++p;
         p = optWS(s, p);
 
         // Parse statements.
@@ -31,9 +30,8 @@ public class BlockParser extends Parser<Statement> {
         }
 
         // Parse "}".
-        if (s.charAt(p) != '}')
+        if (s.charAt(p++) != '}')
             throw new NiftyException("Missing closing '}' in block statement.");
-        ++p;
 
         Statement[] partsArr = parts.toArray(new Statement[parts.size()]);
         return new Success<Statement>(new Block(partsArr), p);

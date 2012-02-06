@@ -17,9 +17,8 @@ public class EvaluationParser extends Parser<Statement> {
         p = optWS(s, p);
 
         // Parse the ';'.
-        if (s.charAt(p) != ';')
+        if (s.charAt(p++) != ';')
             return null;
-        ++p;
 
         return new Success<Statement>(new Evaluation(resExp.value), p);
     }

@@ -4,7 +4,6 @@ import common.NiftyException;
 
 import parse.*;
 import parse.exp.ExpressionParser;
-import util.StringUtils;
 import a.exp.Expression;
 import a.stm.*;
 
@@ -14,20 +13,16 @@ public class RepeatParser extends Parser<Statement> {
 
     @Override
     public Success<Statement> parse(String s, int p) {
-        // Parse "repeat".
-        if (!StringUtils.containsAt(s, "repeat", p))
+        // Parse the "repeat".
+        Success<String> resRepeat = IdentifierParser.singleton.parse(s, p);
+        if (resRepeat == null || !resRepeat.value.equals("repeat"))
             return null;
-        p += "repeat".length();
-        boolean spaceAfterRepeat = optWS(s, p) != p;
+        p = resRepeat.rem;
         p = optWS(s, p);
 
         // Parse the '('.
-        if (s.charAt(p) != '(') {
-            if (spaceAfterRepeat) // certainly a syntax error
-                throw new NiftyException("Missing opening parenthesis after 'repeat'.");
-            return null; // could be valid code, e.g. repeatedlyBangHead();
-        }
-        ++p;
+        if (s.charAt(p++) != '(')
+            throw new NiftyException("Missing opening parenthesis after 'repeat'.");
         p = optWS(s, p);
 
         // Parse the number.
@@ -38,9 +33,8 @@ public class RepeatParser extends Parser<Statement> {
         p = optWS(s, p);
 
         // Parse the ')'.
-        if (s.charAt(p) != ')')
+        if (s.charAt(p++) != ')')
             throw new NiftyException("Missing closing parenthesis in header of repeat loop.");
-        ++p;
         p = optWS(s, p);
 
         // Parse the body.

@@ -4,7 +4,6 @@ import common.NiftyException;
 
 import parse.*;
 import parse.exp.ExpressionParser;
-import util.StringUtils;
 import a.exp.Expression;
 import a.stm.*;
 
@@ -14,20 +13,16 @@ public class WhileParser extends Parser<Statement> {
 
     @Override
     public Success<Statement> parse(String s, int p) {
-        // Parse "while".
-        if (!StringUtils.containsAt(s, "while", p))
+        // Parse the "while".
+        Success<String> resWhile = IdentifierParser.singleton.parse(s, p);
+        if (resWhile == null || !resWhile.value.equals("while"))
             return null;
-        p += "while".length();
-        boolean spaceAfterWhile = optWS(s, p) != p;
+        p = resWhile.rem;
         p = optWS(s, p);
 
         // Parse the '('.
-        if (s.charAt(p) != '(') {
-            if (spaceAfterWhile) // certainly a syntax error
-                throw new NiftyException("Missing opening parenthesis after 'while'.");
-            return null; // could be valid code, e.g. whileSomethingDoSomething();
-        }
-        ++p;
+        if (s.charAt(p++) != '(')
+            throw new NiftyException("Missing opening parenthesis after 'while'.");
         p = optWS(s, p);
 
         // Parse the condition.
@@ -38,9 +33,8 @@ public class WhileParser extends Parser<Statement> {
         p = optWS(s, p);
 
         // Parse the ')'.
-        if (s.charAt(p) != ')')
+        if (s.charAt(p++) != ')')
             throw new NiftyException("Missing closing parenthesis in header of while loop.");
-        ++p;
         p = optWS(s, p);
 
         // Parse the body.

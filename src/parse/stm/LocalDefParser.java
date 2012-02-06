@@ -49,7 +49,6 @@ public class LocalDefParser extends Parser<Statement> {
                 break;
             if (c != ',')
                 throw new NiftyException("Expecting ',' or ';'.");
-            ++p;
             p = optWS(s, p);
         }
 

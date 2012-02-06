@@ -15,9 +15,7 @@ public class ReturnParser extends Parser<Statement> {
     public Success<Statement> parse(String s, int p) {
         // Parse the "return".
         Success<String> resReturn = IdentifierParser.singleton.parse(s, p);
-        if (resReturn == null)
-            return null;
-        if (!resReturn.value.equals("return"))
+        if (resReturn == null || !resReturn.value.equals("return"))
             return null;
         p = resReturn.rem;
         p = optWS(s, p);
@@ -28,9 +26,8 @@ public class ReturnParser extends Parser<Statement> {
         p = optWS(s, p);
 
         // Parse the ';'.
-        if (s.charAt(p) != ';')
+        if (s.charAt(p++) != ';')
             throw new NiftyException("Missing ';' for return statement.");
-        ++p;
 
         return new Success<Statement>(new Return(resExp.value), p);
     }
