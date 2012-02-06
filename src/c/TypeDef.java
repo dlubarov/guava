@@ -40,6 +40,13 @@ public class TypeDef {
         System.arraycopy(instanceMethodDefs, 0, allMethodDefs, staticMethodDefs.length, instanceMethodDefs.length);
     }
 
+    public ParameterizedType thisType() {
+        Type[] genericArgs = new Type[genericInfos.length];
+        for (int i = 0; i < genericArgs.length; ++i)
+            genericArgs[i] = new TypeGenericType(i);
+        return new ParameterizedType(desc, genericArgs);
+    }
+
     public ParameterizedType[] parentsWithGenerics(Type[] myGenerics) {
         ParameterizedType[] result = new ParameterizedType[parents.length];
         for (int i = 0; i < result.length; ++i)

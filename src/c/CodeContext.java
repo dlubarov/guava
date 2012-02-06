@@ -10,11 +10,16 @@ public class CodeContext {
     public final MethodDef method;
     private final List<LocalInfo> locals;
 
-    public CodeContext(Project project, TypeDef type, MethodDef method, LocalInfo[] initLocals) {
+    public CodeContext(Project project, TypeDef type, MethodDef method) {
         this.project = project;
         this.type = type;
         this.method = method;
-        locals = Arrays.asList(initLocals);
+
+        locals = new ArrayList<LocalInfo>();
+        if (!method.isStatic)
+            locals.add(new LocalInfo(type.thisType(), "this"));
+        for (int i = 0; i < method.paramNames.length; ++i)
+            locals.add(new LocalInfo(method.paramTypes[i], method.paramNames[i]));
     }
 
     public CodeContext(CodeContext src) {

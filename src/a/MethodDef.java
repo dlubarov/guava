@@ -16,16 +16,20 @@ public class MethodDef extends MemberDef {
     public final String name;
     public final String[] genericParams;
     public final Type[] paramTypes;
+    public final String[] paramNames;
     public final Block body;
 
     public MethodDef(GenericConstraint[] genericConstraints, String[] quals,
-            Type returnType, String name, String[] genericParams, Type[] paramTypes, Block body) {
+            Type returnType, String name,
+            String[] genericParams, Type[] paramTypes, String[] paramNames,
+            Block body) {
         this.genericConstraints = genericConstraints;
         this.quals = quals;
         this.returnType = returnType;
         this.name = name;
         this.genericParams = genericParams;
         this.paramTypes = paramTypes;
+        this.paramNames = paramNames;
         this.body = body;
     }
 
@@ -90,6 +94,7 @@ public class MethodDef extends MemberDef {
                 name,
                 refinedGenericParams,
                 refinedParamTypes,
+                paramNames,
                 body.refine());
     }
 
@@ -103,7 +108,7 @@ public class MethodDef extends MemberDef {
     @Override
     public String toString() {
         return String.format(
-                "%s %s %s%s%s %s",
+                "%s %s %s%s%s%s",
                 qualsString(),
                 returnType,
                 name,
@@ -111,6 +116,8 @@ public class MethodDef extends MemberDef {
                         ? ""
                         : Arrays.toString(genericParams),
                 paramTypes,
-                body);
+                body == null
+                        ? ";"
+                        : " " + body);
     }
 }

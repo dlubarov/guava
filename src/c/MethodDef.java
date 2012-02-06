@@ -18,12 +18,13 @@ public class MethodDef {
     public final String name;
     public final MethodGenericInfo[] genericInfos;
     public final Type[] paramTypes;
+    public final String[] paramNames;
     public final Block body;
 
     public MethodDef(RawType owner,
             MethodVisibility visibility, boolean isStatic, boolean isSealed,
-            Type returnType, String name, MethodGenericInfo[] genericInfos, Type[] paramTypes,
-            Block body) {
+            Type returnType, String name, MethodGenericInfo[] genericInfos,
+            Type[] paramTypes, String[] paramNames, Block body) {
         this.owner = owner;
         this.visibility = visibility;
         this.isStatic = isStatic;
@@ -32,6 +33,7 @@ public class MethodDef {
         this.name = name;
         this.genericInfos = genericInfos;
         this.paramTypes = paramTypes;
+        this.paramNames = paramNames;
         this.body = body;
     }
 

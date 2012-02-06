@@ -15,12 +15,13 @@ public class MethodDef {
     public final Type returnType;
     public final String name;
     public final MethodGenericParam[] genericParams;
+    public final String[] paramNames;
     public final Type[] paramTypes;
     public final Block body;
 
     public MethodDef(MethodVisibility visibility, boolean isStatic, boolean isSealed,
-            Type returnType, String name, MethodGenericParam[] genericParams, Type[] paramTypes,
-            Block body) {
+            Type returnType, String name, MethodGenericParam[] genericParams,
+            Type[] paramTypes, String[] paramNames, Block body) {
         this.visibility = visibility;
         this.isStatic = isStatic;
         this.isSealed = isSealed;
@@ -28,10 +29,13 @@ public class MethodDef {
         this.name = name;
         this.genericParams = genericParams;
         this.paramTypes = paramTypes;
+        this.paramNames = paramNames;
         this.body = body;
 
         if (isStatic && body == null)
             throw new RuntimeException("static methods can't be abstract");
+        if (isSealed && body == null)
+            throw new RuntimeException("sealed methods can't be abstract");
     }
 
     public int genericParamIndex(String genericParam) {
@@ -59,6 +63,7 @@ public class MethodDef {
                 name,
                 refinedGenerics,
                 refinedParamTypes,
+                paramNames,
                 body.refine(typeCtx, this));
     }
 
