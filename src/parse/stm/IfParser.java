@@ -33,7 +33,7 @@ public class IfParser extends Parser<Statement> {
         // Parse the condition.
         Success<Expression> resCond = ExpressionParser.singleton.parse(s, p);
         if (resCond == null)
-            throw new NiftyException("Expecting condition expression after 'if ('.");
+            throw new NiftyException("Expecting expression after 'if ('.");
         p = resCond.rem;
         p = optWS(s, p);
 

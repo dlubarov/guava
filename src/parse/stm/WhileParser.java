@@ -39,7 +39,7 @@ public class WhileParser extends Parser<Statement> {
 
         // Parse the ')'.
         if (s.charAt(p) != ')')
-            throw new NiftyException("Missing closing parenthesis in header of while loop head.");
+            throw new NiftyException("Missing closing parenthesis in header of while loop.");
         ++p;
         p = optWS(s, p);
 
