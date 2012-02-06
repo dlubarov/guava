@@ -2,6 +2,7 @@ package parse.exp;
 
 import a.exp.*;
 import parse.*;
+import parse.misc.IdentifierParser;
 
 public class LiteralBoolParser extends Parser<Expression> {
     public static final Parser<Expression> singleton = new LiteralBoolParser();

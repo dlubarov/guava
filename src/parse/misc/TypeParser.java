@@ -1,5 +1,6 @@
-package parse;
+package parse.misc;
 
+import parse.*;
 import a.Type;
 
 public class TypeParser extends Parser<Type> {

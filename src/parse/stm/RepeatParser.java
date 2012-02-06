@@ -4,6 +4,7 @@ import common.NiftyException;
 
 import parse.*;
 import parse.exp.ExpressionParser;
+import parse.misc.IdentifierParser;
 import a.exp.Expression;
 import a.stm.*;
 

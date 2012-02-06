@@ -1,6 +1,8 @@
-package parse;
+package parse.misc;
 
 import java.util.*;
+
+import parse.*;
 
 import common.NiftyException;
 

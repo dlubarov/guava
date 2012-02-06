@@ -3,6 +3,7 @@ package parse.stm;
 import common.NiftyException;
 
 import parse.*;
+import parse.misc.IdentifierParser;
 import a.stm.*;
 
 public class ForeverParser extends Parser<Statement> {

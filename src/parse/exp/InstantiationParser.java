@@ -7,6 +7,7 @@ import common.NiftyException;
 import a.Type;
 import a.exp.*;
 import parse.*;
+import parse.misc.*;
 
 public class InstantiationParser extends Parser<Expression> {
     public static final InstantiationParser singleton = new InstantiationParser();

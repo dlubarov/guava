@@ -1,4 +1,6 @@
-package parse;
+package parse.misc;
+
+import parse.*;
 
 public class IdentifierOrOpParser extends Parser<String> {
     public static final Parser<String> singleton = new IdentifierOrOpParser().memo();

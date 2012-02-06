@@ -1,5 +1,6 @@
-package parse;
+package parse.misc;
 
+import parse.*;
 import common.Variance;
 
 import a.gen.TypeGenericParam;

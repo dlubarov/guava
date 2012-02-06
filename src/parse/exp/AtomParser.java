@@ -2,6 +2,7 @@ package parse.exp;
 
 import a.exp.*;
 import parse.*;
+import parse.misc.IdentifierParser;
 
 public class AtomParser extends Parser<Expression> {
     public static final Parser<Expression> singleton = new AtomParser().memo();

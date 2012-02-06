@@ -1,7 +1,8 @@
-package parse;
+package parse.misc;
 
 import java.util.*;
 
+import parse.*;
 import parse.exp.ExpressionParser;
 
 import common.NiftyException;

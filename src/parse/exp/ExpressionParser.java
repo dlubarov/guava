@@ -5,6 +5,7 @@ import common.NiftyException;
 import a.exp.*;
 import parse.*;
 import parse.exp.bin.IorParser;
+import parse.misc.OperatorParser;
 import util.StringUtils;
 
 public class ExpressionParser extends Parser<Expression> {
