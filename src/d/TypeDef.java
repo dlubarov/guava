@@ -69,11 +69,11 @@ public class TypeDef {
         }
         for (RawType superDesc : superGenericDescs.keySet()) {
             TypeDesc[] superArgDescs = superGenericDescs.get(superDesc);
-            TypeDef superType = God.resolveType(superDesc);
+            TypeDef supertype = God.resolveType(superDesc);
             SuperType[] superArgs = new SuperType[superArgDescs.length];
             for (int i = 0; i < superArgs.length; ++i)
                 superArgs[i] = superArgDescs[i].toSuper();
-            superGenerics.put(superType, superArgs);
+            superGenerics.put(supertype, superArgs);
         }
         virtualMethodDescTable = null;
         superGenericDescs = null;

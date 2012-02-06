@@ -20,7 +20,9 @@ public class FieldAssignment extends Expression {
 
     @Override
     public c.exp.Expression refine(TypeDef typeCtx, MethodDef methodCtx) {
-        // TODO Auto-generated method stub
-        return null;
+        return new c.exp.InstanceFieldAssignment(
+                target.refine(typeCtx, methodCtx),
+                fieldName,
+                value.refine(typeCtx, methodCtx));
     }
 }

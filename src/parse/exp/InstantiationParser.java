@@ -17,6 +17,7 @@ public class InstantiationParser extends Parser<Expression> {
         // Parse "new".
         if (!containsAt(s, "new", p))
             return null;
+        p += "new".length();
         if (optWS(s, p) == p)
             return null; // no space following "new"
         p = optWS(s, p);

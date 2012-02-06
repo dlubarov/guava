@@ -8,7 +8,7 @@ public class OperatorParser extends Parser<String> {
     public static final Parser<String> singleton = new OperatorParser().memo();
     private OperatorParser() {}
 
-    private static final String[] operators;
+    public static final String[] operators;
 
     static {
         operators = new String[] {

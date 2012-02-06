@@ -13,20 +13,17 @@ public class InfixOperation extends Expression {
         this.right = right;
     }
 
-    private boolean rightAssociative() {
-        return operator.equals(":");
-    }
-
     @Override
     public b.exp.Expression refine() {
         Expression target, arg;
-        if (rightAssociative()) {
+        if (operator.equals(":")) {
             target = right;
             arg = left;
         } else {
             target = left;
             arg = right;
         }
+
         return new Invocation(
                 new MemberAccess(target, operator),
                 Type.NONE, new Expression[] {arg}
