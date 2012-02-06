@@ -7,12 +7,12 @@ import common.NiftyException;
 import parse.*;
 import a.stm.*;
 
-public class BlockParser extends Parser<Statement> {
-    public static final Parser<Statement> singleton = new BlockParser();
+public class BlockParser extends Parser<Block> {
+    public static final Parser<Block> singleton = new BlockParser();
     private BlockParser() {}
 
     @Override
-    public Success<Statement> parse(String s, int p) {
+    public Success<Block> parse(String s, int p) {
         // Parse "{".
         if (s.charAt(p++) != '{')
             return null;
@@ -34,6 +34,6 @@ public class BlockParser extends Parser<Statement> {
             throw new NiftyException("Missing closing '}' in block statement.");
 
         Statement[] partsArr = parts.toArray(new Statement[parts.size()]);
-        return new Success<Statement>(new Block(partsArr), p);
+        return new Success<Block>(new Block(partsArr), p);
     }
 }

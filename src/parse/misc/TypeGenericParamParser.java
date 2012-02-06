@@ -16,11 +16,11 @@ public class TypeGenericParamParser extends Parser<TypeGenericParam> {
         switch (s.charAt(p)) {
             case '+':
                 var = Variance.COVARIANT;
-                p = optWS(s, ++p);
+                p = optWS(s, p + 1);
                 break;
             case '-':
                 var = Variance.CONTRAVARIANT;
-                p = optWS(s, ++p);
+                p = optWS(s, p + 1);
                 break;
             default:
                 var = Variance.NONVARIANT;

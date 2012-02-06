@@ -16,23 +16,9 @@ public class TypeDefParser extends Parser<TypeDef> {
     @Override
     public Success<TypeDef> parse(String s, int p) {
         // Parse generic constraints.
-        List<GenericConstraint> genericConstraints = new ArrayList<GenericConstraint>();
-        if (s.charAt(p) == '[') {
-            p = optWS(s, ++p);
-            for (;;) {
-                Success<GenericConstraint> resConstraint = GenericConstraintParser.singleton.parse(s, p);
-                if (resConstraint == null)
-                    break;
-                genericConstraints.add(resConstraint.value);
-                p = resConstraint.rem;
-                p = optWS(s, p);
-            }
-            if (s.charAt(p++) != ']')
-                throw new NiftyException("Missing closing ']' after generic constraint list.");
-            if (genericConstraints.isEmpty())
-                throw new NiftyException("List of generic constraints is empty.");
-            p = optWS(s, p);
-        }
+        Success<GenericConstraint[]> resGenConstraints = GenericConstraintListParser.singleton.parse(s, p);
+        p = resGenConstraints.rem;
+        p = optWS(s, p);
 
         // Parse qualifiers and "type" keyword.
         List<String> quals = new ArrayList<String>();
@@ -55,7 +41,7 @@ public class TypeDefParser extends Parser<TypeDef> {
         // Parse the generic parameter list.
         List<TypeGenericParam> genericParams = new ArrayList<TypeGenericParam>();
         if (s.charAt(p) == '[') {
-            p = optWS(s, ++p);
+            p = optWS(s, p + 1);
             for (;;) {
                 Success<TypeGenericParam> resParam = TypeGenericParamParser.singleton.parse(s, p);
                 if (resParam == null)
@@ -109,12 +95,11 @@ public class TypeDefParser extends Parser<TypeDef> {
             throw new NiftyException("Missing closing '}' for type definition.");
 
         // Format and return the results. (Yuck...)
-        GenericConstraint[] genericConstraintsArr = genericConstraints.toArray(new GenericConstraint[genericConstraints.size()]);
         String[] qualsArr = quals.toArray(new String[quals.size()]);
         TypeGenericParam[] genericParamsArr = genericParams.toArray(new TypeGenericParam[genericParams.size()]);
         Type[] parentsArr = parents.toArray(new Type[parents.size()]);
         MemberDef[] memberDefsArr = memberDefs.toArray(new MemberDef[memberDefs.size()]);
-        TypeDef result = new TypeDef(genericConstraintsArr, qualsArr, resName.value, genericParamsArr, parentsArr, memberDefsArr);
+        TypeDef result = new TypeDef(resGenConstraints.value, qualsArr, resName.value, genericParamsArr, parentsArr, memberDefsArr);
         return new Success<TypeDef>(result, p);
     }
 }
