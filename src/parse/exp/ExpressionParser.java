@@ -4,7 +4,7 @@ import a.exp.Expression;
 import parse.*;
 
 public class ExpressionParser extends Parser<Expression> {
-    public final ExpressionParser singleton = new ExpressionParser();
+    public static final Parser<Expression> singleton = new ExpressionParser().memo();
     private ExpressionParser() {}
 
     @Override

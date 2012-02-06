@@ -22,4 +22,11 @@ public class MemoParser<T> extends Parser<T> {
             sMem.put(p, result = inner.parse(s, p));
         return result;
     }
+
+    @Override
+    public Parser<T> memo() {
+        // In case a parser is accidentally wrapped in multiple MemoParsers.
+        // Could alternatively throw an exception, since this shouldn't happen.
+        return this;
+    }
 }

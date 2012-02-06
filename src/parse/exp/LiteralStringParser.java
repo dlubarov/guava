@@ -1,14 +1,14 @@
 package parse.exp;
 
-import a.exp.LiteralString;
+import a.exp.*;
 import parse.*;
 
-public class LiteralStringParser extends Parser<LiteralString> {
+public class LiteralStringParser extends Parser<Expression> {
     public static final LiteralStringParser singleton = new LiteralStringParser();
     private LiteralStringParser() {}
 
     @Override
-    public Success<LiteralString> parse(String s, int p) {
+    public Success<Expression> parse(String s, int p) {
         if (s.charAt(p++) != '"')
             return null;
         StringBuilder sb = new StringBuilder();
@@ -16,7 +16,7 @@ public class LiteralStringParser extends Parser<LiteralString> {
             for (;;) {
                 char c = s.charAt(p++);
                 if (c == '"')
-                    return new Success<LiteralString>(new LiteralString(sb.toString()), p);
+                    return new Success<Expression>(new LiteralString(sb.toString()), p);
                 sb.append(c);
                 if (c == '\\')
                     sb.append(s.charAt(p++));

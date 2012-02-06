@@ -1,14 +1,14 @@
 package parse.exp;
 
-import a.exp.LiteralChar;
+import a.exp.*;
 import parse.*;
 
-public class LiteralCharParser extends Parser<LiteralChar> {
-    public static final LiteralCharParser singleton = new LiteralCharParser();
+public class LiteralCharParser extends Parser<Expression> {
+    public static final Parser<Expression> singleton = new LiteralCharParser();
     private LiteralCharParser() {}
 
     @Override
-    public Success<LiteralChar> parse(String s, int p) {
+    public Success<Expression> parse(String s, int p) {
         if (s.charAt(p++) != '\'')
             return null;
         StringBuilder sb = new StringBuilder();
@@ -16,7 +16,7 @@ public class LiteralCharParser extends Parser<LiteralChar> {
             for (;;) {
                 char c = s.charAt(p++);
                 if (c == '\'')
-                    return new Success<LiteralChar>(new LiteralChar(sb.toString()), p);
+                    return new Success<Expression>(new LiteralChar(sb.toString()), p);
                 sb.append(c);
                 if (c == '\\')
                     sb.append(s.charAt(p++));

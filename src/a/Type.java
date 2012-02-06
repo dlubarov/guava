@@ -26,6 +26,8 @@ public class Type {
 
     @Override
     public String toString() {
+        if (genericArgs.length == 0)
+            return rawType;
         return rawType + Arrays.toString(genericArgs);
     }
 }

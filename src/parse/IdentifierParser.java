@@ -1,7 +1,7 @@
 package parse;
 
 public class IdentifierParser extends Parser<String> {
-    public static final IdentifierParser singleton = new IdentifierParser();
+    public static final Parser<String> singleton = new IdentifierParser().memo();
     private IdentifierParser() {}
 
     @Override
