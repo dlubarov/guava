@@ -105,6 +105,8 @@ public class ParameterizedType extends Type {
 
     @Override
     public String toString() {
+        if (genericArgs.length == 0)
+            return rawType.toString();
         return rawType + Arrays.toString(genericArgs);
     }
 }

@@ -1,6 +1,6 @@
 package c;
 
-import static util.StringUtils.implode;
+import static util.StringUtils.*;
 
 import java.util.*;
 
@@ -171,17 +171,17 @@ public class TypeDef {
 
     @Override
     public String toString() {
-        List<String> sections = new LinkedList<String>();
-        if (staticFieldDefs.length > 0)
-            sections.add(implode("\n", staticFieldDefs));
-        if (instanceFieldDefs.length > 0)
-            sections.add(implode("\n", instanceFieldDefs));
-        if (staticMethodDefs.length > 0)
-            sections.add(implode("\n", staticMethodDefs));
-        if (instanceMethodDefs.length > 0)
-            sections.add(implode("\n", instanceMethodDefs));
+        List<String> members = new LinkedList<String>();
+        for (FieldDef f : staticFieldDefs)
+            members.add(indent(f.toString()));
+        for (FieldDef f : instanceFieldDefs)
+            members.add(indent(f.toString()));
+        for (MethodDef m : staticMethodDefs)
+            members.add(indent(m.toString()));
+        for (MethodDef m : instanceMethodDefs)
+            members.add(indent(m.toString()));
 
-        String body = implode("\n\n", sections);
+        String body = implode("\n\n", members);
         if (body.isEmpty())
             body = "{}";
         else

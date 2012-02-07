@@ -2,6 +2,8 @@ package c;
 
 import java.util.*;
 
+import util.StringUtils;
+
 import common.RawType;
 
 public class Project {
@@ -23,5 +25,10 @@ public class Project {
         if (!hasType(desc))
             throw new NoSuchElementException("could not resolve type (missing import?): " + desc);
         return typeDefs.get(desc);
+    }
+
+    @Override
+    public String toString() {
+        return StringUtils.implode("\n\n", typeDefs.values());
     }
 }
