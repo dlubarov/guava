@@ -58,11 +58,13 @@ public class MethodDef {
             sb.append(Arrays.toString(genericInfos));
 
         // Append parameter list.
+        sb.append('(');
         for (int i = 0; i < paramNames.length; ++i) {
             if (i > 0)
                 sb.append(", ");
             sb.append(paramTypes[i]).append(' ').append(paramNames[i]);
         }
+        sb.append(')');
 
         // Append the method body.
         if (body == null)

@@ -39,8 +39,8 @@ public class InstanceMemberInvocation extends Expression {
 
     @Override
     public String toString() {
-        return String.format("%s%s(%s)",
-                target,
+        return String.format("%s.%s%s(%s)",
+                target, memberName,
                 genericArgs.length == 0 ? "" : '[' + implode(", ", genericArgs) + ']',
                 implode(", ", args));
     }

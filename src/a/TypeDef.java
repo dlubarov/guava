@@ -72,6 +72,10 @@ public class TypeDef {
                             supOf.add(constraint.otherType.refine());
                             break;
                     }
+            if (subOf.isEmpty())
+                subOf.add(new b.Type("Top"));
+            if (supOf.isEmpty())
+                supOf.add(new b.Type("Bottom"));
             refinedGenericParams[i] = new b.gen.TypeGenericParam(
                     genericParam.var,
                     genericParam.name,
