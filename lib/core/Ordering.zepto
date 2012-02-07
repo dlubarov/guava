@@ -17,19 +17,23 @@ public abstract type PartialOrdering[-T] {
   public Maybe[Relation] compare(T a, T b);
 }
 
-public type ReversePartialOrdering[-T] extends PartialOrdering[T] {
-  # TODO: implement
-}
-
 public abstract type TotalOrdering[-T] extends PartialOrdering[T] {
   public Some[Relation] compare(T a, T b);
+}
+
+public abstract type NaturallyOrdered[-T] {
+  public TotalOrdering[T] naturalOrdering();
+}
+
+public type ReversePartialOrdering[-T] extends PartialOrdering[T] {
+  # TODO: implement
 }
 
 public type ReverseOrdering[-T] extends TotalOrdering[T] {
   # TODO: implement
 }
 
-public type LexicographicPartialOrdering[-T] extends PartialOrdering[Squence[T]] {
+public type LexicographicPartialOrdering[-T] extends PartialOrdering[Sequence[T]] {
 }
 
 public type LexicographicTotalOrdering[-T] extends TotalOrdering[Sequence[T]] {

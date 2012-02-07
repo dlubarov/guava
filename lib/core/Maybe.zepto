@@ -3,7 +3,8 @@ module core;
 public abstract type Maybe[+T] extends Collection[T] {
   public T get();
 
-  public T getOr(T default);
+  [U > T]
+  public U getOr[U](U default);
 }
 
 public sealed type Some[+T] extends Maybe[T] {
@@ -13,7 +14,8 @@ public sealed type Some[+T] extends Maybe[T] {
     return this.value;
   }
 
-  public T getOr(T default) {
+  [U > T]
+  public U getOr[U](U default) {
     return this.value;
   }
 
@@ -35,14 +37,15 @@ public sealed type None extends Maybe[Bottom] {
     return None.singleton;
   }
 
-  public T get() {
+  public Bottom get() {
   }
 
-  public T getOr(T default) {
+  [U > T]
+  public U getOr[U](U default) {
     return default;
   }
 
-  public Enumerator[T] enumerator() {
+  public Enumerator[Bottom] enumerator() {
     return EmptySource();
   }
 }

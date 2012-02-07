@@ -26,6 +26,8 @@ public class GenericConstraintListParser extends Parser<GenericConstraint[]> {
             if (resConstraint == null)
                 throw new NiftyException("Expecting at least one generic constraint after '['.");
             constraints.add(resConstraint.value);
+            p = resConstraint.rem;
+            p = optWS(s, p);
 
             // Parse any other constraints.
             for (;;) {

@@ -4,7 +4,7 @@ import static util.StringUtils.implode;
 
 import java.util.*;
 
-import common.RawType;
+import common.*;
 
 public class Project {
     public final Map<RawType, TypeDef> typeDefs;
@@ -25,7 +25,11 @@ public class Project {
         c.TypeDef[] refinedTypeDefs = new c.TypeDef[typeDefs.size()];
         int i = 0;
         for (TypeDef typeDef : typeDefs.values())
-            refinedTypeDefs[i++] = typeDef.refine();
+            try {
+                refinedTypeDefs[i++] = typeDef.refine();
+            } catch (RuntimeException e) {
+                throw new NiftyException(e, "B -> C refinement error in type '%s'.", typeDef.desc);
+            }
         return new c.Project(refinedTypeDefs);
     }
 

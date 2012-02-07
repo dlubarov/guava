@@ -127,6 +127,8 @@ public class TypeDef {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
+        for (String q : quals)
+            sb.append(q).append(' ');
         sb.append("type ").append(name).append(" {");
         for (int i = 0; i < memberDefs.length; ++i) {
             sb.append("\n");

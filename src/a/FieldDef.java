@@ -48,6 +48,7 @@ public class FieldDef extends MemberDef {
             result[i] = new b.FieldDef(
                     visibility(),
                     hasQual("static"),
+                    hasQual("readonly"),
                     type.refine(),
                     names[i]);
         return result;

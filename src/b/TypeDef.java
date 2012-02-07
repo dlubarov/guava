@@ -80,17 +80,17 @@ public class TypeDef {
     }
 
     public c.TypeDef refine() {
-        // Generic parameters
+        // Refine generic parameters.
         c.gen.TypeGenericInfo[] refinedGenerics = new c.gen.TypeGenericInfo[genericParams.length];
         for (int i = 0; i < refinedGenerics.length; ++i)
             refinedGenerics[i] = genericParams[i].refine(this, i);
 
-        // Parent types
+        // Refine parent types.
         c.ty.ParameterizedType[] refinedParents = new c.ty.ParameterizedType[parents.length];
         for (int i = 0; i < refinedParents.length; ++i)
             refinedParents[i] = (c.ty.ParameterizedType) parents[i].refine(this, null);
 
-        // Fields
+        // Refine fields.
         c.FieldDef[] refinedStaticFieldDefs = new c.FieldDef[staticFieldDefs.length],
                      refinedInstanceFieldDefs = new c.FieldDef[instanceFieldDefs.length];
         for (int i = 0; i < refinedStaticFieldDefs.length; ++i)
@@ -98,13 +98,13 @@ public class TypeDef {
         for (int i = 0; i < refinedInstanceFieldDefs.length; ++i)
             refinedInstanceFieldDefs[i] = instanceFieldDefs[i].refine(this);
 
-        // Methods
+        // Refine methods.
         c.MethodDef[] refinedStaticMethodDefs = new c.MethodDef[staticMethodDefs.length],
                       refinedInstanceMethodDefs = new c.MethodDef[instanceMethodDefs.length];
         for (int i = 0; i < refinedStaticMethodDefs.length; ++i)
-            refinedStaticMethodDefs[i] = null;
+            refinedStaticMethodDefs[i] = staticMethodDefs[i].refine(this);
         for (int i = 0; i < refinedInstanceMethodDefs.length; ++i)
-            refinedInstanceMethodDefs[i] = null;
+            refinedInstanceMethodDefs[i] = instanceMethodDefs[i].refine(this);
 
         return new c.TypeDef(
                 visibility, isAbstract, isSealed,

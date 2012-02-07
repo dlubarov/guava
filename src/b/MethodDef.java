@@ -64,7 +64,7 @@ public class MethodDef {
                 refinedGenerics,
                 refinedParamTypes,
                 paramNames,
-                body.refine(typeCtx, this));
+                body == null ? null : body.refine(typeCtx, this));
     }
 
     private String qualsString() {

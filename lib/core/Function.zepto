@@ -1,0 +1,33 @@
+module core;
+
+public abstract type Function0[+R] {
+  public R get();
+}
+
+public abstract type Function1[-T1, +R] {
+  public R get(T1 v1);
+}
+
+public abstract type Function2[-T1, -T2, +R] {
+  public R get(T1 v1, T2 v2);
+}
+
+public type ConstantFunction0[+R] extends Function0[R] {
+  private readonly R value;
+
+  public Unit init(R value) {
+    this.value = value;
+  }
+
+  public R get() {
+    return this.value;
+  }
+}
+
+public type IdentityFunction[T] extends Function1[T, T] {
+  public Unit init() {}
+
+  public T get(T v) {
+    return v;
+  }
+}

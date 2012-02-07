@@ -18,7 +18,9 @@ public class LocalDef extends Statement {
     public c.stm.Statement refine(TypeDef typeCtx, MethodDef methodCtx) {
         c.exp.Expression[] refinedInitVals = new c.exp.Expression[initVals.length];
         for (int i = 0; i < refinedInitVals.length; ++i)
-            refinedInitVals[i] = initVals[i].refine(typeCtx, methodCtx);
+            refinedInitVals[i] = initVals[i] == null
+                    ? null
+                    : initVals[i].refine(typeCtx, methodCtx);
         return new c.stm.LocalDef(type.refine(typeCtx, methodCtx), names, refinedInitVals);
     }
 

@@ -39,24 +39,37 @@ public class MethodDef {
 
     private String qualsString() {
         StringBuilder sb = new StringBuilder();
+        sb.append(visibility);
         if (isStatic)
             sb.append("static ");
+        if (isSealed)
+            sb.append("sealed ");
         return sb.toString();
     }
 
     @Override
     public String toString() {
-        return String.format(
-                "%s%s %s%s%s%s",
-                qualsString(),
-                returnType,
-                name,
-                genericInfos.length == 0
-                        ? ""
-                        : Arrays.toString(genericInfos),
-                paramTypes,
-                body == null
-                        ? ";"
-                        : " " + body);
+        StringBuilder sb = new StringBuilder();
+        sb.append(qualsString());
+        sb.append(returnType).append(' ').append(name);
+
+        // Append generic infos.
+        if (genericInfos.length > 0)
+            sb.append(Arrays.toString(genericInfos));
+
+        // Append parameter list.
+        for (int i = 0; i < paramNames.length; ++i) {
+            if (i > 0)
+                sb.append(", ");
+            sb.append(paramTypes[i]).append(' ').append(paramNames[i]);
+        }
+
+        // Append the method body.
+        if (body == null)
+            sb.append(';');
+        else
+            sb.append(' ').append(body);
+
+        return sb.toString();
     }
 }
