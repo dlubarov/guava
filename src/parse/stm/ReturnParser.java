@@ -23,12 +23,14 @@ public class ReturnParser extends Parser<Statement> {
 
         // Parse the expression.
         Success<Expression> resExp = ExpressionParser.singleton.parse(s, p);
+        if (resExp == null)
+            throw new NiftyException("Missing return expression.");
         p = resExp.rem;
         p = optWS(s, p);
 
         // Parse the ';'.
         if (s.charAt(p++) != ';')
-            throw new NiftyException("Missing ';' for return statement.");
+            throw new NiftyException("Missing ';' at end of return statement.");
 
         return new Success<Statement>(new Return(resExp.value), p);
     }

@@ -16,27 +16,44 @@ public class ArgumentListParser extends Parser<Expression[]> {
     @Override
     public Success<Expression[]> parse(String s, int p) {
         // Parse the '('.
-        if (s.charAt(p) != '(')
+        if (s.charAt(p++) != '(')
             return null;
-        ++p;
         p = optWS(s, p);
 
-        // Parse the types.
+        // Handle empty argument lists.
+        if (s.charAt(p) == ')')
+            return new Success<Expression[]>(Expression.NONE, p + 1);
+
+        // Parse the first argument.
         List<Expression> args = new ArrayList<Expression>();
+        Success<Expression> resArg = ExpressionParser.singleton.parse(s, p);
+        if (resArg == null)
+            return null;
+        args.add(resArg.value);
+        p = resArg.rem;
+        p = optWS(s, p);
+
+        // Parse any remaining arguments.
         for (;;) {
-            Success<Expression> resArg = ExpressionParser.singleton.parse(s, p);
-            if (resArg == null)
+            // Parse the comma.
+            if (s.charAt(p) != ',')
                 break;
+            p = optWS(s, p + 1);
+
+            // Parse the next argument.
+            resArg = ExpressionParser.singleton.parse(s, p);
+            if (resArg == null)
+                throw new NiftyException("Expecting another argument expression after ','.");
             args.add(resArg.value);
             p = resArg.rem;
             p = optWS(s, p);
         }
 
         // Parse the ')'.
-        if (s.charAt(p) != ')')
+        if (s.charAt(p++) != ')')
             throw new NiftyException("Expecting ')' after arguments.");
-        ++p;
 
-        return new Success<Expression[]>(args.toArray(new Expression[args.size()]), p);
+        Expression[] result = args.toArray(new Expression[args.size()]);
+        return new Success<Expression[]>(result, p);
     }
 }

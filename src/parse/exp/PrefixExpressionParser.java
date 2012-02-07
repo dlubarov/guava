@@ -22,7 +22,7 @@ public class PrefixExpressionParser extends Parser<Expression> {
                 break;
             }
         if (opUsed == null)
-            return null;
+            return ChainParser.singleton.parse(s, p);
         p += opUsed.length();
         p = optWS(s, p);
 

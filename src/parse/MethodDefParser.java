@@ -56,7 +56,7 @@ public class MethodDefParser extends Parser<MemberDef> {
         p = optWS(s, p);
 
         // Parse the method name.
-        Success<String> resName = IdentifierParser.singleton.parse(s, p);
+        Success<String> resName = IdentifierOrOpParser.singleton.parse(s, p);
         if (resName == null)
             return null;
         p = resName.rem;
@@ -66,18 +66,34 @@ public class MethodDefParser extends Parser<MemberDef> {
         List<String> genericParams = new ArrayList<String>();
         if (s.charAt(p) == '[') {
             p = optWS(s, p + 1);
+
+            // Parse the first generic parameter.
+            Success<String> resGenParam = IdentifierParser.singleton.parse(s, p);
+            if (resGenParam == null)
+                throw new NiftyException("Expecting at least one generic parameter name after '['.");
+            genericParams.add(resGenParam.value);
+            p = resGenParam.rem;
+            p = optWS(s, p);
+
+            // Parse any other generic parameter names.
             for (;;) {
-                Success<String> resGenParam = IdentifierParser.singleton.parse(s, p);
-                if (resGenParam == null)
+                // Parse the comma.
+                if (s.charAt(p) != ',')
                     break;
+                p = optWS(s, p);
+
+                // Parse the next generic parameter name.
+                resGenParam = IdentifierParser.singleton.parse(s, p);
+                if (resGenParam == null)
+                    throw new NiftyException("Expecting another generic parameter name after ','.");
                 genericParams.add(resGenParam.value);
                 p = resGenParam.rem;
                 p = optWS(s, p);
             }
+
+            // Parse the ']'.
             if (s.charAt(p++) != ']')
                 throw new NiftyException("Unclosed generic param list; expecting ']'.");
-            if (genericParams.isEmpty())
-                throw new NiftyException("Found empty list of generic params.");
             p = optWS(s, p);
         }
 
@@ -87,19 +103,48 @@ public class MethodDefParser extends Parser<MemberDef> {
         if (s.charAt(p++) != '(')
             return null;
         p = optWS(s, p);
-        for (;;) {
+
+        if (s.charAt(p) != ')') {
+            // Parse the first parameter.
             Success<Type> resParamType = TypeParser.singleton.parse(s, p);
             if (resParamType == null)
-                break;
+                return null;
             p = resParamType.rem;
             p = optWS(s, p);
+
             Success<String> resParamName = IdentifierParser.singleton.parse(s, p);
             if (resParamName == null)
-                throw new NiftyException("Found parameter type with no corresponding name.");
+                throw new NiftyException("Found a parameter type with no corresponding name.");
             p = resParamName.rem;
             p = optWS(s, p);
+
             paramTypes.add(resParamType.value);
             paramNames.add(resParamName.value);
+
+            // Parse any other parameters.
+            for (;;) {
+                // Parse the comma.
+                if (s.charAt(p) != ',')
+                    break;
+                p = optWS(s, p + 1);
+    
+                // Parse the parameter type.
+                resParamType = TypeParser.singleton.parse(s, p);
+                if (resParamType == null)
+                    throw new NiftyException("Expecting another parameter type after ','.");
+                p = resParamType.rem;
+                p = optWS(s, p);
+
+                // Parse the parameter name.
+                resParamName = IdentifierParser.singleton.parse(s, p);
+                if (resParamName == null)
+                    throw new NiftyException("Found a parameter type with no corresponding name.");
+                p = resParamName.rem;
+                p = optWS(s, p);
+
+                paramTypes.add(resParamType.value);
+                paramNames.add(resParamName.value);
+            }
         }
         if (s.charAt(p++) != ')')
             throw new NiftyException("Expecting ')' to close method parameter list.");
@@ -112,7 +157,12 @@ public class MethodDefParser extends Parser<MemberDef> {
             body = null;
             ++p;
         } else {
-            Success<Block> resBody = BlockParser.singleton.parse(s, p);
+            Success<Block> resBody;
+            try {
+                resBody = BlockParser.singleton.parse(s, p);
+            } catch (RuntimeException e) {
+                throw new NiftyException(e, "Parse error in method %s.", resName.value);
+            }
             if (resBody == null)
                 throw new NiftyException("Expecting method body or ';'.");
             body = resBody.value;

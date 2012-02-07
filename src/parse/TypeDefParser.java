@@ -42,18 +42,37 @@ public class TypeDefParser extends Parser<TypeDef> {
         List<TypeGenericParam> genericParams = new ArrayList<TypeGenericParam>();
         if (s.charAt(p) == '[') {
             p = optWS(s, p + 1);
+
+            // Parse the first generic parameter name.
+            Success<TypeGenericParam> resParam = TypeGenericParamParser.singleton.parse(s, p);
+            if (resParam == null) {
+                if (s.charAt(p) == ']')
+                    throw new NiftyException("Empty generic parameter lists are not accepted.");
+                throw new NiftyException("Expecting a generic parameter name after '['.");
+            }
+            genericParams.add(resParam.value);
+            p = resParam.rem;
+            p = optWS(s, p);
+
+            // Parse any other generic parameter names.
             for (;;) {
-                Success<TypeGenericParam> resParam = TypeGenericParamParser.singleton.parse(s, p);
-                if (resParam == null)
+                // Parse the comma.
+                if (s.charAt(p) != ',')
                     break;
+                p = optWS(s, p + 1);
+
+                // Parse the next generic parameter name.
+                resParam = TypeGenericParamParser.singleton.parse(s, p);
+                if (resParam == null)
+                    throw new NiftyException("Expecting another generic parameter name after ','.");
                 genericParams.add(resParam.value);
                 p = resParam.rem;
                 p = optWS(s, p);
             }
+
+            // Parse the ']'.
             if (s.charAt(p++) != ']')
                 throw new NiftyException("Missing closing ']' after generic parameter list.");
-            if (genericParams.isEmpty())
-                throw new NiftyException("No generic parameters found between the square brackets.");
             p = optWS(s, p);
         }
 
@@ -63,21 +82,35 @@ public class TypeDefParser extends Parser<TypeDef> {
         if (resExtends != null && resExtends.value.equals("extends")) {
             p = resExtends.rem;
             p = optWS(s, p);
+
+            // Parse first parent (required).
+            Success<Type> resParent = TypeParser.singleton.parse(s, p);
+            if (resParent == null)
+                throw new NiftyException("Expecting parent type after 'extendsd'.");
+            parents.add(resParent.value);
+            p = resParent.rem;
+            p = optWS(s, p);
+
             for (;;) {
-                Success<Type> resParent = TypeParser.singleton.parse(s, p);
-                if (resParent == null)
+                // Parse comma.
+                if (s.charAt(p) != ',')
                     break;
+                p = optWS(s, p + 1);
+
+                // Parse next parent.
+                resParent = TypeParser.singleton.parse(s, p);
+                if (resParent == null)
+                    throw new NiftyException("Expecting another parent type after ','.");
                 parents.add(resParent.value);
                 p = resParent.rem;
                 p = optWS(s, p);
             }
-            if (parents.isEmpty())
-                throw new NiftyException("No types found after 'extends'.");
         }
 
         // Parse opening '{'.
         if (s.charAt(p++) != '{')
             throw new NiftyException("Expecting opening '{' after type name.");
+        p = optWS(s, p);
 
         // Parse member definitions.
         List<MemberDef> memberDefs = new ArrayList<MemberDef>();
@@ -92,7 +125,7 @@ public class TypeDefParser extends Parser<TypeDef> {
 
         // Parse closing '}'.
         if (s.charAt(p++) != '}')
-            throw new NiftyException("Missing closing '}' for type definition.");
+            throw new NiftyException("Missing closing '}' for %s's type definition.", resName.value);
 
         // Format and return the results. (Yuck...)
         String[] qualsArr = quals.toArray(new String[quals.size()]);

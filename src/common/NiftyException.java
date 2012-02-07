@@ -6,4 +6,8 @@ public class NiftyException extends RuntimeException {
     public NiftyException(String format, Object... args) {
         super(String.format(format, args));
     }
+
+    public NiftyException(Throwable cause, String format, Object... args) {
+        super(String.format(format, args), cause);
+    }
 }

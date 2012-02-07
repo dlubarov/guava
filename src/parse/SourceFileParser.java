@@ -30,6 +30,11 @@ public class SourceFileParser extends Parser<SourceFile> {
         p = resModule.rem;
         p = optWS(s, p);
 
+        // Parse the ';'.
+        if (s.charAt(p++) != ';')
+            throw new NiftyException("Expecting ';' after module name.");
+        p = optWS(s, p);
+
         // Parse the imports.
         List<Import> imports = new ArrayList<Import>();
         while (p < s.length()) {

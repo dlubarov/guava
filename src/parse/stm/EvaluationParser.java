@@ -13,6 +13,8 @@ public class EvaluationParser extends Parser<Statement> {
     public Success<Statement> parse(String s, int p) {
         // Parse the expression.
         Success<Expression> resExp = ExpressionParser.singleton.parse(s, p);
+        if (resExp == null)
+            return null;
         p = resExp.rem;
         p = optWS(s, p);
 

@@ -1,7 +1,5 @@
 package parse.exp;
 
-import static util.StringUtils.containsAt;
-
 import common.NiftyException;
 
 import a.Type;
@@ -16,11 +14,10 @@ public class InstantiationParser extends Parser<Expression> {
     @Override
     public Success<Expression> parse(String s, int p) {
         // Parse "new".
-        if (!containsAt(s, "new", p))
+        Success<String> resNew = IdentifierParser.singleton.parse(s, p);
+        if (resNew == null || !resNew.value.equals("new"))
             return null;
-        p += "new".length();
-        if (optWS(s, p) == p)
-            return null; // no space following "new"
+        p = resNew.rem;
         p = optWS(s, p);
 
         // Parse the type being instantiated.

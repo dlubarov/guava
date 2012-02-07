@@ -19,7 +19,7 @@ public class OperatorParser extends Parser<String> {
                 "+=", "-=",
                 "*=", "/=", "%=",
 
-                "~",
+                "~", "!",
                 "|", "^", "&",
                 "==", "!=",
                 "<=", ">=", "<", ">",

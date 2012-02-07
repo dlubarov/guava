@@ -9,11 +9,11 @@ import a.exp.Expression;
 // Parses an OPTIONAL generic argument list followed by a REQUIRED argument list,
 // such as "(2, 'a', false)" or "[String, Int](10)".
 
-public class GenericsAndArgumentsParser extends Parser<GenericsAndArgumentsParser.Result> {
-    public static final Parser<Result> singleton = new GenericsAndArgumentsParser().memo();
+public class GenericsAndArgumentsParser extends Parser<GenericsAndArgumentsParser.GenericsAndArgs> {
+    public static final Parser<GenericsAndArgs> singleton = new GenericsAndArgumentsParser().memo();
 
     @Override
-    public Success<Result> parse(String s, int p) {
+    public Success<GenericsAndArgs> parse(String s, int p) {
         // Parse generic arguments. If none are given, use an empty array.
         Type[] genericArgs;
         Success<Type[]> resGenArgs = GenericArgumentListParser.singleton.parse(s, p);
@@ -33,15 +33,16 @@ public class GenericsAndArgumentsParser extends Parser<GenericsAndArgumentsParse
             throw new NiftyException("Argument list expected.");
         }
         p = resArgs.rem;
-        
-        return new Success<Result>(new Result(genericArgs, resArgs.value), p);
+
+        GenericsAndArgs result = new GenericsAndArgs(genericArgs, resArgs.value);
+        return new Success<GenericsAndArgs>(result, p);
     }
 
-    public static class Result {
+    public static class GenericsAndArgs {
         public final Type[] genericArgs;
         public final Expression[] arguments;
 
-        Result(Type[] genericArgs, Expression[] arguments) {
+        GenericsAndArgs(Type[] genericArgs, Expression[] arguments) {
             this.genericArgs = genericArgs;
             this.arguments = arguments;
         }

@@ -19,6 +19,8 @@ public class LocalDefParser extends Parser<Statement> {
     public Success<Statement> parse(String s, int p) {
         // Parse the type.
         Success<Type> resType = TypeParser.singleton.parse(s, p);
+        if (resType == null)
+            return null;
         p = resType.rem;
         p = optWS(s, p);
 
@@ -28,7 +30,7 @@ public class LocalDefParser extends Parser<Statement> {
         for (;;) {
             Success<String> resName = IdentifierParser.singleton.parse(s, p);
             if (resName == null)
-                throw new NiftyException("Expecting local variable identifier.");
+                return null;
             names.add(resName.value);
             p = resName.rem;
             p = optWS(s, p);

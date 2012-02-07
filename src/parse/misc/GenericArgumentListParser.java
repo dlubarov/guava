@@ -22,26 +22,40 @@ public class GenericArgumentListParser extends Parser<Type[]> {
         ++p;
         p = optWS(s, p);
 
-        // Parse the types.
+        // Parse the first type.
         List<Type> genericArgs = new ArrayList<Type>();
+        Success<Type> resArg = TypeParser.singleton.parse(s, p);
+        if (resArg == null) {
+            if (s.charAt(p) == ']')
+                throw new NiftyException("Empty parameter lists aren't accepted, just don't specify a list.");
+            throw new NiftyException("Expecting a type after '[' in generic argument list.");
+        }
+        genericArgs.add(resArg.value);
+        p = resArg.rem;
+        p = optWS(s, p);
+
+        // Parse any other types.
         for (;;) {
-            Success<Type> resArg = TypeParser.singleton.parse(s, p);
-            if (resArg == null)
+            // Parse the comma.
+            if (s.charAt(p) != ',')
                 break;
+            p = optWS(s, p + 1);
+
+            // Parse the next type.
+            resArg = TypeParser.singleton.parse(s, p);
+            if (resArg == null)
+                throw new NiftyException("Expecting another type after ',' in generic argument list.");
             genericArgs.add(resArg.value);
             p = resArg.rem;
             p = optWS(s, p);
         }
-
-        // Don't permit "[]".
-        if (genericArgs.isEmpty())
-            throw new NiftyException("Expecting generic arguments after '['.");
 
         // Parse the ']'.
         if (s.charAt(p) != ']')
             throw new NiftyException("Expecting ']' after generic arguments.");
         ++p;
 
-        return new Success<Type[]>(genericArgs.toArray(new Type[genericArgs.size()]), p);
+        Type[] result = genericArgs.toArray(new Type[genericArgs.size()]);
+        return new Success<Type[]>(result, p);
     }
 }

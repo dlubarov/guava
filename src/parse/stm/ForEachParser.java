@@ -41,6 +41,13 @@ public class ForEachParser extends Parser<Statement> {
         p = resVar.rem;
         p = optWS(s, p);
 
+        // Parse the "in".
+        Success<String> resIn = IdentifierParser.singleton.parse(s, p);
+        if (resIn == null || !resIn.value.equals("in"))
+            throw new NiftyException("Expecting 'in' after variable name in foreach header.");
+        p = resIn.rem;
+        p = optWS(s, p);
+
         // Parse the enumerable expression.
         Success<Expression> resEnum = ExpressionParser.singleton.parse(s, p);
         if (resEnum == null)

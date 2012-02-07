@@ -2,50 +2,34 @@ package parse.exp;
 
 import a.exp.*;
 import parse.*;
-import parse.misc.IdentifierParser;
 
+@SuppressWarnings("unchecked")
 public class AtomParser extends Parser<Expression> {
     public static final Parser<Expression> singleton = new AtomParser().memo();
     private AtomParser() {}
 
+    private static final Parser<Expression>[] atomParsers;
+
+    static {
+        atomParsers = new Parser[] {
+                ParentheticalExpressionParser.singleton,
+                LiteralIntParser.singleton,
+                LiteralBoolParser.singleton,
+                LiteralCharParser.singleton,
+                LiteralStringParser.singleton,
+                InstantiationParser.singleton,
+                VarParser.singleton
+        };
+    }
+
     @Override
     public Success<Expression> parse(String s, int p) {
-        Success<Expression> result;
-
-        // Try to parse an parenthetical expression.
-        result = ParentheticalExpressionParser.singleton.parse(s, p);
-        if (result != null)
-            return result;
-
-        // Try to parse a literal Int.
-        result = LiteralIntParser.singleton.parse(s, p);
-        if (result != null)
-            return result;
-
-        // Try to parse a literal Bool.
-        result = LiteralBoolParser.singleton.parse(s, p);
-        if (result != null)
-            return result;
-
-        // Try to parse a literal Char.
-        result = LiteralCharParser.singleton.parse(s, p);
-        if (result != null)
-            return result;
-
-        // Try to parse a literal String.
-        result = LiteralStringParser.singleton.parse(s, p);
-        if (result != null)
-            return result;
-
-        // Try to parse an instantiation.
-        result = InstantiationParser.singleton.parse(s, p);
-        if (result != null)
-            return result;
-
-        // Try to parse a local variable.
-        Success<String> resIdent = IdentifierParser.singleton.parse(s, p);
-        if (resIdent != null)
-            return new Success<Expression>(new Variable(resIdent.value), resIdent.rem);
+        // Delegate to the various atomic expression parsers.
+        for (Parser<Expression> atomParser : atomParsers) {
+            Success<Expression> result = atomParser.parse(s, p);
+            if (result != null)
+                return result;
+        }
 
         // We tried everything. There is no atomic expression here.
         return null;
