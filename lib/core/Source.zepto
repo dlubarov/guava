@@ -42,7 +42,7 @@ public sealed type RandomAccessEnumerator[+T] extends Source[T] {
   private readonly Sequence[T] seq;
   private Int index;
 
-  public Unit init(Sequence[t] seq) {
+  public Unit init(Sequence[T] seq) {
     this.seq = seq;
   }
 

@@ -19,7 +19,7 @@ public sealed type Some[+T] extends Maybe[T] {
     return this.value;
   }
 
-  public Enumerator[T] enumerator() {
+  public Source[T] enumerator() {
     return new SingletonSource[T](this.value);
   }
 }
@@ -40,12 +40,12 @@ public sealed type None extends Maybe[Bottom] {
   public Bottom get() {
   }
 
-  [U > T]
+  [U > Bottom]
   public U getOr[U](U default) {
     return default;
   }
 
-  public Enumerator[Bottom] enumerator() {
+  public Source[Bottom] enumerator() {
     return EmptySource();
   }
 }

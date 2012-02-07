@@ -1,4 +1,4 @@
 module re;
 
-type Star[T] extends RegularLanguage[T] {
+public type Star[T] extends RegularLanguage[T] {
 }

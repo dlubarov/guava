@@ -1,7 +1,9 @@
 module core;
 
-type Top {
-  Bool ==(Top o) {}
-  Int hashCode() {}
-  String toString() {}
+public type Top {
+  public Bool ==(Top o) {}
+
+  public Int hashCode() {}
+
+  public String toString() {}
 }

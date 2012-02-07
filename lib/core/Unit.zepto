@@ -1,6 +1,6 @@
 module core;
 
-type Unit {
+public sealed type Unit {
   private static readonly Unit singleton;
 
   private Unit init() {}

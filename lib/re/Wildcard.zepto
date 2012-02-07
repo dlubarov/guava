@@ -1,6 +1,6 @@
 module re;
 
-type Wildcard[T] extends RegularLanguage[T] {
+public type Wildcard[T] extends RegularLanguage[T] {
   public Bool contains(Sequence[T] str) {
     return str.size() == 1;
   }

@@ -1,7 +1,7 @@
 module gui;
 
-abstract type Font {
+public abstract type Font {
 }
 
-type TrueTypeFont extends Font {
+public type TrueTypeFont extends Font {
 }

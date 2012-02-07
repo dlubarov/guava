@@ -22,7 +22,7 @@ public type Sequence[+T] extends Collection[T] {
   public Bool endsWith(Sequence[T] s) {
   }
 
-  public Boolean equals(Top o) {
+  public Bool equals(Top o) {
   }
 
   public Int hashCode() {

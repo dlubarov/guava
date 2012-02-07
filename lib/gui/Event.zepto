@@ -1,41 +1,47 @@
 module gui;
 
-abstract type Event {
+public abstract type Event {}
+
+public abstract type KeyEvent extends Event {
+  public readonly Int key;
 }
 
-abstract type KeyEvent extends Event {
-  readonly Int key;
+public type KeyDownEvent extends KeyEvent {}
+
+public type KeyUpEvent extends KeyEvent {}
+
+public abstract type MouseEvent extends Event {
+  public readonly Point2D[Int] screenLocation;
 }
 
-type KeyDownEvent extends KeyEvent {
+public type MouseDownEvent extends MouseEvent {}
+
+public type MouseUpEvent extends MouseEvent {}
+
+public abstract type KeyEventHandler {
+  public Bool keyDown(KeyDownEvent e);
+  public Bool keyUp(KeyUpEvent e);
 }
 
-type KeyUpEvent extends KeyEvent {
+public abstract type MouseEventHandler {
+  public Bool mouseDown(MouseDownEvent e);
+  public Bool mouseUp(MouseUpEvent e);
 }
 
-abstract type MouseEvent extends Event {
-  readonly Point2D[Int] screenLocation;
-}
-
-type MouseDownEvent extends MouseEvent {
-}
-
-type MouseUpEvent extends MouseEvent {
-}
-
-abstract type KeyEventHandler {
-  Bool keyDown(KeyDownEvent e);
-  Bool keyUp(KeyDownEvent e);
-}
-
-abstract type MouseEventHandler {
-  Bool mouseDown(MouseDownEvent e);
-  Bool mouseUp(MouseDownEvent e);
-}
-
-type KeyEventAdapter {
-  Bool keyDown(KeyDownEvent e) {
+public type KeyEventAdapter {
+  public Bool keyDown(KeyDownEvent e) {
     return false;
   }
-  # TODO: finish
+  public Bool keyUp(KeyDownEvent e) {
+    return false;
+  }
+}
+
+public type MouseEventAdapter {
+  public Bool mouseDown(MouseDownEvent e) {
+    return false;
+  }
+  public Bool mouseUp(MouseUpEvent e) {
+    return false;
+  }
 }

@@ -1,4 +1,4 @@
 module core;
 
-type DeflatedString extends String {
+public type DeflatedString extends Sequence[Char] {
 }

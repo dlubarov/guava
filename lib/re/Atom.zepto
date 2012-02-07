@@ -1,4 +1,4 @@
 module re;
 
-type Atom[T] extends RegularLanguage[T] {
+public type Atom[T] extends RegularLanguage[T] {
 }

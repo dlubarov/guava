@@ -1,10 +1,10 @@
 module core;
 
-type DoublyLinkedList[+T] extends Sequence[T] {
+public abstract type DoublyLinkedList[+T] extends Sequence[T] {
 }
 
-type MutableDoublyLinkedList[T] extends Sequence[T] {
+public type MutableDoublyLinkedList[T] extends Sequence[T] {
 }
 
-type ImmutableDoublyLinkedList[+T] extends Sequence[T] {
+public type ImmutableDoublyLinkedList[+T] extends Sequence[T] {
 }

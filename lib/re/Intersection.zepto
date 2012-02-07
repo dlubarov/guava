@@ -1,4 +1,4 @@
 module re;
 
-type Intersection[T] extends RegularLanguage[T] {
+public type Intersection[T] extends RegularLanguage[T] {
 }
