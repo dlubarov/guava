@@ -27,7 +27,7 @@ public class NativeConsole extends NativeObject {
                             public void invoke(BaseObject[] stack, int bp, ConcreteType[] genericArgs) {
                                 BaseObject str = stack[bp + 1];
                                 System.out.print(VMUtils.extractString(str));
-                                stack[bp + 1] = VMUtils.getVoid();
+                                stack[bp + 1] = VMUtils.getUnit();
                             }
                         },
                         new NativeMethodDef(new RawMethod(true, RawType.coreConsole, "errString", 0, TypeDesc.coreStringOnly)) {
@@ -35,7 +35,7 @@ public class NativeConsole extends NativeObject {
                             public void invoke(BaseObject[] stack, int bp, ConcreteType[] genericArgs) {
                                 BaseObject str = stack[bp + 1];
                                 System.err.print(VMUtils.extractString(str));
-                                stack[bp + 1] = VMUtils.getVoid();
+                                stack[bp + 1] = VMUtils.getUnit();
                             }
                         },
                 },

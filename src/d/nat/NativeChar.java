@@ -39,7 +39,7 @@ public class NativeChar extends NativeObject {
                                 NativeChar c = (NativeChar) stack[bp + 1];
                                 int ord = ((NativeInt) stack[bp + 2]).value;
                                 c.value = (char) ord;
-                                stack[bp + 1] = VMUtils.getVoid();
+                                stack[bp + 1] = VMUtils.getUnit();
                             }
                         },
 

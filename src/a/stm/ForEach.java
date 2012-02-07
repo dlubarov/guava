@@ -29,8 +29,8 @@ public class ForEach extends Statement {
          * is sugar for (roughly)
          *     {
          *         Source[ElemType] iter = iterable.enumerator();
-         *         ElemType elemName = iter.take();
-         *         while (elemName.nonEmpty()) {
+         *         Maybe[ElemType] elemName = iter.take();
+         *         while (!elemName.isEmpty()) {
          *             body
          *             elemName = iter.take();
          *         }
@@ -44,7 +44,7 @@ public class ForEach extends Statement {
                 new LocalDef(
                         new Type("Source", new Type[] {elemType}), iterId,
                         new Invocation(
-                                new MemberAccess(iterable, "iterator"),
+                                new MemberAccess(iterable, "enumerator"),
                                 Type.NONE, Expression.NONE
                         )
                 ),
@@ -56,9 +56,12 @@ public class ForEach extends Statement {
                         )
                 ),
                 new While(
-                        new Invocation(
-                                new MemberAccess(elemVar, "nonEmpty"),
-                                Type.NONE, Expression.NONE
+                        new PrefixOperation(
+                                "!",
+                                new Invocation(
+                                        new MemberAccess(elemVar, "isEmpty"),
+                                        Type.NONE, Expression.NONE
+                                )
                         ),
                         new Block(
                                 body,

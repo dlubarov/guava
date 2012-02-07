@@ -4,7 +4,7 @@ module core;
 public abstract type Set[+T] extends Sequence[T] {
   public static readonly Set[Bottom] empty;
 
-  public static Void init(Collection[T] source) {
+  public static Unit init(Collection[T] source) {
   }
 
   public Set[T] &(Set[T] that) {
@@ -31,8 +31,8 @@ public abstract type Set[+T] extends Sequence[T] {
 }
 
 public abstract type MutableSet[T] extends Set[T] {
-  public Void +=(T elem);
-  public Void -=(T elem);
+  public Unit +=(T elem);
+  public Unit -=(T elem);
 }
 
 public abstract type ImmutableSet[+T] extends Set[T] {

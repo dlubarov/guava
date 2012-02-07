@@ -38,7 +38,7 @@ public class NativeMutableArray extends NativeObject {
                             public void invoke(BaseObject[] stack, int bp, ConcreteType[] genericArgs) {
                                 NativeMutableArray arr = (NativeMutableArray) stack[bp + 1];
                                 arr.contents = new BaseObject[0];
-                                stack[bp + 1] = VMUtils.getVoid();
+                                stack[bp + 1] = VMUtils.getUnit();
                             }
                         },
                         new NativeMethodDef(new RawMethod(false, RawType.coreMutableArray, "init", 0,
@@ -48,7 +48,7 @@ public class NativeMutableArray extends NativeObject {
                             public void invoke(BaseObject[] stack, int bp, ConcreteType[] genericArgs) {
                                 NativeMutableArray arr = (NativeMutableArray) stack[bp + 1];
                                 arr.contents = new BaseObject[0];
-                                stack[bp + 1] = VMUtils.getVoid();
+                                stack[bp + 1] = VMUtils.getUnit();
                             }
                         },
 

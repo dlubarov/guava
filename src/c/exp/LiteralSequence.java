@@ -19,7 +19,7 @@ public class LiteralSequence extends Expression {
         // TODO: give type a getConcreteSubtypes method, check if any of them have types
         // Sequence[T] or Collection[T] and each element has type T. This will handle code like
         //   [M > Sequence[Int]]
-        //   Void foo[M]() {
+        //   Unit foo[M]() {
         //     M s = {1, 2, 3};
         //   }
         search:

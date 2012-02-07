@@ -8,6 +8,10 @@ public type Collection[+T] extends Enumerable[T] {
     return n;
   }
 
+  public Bool isEmpty() {
+    return this.size() == 0;
+  }
+
   public Int count(T elem) {
     Int n = 0;
     foreach (T x in this)

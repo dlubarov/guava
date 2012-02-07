@@ -20,7 +20,7 @@ public type Tuple2[+A, +B] extends Tuple {
   public readonly A first;
   public readonly B second;
 
-  public Void init(A first, B second) {
+  public Unit init(A first, B second) {
     this.first = first;
     this.second = second;
   }

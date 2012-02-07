@@ -6,8 +6,8 @@ abstract type Queue[+T] extends Sequence[T] {
 }
 
 abstract type MutableQueue[T] extends Queue[T] {
-  Void pushBack(T elem);
-  Void popFront(T elem);
+  Unit pushBack(T elem);
+  Unit popFront(T elem);
 }
 
 abstract type ImmutableQueue[T] extends Queue[T] {

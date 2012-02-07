@@ -1,8 +1,8 @@
 module core;
 
 public sealed type Double extends NaturallyOrdered[Double] {
-  public Void init(Int n) {}
-  public Void init(String s) {}
+  public Unit init(Int n) {}
+  public Unit init(String s) {}
 
   public Double +() {}
   public Double -() {}

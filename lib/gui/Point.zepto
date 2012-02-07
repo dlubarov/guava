@@ -1,0 +1,26 @@
+module gui;
+
+public abstract type Point2D[T] {
+  public T getX();
+  public T getY();
+
+  public Bool ==(Top o) {
+  }
+
+  public Int hashCode() {
+    return {this.getX().hashCode(), this.getY().hashCode()}.hashCode();
+  }
+
+  public String toString() {
+    return "(%s, %s)".format(this.getX(), this.getY());
+  }
+}
+
+public type IntPoint2D extends Point2D[Int] {
+  public readonly Int x, y;
+
+  public Unit init(Int x, Int y) {
+    this.x = x;
+    this.y = y;
+  }
+}

@@ -6,7 +6,7 @@ public class RawType {
     public static final RawType
         coreTop = new RawType("core", "Top"),
         coreBottom = new RawType("core", "Bottom"),
-        coreVoid = new RawType("core", "Void"),
+        coreUnit = new RawType("core", "Unit"),
         coreInt = new RawType("core", "Int"),
         coreChar = new RawType("core", "Char"),
         coreBool = new RawType("core", "Bool"),

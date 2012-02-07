@@ -7,8 +7,8 @@ import d.ty.ConcreteType;
 public final class VMUtils {
     private VMUtils() {}
 
-    public static BaseObject getVoid() {
-        return God.resolveType(RawType.coreVoid).staticFields[0];
+    public static BaseObject getUnit() {
+        return God.resolveType(RawType.coreUnit).staticFields[0];
     }
 
     public static BaseObject makeString(String javaString) {

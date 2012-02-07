@@ -1,9 +1,9 @@
 module core;
 
 public sealed type Int extends NaturallyOrdered[Int], Sequence[Bool] {
-  public Void init(String s, Int radix) {}
+  public Unit init(String s, Int radix) {}
 
-  public Void init(String s) {
+  public Unit init(String s) {
     this.init(s, 10);
   }
 

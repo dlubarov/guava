@@ -1,49 +1,49 @@
 module core;
 
-type MutableArray[T] extends Sequence[T] {
-  Void init() {
+pubilc type MutableArray[T] extends Sequence[T] {
+  public Unit init() {
     # native code
   }
 
-  Void init(Collection[T] source) {
+  public Unit init(Collection[T] source) {
     # native code
   }
 
-  T get(Int i) {
+  public T get(Int i) {
     # native code
   }
 
-  T set(Int i, T val) {
+  public T set(Int i, T val) {
     # native code
   }
 
-  Int size() {
+  public Int size() {
     # native code
   }
 
-  Source[T] enumerator() {
+  public Source[T] enumerator() {
     return new RandomAccessEnumerator[T](this);
   }
 }
 
-type ImmutableArray[+T] extends Sequence[T] {
-  static ImmutableArray[Bottom] empty;
+public type ImmutableArray[+T] extends Sequence[T] {
+  public static readonly ImmutableArray[Bottom] empty;
 
-  static Void init() {
+  private static Unit init() {
     ImmutableArray.empty = new ImmutableArray[Bottom]();
   }
 
-  MutableArray backingArray;
+  private readonly MutableArray backingArray;
 
-  Void init(Collection[T] source) {
+  public Unit init(Collection[T] source) {
     this.backingArray = new MutableArray[T](source);
   }
 
-  Void init() {
+  public Unit init() {
     this.init(new MutableArray[T]());
   }
 
-  Source[T] enumerator() {
+  public Source[T] enumerator() {
     return new RandomAccessEnumerator[T](this);
   }
 }

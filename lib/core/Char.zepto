@@ -1,7 +1,7 @@
 module core;
 
 public sealed type Char extends NaturallyOrdered[Char] {
-  public Void init(Int ord) {
+  public Unit init(Int ord) {
   }
 
   public Char toUpperCase() {

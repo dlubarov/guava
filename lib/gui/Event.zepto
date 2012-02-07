@@ -14,7 +14,7 @@ type KeyUpEvent extends KeyEvent {
 }
 
 abstract type MouseEvent extends Event {
-  readonly Point[Int] screenLocation;
+  readonly Point2D[Int] screenLocation;
 }
 
 type MouseDownEvent extends MouseEvent {

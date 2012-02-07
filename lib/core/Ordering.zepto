@@ -4,13 +4,13 @@ module core;
 public type Relation {
   public static readonly Relation LT, GT, EQ;
 
-  private static Void init() {
+  private static Unit init() {
     LT = new Relation();
     GT = new Relation();
     EQ = new Relation();
   }
 
-  private Void init() {}
+  private Unit init() {}
 }
 
 public abstract type PartialOrdering[-T] {

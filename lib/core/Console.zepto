@@ -1,19 +1,19 @@
 module core;
 
-type Console {
-  private static Void outString(String s) {
+public sealed abstract type Console {
+  private static Unit outString(String s) {
     # native code
   }
 
-  private static Void errString(String s) {
+  private static Unit errString(String s) {
     # native code
   }
 
-  public static Void out(Top o) {
+  public static Unit out(Top o) {
     Console.outString(o.toString());
   }
 
-  public static Void err(Top o) {
+  public static Unit err(Top o) {
     Console.errString(o.toString());
   }
 }

@@ -1,14 +1,14 @@
 module core;
 
 public type String extends Sequence[Char] {
-  MutableArray[Char] chars;
+  private MutableArray[Char] chars;
 
-  Void init(Sequence[Char] source) {
+  public Unit init(Sequence[Char] source) {
   }
 
-  String join(Sequence[Top] seq) {
+  public String join(Sequence[Top] seq) {
   }
 
-  String split(Sequence[Char] delim) {
+  public String split(Sequence[Char] delim) {
   }
 }

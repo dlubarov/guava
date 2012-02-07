@@ -5,8 +5,8 @@ type Stack[+T] extends Sequence[T] {
 }
 
 type MutableStack[T] extends Stack[T] {
-  Void pushBack(T elem);
-  Void popBack(T elem);
+  Unit pushBack(T elem);
+  Unit popBack(T elem);
 }
 
 type ImmutableStack[T] extends Stack[T] {
