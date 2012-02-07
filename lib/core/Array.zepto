@@ -29,7 +29,8 @@ type ImmutableArray[+T] extends Array[T] {
   MutableArray[T] store;
 
   Void init(Collection[T] source) {
-    this.store = new MutableArray[T](source);
+    this.store = 0;
+    #new MutableArray[T](source);
   }
 
   T get(Int idx) {

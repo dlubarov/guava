@@ -3,7 +3,7 @@ module core;
 abstract type Collection[+T] extends Iterable[T] {
   Int size() {
     Int result = 0;
-    for (T elem : this)
+    foreach (T elem in this)
       result = result + 1;
     return result;
   }
@@ -18,7 +18,7 @@ abstract type Collection[+T] extends Iterable[T] {
 
   Int count(T elem) {
     Int result = 0;
-    for (T x : this)
+    foreach (T x in this)
       if (x == elem)
         result = result + 1;
     return result;
@@ -29,7 +29,7 @@ abstract type Collection[+T] extends Iterable[T] {
 
   Collection[U] map[U](Function1[T, U] f) {
     List[U] result = new EmptyList[U]();
-    for (T elem : this) {
+    foreach (T elem in this) {
       U mapped = f(elem);
       result = new NonEmptyList[U](mapped, result);
     }
@@ -38,7 +38,7 @@ abstract type Collection[+T] extends Iterable[T] {
 
   Collection[U] map[U](Function1[T, Maybe[U]] f) {
     List[U] result = new EmptyList[U]();
-    for (T elem : this) {
+    foreach (T elem in this) {
       Maybe[U] mappedElem = f(elem);
       if (mappedElem.isSomething())
         result = new NonEmptyList[U](mappedElem.get(), result);
@@ -48,7 +48,7 @@ abstract type Collection[+T] extends Iterable[T] {
 
   Collection[T] filter(Function1[T, Bool] p) {
     List[T] result = new EmptyList[T]();
-    for (T elem : this)
+    foreach (T elem in this)
       if (p(elem))
         result = new NonEmptyList[T](elem, result);
     return result;

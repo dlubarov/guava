@@ -3,9 +3,9 @@ module core;
 type Bool {
   Bool !() {}
 
-  Bool &(Bool that) {}
   Bool |(Bool that) {}
   Bool ^(Bool that) {}
+  Bool &(Bool that) {}
 
   Bool ==(Object that) {}
   Int hashCode() {}

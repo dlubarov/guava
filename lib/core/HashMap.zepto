@@ -20,7 +20,7 @@ type MutableHashMap[K, V] extends MutableMap[K, V] {
   }
 
   Maybe[V] get(K key) {
-    for (Tuple2[K, V] pair : this.binFor(key))
+    foreach (Tuple2[K, V] pair in this.binFor(key))
       if (pair.first() == key)
         return Some[V](pair.second());
     return None[V]();

@@ -5,14 +5,14 @@ abstract type Map[K, +V] extends Collection[Tuple2[K, V]] {
 
   Collection[K] keys() {
     List[K] result = new EmptyList[K]();
-    for (Tuple2[K, V] pair : this)
+    foreach (Tuple2[K, V] pair in this)
       result = new NonEmptyList[K](pair.first(), result);
     return result;
   }
 
   Collection[V] values() {
     List[V] result = new EmptyList[V]();
-    for (Tuple2[K, V] pair : this)
+    foreach (Tuple2[K, V] pair in this)
       result = new NonEmptyList[V](pair.second(), result);
     return result;
   }

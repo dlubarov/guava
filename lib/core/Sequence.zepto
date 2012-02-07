@@ -59,16 +59,16 @@ abstract type Sequence[+T] extends Collection[T] {
 
   Sequence[T] reverse() {
     List[T] result = new EmptyList[T]();
-    for (T elem : this)
+    foreach (T elem in this)
       result = new NonEmptyList[T](elem, result);
     return result;
   }
 
   Sequence[T] +(Sequence[T] that) {
     List[T] result = new EmptyList[T]();
-    for (T elem : this)
+    foreach (T elem in this)
       result = new NonEmptyList[T](elem, result);
-    for (T elem : that)
+    foreach (T elem in that)
       result = new NonEmptyList[T](elem, result);
     return result.reverse();
   }
@@ -76,7 +76,7 @@ abstract type Sequence[+T] extends Collection[T] {
   Sequence[T] *(Int n) {
     List[T] result = new EmptyList[T]();
     for (Int i = 0; i < n; i = i + 1)
-      for (T elem : this)
+      foreach (T elem in this)
         result = new NonEmptyList[T](elem, result);
     return result.reverse();
   }

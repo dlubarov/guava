@@ -12,9 +12,9 @@ type Int {
   #Int *=(Int x) {}
   #Int /=(Int x) {}
   #Int %=(Int x) {}
-  #Int &=(Int x) {}
   #Int |=(Int x) {}
   #Int ^=(Int x) {}
+  #Int &=(Int x) {}
   #Int >>=(Int x) {}
   #Int <<=(Int x) {}
 
@@ -27,9 +27,9 @@ type Int {
   Int *(Int that) {}
   Int /(Int that) {}
   Int %(Int that) {}
-  Int &(Int that) {}
   Int |(Int that) {}
   Int ^(Int that) {}
+  Int &(Int that) {}
   Int <<(Int that) {}
   Int >>(Int that) {}
 

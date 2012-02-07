@@ -3,7 +3,7 @@ module core;
 abstract type List[+T] extends Sequence[T] {
   static List[U] get[U](Collection[U] source) {
     List[U] result = new EmptyList[U]();
-    for (U elem : source)
+    foreach (U elem in source)
       result = new NonEmptyList[U](elem, result);
     return result.reverse();
   }
@@ -14,7 +14,7 @@ abstract type List[+T] extends Sequence[T] {
 
   List[T] reverse() {
     List[T] result = new EmptyList[T]();
-    for (T elem : this)
+    foreach (T elem in this)
       result = new NonEmptyList[T](elem, result);
     return result;
   }
