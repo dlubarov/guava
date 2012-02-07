@@ -10,7 +10,7 @@ public class PrefixExpressionParser extends Parser<Expression> {
     public static final Parser<Expression> singleton = new PrefixExpressionParser().memo();
     private PrefixExpressionParser() {}
 
-    private static final String[] prefixOps = {"+", "-", "~"};
+    private static final String[] prefixOps = {"+", "-", "~", "!"};
 
     @Override
     public Success<Expression> parse(String s, int p) {

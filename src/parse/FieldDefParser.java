@@ -2,6 +2,8 @@ package parse;
 
 import java.util.*;
 
+import common.NiftyException;
+
 import parse.misc.*;
 
 import a.*;
@@ -46,18 +48,32 @@ public class FieldDefParser extends Parser<MemberDef> {
         p = resType.rem;
         p = optWS(s, p);
 
-        // Parse the field names.
+        // Parse the first field name.
         List<String> names = new ArrayList<String>();
+        Success<String> resName = IdentifierParser.singleton.parse(s, p);
+        if (resName == null)
+            return null;
+        names.add(resName.value);
+        p = resName.rem;
+        p = optWS(s, p);
+
+        // Parse any additional field names.
         for (;;) {
-            Success<String> resName = IdentifierParser.singleton.parse(s, p);
-            if (resName == null)
+            // Parse the comma.
+            if (s.charAt(p) != ',')
                 break;
+            p = optWS(s, p + 1);
+
+            // Parse the next field name.
+            resName = IdentifierParser.singleton.parse(s, p);
+            if (resName == null)
+                throw new NiftyException("Expecting another field name after ','.");
             names.add(resName.value);
             p = resName.rem;
             p = optWS(s, p);
         }
-        if (names.isEmpty())
-            return null;
+
+        // Parse the semicolon.
         p = optWS(s, p);
         if (s.charAt(p++) != ';')
             return null;

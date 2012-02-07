@@ -40,6 +40,11 @@ public class ForParser extends Parser<Statement> {
         p = resB.rem;
         p = optWS(s, p);
 
+        // Parse the ';' separating the second and third parts of the header.
+        if (s.charAt(p++) != ';')
+            throw new NiftyException("Missing ';' after condition expression in for loop.");
+        p = optWS(s, p);
+
         // Parse the other expression.
         Success<Expression> resC = ExpressionParser.singleton.parse(s, p);
         if (resC == null)
