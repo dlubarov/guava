@@ -13,6 +13,8 @@ public class AtomParser extends Parser<Expression> {
     static {
         atomParsers = new Parser[] {
                 ParentheticalExpressionParser.singleton,
+                LiteralSequenceParser.singleton,
+                LiteralDoubleParser.singleton,
                 LiteralIntParser.singleton,
                 LiteralBoolParser.singleton,
                 LiteralCharParser.singleton,
