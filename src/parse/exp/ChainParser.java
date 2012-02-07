@@ -28,13 +28,14 @@ public class ChainParser extends Parser<Expression> {
             p = optWS(s, p);
         }
 
+        // Parse any selectors attached to this base expression.
         for (;;) {
             // Parse the '.'.
             if (s.charAt(p) != '.')
                 break;
             p = optWS(s, p + 1);
 
-            // Parse the selector
+            // Parse the member name.
             Success<String> resMember = IdentifierOrOpParser.singleton.parse(s, p);
             if (resMember == null)
                 throw new NiftyException("Expecting member name after '.'.");
@@ -42,6 +43,7 @@ public class ChainParser extends Parser<Expression> {
             p = resMember.rem;
             p = optWS(s, p);
 
+            // Parse the invocation, if there is one.
             resGenericsAndArgs = GenericsAndArgumentsParser.singleton.parse(s, p);
             if (resGenericsAndArgs != null) {
                 GenericsAndArgumentsParser.GenericsAndArgs val = resGenericsAndArgs.value;

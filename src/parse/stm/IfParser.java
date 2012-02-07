@@ -44,6 +44,7 @@ public class IfParser extends Parser<Statement> {
         if (resBody == null)
             throw new NiftyException("If statement is missing a body.");
         p = resBody.rem;
+        p = optWS(s, p);
 
         // Try to parse an if-else statement.
         if (StringUtils.containsAt(s, "else", p)) {
@@ -59,6 +60,6 @@ public class IfParser extends Parser<Statement> {
         }
 
         // There was no else clause, so this is just an if statement.
-        return new Success<Statement>(new If(resCond.value, resBody.value), p);
+        return new Success<Statement>(new If(resCond.value, resBody.value), resBody.rem);
     }
 }

@@ -1,7 +1,6 @@
 package parse.misc;
 
 import parse.*;
-import common.NiftyException;
 
 import a.Type;
 import a.exp.Expression;
@@ -26,12 +25,8 @@ public class GenericsAndArgumentsParser extends Parser<GenericsAndArgumentsParse
 
         // Parse arguments.
         Success<Expression[]> resArgs = ArgumentListParser.singleton.parse(s, p);
-        if (resArgs == null) {
-            if (resGenArgs == null)
-                return null;
-            // Code provides generic args but no args, must be an error.
-            throw new NiftyException("Argument list expected.");
-        }
+        if (resArgs == null)
+            return null;
         p = resArgs.rem;
 
         GenericsAndArgs result = new GenericsAndArgs(genericArgs, resArgs.value);

@@ -9,7 +9,7 @@ import parse.*;
 import a.Type;
 
 public class TypeListParser extends Parser<Type[]> {
-    public static final TypeListParser singleton = new TypeListParser();
+    public static final Parser<Type[]> singleton = new TypeListParser();
     private TypeListParser() {}
 
     @Override
@@ -18,11 +18,27 @@ public class TypeListParser extends Parser<Type[]> {
         if (s.charAt(p++) != '[')
             return null;
         p = optWS(s, p);
+        if (s.charAt(p) == ']')
+            throw new NiftyException("Empty type lists are not accepted; try removing the '[]'.");
 
-        // Parse the types.
+        // Parse the first type.
         List<Type> types = new ArrayList<Type>();
+        Success<Type> resType = TypeParser.singleton.parse(s, p);
+        if (resType == null)
+            throw new NiftyException("Expecting at least one type after '['.");
+        types.add(resType.value);
+        p = resType.rem;
+        p = optWS(s, p);
+
+        // Parse any other types.
         for (;;) {
-            Success<Type> resType = TypeParser.singleton.parse(s, p);
+            // Parse the comma.
+            if (s.charAt(p) != ',')
+                break;
+            p = optWS(s, p + 1);
+
+            // Parse the next type.
+            resType = TypeParser.singleton.parse(s, p);
             if (resType == null)
                 break;
             types.add(resType.value);
