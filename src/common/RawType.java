@@ -10,6 +10,7 @@ public class RawType {
         coreInt = new RawType("core", "Int"),
         coreChar = new RawType("core", "Char"),
         coreBool = new RawType("core", "Bool"),
+        coreDouble = new RawType("core", "Double"),
         coreMutableArray = new RawType("core", "MutableArray"),
         coreEnumerable = new RawType("core", "Enumerable"),
         coreCollection = new RawType("core", "Collection"),

@@ -43,7 +43,7 @@ public class ParameterizedType extends Type {
         // when their getSupertypes is called. So we just return Bottom.
         if (rawType.equals(RawType.coreBottom))
             return Type.NONE;
-        return new Type[] {new ParameterizedType("core", "Bottom")};
+        return new Type[] {new ParameterizedType(RawType.coreBottom)};
     }
 
     @Override

@@ -1,5 +1,7 @@
 package c.exp;
 
+import common.RawType;
+
 import c.CodeContext;
 import c.ty.*;
 
@@ -12,7 +14,7 @@ public class LiteralChar extends Expression {
 
     @Override
     public Type inferType(CodeContext ctx) {
-        return new ParameterizedType("core", "Char");
+        return new ParameterizedType(RawType.coreChar);
     }
 
     @Override

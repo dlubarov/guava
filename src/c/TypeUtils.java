@@ -16,7 +16,7 @@ public final class TypeUtils {
         //     - if there are multiple, return the intersection
         //       (if they share no common subtype, fail)
         if (types.length == 0)
-            return new ParameterizedType("core", "Bottom");
+            return new ParameterizedType(RawType.coreBottom);
         Type result = types[0];
         for (Type type : types)
             if (!type.equals(result))

@@ -55,9 +55,10 @@ public class FieldDef extends MemberDef {
 
     @Override
     public String toString() {
-        return String.format("%s%s %s;",
-                implode(' ', quals),
-                type,
-                implode(", ", names));
+        StringBuilder sb = new StringBuilder();
+        for (String q : quals)
+            sb.append(q).append(' ');
+        sb.append(type).append(' ').append(implode(", ", names));
+        return sb.append(';').toString();
     }
 }
