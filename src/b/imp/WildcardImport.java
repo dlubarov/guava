@@ -8,6 +8,16 @@ public class WildcardImport extends Import {
     }
 
     @Override
+    public boolean equals(Object o) {
+        return o instanceof WildcardImport && module.equals(((WildcardImport) o).module);
+    }
+
+    @Override
+    public int hashCode() {
+        return module.hashCode();
+    }
+
+    @Override
     public String toString() {
         return String.format("import %s.*;", module);
     }
