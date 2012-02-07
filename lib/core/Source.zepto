@@ -1,13 +1,56 @@
 module core;
 
-type Source[+T] {
+public abstract type Source[+T] {
+  public Maybe[T] take();
 }
 
-type EmptySource[+T] extends Source[T] {
+public sealed type EmptySource extends Source[Bottom] {
+  private static readonly EmptySource singleton;
+
+  private Unit init() {}
+
+  private static Unit init() {
+    EmptySource.singleton = new EmptySource();
+  }
+
+  public static EmptySource get() {
+    return EmptySource.singleton;
+  }
+
+  public None take() {
+    return None();
+  }
 }
 
-type SingletonSource[+T] extends Source[T] {
+public sealed type SingletonSource[+T] extends Source[T] {
+  private readonly T value;
+  private Bool used;
+
+  public Maybe[T] take() {
+    if (this.used)
+      return None();
+    this.used = true;
+    return value;
+  }
 }
 
-type RandomAccessIterator[+T] extends Source[T] {
+public abstract type InfiniteSource[+T] extends Source[T] {
+  public Some[T] maybeTake();
+}
+
+public sealed type RandomAccessEnumerator[+T] extends Source[T] {
+  private readonly Sequence[T] seq;
+  private Int index;
+
+  public Void init(Sequence[t] seq) {
+    this.seq = seq;
+  }
+
+  public Maybe[T] take() {
+    if (this.index >= seq.size())
+      return None();
+    T result = this.seq(index);
+    index = index + 1;
+    return result;
+  }
 }

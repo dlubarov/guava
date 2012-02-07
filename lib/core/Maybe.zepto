@@ -1,0 +1,48 @@
+module core;
+
+public abstract type Maybe[+T] extends Collection[T] {
+  public T get();
+
+  public T getOr(T default);
+}
+
+public sealed type Some[+T] extends Maybe[T] {
+  public readonly T value;
+
+  public T get() {
+    return this.value;
+  }
+
+  public T getOr(T default) {
+    return this.value;
+  }
+
+  public Enumerator[T] enumerator() {
+    return new SingletonSource[T](this.value);
+  }
+}
+
+public sealed type None extends Maybe[Bottom] {
+  private static readonly None singleton;
+
+  private Unit init() {}
+
+  private static Unit init() {
+    None.singleton = new None();
+  }
+
+  public static None get() {
+    return None.singleton;
+  }
+
+  public T get() {
+  }
+
+  public T getOr(T default) {
+    return default;
+  }
+
+  public Enumerator[T] enumerator() {
+    return EmptySource();
+  }
+}

@@ -29,8 +29,6 @@ public sealed type Int extends NaturallyOrdered[Int], Sequence[Bool] {
   public Int rotateLeft(Int distance) {}
   public Int rotateRight(Int distance) {}
 
-  public Ordering[Int] naturalOrdering() {}
-
   public static Int min(Int a, Int b) {}
   public static Int max(Int a, Int b) {}
 
@@ -47,7 +45,7 @@ public sealed type Int extends NaturallyOrdered[Int], Sequence[Bool] {
   public Int reverseBits();
   public Int reverseBytes();
 
-  public Bool equals(Top o) {}
+  public Bool ==(Top o) {}
 
   public Int hashCode() {
     return this;
@@ -70,7 +68,9 @@ public sealed type Int extends NaturallyOrdered[Int], Sequence[Bool] {
   public String toHexString() {
     return this.toString(16);
   }
+
+  public TotalOrdering[Int] naturalOrdering() {}
 }
 
-public type AscendingIntegerOrdering extends Ordering[Int] {
+public type AscendingIntegerOrdering extends TotalOrdering[Int] {
 }

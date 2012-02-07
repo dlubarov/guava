@@ -13,15 +13,15 @@ public sealed type Double extends NaturallyOrdered[Double] {
   public Double /(Double x) {}
   public Double %(Double x) {}
 
-  public Ordering[Int] naturalOrdering() {}
+  public TotalOrdering[Int] naturalOrdering() {}
 
   public static Double min(Double a, Double b) {}
   public static Double max(Double a, Double b) {}
 
-  public Bool equals(Top o) {}
+  public Bool ==(Top o) {}
   public Int hashCode() {}
   public String toString() {}
 }
 
-public type AsendingDoubleOrdering extends Ordering[Double {
+public type AsendingDoubleOrdering extends TotalOrdering[Double] {
 }

@@ -1,6 +1,6 @@
 module core;
 
-public sealed type Char {
+public sealed type Char extends NaturallyOrdered[Char] {
   public Void init(Int ord) {
   }
 
@@ -15,4 +15,18 @@ public sealed type Char {
 
   public Bool isDigit() {
   }
+
+  public Bool ==(Top o) {}
+
+  public Int hashCode() {
+    return new Int(this).hashCode();
+  }
+
+  public String toString() {
+  }
+
+  public TotalOrdering[Char] naturalOrdering() {}
+}
+
+public type AscendingCharOrdering extends TotalOrdering[Char] {
 }

@@ -1,5 +1,24 @@
 module core;
 
 public type Collection[+T] extends Enumerable[T] {
-  Int size();
+  public Int size() {
+    Int n = 0;
+    foreach (T x in this)
+      n = n + 1;
+    return n;
+  }
+
+  public Int count(T elem) {
+    Int n = 0;
+    foreach (T x in this)
+      if (x == elem)
+        n = n + 1;
+    return n;
+  }
+
+  public Bool contains(T elem) {
+    return this.count(elem) > 0;
+  }
+
+  public Collection[T] map(Function1[T, T] f);
 }

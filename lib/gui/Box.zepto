@@ -1,10 +1,10 @@
 module gui;
 
-abstract type Box extends Widget {
+public abstract type Box extends Widget {
 }
 
-type HBox extends Box {
+public type HBox extends Box {
 }
 
-type VBox extends Box {
+public type VBox extends Box {
 }

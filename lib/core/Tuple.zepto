@@ -3,7 +3,7 @@ module core;
 public type Tuple {
   Sequence[Top] toSequence();
 
-  public Bool equals(Top o) {
+  public Bool ==(Top o) {
     return this.toSequence() == o.as[Tuple]().toSequence();
   }
 

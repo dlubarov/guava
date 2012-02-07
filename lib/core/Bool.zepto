@@ -1,0 +1,23 @@
+module core;
+
+public sealed type Bool {
+  public Bool !() {}
+
+  public Bool |(Bool b) {}
+  public Bool ^(Bool b) {}
+  public Bool &(Bool b) {}
+
+  public Bool ==(Top o) {}
+
+  public Int hashCode() {
+    if (this)
+      return 1;
+    return 0;
+  }
+
+  public String toString() {
+    if (this)
+      return "true";
+    return "false";
+  }
+}

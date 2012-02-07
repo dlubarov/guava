@@ -1,0 +1,7 @@
+module core;
+
+type Top {
+  Bool ==(Top o) {}
+  Int hashCode() {}
+  String toString() {}
+}

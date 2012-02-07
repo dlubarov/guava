@@ -1,0 +1,5 @@
+module core;
+
+public abstract type Sink[-T] {
+  Bool give(T elem);
+}

@@ -1,22 +1,31 @@
 module core;
 
 public type Sequence[+T] extends Collection[T] {
-  Sequence[T] replace(T a, T b) {
+  public Sequence[T] map(Function1[T, T] f) {
   }
 
-  Sequence[T] replace(Sequence[T] a, Sequence[T] b) {
+  public Sequence[T] replace(T a, T b) {
   }
 
-  Sequence[T] subsequence(Int a, Int b) {
+  public Sequence[T] replace(Sequence[T] a, Sequence[T] b) {
+  }
+
+  public Sequence[T] subsequence(Int a, Int b) {
   }
 
   # TODO: decide names for "get first/last n elements"
   # front/first/head, back/last/tail
 
-  Bool startsWith(Sequence[T] s) {
+  public Bool startsWith(Sequence[T] s) {
   }
 
-  Bool endsWith(Sequence[T] s) {
+  public Bool endsWith(Sequence[T] s) {
+  }
+
+  public Boolean equals(Top o) {
+  }
+
+  public Int hashCode() {
   }
 
   public String toString() {

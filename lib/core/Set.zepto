@@ -22,6 +22,12 @@ public abstract type Set[+T] extends Sequence[T] {
     else
       return 0;
   }
+
+  public Bool equals(Top o) {
+  }
+
+  public Int hashCode() {
+  }
 }
 
 public abstract type MutableSet[T] extends Set[T] {

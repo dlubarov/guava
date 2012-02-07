@@ -1,11 +1,15 @@
 module core;
 
-type Void {
-  private static Void singleton;
+type Unit {
+  private static readonly Unit singleton;
 
-  private Void init() {}
+  private Unit init() {}
 
-  static Void get() {
-    return Void.singleton;
+  private static Unit init() {
+    singleton = new Unit();
+  }
+
+  public static Unit get() {
+    return Unit.singleton;
   }
 }

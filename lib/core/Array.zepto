@@ -21,8 +21,8 @@ type MutableArray[T] extends Sequence[T] {
     # native code
   }
 
-  Source[T] iterator() {
-    return new RandomAccessIterator[T](this);
+  Source[T] enumerator() {
+    return new RandomAccessEnumerator[T](this);
   }
 }
 
@@ -43,7 +43,7 @@ type ImmutableArray[+T] extends Sequence[T] {
     this.init(new MutableArray[T]());
   }
 
-  Source[T] iterator() {
-    return new RandomAccessIterator[T](this);
+  Source[T] enumerator() {
+    return new RandomAccessEnumerator[T](this);
   }
 }
