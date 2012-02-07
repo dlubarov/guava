@@ -1,15 +1,18 @@
 module core;
 
-type Char {
-  Void init(Int i) {}
+public sealed type Char {
+  public Void init(Int ord) {
+  }
 
-  Char toUpper() {}
-  Char toLower() {}
+  public Char toUpperCase() {
+  }
 
-  Bool isLetter() {}
-  Bool isDigit() {}
+  public Char toLowerCase() {
+  }
 
-  Bool ==(Object that) {}
-  Int hashCode() {}
-  String toString() {}
+  public Bool isLetter() {
+  }
+
+  public Bool isDigit() {
+  }
 }

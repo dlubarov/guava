@@ -1,57 +1,49 @@
 module core;
 
-# An array is a fixed-length sequence with fast random access.
-abstract type Array[+T] extends Sequence[T] {
-  Iterator[T] iterator() {
-    return new ArrayIterator[T](this);
+type MutableArray[T] extends Sequence[T] {
+  Void init() {
+    # native code
   }
-}
 
-type MutableArray[T] extends Array[T], MutableSequence[T] {
   Void init(Collection[T] source) {
     # native code
   }
 
-  T get(Int idx) {
+  T get(Int i) {
     # native code
   }
 
-  T set(Int idx, T val) {
+  T set(Int i, T val) {
     # native code
   }
 
   Int size() {
     # native code
   }
+
+  Source[T] iterator() {
+    return new RandomAccessIterator[T](this);
+  }
 }
 
-type ImmutableArray[+T] extends Array[T] {
-  MutableArray[T] store;
+type ImmutableArray[+T] extends Sequence[T] {
+  static ImmutableArray[Bottom] empty;
+
+  static Void init() {
+    ImmutableArray.empty = new ImmutableArray[Bottom]();
+  }
+
+  MutableArray backingArray;
 
   Void init(Collection[T] source) {
-    this.store = 0;
-    #new MutableArray[T](source);
+    this.backingArray = new MutableArray[T](source);
   }
 
-  T get(Int idx) {
-    return this.store(idx);
-  }
-}
-
-type ArrayIterator[+T] extends Iterator[T] {
-  Array[T] source;
-  Int index;
-
-  Void init(Array[T] source) {
-    this.source = source;
-    this.index = 0;
+  Void init() {
+    this.init(new MutableArray[T]());
   }
 
-  Maybe[T] next() {
-    if (this.index >= this.source.size())
-      return new None[T]();
-    T result = this.source(this.index);
-    this.index = this.index + 1;
-    return Some[T](result);
+  Source[T] iterator() {
+    return new RandomAccessIterator[T](this);
   }
 }

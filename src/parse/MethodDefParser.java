@@ -127,7 +127,7 @@ public class MethodDefParser extends Parser<MemberDef> {
                 if (s.charAt(p) != ',')
                     break;
                 p = optWS(s, p + 1);
-    
+
                 // Parse the parameter type.
                 resParamType = TypeParser.singleton.parse(s, p);
                 if (resParamType == null)

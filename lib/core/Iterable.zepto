@@ -1,5 +1,0 @@
-module core;
-
-abstract type Iterable[+T] {
-  Iterator[T] iterator();
-}

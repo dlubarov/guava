@@ -1,0 +1,6 @@
+module gui;
+
+abstract type Image {
+  Int getWidth();
+  Int getHeight();
+}

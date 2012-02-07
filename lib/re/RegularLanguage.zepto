@@ -1,0 +1,5 @@
+module re;
+
+type RegularLanguage[T] {
+  public Bool contains(Sequence[T] str);
+}

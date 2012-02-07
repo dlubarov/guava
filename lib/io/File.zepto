@@ -1,0 +1,7 @@
+module io;
+
+# TODO: should this be purely a descriptor like Java's File?
+# If so, perhaps rename to Path?
+
+type File {
+}

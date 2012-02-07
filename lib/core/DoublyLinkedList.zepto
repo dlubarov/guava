@@ -1,0 +1,10 @@
+module core;
+
+type DoublyLinkedList[+T] extends Sequence[T] {
+}
+
+type MutableDoublyLinkedList[T] extends Sequence[T] {
+}
+
+type ImmutableDoublyLinkedList[+T] extends Sequence[T] {
+}

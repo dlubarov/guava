@@ -1,17 +1,4 @@
 module core;
 
-abstract type Deque[+T] extends Stack[T], Queue[T] {
-  T getFront();
-  T getBack();
-}
-
-abstract type MutableDeque[T] extends Deque[T] {
-  Void pushFront(T item);
-  Void pushBack(T item);
-
-  T popFront();
-  T popBack();
-}
-
-abstract type ImmutableDeque[+T] extends Deque[T] {
+type Deque[T] extends Stack[T], Queue[T] {
 }

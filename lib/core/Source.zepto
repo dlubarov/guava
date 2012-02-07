@@ -1,0 +1,13 @@
+module core;
+
+type Source[+T] {
+}
+
+type EmptySource[+T] extends Source[T] {
+}
+
+type SingletonSource[+T] extends Source[T] {
+}
+
+type RandomAccessIterator[+T] extends Source[T] {
+}

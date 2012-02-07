@@ -1,0 +1,4 @@
+module re;
+
+type Intersection[T] extends RegularLanguage[T] {
+}

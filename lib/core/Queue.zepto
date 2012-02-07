@@ -2,13 +2,15 @@ module core;
 
 abstract type Queue[+T] extends Sequence[T] {
   T getFront();
+  T getBack();
 }
 
 abstract type MutableQueue[T] extends Queue[T] {
-  Void pushBack(T item);
-
-  T popFront();
+  Void pushBack(T elem);
+  Void popFront(T elem);
 }
 
-abstract type ImmutableQueue[+T] extends Queue[T] {
+abstract type ImmutableQueue[T] extends Queue[T] {
+  Queue[T] pushBack(T elem);
+  Queue[T] popFront(T elem);
 }

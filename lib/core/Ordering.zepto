@@ -1,0 +1,31 @@
+module core;
+
+# used to enforce trichotomy
+public type Relation {
+  public static readonly Relation LT, GT, EQ;
+
+  private static Void init() {
+    LT = new Relation();
+    GT = new Relation();
+    EQ = new Relation();
+  }
+
+  private Void init() {}
+}
+
+public abstract type PartialOrdering[-T] {
+  Maybe[Relation] compare(T a, T b);
+}
+
+public type ReversePartialOrdering[-T] extends PartialOrdering[T] {
+}
+
+public abstract type TotalOrdering[-T] extends PartialOrdering[T] {
+  Some[Relation] compare(T a, T b);
+}
+
+public type ReverseOrdering[-T] extends Ordering[T] {
+}
+
+public type LexicographicOrdering[-T] extends Ordering[S] {
+}

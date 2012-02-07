@@ -1,44 +1,76 @@
 module core;
 
-# All of the following methods are implemented with native code.
+public sealed type Int extends NaturallyOrdered[Int], Sequence[Bool] {
+  public Void init(String s, Int radix) {}
 
-type Int {
-  Void init(Char c) {}
+  public Void init(String s) {
+    this.init(s, 10);
+  }
 
-  #Int ++() {}
-  #Int --() {}
-  #Int +=(Int x) {}
-  #Int -=(Int x) {}
-  #Int *=(Int x) {}
-  #Int /=(Int x) {}
-  #Int %=(Int x) {}
-  #Int |=(Int x) {}
-  #Int ^=(Int x) {}
-  #Int &=(Int x) {}
-  #Int >>=(Int x) {}
-  #Int <<=(Int x) {}
+  public Int +() {}
+  public Int -() {}
+  public Int ~() {}
 
-  Int +() {}
-  Int -() {}
-  Int ~() {}
+  public Int +(Int that) {}
+  public Int -(Int that) {}
 
-  Int +(Int that) {}
-  Int -(Int that) {}
-  Int *(Int that) {}
-  Int /(Int that) {}
-  Int %(Int that) {}
-  Int |(Int that) {}
-  Int ^(Int that) {}
-  Int &(Int that) {}
-  Int <<(Int that) {}
-  Int >>(Int that) {}
+  public Int *(Int that) {}
+  public Int /(Int that) {}
+  public Int %(Int that) {}
 
-  Bool <(Int that) {}
-  Bool >(Int that) {}
-  Bool <=(Int that) {}
-  Bool >=(Int that) {}
+  public Int |(Int that) {}
+  public Int ^(Int that) {}
+  public Int &(Int that) {}
 
-  Bool ==(Object that) {}
-  Int hashCode() {}
-  String toString() {}
+  public Int <<(Int that) {}
+  public Int >>(Int that) {}
+  #public Int >>>(Int that) {} # TODO: decide about rshifts
+
+  public Int rotateLeft(Int distance) {}
+  public Int rotateRight(Int distance) {}
+
+  public Ordering[Int] naturalOrdering() {}
+
+  public static Int min(Int a, Int b) {}
+  public static Int max(Int a, Int b) {}
+
+  public Int signum() {}
+
+  public Int bitCount() {}
+
+  public Int lowestOneBit() {}
+  public Int highestOneBit() {}
+
+  public Int numLeadingZeros() {}
+  public Int numTrailingZeros() {}
+
+  public Int reverseBits();
+  public Int reverseBytes();
+
+  public Bool equals(Top o) {}
+
+  public Int hashCode() {
+    return this;
+  }
+
+  public String toString(Int radix) {}
+
+  public String toString() {
+    return this.toString(10);
+  }
+
+  public String toBinaryString() {
+    return this.toString(2);
+  }
+
+  public String toOctalString() {
+    return this.toString(8);
+  }
+
+  public String toHexString() {
+    return this.toString(16);
+  }
+}
+
+public type AscendingIntegerOrdering extends Ordering[Int] {
 }

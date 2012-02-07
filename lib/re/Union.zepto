@@ -1,0 +1,4 @@
+module re;
+
+type Union[T] extends RegularLanguage[T] {
+}

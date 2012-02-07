@@ -1,0 +1,5 @@
+module gui;
+
+type Window {
+  Widget content;
+}

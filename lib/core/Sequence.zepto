@@ -1,89 +1,25 @@
 module core;
 
-abstract type Sequence[+T] extends Collection[T] {
-  T get(Int idx) {
-    # TODO bounds check
-    Iterator[T] iter = this.iterator();
-    while (idx > 0) {
-      iter.next();
-      idx = idx - 1;
-    }
-    return iter.next().get();
+public type Sequence[+T] extends Collection[T] {
+  Sequence[T] replace(T a, T b) {
   }
 
-  T first() {
-    return this(0);
+  Sequence[T] replace(Sequence[T] a, Sequence[T] b) {
   }
 
-  Maybe[T] last() {
-    if (this.isEmpty())
-      return new None[T]();
-    else
-      return Some[T](this(this.size() - 1));
+  Sequence[T] subsequence(Int a, Int b) {
   }
 
-  Sequence[T] first(Int n) {
-    List[T] result = new EmptyList[T]();
-    Iterator[T] iter = this.iterator();
-    Maybe[T] current = iter.next();
-    while (current.isSomething() & result.size() < n) {
-      result = new NonEmptyList[T](current.get(), result);
-      current = iter.next();
-    }
-    return result.reverse();
+  # TODO: decide names for "get first/last n elements"
+  # front/first/head, back/last/tail
+
+  Bool startsWith(Sequence[T] s) {
   }
 
-  Sequence[T] last(Int n) {
-    return this.reverse().first(n).reverse();
+  Bool endsWith(Sequence[T] s) {
   }
 
-  Maybe[Int] firstIndexOf(T elem) {
-    Iterator[T] iter = this.iterator();
-    Int i = 0;
-    Maybe[T] current = iter.next();
-    while (current.isSomething()) {
-      if (current.get() == elem)
-        return Some[Int](i);
-      i = i + 1;
-      current = iter.next();
-    }
-    return new None[Int]();
-  }
-
-  Maybe[Int] lastIndexOf(T elem) {
-    Maybe[Int] i = this.reverse().firstIndexOf(elem);
-    if (i.isNothing())
-      return i;
-    return Some[Int](this.size() - 1 - i.get());
-  }
-
-  Sequence[T] reverse() {
-    List[T] result = new EmptyList[T]();
-    foreach (T elem in this)
-      result = new NonEmptyList[T](elem, result);
-    return result;
-  }
-
-  Sequence[T] +(Sequence[T] that) {
-    List[T] result = new EmptyList[T]();
-    foreach (T elem in this)
-      result = new NonEmptyList[T](elem, result);
-    foreach (T elem in that)
-      result = new NonEmptyList[T](elem, result);
-    return result.reverse();
-  }
-
-  Sequence[T] *(Int n) {
-    List[T] result = new EmptyList[T]();
-    for (Int i = 0; i < n; i = i + 1)
-      foreach (T elem in this)
-        result = new NonEmptyList[T](elem, result);
-    return result.reverse();
+  public String toString() {
+    return "(" + ", ".join(toSequence()) + ")";
   }
 }
-
-abstract type MutableSequence[T] extends Sequence[T] {
-  T set(Int idx, T val);
-}
-
-abstract type ImmutableSequence[+T] extends Sequence[T] {}

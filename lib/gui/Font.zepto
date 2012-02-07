@@ -1,0 +1,7 @@
+module gui;
+
+abstract type Font {
+}
+
+type TrueTypeFont extends Font {
+}

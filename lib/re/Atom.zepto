@@ -1,0 +1,4 @@
+module re;
+
+type Atom[T] extends RegularLanguage[T] {
+}

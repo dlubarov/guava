@@ -1,11 +1,11 @@
 module core;
 
 type Void {
-  static Void SINGLETON;
+  private static Void singleton;
 
-  static Void init() {
-    Void.SINGLETON = new Void();
+  private Void init() {}
+
+  static Void get() {
+    return Void.singleton;
   }
-
-  Void init() {}
 }

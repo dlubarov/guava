@@ -1,0 +1,20 @@
+module gui;
+
+# TODO: naming for RGB vs RGBA? Color vs pigment? etc.
+# Perhaps just make Color RGBA, with default alpha values of 1.
+
+type Color {
+  static Color fromRGBA(Double r, Double g, Double b, Double a) {
+  }
+
+  static Color fromRGB(Double r, Double g, Double b) {
+    return Color.fromRGBA(r, g, b, 1.0);
+  }
+
+  static Color fromHSVA(Double h, Double s, Double v, Double a) {
+  }
+
+  static Color fromHSV(Double h, Double s, Double v) {
+    return Color.fromHSVA(h, s, v, 1.0);
+  }
+}

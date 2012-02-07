@@ -1,0 +1,5 @@
+module core;
+
+public type Enumerable[+T] {
+  Source[T] enumerator();
+}

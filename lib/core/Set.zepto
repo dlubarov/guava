@@ -1,28 +1,33 @@
 module core;
 
 # A Set is a collection which contains no duplicate elements.
-abstract type Set[+T] extends Collection[T] {
-  Set[T] &(Set[T] that);
+public abstract type Set[+T] extends Sequence[T] {
+  public static readonly Set[Bottom] empty;
 
-  Set[T] |(Set[T] that);
+  public static Void init(Collection[T] source) {
+  }
 
-  Set[T] ^(Set[T] that);
+  public Set[T] &(Set[T] that) {
+  }
 
-  Int count(T elem) {
+  public Set[T] |(Set[T] that) {
+  }
+
+  public Set[T] ^(Set[T] that) {
+  }
+
+  public Int count(T elem) {
     if (this.contains(elem))
       return 1;
     else
       return 0;
   }
-
-  Set[T] uniqueElems() {
-    return this;
-  }
 }
 
-abstract type MutableSet[T] extends Set[T] {
-  Void +=(T elem);
+public abstract type MutableSet[T] extends Set[T] {
+  public Void +=(T elem);
+  public Void -=(T elem);
 }
 
-abstract type ImmutableSet[+T] extends Set[T] {
+public abstract type ImmutableSet[+T] extends Set[T] {
 }

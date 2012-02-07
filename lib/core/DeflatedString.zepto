@@ -1,0 +1,4 @@
+module core;
+
+type DeflatedString extends String {
+}

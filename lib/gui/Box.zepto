@@ -1,0 +1,10 @@
+module gui;
+
+abstract type Box extends Widget {
+}
+
+type HBox extends Box {
+}
+
+type VBox extends Box {
+}

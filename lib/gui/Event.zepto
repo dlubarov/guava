@@ -1,0 +1,41 @@
+module gui;
+
+abstract type Event {
+}
+
+abstract type KeyEvent extends Event {
+  readonly Int key;
+}
+
+type KeyDownEvent extends KeyEvent {
+}
+
+type KeyUpEvent extends KeyEvent {
+}
+
+abstract type MouseEvent extends Event {
+  readonly Point[Int] screenLocation;
+}
+
+type MouseDownEvent extends MouseEvent {
+}
+
+type MouseUpEvent extends MouseEvent {
+}
+
+abstract type KeyEventHandler {
+  Bool keyDown(KeyDownEvent e);
+  Bool keyUp(KeyDownEvent e);
+}
+
+abstract type MouseEventHandler {
+  Bool mouseDown(MouseDownEvent e);
+  Bool mouseUp(MouseDownEvent e);
+}
+
+type KeyEventAdapter {
+  Bool keyDown(KeyDownEvent e) {
+    return false;
+  }
+  # TODO: finish
+}

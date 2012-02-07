@@ -1,0 +1,6 @@
+module peg;
+
+# TODO: port from https://github.com/dlubarov/tank/tree/master/src/peg
+
+type PEG {
+}

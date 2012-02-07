@@ -1,0 +1,10 @@
+module core;
+
+type SinglyLinkedList[+T] extends Sequence[T] {
+}
+
+type MutableSinglyLinkedList[T] extends Sequence[T] {
+}
+
+type ImmutableSinglyLinkedList[+T] extends Sequence[T] {
+}

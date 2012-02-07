@@ -1,27 +1,19 @@
 module core;
 
 type Console {
-  static Void outString(String s) {
+  private static Void outString(String s) {
     # native code
   }
 
-  static Void errString(String s) {
+  private static Void errString(String s) {
     # native code
   }
 
-  static Void out(Object o) {
+  public static Void out(Top o) {
     Console.outString(o.toString());
   }
 
-  static Void err(Object o) {
+  public static Void err(Top o) {
     Console.errString(o.toString());
-  }
-
-  static Void outln(Object o) {
-    Console.outString(o.toString() + "\n");
-  }
-
-  static Void errln(Object o) {
-    Console.errString(o.toString() + "\n");
   }
 }

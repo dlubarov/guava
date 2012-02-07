@@ -1,0 +1,4 @@
+module re;
+
+type Plus[T] extends RegularLanguage[T] {
+}

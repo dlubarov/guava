@@ -1,0 +1,4 @@
+module gui;
+
+abstract type Widget {
+}

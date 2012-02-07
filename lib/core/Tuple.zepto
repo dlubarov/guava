@@ -1,43 +1,31 @@
 module core;
 
-type Tuple2[+A, +B] {
-  A a;
-  B b;
+public type Tuple {
+  Sequence[Top] toSequence();
 
-  Void init(A a, B b) {
-    this.a = a;
-    this.b = b;
+  public Bool equals(Top o) {
+    return this.toSequence() == o.as[Tuple]().toSequence();
   }
 
-  A first() {
-    return this.a;
+  public Int hashCode() {
+    return this.toSequence().hashCode();
   }
 
-  B second() {
-    return this.b;
+  public String toString() {
+    return "(" + ", ".join(toSequence()) + ")";
   }
 }
 
-type Tuple3[+A, +B, +C] {
-  A a;
-  B b;
-  C c;
+public type Tuple2[+A, +B] extends Tuple {
+  public readonly A first;
+  public readonly B second;
 
-  Void init(A a, B b, C c) {
-    this.a = a;
-    this.b = b;
-    this.c = c;
+  public Void init(A first, B second) {
+    this.first = first;
+    this.second = second;
   }
 
-  A first() {
-    return this.a;
-  }
-
-  B second() {
-    return this.b;
-  }
-
-  C third() {
-    return this.c;
+  public Sequence[Top] toSequence() {
+    return {first, second};
   }
 }

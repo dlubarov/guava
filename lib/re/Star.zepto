@@ -1,0 +1,4 @@
+module re;
+
+type Star[T] extends RegularLanguage[T] {
+}
