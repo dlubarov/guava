@@ -107,17 +107,30 @@ public class MethodDef extends MemberDef {
 
     @Override
     public String toString() {
-        return String.format(
-                "%s %s %s%s%s%s",
-                qualsString(),
-                returnType,
-                name,
-                genericParams.length == 0
-                        ? ""
-                        : Arrays.toString(genericParams),
-                paramTypes,
-                body == null
-                        ? ";"
-                        : " " + body);
+        StringBuilder sb = new StringBuilder();
+        sb.append(qualsString());
+        sb.append(returnType).append(' ');
+        sb.append(name);
+
+        // Append generic parameter list.
+        if (genericParams.length > 0)
+            sb.append(Arrays.toString(genericParams));
+
+        // Append parameter list.
+        sb.append('(');
+        for (int i = 0; i < paramNames.length; ++i) {
+            if (i > 0)
+                sb.append(", ");
+            sb.append(paramTypes[i]).append(' ').append(paramNames[i]);
+        }
+        sb.append(')');
+
+        // Append body.
+        if (body == null)
+            sb.append(';');
+        else
+            sb.append(' ').append(body);
+
+        return sb.toString();
     }
 }

@@ -1,6 +1,6 @@
 package a;
 
-import static util.StringUtils.implode;
+import static util.StringUtils.indent;
 
 import java.util.*;
 
@@ -127,14 +127,12 @@ public class TypeDef {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("type ").append(name);
-        sb.append(" {");
-        if (memberDefs.length > 0) {
-            sb.append('\n');
-            sb.append(implode("\n\n", memberDefs));
-            sb.append('\n');
+        sb.append("type ").append(name).append(" {");
+        for (int i = 0; i < memberDefs.length; ++i) {
+            sb.append("\n");
+            sb.append(indent(memberDefs[i]));
+            sb.append("\n");
         }
-        sb.append("}");
-        return sb.toString();
+        return sb.append("}").toString();
     }
 }
