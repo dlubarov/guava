@@ -69,6 +69,7 @@ public class MethodDef {
 
     private String qualsString() {
         StringBuilder sb = new StringBuilder();
+        sb.append(visibility);
         if (isStatic)
             sb.append("static ");
         return sb.toString();
@@ -85,11 +86,13 @@ public class MethodDef {
             sb.append(Arrays.toString(genericParams));
 
         // Append parameter list.
+        sb.append('(');
         for (int i = 0; i < paramNames.length; ++i) {
             if (i > 0)
                 sb.append(", ");
             sb.append(paramTypes[i]).append(' ').append(paramNames[i]);
         }
+        sb.append(')');
 
         // Append method body.
         if (body == null)

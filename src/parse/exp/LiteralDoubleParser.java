@@ -25,7 +25,7 @@ public class LiteralDoubleParser extends Parser<Expression> {
         p = resLeft.rem;
 
         // Parse the decimal point.
-        if (s.charAt(p) != '.')
+        if (s.charAt(p++) != '.')
             return null;
 
         // Parse digits after the decimal point.

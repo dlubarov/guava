@@ -95,7 +95,7 @@ public class MethodDef extends MemberDef {
                 refinedGenericParams,
                 refinedParamTypes,
                 paramNames,
-                body.refine());
+                body == null ? null : body.refine());
     }
 
     private String qualsString() {

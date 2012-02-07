@@ -22,6 +22,7 @@ public class FieldDef {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
+        sb.append(visibility);
         if (isStatic)
             sb.append("static ");
         sb.append(type).append(' ').append(name).append(';');

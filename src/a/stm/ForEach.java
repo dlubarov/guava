@@ -28,7 +28,7 @@ public class ForEach extends Statement {
          *         body
          * is sugar for (roughly)
          *     {
-         *         Source[ElemType] iter = iterable.iterator();
+         *         Source[ElemType] iter = iterable.enumerator();
          *         ElemType elemName = iter.take();
          *         while (elemName.nonEmpty()) {
          *             body
