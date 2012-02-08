@@ -6,7 +6,7 @@ import d.*;
 import d.ty.ConcreteType;
 
 public abstract class NativeTypeDef extends TypeDef {
-    // TODO: get rid of numStaticFields arg, get it from associated library code.
+    // TODO: Get rid of genericVariances, numStaticFields, allInstanceFields. Can infer from source.
     public NativeTypeDef(RawType desc, Variance[] genericVariances,
             int numStaticFields, String[] allInstanceFields,
             NativeMethodDef[] staticMethods, NativeMethodDef[] instanceMethods) {

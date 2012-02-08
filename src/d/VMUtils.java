@@ -8,6 +8,7 @@ public final class VMUtils {
     private VMUtils() {}
 
     public static BaseObject getUnit() {
+        // TODO: getUnit is very slow, should store a direct reference to Unit.singleton.
         return God.resolveType(RawType.coreUnit).staticFields[0];
     }
 

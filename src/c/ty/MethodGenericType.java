@@ -25,6 +25,11 @@ public class MethodGenericType extends Type {
     }
 
     @Override
+    public d.ty.desc.TypeDesc refine() {
+        return new d.ty.desc.MethodGenericTypeDesc(index);
+    }
+
+    @Override
     public boolean equals(Object o) {
         return o instanceof MethodGenericType && index == ((MethodGenericType) o).index;
     }

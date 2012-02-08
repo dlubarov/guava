@@ -5,7 +5,7 @@ import d.ty.nf.*;
 import d.ty.sup.*;
 
 public class MethodGenericTypeDesc extends TypeDesc {
-    private final int index;
+    public final int index;
 
     public MethodGenericTypeDesc(int index) {
         this.index = index;

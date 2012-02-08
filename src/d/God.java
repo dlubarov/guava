@@ -4,6 +4,8 @@ import java.util.*;
 
 import common.*;
 import d.nat.*;
+import d.ty.ConcreteType;
+import d.ty.desc.TypeDesc;
 
 public final class God {
     private God() {}
@@ -38,9 +40,20 @@ public final class God {
     }
 
     public static void newType(TypeDef type) {
+        // Register the new type.
+        allTypes.put(type.desc, type);
         if (type instanceof NativeTypeDef)
             nativeTypes.add((NativeTypeDef) type);
-        allTypes.put(type.desc, type);
+
+        // Invoke the static initializer, if there is one.
+        // TODO: non-native static initializers won't work with native types...
+        for (ConcreteMethodDef m : type.staticMethods)
+            if (m.desc.equals(new RawMethod(true, type.desc, "init", 0, TypeDesc.NONE)))
+                m.invoke(ConcreteType.NONE);
+
+        // When Unit is loaded, we would like a reference to Unit.singleton.
+        if (type.desc.equals(RawType.coreUnit))
+            ;
     }
 
     public static MethodDef resolveMethod(RawMethod desc) {

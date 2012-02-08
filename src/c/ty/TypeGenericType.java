@@ -25,6 +25,11 @@ public class TypeGenericType extends Type {
     }
 
     @Override
+    public d.ty.desc.TypeDesc refine() {
+        return new d.ty.desc.TypeGenericTypeDesc(index);
+    }
+
+    @Override
     public boolean equals(Object o) {
         return o instanceof TypeGenericType && index == ((TypeGenericType) o).index;
     }

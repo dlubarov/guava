@@ -66,6 +66,8 @@ public abstract class Type {
                 ctx.type, ctx.method);
     }
 
+    public abstract d.ty.desc.TypeDesc refine();
+
     @Override
     public abstract boolean equals(Object o);
 

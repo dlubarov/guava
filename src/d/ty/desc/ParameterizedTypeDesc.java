@@ -8,8 +8,8 @@ import d.ty.nf.*;
 import d.ty.sup.*;
 
 public class ParameterizedTypeDesc extends TypeDesc {
-    private final RawType rawType;
-    private final TypeDesc[] genericArgs;
+    public final RawType rawType;
+    public final TypeDesc[] genericArgs;
 
     public ParameterizedTypeDesc(RawType rawType, TypeDesc[] genericArgs) {
         this.rawType = rawType;

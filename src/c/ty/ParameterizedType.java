@@ -89,6 +89,14 @@ public class ParameterizedType extends Type {
     }
 
     @Override
+    public d.ty.desc.ParameterizedTypeDesc refine() {
+        d.ty.desc.TypeDesc[] refinedArgs = new d.ty.desc.TypeDesc[genericArgs.length];
+        for (int i = 0; i < refinedArgs.length; ++i)
+            refinedArgs[i] = genericArgs[i].refine();
+        return new d.ty.desc.ParameterizedTypeDesc(rawType, refinedArgs);
+    }
+
+    @Override
     public boolean equals(Object o) {
         try {
             ParameterizedType that = (ParameterizedType) o;

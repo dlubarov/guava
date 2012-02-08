@@ -47,6 +47,17 @@ public class TypeDef {
         return new ParameterizedType(desc, genericArgs);
     }
 
+    public Set<RawType> allSupertypes() {
+        Set<RawType> result = new HashSet<RawType>();
+        result.add(desc);
+        for (ParameterizedType parent : parents)
+            if (!result.contains(parent.rawType)) {
+                TypeDef parentDef = owner.resolve(parent.rawType);
+                result.addAll(parentDef.allSupertypes());
+            }
+        return result;
+    }
+
     public ParameterizedType[] parentsWithGenerics(Type[] myGenerics) {
         ParameterizedType[] result = new ParameterizedType[parents.length];
         for (int i = 0; i < result.length; ++i)
@@ -105,18 +116,18 @@ public class TypeDef {
     public FieldDef getInstanceField(String name) {
         Set<FieldDef> options = new HashSet<FieldDef>();
 
-        // Search my own fields
+        // Search my own fields.
         for (FieldDef field : instanceFieldDefs)
             if (field.name.equals(name))
                 options.add(field);
 
-        // Search my parents' fields
+        // Search my parents' fields.
         for (ParameterizedType parent : parents)
             try {
                 options.add(owner.resolve(parent.rawType).getInstanceField(name));
             } catch (NoSuchElementException e) {}
 
-        // There should be exactly one matching field
+        // There should be exactly one matching field.
         if (options.isEmpty())
             throw new NoSuchElementException(desc + " has no instance field named " + name);
         if (options.size() > 1)
@@ -127,7 +138,7 @@ public class TypeDef {
     public MethodDef getInstanceMethod(String name, Type[] genericArgs, Type[] argTypes, CodeContext ctx) {
         Set<MethodDef> options = new HashSet<MethodDef>();
 
-        // Search my own methods
+        // Search my own methods.
         methodSearch:
         for (MethodDef meth : instanceMethodDefs) {
             if (!name.equals(meth.name))
@@ -142,7 +153,7 @@ public class TypeDef {
             options.add(meth);
         }
 
-        // Search my parents' methods
+        // Search my parents' methods.
         if (options.isEmpty())
             for (ParameterizedType parent : parents)
                 try {
@@ -151,12 +162,49 @@ public class TypeDef {
                     options.add(meth);
                 } catch (NoSuchElementException e) {}
 
-        // There should be exactly one matching method
+        // There should be exactly one matching method.
         if (options.isEmpty())
             throw new NoSuchElementException(desc + " has no instance method named " + name);
         if (options.size() > 1)
             throw new RuntimeException(desc + " has multiple instance methods matching " + name);
         return options.iterator().next();
+    }
+
+    public d.TypeDef refine() {
+        Variance[] genericVariances = new Variance[genericInfos.length];
+        for (int i = 0; i < genericVariances.length; ++i)
+            genericVariances[i] = genericInfos[i].var;
+
+        String[] instanceFieldNames = new String[instanceFieldDefs.length];
+        for (int i = 0; i < instanceFieldNames.length; ++i)
+            instanceFieldNames[i] = instanceFieldDefs[i].name;
+
+        d.ConcreteMethodDef[] refinedStaticMethods = new d.ConcreteMethodDef[staticMethodDefs.length];
+        for (int i = 0; i < refinedStaticMethods.length; ++i)
+            refinedStaticMethods[i] = null; // FIXME finish
+
+        d.MethodDef[] refinedInstanceMethods = new d.MethodDef[instanceMethodDefs.length];
+        for (int i = 0; i < refinedInstanceMethods.length; ++i)
+            refinedInstanceMethods[i] = null; // FIXME finish
+
+        Map<d.RawMethod, d.RawMethod> virtualMethodDescTable = new HashMap<d.RawMethod, d.RawMethod>();
+        // FIXME populate vtable
+
+        Map<RawType, d.ty.desc.TypeDesc[]> superGenericDescs = new HashMap<RawType, d.ty.desc.TypeDesc[]>();
+        for (RawType supertype : allSupertypes()) {
+            ParameterizedType thisAsSuper = thisType().asSupertype(supertype, new CodeContext(owner, this, null));
+            superGenericDescs.put(supertype, thisAsSuper.refine().genericArgs);
+        }
+
+        return new d.TypeDef(
+                desc,
+                genericVariances,
+                staticFieldDefs.length,
+                instanceFieldNames,
+                refinedStaticMethods,
+                refinedInstanceMethods,
+                virtualMethodDescTable,
+                superGenericDescs);
     }
 
     private String qualsString() {

@@ -32,6 +32,17 @@ public class NativeInt extends NativeObject {
 
                 // instance methods
                 new NativeMethodDef[] {
+                        // Constructors
+                        new NativeMethodDef(new RawMethod(false, RawType.coreInt, "init", 0, TypeDesc.coreCharOnly)) {
+                            @Override
+                            public void invoke(BaseObject[] stack, int bp, ConcreteType[] genericArgs) {
+                                NativeInt n = (NativeInt) stack[bp + 1];
+                                char c = ((NativeChar) stack[bp + 2]).value;
+                                n.value = c;
+                                stack[bp + 1] = VMUtils.getUnit();
+                            }
+                        },
+
                         // Unary methods
                         new NativeMethodDef(new RawMethod(false, RawType.coreInt, "+", 0, TypeDesc.NONE)) {
                             @Override
