@@ -155,7 +155,7 @@ public class NativeInt extends NativeObject {
                             }
                         },
 
-                        // equals, hashCode
+                        // ==, hashCode
                         new NativeMethodDef(new RawMethod(false, RawType.coreInt, "==", 0, TypeDesc.coreTopOnly)) {
                             @Override
                             public void invoke(BaseObject[] stack, int bp, ConcreteType[] genericArgs) {
@@ -174,6 +174,13 @@ public class NativeInt extends NativeObject {
                             public void invoke(BaseObject[] stack, int bp, ConcreteType[] genericArgs) {
                                 // We don't need to do anything, since n.hashCode() = n. :-)
                                 // And Int is immutable, so we don't need to clone it.
+                            }
+                        },
+                        new NativeMethodDef(new RawMethod(false, RawType.coreInt, "toString", 0, TypeDesc.NONE)) {
+                            @Override
+                            public void invoke(BaseObject[] stack, int bp, ConcreteType[] genericArgs) {
+                                int n = ((NativeInt) stack[bp + 1]).value;
+                                stack[bp + 1] = VMUtils.makeString(Integer.toString(n));
                             }
                         },
                 })

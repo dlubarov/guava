@@ -6,7 +6,7 @@ import d.*;
 import d.ty.ConcreteType;
 import d.ty.desc.TypeDesc;
 
-public class NativeObject extends BaseObject {
+public abstract class NativeObject extends BaseObject {
     public static final NativeTypeDef TOP_TYPE;
 
     // TODO: get rid of this class (except as a container for TOP_TYPE) and have NativeInt etc.

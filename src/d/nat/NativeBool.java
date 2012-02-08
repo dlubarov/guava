@@ -90,6 +90,13 @@ public class NativeBool extends NativeObject {
                                 stack[bp + 1] = new NativeInt(b ? 1 : 0);
                             }
                         },
+                        new NativeMethodDef(new RawMethod(false, RawType.coreBool, "toString", 0, TypeDesc.NONE)) {
+                            @Override
+                            public void invoke(BaseObject[] stack, int bp, ConcreteType[] genericArgs) {
+                                boolean b = ((NativeBool) stack[bp + 1]).value;
+                                stack[bp + 1] = VMUtils.makeString(Boolean.toString(b));
+                            }
+                        },
                 })
         {
             @Override

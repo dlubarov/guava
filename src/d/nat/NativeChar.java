@@ -43,7 +43,7 @@ public class NativeChar extends NativeObject {
                             }
                         },
 
-                        // ==, hashCode
+                        // ==, hashCode, toString
                         new NativeMethodDef(new RawMethod(false, RawType.coreChar, "==", 0, TypeDesc.coreTopOnly)) {
                             @Override
                             public void invoke(BaseObject[] stack, int bp, ConcreteType[] genericArgs) {
@@ -62,6 +62,13 @@ public class NativeChar extends NativeObject {
                             public void invoke(BaseObject[] stack, int bp, ConcreteType[] genericArgs) {
                                 char c = ((NativeChar) stack[bp + 1]).value;
                                 stack[bp + 1] = new NativeInt(c);
+                            }
+                        },
+                        new NativeMethodDef(new RawMethod(false, RawType.coreChar, "toString", 0, TypeDesc.NONE)) {
+                            @Override
+                            public void invoke(BaseObject[] stack, int bp, ConcreteType[] genericArgs) {
+                                char c = ((NativeChar) stack[bp + 1]).value;
+                                stack[bp + 1] = VMUtils.makeString(Character.toString(c));
                             }
                         },
                 }) {

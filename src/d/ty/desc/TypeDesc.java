@@ -11,6 +11,7 @@ public abstract class TypeDesc {
             coreTop = new ParameterizedTypeDesc(RawType.coreTop),
             coreBottom = new ParameterizedTypeDesc(RawType.coreBottom),
             coreInt = new ParameterizedTypeDesc(RawType.coreInt),
+            coreDouble = new ParameterizedTypeDesc(RawType.coreDouble),
             coreChar = new ParameterizedTypeDesc(RawType.coreChar),
             coreBool = new ParameterizedTypeDesc(RawType.coreBool),
             coreString = new ParameterizedTypeDesc(RawType.coreString);
@@ -20,6 +21,7 @@ public abstract class TypeDesc {
             coreTopOnly = new TypeDesc[] {coreTop},
             coreBottomOnly = new TypeDesc[] {coreBottom},
             coreIntOnly = new TypeDesc[] {coreInt},
+            coreDoubleOnly = new TypeDesc[] {coreDouble},
             coreCharOnly = new TypeDesc[] {coreChar},
             coreBoolOnly = new TypeDesc[] {coreBool},
             coreStringOnly = new TypeDesc[] {coreString};
