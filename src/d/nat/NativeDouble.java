@@ -17,7 +17,7 @@ public class NativeDouble extends NativeObject {
     }
 
     public NativeDouble() {
-        this(0e1d);
+        this(0);
     }
 
     static {
@@ -36,15 +36,15 @@ public class NativeDouble extends NativeObject {
                         new NativeMethodDef(new RawMethod(false, RawType.coreDouble, "+", 0, TypeDesc.NONE)) {
                             @Override
                             public void invoke(BaseObject[] stack, int bp, ConcreteType[] genericArgs) {
-                                double n = ((NativeDouble) stack[bp + 1]).value;
-                                stack[bp + 1] = new NativeDouble(+n);
+                                double x = ((NativeDouble) stack[bp + 1]).value;
+                                stack[bp + 1] = new NativeDouble(+x);
                             }
                         },
                         new NativeMethodDef(new RawMethod(false, RawType.coreDouble, "-", 0, TypeDesc.NONE)) {
                             @Override
                             public void invoke(BaseObject[] stack, int bp, ConcreteType[] genericArgs) {
-                                double n = ((NativeDouble) stack[bp + 1]).value;
-                                stack[bp + 1] = new NativeDouble(-n);
+                                double x = ((NativeDouble) stack[bp + 1]).value;
+                                stack[bp + 1] = new NativeDouble(-x);
                             }
                         },
 
@@ -52,87 +52,55 @@ public class NativeDouble extends NativeObject {
                         new NativeMethodDef(new RawMethod(false, RawType.coreDouble, "+", 0, TypeDesc.coreDoubleOnly)) {
                             @Override
                             public void invoke(BaseObject[] stack, int bp, ConcreteType[] genericArgs) {
-                                double n = ((NativeDouble) stack[bp + 1]).value;
-                                double m = ((NativeDouble) stack[bp + 2]).value;
-                                stack[bp + 1] = new NativeDouble(n + m);
+                                double x = ((NativeDouble) stack[bp + 1]).value;
+                                double y = ((NativeDouble) stack[bp + 2]).value;
+                                stack[bp + 1] = new NativeDouble(x + y);
                             }
                         },
                         new NativeMethodDef(new RawMethod(false, RawType.coreDouble, "-", 0, TypeDesc.coreDoubleOnly)) {
                             @Override
                             public void invoke(BaseObject[] stack, int bp, ConcreteType[] genericArgs) {
-                                double n = ((NativeDouble) stack[bp + 1]).value;
-                                double m = ((NativeDouble) stack[bp + 2]).value;
-                                stack[bp + 1] = new NativeDouble(n - m);
+                                double x = ((NativeDouble) stack[bp + 1]).value;
+                                double y = ((NativeDouble) stack[bp + 2]).value;
+                                stack[bp + 1] = new NativeDouble(x - y);
                             }
                         },
                         new NativeMethodDef(new RawMethod(false, RawType.coreDouble, "*", 0, TypeDesc.coreDoubleOnly)) {
                             @Override
                             public void invoke(BaseObject[] stack, int bp, ConcreteType[] genericArgs) {
-                                double n = ((NativeDouble) stack[bp + 1]).value;
-                                double m = ((NativeDouble) stack[bp + 2]).value;
-                                stack[bp + 1] = new NativeDouble(n * m);
+                                double x = ((NativeDouble) stack[bp + 1]).value;
+                                double y = ((NativeDouble) stack[bp + 2]).value;
+                                stack[bp + 1] = new NativeDouble(x * y);
                             }
                         },
                         new NativeMethodDef(new RawMethod(false, RawType.coreDouble, "/", 0, TypeDesc.coreDoubleOnly)) {
                             @Override
                             public void invoke(BaseObject[] stack, int bp, ConcreteType[] genericArgs) {
-                                double n = ((NativeDouble) stack[bp + 1]).value;
-                                double m = ((NativeDouble) stack[bp + 2]).value;
-                                stack[bp + 1] = new NativeDouble(n / m);
+                                double x = ((NativeDouble) stack[bp + 1]).value;
+                                double y = ((NativeDouble) stack[bp + 2]).value;
+                                stack[bp + 1] = new NativeDouble(x / y);
                             }
                         },
                         new NativeMethodDef(new RawMethod(false, RawType.coreDouble, "%", 0, TypeDesc.coreDoubleOnly)) {
                             @Override
                             public void invoke(BaseObject[] stack, int bp, ConcreteType[] genericArgs) {
-                                double n = ((NativeDouble) stack[bp + 1]).value;
-                                double m = ((NativeDouble) stack[bp + 2]).value;
-                                stack[bp + 1] = new NativeDouble(n % m);
+                                double x = ((NativeDouble) stack[bp + 1]).value;
+                                double y = ((NativeDouble) stack[bp + 2]).value;
+                                stack[bp + 1] = new NativeDouble(x % y);
                             }
                         },
 
-                        // Comparisons
-                        new NativeMethodDef(new RawMethod(false, RawType.coreDouble, "<", 0, TypeDesc.coreDoubleOnly)) {
-                            @Override
-                            public void invoke(BaseObject[] stack, int bp, ConcreteType[] genericArgs) {
-                                double n = ((NativeDouble) stack[bp + 1]).value;
-                                double m = ((NativeDouble) stack[bp + 2]).value;
-                                stack[bp + 1] = new NativeBool(n < m);
-                            }
-                        },
-                        new NativeMethodDef(new RawMethod(false, RawType.coreDouble, ">", 0, TypeDesc.coreDoubleOnly)) {
-                            @Override
-                            public void invoke(BaseObject[] stack, int bp, ConcreteType[] genericArgs) {
-                                double n = ((NativeDouble) stack[bp + 1]).value;
-                                double m = ((NativeDouble) stack[bp + 2]).value;
-                                stack[bp + 1] = new NativeBool(n > m);
-                            }
-                        },
-                        new NativeMethodDef(new RawMethod(false, RawType.coreDouble, "<=", 0, TypeDesc.coreDoubleOnly)) {
-                            @Override
-                            public void invoke(BaseObject[] stack, int bp, ConcreteType[] genericArgs) {
-                                double n = ((NativeDouble) stack[bp + 1]).value;
-                                double m = ((NativeDouble) stack[bp + 2]).value;
-                                stack[bp + 1] = new NativeBool(n <= m);
-                            }
-                        },
-                        new NativeMethodDef(new RawMethod(false, RawType.coreDouble, ">=", 0, TypeDesc.coreDoubleOnly)) {
-                            @Override
-                            public void invoke(BaseObject[] stack, int bp, ConcreteType[] genericArgs) {
-                                double n = ((NativeDouble) stack[bp + 1]).value;
-                                double m = ((NativeDouble) stack[bp + 2]).value;
-                                stack[bp + 1] = new NativeBool(n >= m);
-                            }
-                        },
+                        // TODO: override comparison for efficiency
 
-                        // ==, hashCode
+                        // ==, hashCode, toString
                         new NativeMethodDef(new RawMethod(false, RawType.coreDouble, "==", 0, TypeDesc.coreTopOnly)) {
                             @Override
                             public void invoke(BaseObject[] stack, int bp, ConcreteType[] genericArgs) {
-                                double n = ((NativeDouble) stack[bp + 1]).value;
+                                double x = ((NativeDouble) stack[bp + 1]).value;
                                 BaseObject o = stack[bp + 2];
                                 boolean result;
                                 if (o instanceof NativeDouble)
-                                    result = n == ((NativeDouble) o).value;
+                                    result = x == ((NativeDouble) o).value;
                                 else
                                     result = false;
                                 stack[bp + 1] = new NativeBool(result);
@@ -141,8 +109,8 @@ public class NativeDouble extends NativeObject {
                         new NativeMethodDef(new RawMethod(false, RawType.coreDouble, "hashCode", 0, TypeDesc.NONE)) {
                             @Override
                             public void invoke(BaseObject[] stack, int bp, ConcreteType[] genericArgs) {
-                                // We don't need to do anything, since n.hashCode() = n. :-)
-                                // And Int is immutable, so we don't need to clone it.
+                                double x = ((NativeDouble) stack[bp + 1]).value;
+                                stack[bp + 1] = new NativeInt(new Double(x).hashCode());
                             }
                         },
                         new NativeMethodDef(new RawMethod(false, RawType.coreDouble, "toString", 0, TypeDesc.NONE)) {

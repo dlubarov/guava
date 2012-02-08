@@ -121,41 +121,9 @@ public class NativeInt extends NativeObject {
                             }
                         },
 
-                        // Comparisons
-                        new NativeMethodDef(new RawMethod(false, RawType.coreInt, "<", 0, TypeDesc.coreIntOnly)) {
-                            @Override
-                            public void invoke(BaseObject[] stack, int bp, ConcreteType[] genericArgs) {
-                                int n = ((NativeInt) stack[bp + 1]).value;
-                                int m = ((NativeInt) stack[bp + 2]).value;
-                                stack[bp + 1] = new NativeBool(n < m);
-                            }
-                        },
-                        new NativeMethodDef(new RawMethod(false, RawType.coreInt, ">", 0, TypeDesc.coreIntOnly)) {
-                            @Override
-                            public void invoke(BaseObject[] stack, int bp, ConcreteType[] genericArgs) {
-                                int n = ((NativeInt) stack[bp + 1]).value;
-                                int m = ((NativeInt) stack[bp + 2]).value;
-                                stack[bp + 1] = new NativeBool(n > m);
-                            }
-                        },
-                        new NativeMethodDef(new RawMethod(false, RawType.coreInt, "<=", 0, TypeDesc.coreIntOnly)) {
-                            @Override
-                            public void invoke(BaseObject[] stack, int bp, ConcreteType[] genericArgs) {
-                                int n = ((NativeInt) stack[bp + 1]).value;
-                                int m = ((NativeInt) stack[bp + 2]).value;
-                                stack[bp + 1] = new NativeBool(n <= m);
-                            }
-                        },
-                        new NativeMethodDef(new RawMethod(false, RawType.coreInt, ">=", 0, TypeDesc.coreIntOnly)) {
-                            @Override
-                            public void invoke(BaseObject[] stack, int bp, ConcreteType[] genericArgs) {
-                                int n = ((NativeInt) stack[bp + 1]).value;
-                                int m = ((NativeInt) stack[bp + 2]).value;
-                                stack[bp + 1] = new NativeBool(n >= m);
-                            }
-                        },
+                        // TODO: override comparison for efficiency
 
-                        // ==, hashCode
+                        // ==, hashCode, toString
                         new NativeMethodDef(new RawMethod(false, RawType.coreInt, "==", 0, TypeDesc.coreTopOnly)) {
                             @Override
                             public void invoke(BaseObject[] stack, int bp, ConcreteType[] genericArgs) {

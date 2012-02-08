@@ -43,6 +43,8 @@ public class NativeChar extends NativeObject {
                             }
                         },
 
+                        // TODO: override comparison for efficiency
+
                         // ==, hashCode, toString
                         new NativeMethodDef(new RawMethod(false, RawType.coreChar, "==", 0, TypeDesc.coreTopOnly)) {
                             @Override
