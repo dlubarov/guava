@@ -6,6 +6,7 @@ import common.*;
 
 import c.*;
 import c.ty.*;
+import d.Opcodes;
 
 public class LiteralSequence extends Expression {
     public final Expression[] elements;
@@ -47,6 +48,14 @@ public class LiteralSequence extends Expression {
             elementTypes[i] = elements[i].inferType(ctx);
         Type elementType = TypeUtils.union(elementTypes);
         return new ParameterizedType(RawType.coreSequence, new Type[] {elementType});
+    }
+
+    @Override
+    public CodeTree compile(CodeContext ctx) {
+        return new CodeTree(
+                Expression.compileAll(elements, ctx),
+                Opcodes.CREATE_SEQ, elements.length
+        );
     }
 
     @Override

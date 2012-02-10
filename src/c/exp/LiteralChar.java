@@ -2,8 +2,9 @@ package c.exp;
 
 import common.RawType;
 
-import c.CodeContext;
+import c.*;
 import c.ty.*;
+import d.Opcodes;
 
 public class LiteralChar extends Expression {
     public final char value;
@@ -15,6 +16,11 @@ public class LiteralChar extends Expression {
     @Override
     public Type inferType(CodeContext ctx) {
         return new ParameterizedType(RawType.coreChar);
+    }
+
+    @Override
+    public CodeTree compile(CodeContext ctx) {
+        return new CodeTree(Opcodes.CONST_CHAR, (int) value);
     }
 
     @Override

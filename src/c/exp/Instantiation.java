@@ -1,8 +1,9 @@
 package c.exp;
 
 import static util.StringUtils.implode;
-import c.CodeContext;
+import c.*;
 import c.ty.*;
+import d.Opcodes;
 
 public class Instantiation extends Expression {
     public final ParameterizedType type;
@@ -16,6 +17,21 @@ public class Instantiation extends Expression {
     @Override
     public Type inferType(CodeContext ctx) {
         return type;
+    }
+
+    private MethodDef getConstructor(CodeContext ctx) {
+        TypeDef typeDef = ctx.project.resolve(type.rawType);
+        Type[] argTypes = Expression.inferAllTypes(args, ctx);
+        return typeDef.getInstanceMethod("init", Type.NONE, argTypes, ctx);
+    }
+
+    @Override
+    public CodeTree compile(CodeContext ctx) {
+        MethodDef constructor = getConstructor(ctx);
+        return new CodeTree(
+                Opcodes.NEW, ctx.method.getFullTypeTableIndex(type),
+                Opcodes.DUP, Expression.compileAll(args, ctx),
+                Opcodes.INVOKE_STATIC, ctx.method.getMethodTableIndex(constructor));
     }
 
     @Override

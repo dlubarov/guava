@@ -1,8 +1,9 @@
 package c.exp;
 
-import c.CodeContext;
+import c.*;
 import c.ty.Type;
 import common.RawType;
+import d.Opcodes;
 
 public class StaticFieldGet extends Expression {
     public final RawType owner;
@@ -16,6 +17,13 @@ public class StaticFieldGet extends Expression {
     @Override
     public Type inferType(CodeContext ctx) {
         return ctx.project.resolve(owner).getStaticField(fieldName).type;
+    }
+
+    @Override
+    public CodeTree compile(CodeContext ctx) {
+        TypeDef ownerDef = ctx.project.resolve(owner);
+        int fieldIndex = ownerDef.getStaticFieldIndex(fieldName);
+        return new CodeTree(Opcodes.GET_STATIC_FIELD, fieldIndex);
     }
 
     @Override

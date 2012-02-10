@@ -7,7 +7,7 @@ import d.ty.desc.TypeDesc;
 public abstract class NativeMethodDef extends ConcreteMethodDef {
     public NativeMethodDef(RawMethod desc,
             RawType[] typeDescTable, TypeDesc[] fullTypeDescTable, RawMethod[] methodDescTable) {
-        super(desc, typeDescTable, fullTypeDescTable, methodDescTable, null);
+        super(desc, typeDescTable, fullTypeDescTable, methodDescTable);
     }
 
     public NativeMethodDef(RawMethod desc) {

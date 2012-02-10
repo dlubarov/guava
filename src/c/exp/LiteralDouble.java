@@ -2,8 +2,9 @@ package c.exp;
 
 import common.RawType;
 
-import c.CodeContext;
+import c.*;
 import c.ty.*;
+import d.Opcodes;
 
 public class LiteralDouble extends Expression {
     public final double value;
@@ -15,6 +16,13 @@ public class LiteralDouble extends Expression {
     @Override
     public Type inferType(CodeContext ctx) {
         return new ParameterizedType(RawType.coreDouble);
+    }
+
+    @Override
+    public CodeTree compile(CodeContext ctx) {
+        long l = Double.doubleToLongBits(value);
+        int i1 = (int) (l >>> 32), i0 = (int) l;
+        return new CodeTree(Opcodes.CONST_DOUBLE, i1, i0);
     }
 
     @Override

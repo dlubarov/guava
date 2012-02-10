@@ -8,6 +8,7 @@ import common.NiftyException;
 
 import c.*;
 import c.ty.*;
+import d.Opcodes;
 
 public class InstanceMethodInvocation extends Expression {
     public final Expression target;
@@ -25,9 +26,7 @@ public class InstanceMethodInvocation extends Expression {
 
     private MethodDef getMethod(CodeContext ctx) {
         Type targetType = target.inferType(ctx);
-        Type[] argTypes = new Type[args.length];
-        for (int i = 0; i < argTypes.length; ++i)
-            argTypes[i] = args[i].inferType(ctx);
+        Type[] argTypes = Expression.inferAllTypes(args, ctx);
         Set<MethodDef> options = new HashSet<MethodDef>();
         for (ParameterizedType concreteSuper : targetType.getConcreteSupertypes(ctx.type, ctx.method))
             try {
@@ -56,6 +55,18 @@ public class InstanceMethodInvocation extends Expression {
         MethodDef method = getMethod(ctx);
         ParameterizedType targetAsMethodOwner = target.inferType(ctx).asSupertype(method.owner, ctx);
         return method.returnType.withGenericArgs(targetAsMethodOwner.genericArgs, genericArgs);
+    }
+
+    @Override
+    public CodeTree compile(CodeContext ctx) {
+        MethodDef m = getMethod(ctx);
+        int methodIndex = ctx.method.getMethodTableIndex(m);
+        int[] genericArgIndices = m.getFullTypeTableIndices(genericArgs);
+        return new CodeTree(
+                target.compile(ctx),
+                Expression.compileAll(args, ctx),
+                Opcodes.INVOKE_VIRTUAL, methodIndex, genericArgIndices
+        );
     }
 
     @Override

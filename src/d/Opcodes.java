@@ -10,7 +10,9 @@ public final class Opcodes {
             CONST_FALSE = 11,
             CONST_INT = 12,
             CONST_CHAR = 13,
-            CONST_STRING = 14,
+            CONST_DOUBLE = 14,
+            CONST_STRING = 15,
+            CREATE_SEQ = 18,
             GET_LOCAL = 20,
             PUT_LOCAL = 21,
             GET_STATIC_FIELD = 22,
@@ -49,32 +51,45 @@ public final class Opcodes {
                 case CONST_CHAR:
                     sb.append(String.format("CONST_CHAR '%c'", code[++i]));
                     break;
+                case CONST_DOUBLE: {
+                    int i1 = code[++i];
+                    int i0 = code[++i];
+                    long l = ((long) i1) << 32 | i0;
+                    double d = Double.longBitsToDouble(l);
+                    sb.append(String.format("CONST_DOUBLE %f", d));
+                    break;
+                }
                 case CONST_STRING:
-                    sb.append("CONST_STRING " + code[++i]);
+                    sb.append("CONST_STRING index=" + code[++i]);
+                    break;
+                case CREATE_SEQ:
+                    sb.append("CREATE_SEQ length=" + code[++i]);
                     break;
                 case GET_LOCAL:
-                    sb.append("GET_LOCAL " + code[++i]);
+                    sb.append("GET_LOCAL index=" + code[++i]);
                     break;
                 case PUT_LOCAL:
-                    sb.append("PUT_LOCAL " + code[++i]);
+                    sb.append("PUT_LOCAL index=" + code[++i]);
                     break;
                 case GET_STATIC_FIELD:
-                    sb.append("GET_STATIC_FIELD " + code[++i]);
+                    sb.append("GET_STATIC_FIELD index=" + code[++i]);
                     break;
                 case PUT_STATIC_FIELD:
-                    sb.append("PUT_STATIC_FIELD " + code[++i]);
+                    sb.append("PUT_STATIC_FIELD index=" + code[++i]);
                     break;
                 case GET_INSTANCE_FIELD:
-                    sb.append("GET_INSTANCE_FIELD " + code[++i]);
+                    sb.append("GET_INSTANCE_FIELD nameIndex=" + code[++i]);
                     break;
                 case PUT_INSTANCE_FIELD:
-                    sb.append("PUT_INSTANCE_FIELD " + code[++i]);
+                    sb.append("PUT_INSTANCE_FIELD nameIndex=" + code[++i]);
                     break;
                 case INVOKE_STATIC:
-                    sb.append("INVOKE_STATIC " + code[++i]);
+                    sb.append("INVOKE_STATIC index=" + code[++i]);
+                    // FIXME low: don't know # generic args, can't advance i
                     break;
                 case INVOKE_VIRTUAL:
-                    sb.append("INVOKE_VIRTUAL " + code[++i]);
+                    sb.append("INVOKE_VIRTUAL vtableIndex=" + code[++i]);
+                    // FIXME low: don't know # generic args, can't advance i
                     break;
                 case NEW:
                     sb.append("NEW " + code[++i]);

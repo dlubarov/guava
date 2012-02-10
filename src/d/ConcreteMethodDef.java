@@ -1,7 +1,5 @@
 package d;
 
-import java.util.*;
-
 import common.*;
 import d.ty.ConcreteType;
 import d.ty.desc.TypeDesc;
@@ -20,8 +18,7 @@ public abstract class ConcreteMethodDef extends MethodDef {
     public ConcreteMethodDef(RawMethod desc,
             RawType[] typeDescTable,
             TypeDesc[] fullTypeDescTable,
-            RawMethod[] methodDescTable,
-            Map<RawMethod, RawMethod> vDescTable) {
+            RawMethod[] methodDescTable) {
         super(desc);
         this.rawTypeDescTable = typeDescTable;
         rawTypeTable = new TypeDef[typeDescTable.length];

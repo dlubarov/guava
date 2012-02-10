@@ -7,6 +7,7 @@ import java.util.*;
 import c.gen.*;
 import c.ty.*;
 import common.*;
+import d.ConcreteMethodDef;
 
 public class TypeDef {
     public Project owner;
@@ -153,8 +154,8 @@ public class TypeDef {
             options.add(meth);
         }
 
-        // Search my parents' methods.
-        if (options.isEmpty())
+        // Search my parents' methods, unless this is a constructor since those aren't inherited.
+        if (options.isEmpty() && !name.equals("init"))
             for (ParameterizedType parent : parents)
                 try {
                     TypeDef parentDef = owner.resolve(parent.rawType);
@@ -171,25 +172,33 @@ public class TypeDef {
     }
 
     public d.TypeDef refine() {
+        // Refine my generic variances.
+        // TODO: This discards generic bounds. Shouldn't the VM's instanceof code use this info?
         Variance[] genericVariances = new Variance[genericInfos.length];
         for (int i = 0; i < genericVariances.length; ++i)
             genericVariances[i] = genericInfos[i].var;
 
+        // Get a list of all my instance field names, including inherited fields.
         String[] instanceFieldNames = new String[instanceFieldDefs.length];
+        // FIXME: need to include inherited instance fields.
         for (int i = 0; i < instanceFieldNames.length; ++i)
             instanceFieldNames[i] = instanceFieldDefs[i].name;
 
+        // Compile static methods.
         d.ConcreteMethodDef[] refinedStaticMethods = new d.ConcreteMethodDef[staticMethodDefs.length];
         for (int i = 0; i < refinedStaticMethods.length; ++i)
-            refinedStaticMethods[i] = null; // FIXME finish
+            refinedStaticMethods[i] = (ConcreteMethodDef) staticMethodDefs[i].refine(this);
 
+        // Compile instance methods.
         d.MethodDef[] refinedInstanceMethods = new d.MethodDef[instanceMethodDefs.length];
         for (int i = 0; i < refinedInstanceMethods.length; ++i)
-            refinedInstanceMethods[i] = null; // FIXME finish
+            refinedInstanceMethods[i] = instanceMethodDefs[i].refine(this);
 
         Map<d.RawMethod, d.RawMethod> virtualMethodDescTable = new HashMap<d.RawMethod, d.RawMethod>();
         // FIXME populate vtable
 
+        // Figure out what my generic arguments are for each supertype.
+        // For example, String's generic arguments for Sequence are {Char}.
         Map<RawType, d.ty.desc.TypeDesc[]> superGenericDescs = new HashMap<RawType, d.ty.desc.TypeDesc[]>();
         for (RawType supertype : allSupertypes()) {
             ParameterizedType thisAsSuper = thisType().asSupertype(supertype, new CodeContext(owner, this, null));

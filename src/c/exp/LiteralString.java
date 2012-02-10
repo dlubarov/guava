@@ -2,8 +2,9 @@ package c.exp;
 
 import common.RawType;
 
-import c.CodeContext;
+import c.*;
 import c.ty.*;
+import d.Opcodes;
 
 public class LiteralString extends Expression {
     public final String value;
@@ -15,6 +16,11 @@ public class LiteralString extends Expression {
     @Override
     public Type inferType(CodeContext ctx) {
         return new ParameterizedType(RawType.coreString);
+    }
+
+    @Override
+    public CodeTree compile(CodeContext ctx) {
+        return new CodeTree(Opcodes.CONST_STRING, ctx.method.getStringTableIndex(value));
     }
 
     @Override

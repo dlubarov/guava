@@ -1,7 +1,8 @@
 package c.exp;
 
-import c.CodeContext;
+import c.*;
 import c.ty.Type;
+import d.Opcodes;
 
 public class InstanceFieldAssignment extends Expression {
     public final Expression target;
@@ -14,9 +15,26 @@ public class InstanceFieldAssignment extends Expression {
         this.value = value;
     }
 
+    private FieldDef getField(CodeContext ctx) {
+        // Piggyback on our friend, InstanceFieldGet.
+        return new InstanceFieldGet(target, fieldName).getField(ctx);
+    }
+
     @Override
     public Type inferType(CodeContext ctx) {
+        // Piggyback on our friend, InstanceFieldGet.
         return new InstanceFieldGet(target, fieldName).inferType(ctx);
+    }
+
+    @Override
+    public CodeTree compile(CodeContext ctx) {
+        getField(ctx); // Ensure that the field exists.
+        int fieldNameIndex = ctx.method.getStringTableIndex(fieldName);
+        return new CodeTree(
+                target.compile(ctx),
+                value.compile(ctx),
+                Opcodes.PUT_INSTANCE_FIELD,
+                fieldNameIndex);
     }
 
     @Override

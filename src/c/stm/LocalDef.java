@@ -1,6 +1,9 @@
 package c.stm;
 
-import c.exp.Expression;
+import java.util.*;
+
+import c.*;
+import c.exp.*;
 import c.ty.Type;
 
 public class LocalDef extends Statement {
@@ -12,6 +15,18 @@ public class LocalDef extends Statement {
         this.type = type;
         this.names = names;
         this.initVals = initVals;
+    }
+
+    @Override
+    public CompilationResult compile(CodeContext ctx) {
+        List<CodeTree> l = new ArrayList<CodeTree>();
+        for (int i = 0; i < names.length; ++i) {
+            if (initVals[i] != null)
+                l.add(new LocalAssignment(names[i], initVals[i]).compile(ctx));
+            ctx = ctx.addLocal(type, names[i]);
+        }
+        CodeTree allCode = new CodeTree(l.toArray());
+        return new CompilationResult(allCode, ctx);
     }
 
     @Override

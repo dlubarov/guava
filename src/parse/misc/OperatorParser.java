@@ -15,7 +15,7 @@ public class OperatorParser extends Parser<String> {
     static {
         operators = new String[] {
                 "|=", "^=", "&=",
-                "<<=", ">>=",
+                "<<=", ">>>=", ">>=",
                 "+=", "-=",
                 "*=", "/=", "%=",
 
@@ -23,7 +23,7 @@ public class OperatorParser extends Parser<String> {
                 "|", "^", "&",
                 "==", "!=",
                 "<=", ">=", "<", ">",
-                "<<", ">>",
+                "<<", ">>>", ">>",
                 "+", "-",
                 "*", "/", "%"
         };

@@ -4,7 +4,7 @@ import static util.StringUtils.implode;
 
 import common.NiftyException;
 
-import c.CodeContext;
+import c.*;
 import c.ty.Type;
 
 public class InstanceMemberInvocation extends Expression {
@@ -34,6 +34,15 @@ public class InstanceMemberInvocation extends Expression {
             return normalInvocation.inferType(ctx);
         if (fieldGetInvocation.isValid(ctx))
             return fieldGetInvocation.inferType(ctx);
+        throw new NiftyException("no such method: %s.%s", target, memberName);
+    }
+
+    @Override
+    public CodeTree compile(CodeContext ctx) {
+        if (normalInvocation.isValid(ctx))
+            return normalInvocation.compile(ctx);
+        if (fieldGetInvocation.isValid(ctx))
+            return fieldGetInvocation.compile(ctx);
         throw new NiftyException("no such method: %s.%s", target, memberName);
     }
 

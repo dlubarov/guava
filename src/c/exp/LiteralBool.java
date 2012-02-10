@@ -2,8 +2,9 @@ package c.exp;
 
 import common.RawType;
 
-import c.CodeContext;
+import c.*;
 import c.ty.*;
+import d.Opcodes;
 
 public class LiteralBool extends Expression {
     public final boolean value;
@@ -15,6 +16,13 @@ public class LiteralBool extends Expression {
     @Override
     public Type inferType(CodeContext ctx) {
         return new ParameterizedType(RawType.coreBool);
+    }
+
+    @Override
+    public CodeTree compile(CodeContext ctx) {
+        if (value)
+            return new CodeTree(Opcodes.CONST_TRUE);
+        return new CodeTree(Opcodes.CONST_FALSE);
     }
 
     @Override

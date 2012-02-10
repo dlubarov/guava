@@ -6,6 +6,7 @@ import common.*;
 
 import c.*;
 import c.ty.*;
+import d.Opcodes;
 
 public class InstanceFieldGet extends Expression {
     public final Expression target;
@@ -16,7 +17,7 @@ public class InstanceFieldGet extends Expression {
         this.fieldName = fieldName;
     }
 
-    private FieldDef getField(CodeContext ctx) {
+    FieldDef getField(CodeContext ctx) {
         Type targetType = target.inferType(ctx);
         Set<FieldDef> options = new HashSet<FieldDef>();
         for (ParameterizedType concreteSuper : targetType.getConcreteSupertypes(ctx.type, ctx.method))
@@ -36,6 +37,15 @@ public class InstanceFieldGet extends Expression {
         FieldDef field = getField(ctx);
         ParameterizedType targetAsFieldOwner = target.inferType(ctx).asSupertype(field.owner, ctx);
         return field.type.withGenericArgs(targetAsFieldOwner.genericArgs, null);
+    }
+
+    @Override
+    public CodeTree compile(CodeContext ctx) {
+        getField(ctx); // Ensure that the field exists.
+        int fieldNameIndex = ctx.method.getStringTableIndex(fieldName);
+        return new CodeTree(
+                target.compile(ctx),
+                Opcodes.GET_INSTANCE_FIELD, fieldNameIndex);
     }
 
     @Override

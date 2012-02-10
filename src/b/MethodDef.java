@@ -4,7 +4,7 @@ import java.util.Arrays;
 
 import c.gen.MethodGenericInfo;
 
-import common.MethodVisibility;
+import common.*;
 
 import b.gen.MethodGenericParam;
 import b.stm.Block;
@@ -46,6 +46,10 @@ public class MethodDef {
     }
 
     public c.MethodDef refine(TypeDef typeCtx) {
+        // Validity checks.
+        if (body == null && !typeCtx.isAbstract)
+            throw new NiftyException("Non-abstract type '%s' has abstract method '%s'", typeCtx.desc, name);
+
         // Generic parameters
         MethodGenericInfo[] refinedGenerics = new MethodGenericInfo[genericParams.length];
         for (int i = 0; i < refinedGenerics.length; ++i)

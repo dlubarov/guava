@@ -2,6 +2,8 @@ package c;
 
 import java.util.*;
 
+import common.NiftyException;
+
 import c.ty.Type;
 
 public class CodeContext {
@@ -41,6 +43,19 @@ public class CodeContext {
             if (locals.get(i).name.equals(name))
                 return i;
         throw new NoSuchElementException(String.format("no local named %s", name));
+    }
+
+    public int getNumLocals() {
+        return locals.size();
+    }
+
+    public CodeContext addLocal(Type type, String name) {
+        for (LocalInfo loc : locals)
+            if (loc.name.equals(name))
+                throw new NiftyException("Duplicate local: '%s'.", name);
+        CodeContext newCtx = new CodeContext(this);
+        newCtx.locals.add(new LocalInfo(type, name));
+        return newCtx;
     }
 
     public static class LocalInfo {

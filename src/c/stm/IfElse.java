@@ -1,7 +1,13 @@
 package c.stm;
 
 import static util.StringUtils.indent;
+
+import common.NiftyException;
+
+import c.*;
 import c.exp.Expression;
+import c.ty.Type;
+import d.Opcodes;
 
 public class IfElse extends Statement {
     public final Expression cond;
@@ -11,6 +17,23 @@ public class IfElse extends Statement {
         this.cond = cond;
         this.bodyTrue = bodyTrue;
         this.bodyFalse = bodyFalse;
+    }
+
+    @Override
+    public CompilationResult compile(CodeContext ctx) {
+        if (!cond.hasType(Type.coreBool, ctx))
+            throw new NiftyException("Condition '%s' must have type Bool.", cond);
+
+        CodeTree condCode = cond.compile(ctx);
+        CodeTree trueCode = bodyTrue.compile(ctx).code;
+        CodeTree falseCode = bodyFalse.compile(ctx).code;
+        CodeTree code = new CodeTree(
+                condCode,
+                Opcodes.JUMP_COND, falseCode.getSize() + 2,
+                falseCode, Opcodes.JUMP, trueCode.getSize(),
+                trueCode
+        );
+        return new CompilationResult(code, ctx);
     }
 
     @Override

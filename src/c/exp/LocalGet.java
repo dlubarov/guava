@@ -1,7 +1,8 @@
 package c.exp;
 
-import c.CodeContext;
+import c.*;
 import c.ty.Type;
+import d.Opcodes;
 
 public class LocalGet extends Expression {
     public final String name;
@@ -13,6 +14,11 @@ public class LocalGet extends Expression {
     @Override
     public Type inferType(CodeContext ctx) {
         return ctx.getLocalType(name);
+    }
+
+    @Override
+    public CodeTree compile(CodeContext ctx) {
+        return new CodeTree(Opcodes.GET_LOCAL, ctx.getLocalIndex(name));
     }
 
     @Override

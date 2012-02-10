@@ -2,8 +2,9 @@ package c.exp;
 
 import common.RawType;
 
-import c.CodeContext;
+import c.*;
 import c.ty.*;
+import d.Opcodes;
 
 public class LiteralInt extends Expression {
     public final int value;
@@ -15,6 +16,11 @@ public class LiteralInt extends Expression {
     @Override
     public Type inferType(CodeContext ctx) {
         return new ParameterizedType(RawType.coreInt);
+    }
+
+    @Override
+    public CodeTree compile(CodeContext ctx) {
+        return new CodeTree(Opcodes.CONST_INT, value);
     }
 
     @Override
