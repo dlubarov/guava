@@ -61,8 +61,8 @@ public sealed type Int extends NaturallyOrdered[Int], Sequence[Bool] {
   public Int numLeadingZeros() {}
   public Int numTrailingZeros() {}
 
-  public Int reverseBits();
-  public Int reverseBytes();
+  public Int reverseBits() {}
+  public Int reverseBytes() {}
 
   public Bool ==(Top o) {}
 

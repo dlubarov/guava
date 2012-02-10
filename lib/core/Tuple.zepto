@@ -1,7 +1,7 @@
 module core;
 
-public type Tuple {
-  Sequence[Top] toSequence();
+public abstract type Tuple {
+  public Sequence[Top] toSequence();
 
   public Bool ==(Top o) {
     return this.toSequence() == o.as[Tuple]().toSequence();

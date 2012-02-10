@@ -1,5 +1,5 @@
 module re;
 
-public type RegularLanguage[T] {
+public abstract type RegularLanguage[T] {
   public Bool contains(Sequence[T] str);
 }
