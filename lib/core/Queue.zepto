@@ -1,7 +1,6 @@
 module core;
 
 public abstract type Queue[+T] extends Sequence[T] {
-  public T getFront();
 }
 
 public abstract type MutableQueue[T] extends Queue[T] {

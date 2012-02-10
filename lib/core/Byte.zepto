@@ -1,0 +1,53 @@
+module core;
+
+public sealed type Byte extends NaturallyOrdered[Byte], Sequence[Bool] {
+  public Unit init(Int n) {}
+
+  public Byte +() {}
+  public Byte -() {}
+  public Byte ~() {}
+
+  public Byte +(Byte that) {}
+  public Byte -(Byte that) {}
+
+  public Byte *(Byte that) {}
+  public Byte /(Byte that) {}
+  public Byte %(Byte that) {}
+
+  public Byte |(Byte that) {}
+  public Byte ^(Byte that) {}
+  public Byte &(Byte that) {}
+
+  public Byte <<(Byte that) {}
+  public Byte >>(Byte that) {}
+  public Byte >>>(Byte that) {}
+
+  public Byte rotateLeft(Int distance) {}
+  public Byte rotateRight(Int distance) {}
+
+  public static Byte min(Byte a, Byte b) {
+    if (a < b)
+      return a;
+    return b;
+  }
+
+  public static Byte max(Byte a, Byte b) {
+    if (a > b)
+      return a;
+    return b;
+  }
+
+  public Byte signum() {
+    return new Byte(new Int(this).signum());
+  }
+
+  public Bool ==(Top o) {}
+
+  public Int hashCode() {
+    return new Int(this).hashCode();
+  }
+
+  public String toString() {
+    return new Int(this).toString();
+  }
+}

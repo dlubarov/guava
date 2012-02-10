@@ -1,4 +1,0 @@
-module core;
-
-public type DeflatedString extends Sequence[Char] {
-}

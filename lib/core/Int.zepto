@@ -7,6 +7,10 @@ public sealed type Int extends NaturallyOrdered[Int], Sequence[Bool] {
     this.init(s, 10);
   }
 
+  public Unit init(Byte b) {}
+
+  public Unit init(Char c) {}
+
   public Int +() {}
   public Int -() {}
   public Int ~() {}
@@ -24,15 +28,30 @@ public sealed type Int extends NaturallyOrdered[Int], Sequence[Bool] {
 
   public Int <<(Int that) {}
   public Int >>(Int that) {}
-  #public Int >>>(Int that) {} # TODO: decide about rshifts
+  public Int >>>(Int that) {}
 
   public Int rotateLeft(Int distance) {}
   public Int rotateRight(Int distance) {}
 
-  public static Int min(Int a, Int b) {}
-  public static Int max(Int a, Int b) {}
+  public static Int min(Int a, Int b) {
+    if (a < b)
+      return a;
+    return b;
+  }
 
-  public Int signum() {}
+  public static Int max(Int a, Int b) {
+    if (a > b)
+      return a;
+    return b;
+  }
+
+  public Int signum() {
+    if (this > 0)
+      return 1;
+    if (this < 0)
+      return -1;
+    return 0;
+  }
 
   public Int bitCount() {}
 
@@ -73,4 +92,55 @@ public sealed type Int extends NaturallyOrdered[Int], Sequence[Bool] {
 }
 
 public type AscendingIntegerOrdering extends TotalOrdering[Int] {
+}
+
+# The sensible encoding for integers. :-)
+public type BigEndianIntSerializer extends Serializer[Int] {
+  private static readonly BigEndianIntSerializer singleton;
+
+  private Unit init() {}
+
+  private static Unit init() {
+    singleton = new LittleEndianIntSerializer();
+  }
+
+  public static Unit get() {
+    return BigEndianIntSerializer.singleton;
+  }
+
+  public Sequence[Byte] serialize(Int n) {
+    MutableStack[Byte] bytes = new DynamicArray[Byte](4);
+    for (Int i = 3; i >= 0; i = i - 1)
+      bytes.pushBack(new Byte(n << 8*i));
+    return {new Byte(n)};
+  }
+
+  public Int deserialize(Sequence[Byte] bytes) {
+    Int n = 0;
+    foreach (Byte b in bytes)
+      n = (n << 8) | b;
+    return n;
+  }
+}
+
+public type LittleEndianIntSerializer extends Serializer[Int] {
+  private static readonly LittleEndianIntSerializer singleton;
+
+  private Unit init() {}
+
+  private static Unit init() {
+    singleton = new LittleEndianIntSerializer();
+  }
+
+  public static Unit get() {
+    return LittleEndianIntSerializer.singleton;
+  }
+
+  public Sequence[Byte] serialize(Int n) {
+    return BigEndianIntSerializer().serialize(n).reverse();
+  }
+
+  public Int deserialize(Sequence[Byte] bytes) {
+    return BigEndianIntSerializer().deserialize(bytes.reverse());
+  }
 }

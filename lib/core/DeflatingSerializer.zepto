@@ -1,0 +1,20 @@
+module core;
+
+public type DeflatingSerializer[T] extends Serializer[T] {
+  private readonly Serializer[T] helper;
+
+  public Unit init(Serializer[T] helper) {
+    this.helper = helper;
+  }
+
+  public Sequence[Byte] serialize(T object) {
+    Sequence[Byte] bytes = helper.serialize(object);
+    # TODO: deflate byte sequence.
+    return bytes;
+  }
+
+  public T deserialize(Sequence[Byte] bytes) {
+    # TODO: inflate byte sequence.
+    return helper.deserialize(bytes);
+  }
+}

@@ -10,6 +10,8 @@ public type Sequence[+T] extends Collection[T] {
   public Sequence[T] replace(Sequence[T] a, Sequence[T] b) {
   }
 
+  # The index a is inclusive, while b is exclusive.
+  # Fails if b >= size().
   public Sequence[T] subsequence(Int a, Int b) {
   }
 
@@ -30,5 +32,47 @@ public type Sequence[+T] extends Collection[T] {
 
   public String toString() {
     return "(" + ", ".join(toSequence()) + ")";
+  }
+}
+
+public type SequenceSerializer[T] extends Serializer[Sequence[T]] {
+  private readonly Serializer[T] elementSerializer;
+
+  public Unit init(Serializer[T] elementSerializer) {
+    this.elementSerializer = elementSerializer;
+  }
+
+  public Sequence[Byte] serialize(Sequence[T] seq) {
+    Stack[Byte] bytes = new DynamicArray[Byte]();
+
+    foreach (T elem in seq) {
+      Sequence[Byte] elemBytes = elemSerializer.serialize(elem);
+      Sequence[Byte] sizeBytes = BigEndianSerializer().serialize(elemBytes.size());
+      # Write the length of this element's data, followed by the data itself.
+      bytes.pushBackAll(sizeBytes);
+      bytes.pushBackAll(elemBytes);
+    }
+
+    return bytes;
+  }
+
+  public Sequence[T] deserialize(Sequence[T] bytes) {
+    Stack[T] seq = new DynamicArray[T]();
+    Int pos = 0;
+
+    # Read each element.
+    while (pos < bytes.size()) {
+      # Read the size of this element.
+      Sequence[Byte] sizeBytes = bytes.subsequence(pos, pos + 4);
+      Int size = BigEndianSerializer().deserialize(sizeBytes);
+      pos = pos + 4;
+
+      # Read the element itself.
+      Sequence[Byte] elemBytes = bytes.subsequence(pos, pos + size);
+      seq.pushBack(elemSerializer.deserialize(elemBytes));
+      pos = pos + size;
+    }
+
+    return seq;
   }
 }
