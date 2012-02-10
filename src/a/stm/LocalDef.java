@@ -20,7 +20,10 @@ public class LocalDef extends Statement {
 
     @Override
     public b.stm.Statement refine() {
-        b.exp.Expression[] refinedInitVals = Expression.refineAll(initVals);
+        b.exp.Expression[] refinedInitVals = new b.exp.Expression[initVals.length];
+        for (int i = 0; i < refinedInitVals.length; ++i)
+            if (initVals[i] != null)
+                refinedInitVals[i] = initVals[i].refine();
         return new b.stm.LocalDef(type.refine(), names, refinedInitVals);
     }
 

@@ -15,16 +15,36 @@ public type Sequence[+T] extends Collection[T] {
   public Sequence[T] subsequence(Int a, Int b) {
   }
 
-  # TODO: decide names for "get first/last n elements"
-  # front/first/head, back/last/tail
+  public T getFront() {
+    return this.iterator().take().get();
+  }
+
+  public T getBack() {
+    T back;
+    foreach (T elem in this)
+      back = elem;
+    return back;
+  }
+
+  public Sequence[T] getFront(Int l) {
+  }
+
+  public Sequence[T] getBack(Int l) {
+  }
 
   public Bool startsWith(Sequence[T] s) {
+    if (this.size() < s.size())
+      return false;
+    return this.getFront(s.size()) == s;
   }
 
   public Bool endsWith(Sequence[T] s) {
+    if (this.size() < s.size())
+      return false;
+    return this.getBack(s.size()) == s;
   }
 
-  public Bool equals(Top o) {
+  public Bool ==(Top o) {
   }
 
   public Int hashCode() {

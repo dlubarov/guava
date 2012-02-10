@@ -23,7 +23,7 @@ public abstract type Set[+T] extends Sequence[T] {
       return 0;
   }
 
-  public Bool equals(Top o) {
+  public Bool ==(Top o) {
   }
 
   public Int hashCode() {
