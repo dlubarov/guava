@@ -9,6 +9,6 @@ public abstract type MutableQueue[T] extends Queue[T] {
 }
 
 public abstract type ImmutableQueue[T] extends Queue[T] {
-  public Queue[T] pushBack(T elem);
-  public Queue[T] popFront();
+  public ImmutableQueue[T] pushBack(T elem);
+  public ImmutableQueue[T] popFront();
 }

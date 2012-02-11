@@ -36,4 +36,6 @@ public abstract type MutableSet[T] extends Set[T] {
 }
 
 public abstract type ImmutableSet[+T] extends Set[T] {
+  public ImmutableSet[T] +(T elem);
+  public ImmutableSet[T] -(T elem);
 }

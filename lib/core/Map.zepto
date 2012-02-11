@@ -1,0 +1,21 @@
+module core;
+
+public abstract type Map[K, V] extends Set[Tuple2[K, V]] {
+  public V get(K key);
+
+  public Set[K] getKeys();
+  public Set[V] getValues();
+  public Set[Tuple2[K, V]] getEntries();
+}
+
+# Does no implement MutableSet[Tuple2[K, V]] because users of that
+# type would not expect adding an element to remove a distinct element.
+public abstract type MutableMap[K, V] extends Map[K, V] {
+  public Unit set(K key, V value);
+}
+
+# Does no implement ImmutableSet[Tuple2[K, V]] because users of that
+# type would not expect adding an element to remove a distinct element.
+public abstract type ImmutableMap[K, V] extends Map[K, V] {
+  public ImmutableMap[K, V] with(K key, V value);
+}

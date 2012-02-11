@@ -9,6 +9,6 @@ public abstract type MutableStack[T] extends Stack[T] {
 }
 
 public abstract type ImmutableStack[T] extends Stack[T] {
-  public Stack[T] pushBack(T elem);
-  public Stack[T] popBack(T elem);
+  public ImmutableStack[T] pushBack(T elem);
+  public ImmutableStack[T] popBack(T elem);
 }

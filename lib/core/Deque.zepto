@@ -11,8 +11,8 @@ public abstract type MutableDeque[T] extends Deque[T], MutableStack[T], MutableQ
 }
 
 public abstract type ImmutableDeque[T] extends Deque[T], ImmutableStack[T], ImmutableQueue[T] {
-  public Deque[T] pushFront(T elem);
-  public Deque[T] pushBack(T elem);
-  public Deque[T] popFront();
-  public Deque[T] popBack();
+  public ImmutableDeque[T] pushFront(T elem);
+  public ImmutableDeque[T] pushBack(T elem);
+  public ImmutableDeque[T] popFront();
+  public ImmutableDeque[T] popBack();
 }
