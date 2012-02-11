@@ -1,14 +1,11 @@
 module core;
 
-public abstract type Stack[+T] extends Sequence[T] {
-}
-
-public abstract type MutableStack[T] extends Stack[T] {
-  public Unit pushBack(T elem);
+public abstract type MutableStack[T] extends MutableSequence[T] {
+  public Unit pushBack(T value);
   public T popBack();
 }
 
-public abstract type ImmutableStack[T] extends Stack[T] {
-  public ImmutableStack[T] pushBack(T elem);
-  public ImmutableStack[T] popBack(T elem);
+public abstract type ImmutableStack[T] extends ImmutableSequence[T] {
+  public ImmutableStack[T] pushBack(T value);
+  public ImmutableStack[T] popBack(T value);
 }

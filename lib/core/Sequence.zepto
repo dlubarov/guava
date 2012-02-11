@@ -1,29 +1,20 @@
 module core;
 
 public type Sequence[+T] extends Collection[T] {
-  public Sequence[T] map(Function1[T, T] f) {
-  }
-
-  public Sequence[T] replace(T a, T b) {
-  }
-
-  public Sequence[T] replace(Sequence[T] a, Sequence[T] b) {
-  }
-
   # The index a is inclusive, while b is exclusive.
   # Fails if b >= size().
   public Sequence[T] subsequence(Int a, Int b) {
   }
 
+  public T get(Int index) {
+  }
+
   public T getFront() {
-    return this.iterator().take().get();
+    return this(0);
   }
 
   public T getBack() {
-    T back;
-    foreach (T elem in this)
-      back = elem;
-    return back;
+    return this(this.size() - 1);
   }
 
   public Sequence[T] getFront(Int l) {
@@ -44,6 +35,19 @@ public type Sequence[+T] extends Collection[T] {
     return this.getBack(s.size()) == s;
   }
 
+  # Repeat this sequence k times.
+  public Sequence[T] *(Int k) {
+  }
+
+  public Sequence[T] map(Function1[T, T] f) {
+  }
+
+  public Sequence[T] replace(T a, T b) {
+  }
+
+  public Sequence[T] replace(Sequence[T] a, Sequence[T] b) {
+  }
+
   public Bool ==(Top o) {
   }
 
@@ -53,6 +57,23 @@ public type Sequence[+T] extends Collection[T] {
   public String toString() {
     return "(" + ", ".join(toSequence()) + ")";
   }
+}
+
+# Most mutable sequences support various types of insertion operations,
+# but the only operation they have in common is replacing the i'th element.
+# Note that things like mutable ordered maps don't support this, but I think
+# it makes sense to have them extend regular Sequence and not MutableSequence.
+# Those are mutable structures, but "mutable sequence" has a more specific
+# meaning here than "a sequence which also has some mutation operation".
+public type MutableSequence[T] extends Sequence[T] {
+  T set(Int index, T value);
+}
+
+public type ImmutableSequence[+T] extends Sequence[T] {
+  # TODO: A method like this makes sense, but needs a name that
+  # doesn't conflict with ImmutableMap.with(k, v).
+  #ImmutableSequence[T] with(Int index, T value) {
+  #}
 }
 
 public type SequenceSerializer[T] extends Serializer[Sequence[T]] {

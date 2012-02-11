@@ -1,18 +1,22 @@
 module core;
 
-public abstract type Deque[T] extends Stack[T], Queue[T] {
-}
-
-public abstract type MutableDeque[T] extends Deque[T], MutableStack[T], MutableQueue[T] {
-  public Unit pushFront(T elem);
-  public Unit pushBack(T elem);
+public abstract type MutableDeque[T] extends
+    MutableStack[T], MutableQueue[T] {
+  public Unit pushFront(T value);
+  public Unit pushBack(T value);
   public T popFront();
   public T popBack();
 }
 
-public abstract type ImmutableDeque[T] extends Deque[T], ImmutableStack[T], ImmutableQueue[T] {
-  public ImmutableDeque[T] pushFront(T elem);
-  public ImmutableDeque[T] pushBack(T elem);
+public abstract type ImmutableDeque[+T] extends
+    ImmutableStack[T], ImmutableQueue[T] {
+  [U > T]
+  public ImmutableDeque[U] pushFront[U](U value);
+
+  [U > T]
+  public ImmutableDeque[U] pushBack[U](U value);
+
   public ImmutableDeque[T] popFront();
+
   public ImmutableDeque[T] popBack();
 }

@@ -1,0 +1,97 @@
+module core;
+
+# A fixed-length circular buffer of objects.
+# Unlike most collections, this has a FIXED CAPACITY which is cannot expand beyond.
+# Adding an element after this capacity has been reached will trigger an exception.
+
+# This does not extend MutableDeque despite supporting similar methods, since users
+# expect to be able to add elements to a MutableDeque safely.
+
+public type CircularBuffer[T] extends MutableSequence[T] {
+  private readonly MutableArray[Maybe[T]] backingArray;
+  private Int pos, len;
+
+  public Unit init(Int capacity) {
+    this.backingArray = {None() * capacity};
+    this.pos = this.len = 0;
+  }
+
+  public Unit init(Int capacity, CircularBuffer[T] source) {
+    this.init(capacity);
+    for (Int i = 0; i < source.size(); i = i + 1)
+      this(i) = source(i);
+  }
+
+  public Int size() {
+    return this.len;
+  }
+
+  public Int capacity() {
+    return this.backingArray.size();
+  }
+
+  private Int convertIndex(Int i) {
+    return (this.pos + i) % this.capacity();
+  }
+
+  public T get(Int i) {
+    if (i < 0 || i >= this.len)
+      1 / 0; # fail
+    return this.backingArray(this.convertIndex(i)).get();
+  }
+
+  # This cannot be used to add new elements; use the push methods for that.
+  public T set(Int i, T value) {
+    if (i < 0 || i >= this.len)
+      1 / 0; # fail
+    this.backingArray(this.convertIndex(i)) = Some(value);
+    return value;
+  }
+
+  private Unit clear(Int i) {
+    # Set an entry to None, allowing the GC to delete the old value.
+    this.backingARray(this.convertIndex(i)) = None();
+  }
+
+  private Unit wrapPos() {
+    this.pos = (this.pos + this.capacity()) % this.capacity();
+  }
+
+  public Unit pushFront(T value) {
+    if (this.len == this.capacity())
+      1 / 0; # fail
+    this.pos = this.pos - 1;
+    this.wrapPos();
+    this(0) = value;
+  }
+
+  public Unit pushBack(T value) {
+    if (this.len == this.capacity())
+      1 / 0; # fail
+    this(this.len) = value;
+    this.len = this.len + 1;
+  }
+
+  public T popFront() {
+    if (this.len == 0)
+      1 / 0; # fail
+    T result = this(0);
+    this.clear(0);
+    this.pos = this.pos + 1;
+    this.wrapPos();
+    return result;
+  }
+
+  public T popBack() {
+    if (this.len == 0)
+      1 / 0; # fail
+    this.len = this.len - 1;
+    T result = this(this.len);
+    this.clear(this.len);
+    return result;
+  }
+
+  public Enumerator[T] enumerator() {
+    return new RandomAccessEnumerator[T](this);
+  }
+}

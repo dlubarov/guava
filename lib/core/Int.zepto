@@ -101,18 +101,18 @@ public type BigEndianIntSerializer extends Serializer[Int] {
   private Unit init() {}
 
   private static Unit init() {
-    singleton = new LittleEndianIntSerializer();
+    BigEndianIntSerializer.singleton = new BigEndianIntSerializer();
   }
 
-  public static Unit get() {
+  public static BigEndianIntSerializer get() {
     return BigEndianIntSerializer.singleton;
   }
 
   public Sequence[Byte] serialize(Int n) {
-    MutableStack[Byte] bytes = new DynamicArray[Byte](4);
-    for (Int i = 3; i >= 0; i = i - 1)
-      bytes.pushBack(new Byte(n << 8*i));
-    return {new Byte(n)};
+    MutableDeque[Byte] bytes = new ArrayDeque[Byte](4);
+    for (Int i = 0; i < 4; i = i + 1)
+      bytes.pushFront(new Byte(n << 8 * i));
+    return bytes;
   }
 
   public Int deserialize(Sequence[Byte] bytes) {
@@ -129,10 +129,10 @@ public type LittleEndianIntSerializer extends Serializer[Int] {
   private Unit init() {}
 
   private static Unit init() {
-    singleton = new LittleEndianIntSerializer();
+    LittleEndianIntSerializer.singleton = new LittleEndianIntSerializer();
   }
 
-  public static Unit get() {
+  public static LittleEndianIntSerializer get() {
     return LittleEndianIntSerializer.singleton;
   }
 
