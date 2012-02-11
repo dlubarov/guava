@@ -1,6 +1,6 @@
 package a.exp;
 
-import util.StringUtils;
+import static util.StringUtils.implode;
 
 public class LiteralSequence extends Expression {
     public final Expression[] elements;
@@ -11,14 +11,12 @@ public class LiteralSequence extends Expression {
 
     @Override
     public b.exp.Expression refine() {
-        b.exp.Expression[] refinedElements = new b.exp.Expression[elements.length];
-        for (int i = 0; i < refinedElements.length; ++i)
-            refinedElements[i] = elements[i].refine();
+        b.exp.Expression[] refinedElements = Expression.refineAll(elements);
         return new b.exp.LiteralSequence(refinedElements);
     }
 
     @Override
     public String toString() {
-        return "{" + StringUtils.implode(", ", elements) + "}";
+        return '{' + implode(", ", elements) + '}';
     }
 }

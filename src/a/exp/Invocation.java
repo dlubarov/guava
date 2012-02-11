@@ -16,16 +16,8 @@ public class Invocation extends Expression {
 
     @Override
     public b.exp.Expression refine() {
-        // Refine generic arguments
-        b.Type[] refinedGenericArgs = new b.Type[genericArgs.length];
-        for (int i = 0; i < refinedGenericArgs.length; ++i)
-            refinedGenericArgs[i] = genericArgs[i].refine();
-
-        // Refine arguments
-        b.exp.Expression[] refinedArgs = new b.exp.Expression[args.length];
-        for (int i = 0; i < refinedArgs.length; ++i)
-            refinedArgs[i] = args[i].refine();
-
+        b.Type[] refinedGenericArgs = Type.refineAll(genericArgs);
+        b.exp.Expression[] refinedArgs = Expression.refineAll(args);
         return new b.exp.Invocation(target.refine(), refinedGenericArgs, refinedArgs);
     }
 

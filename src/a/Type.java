@@ -24,6 +24,13 @@ public class Type {
         return new b.Type(rawType, refinedGenericArgs);
     }
 
+    public static b.Type[] refineAll(Type[] types) {
+        b.Type[] result = new b.Type[types.length];
+        for (int i = 0; i < result.length; ++i)
+            result[i] = types[i].refine();
+        return result;
+    }
+
     @Override
     public String toString() {
         if (genericArgs.length == 0)

@@ -2,6 +2,8 @@ package c.exp;
 
 import static util.StringUtils.implode;
 
+import java.util.Arrays;
+
 import common.NiftyException;
 
 import c.*;
@@ -28,29 +30,37 @@ public class InstanceMemberInvocation extends Expression {
                 "get", genericArgs, args);
     }
 
+    private InstanceMethodInvocation getActualInvocation(CodeContext ctx) {
+        boolean normalIsValid = normalInvocation.isValid(ctx),
+                fieldGetIsValid = fieldGetInvocation.isValid(ctx);
+        if (normalIsValid && fieldGetIsValid)
+            throw new NiftyException(
+                    "Can't tell if '%s' is an invocation of the '%s' method or the 'get' method of the '%s' field.",
+                    this, memberName, memberName);
+        if (normalIsValid)
+            return normalInvocation;
+        if (fieldGetIsValid)
+            return fieldGetInvocation;
+        throw new NiftyException("no such method: %s.%s", target, memberName);
+    }
+
     @Override
     public Type inferType(CodeContext ctx) {
-        if (normalInvocation.isValid(ctx))
-            return normalInvocation.inferType(ctx);
-        if (fieldGetInvocation.isValid(ctx))
-            return fieldGetInvocation.inferType(ctx);
-        throw new NiftyException("no such method: %s.%s", target, memberName);
+        return getActualInvocation(ctx).inferType(ctx);
     }
 
     @Override
     public CodeTree compile(CodeContext ctx) {
-        if (normalInvocation.isValid(ctx))
-            return normalInvocation.compile(ctx);
-        if (fieldGetInvocation.isValid(ctx))
-            return fieldGetInvocation.compile(ctx);
-        throw new NiftyException("no such method: %s.%s", target, memberName);
+        return getActualInvocation(ctx).compile(ctx);
     }
 
     @Override
     public String toString() {
-        return String.format("%s.%s%s(%s)",
-                target, memberName,
-                genericArgs.length == 0 ? "" : '[' + implode(", ", genericArgs) + ']',
-                implode(", ", args));
+        StringBuilder sb = new StringBuilder();
+        sb.append(target);
+        if (genericArgs.length > 0)
+            sb.append(Arrays.toString(genericArgs));
+        sb.append('(').append(implode(", ", args)).append(')');
+        return sb.toString();
     }
 }

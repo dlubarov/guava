@@ -1,6 +1,9 @@
 package c.exp;
 
 import static util.StringUtils.implode;
+
+import java.util.Arrays;
+
 import c.*;
 import c.ty.Type;
 
@@ -48,10 +51,11 @@ public class StaticMethodInvocation extends Expression {
 
     @Override
     public String toString() {
-        return String.format("%s.%s%s(%s)",
-                owner,
-                methodName,
-                genericArgs.length == 0 ? "" : '[' + implode(", ", genericArgs) + ']',
-                implode(", ", args));
+        StringBuilder sb = new StringBuilder();
+        sb.append(owner).append('.').append(methodName);
+        if (genericArgs.length > 0)
+            sb.append(Arrays.toString(genericArgs));
+        sb.append('(').append(implode(", ", args)).append(')');
+        return sb.toString();
     }
 }

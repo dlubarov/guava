@@ -39,6 +39,13 @@ public class Type {
         return new c.ty.ParameterizedType(refinedRawType, refinedGenericArgs);
     }
 
+    public static c.ty.Type[] refineAll(Type[] types, TypeDef typeCtx, MethodDef methodCtx) {
+        c.ty.Type[] result = new c.ty.Type[types.length];
+        for (int i = 0; i < result.length; ++i)
+            result[i] = types[i].refine(typeCtx, methodCtx);
+        return result;
+    }
+
     @Override
     public String toString() {
         if (genericArgs.length == 0)

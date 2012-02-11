@@ -16,7 +16,6 @@ public abstract class Expression {
 
     public abstract CodeTree compile(CodeContext ctx);
 
-    // TODO: use this more.
     public static Type[] inferAllTypes(Expression[] expressions, CodeContext ctx) {
         Type[] types = new Type[expressions.length];
         for (int i = 0; i < types.length; ++i)

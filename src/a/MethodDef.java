@@ -55,10 +55,12 @@ public class MethodDef extends MemberDef {
     }
 
     public b.MethodDef refine() {
+        // Validity checks.
         if (ArrayUtils.hasDuplicates(quals))
             throw new NiftyException("%s has duplicate modifier", name);
+        // TODO: check for invalid qualifiers.
 
-        // Refine generic parameters
+        // Refine generic parameters.
         b.gen.MethodGenericParam[] refinedGenericParams = new b.gen.MethodGenericParam[genericParams.length];
         for (int i = 0; i < refinedGenericParams.length; ++i) {
             Set<b.Type> subOf = new HashSet<b.Type>(), supOf = new HashSet<b.Type>();
@@ -82,10 +84,8 @@ public class MethodDef extends MemberDef {
                     supOf.toArray(new b.Type[supOf.size()]));
         }
 
-        // Refine parameter types
-        b.Type[] refinedParamTypes = new b.Type[paramTypes.length];
-        for (int i = 0; i < refinedParamTypes.length; ++i)
-            refinedParamTypes[i] = paramTypes[i].refine();
+        // Refine parameter types.
+        b.Type[] refinedParamTypes = Type.refineAll(paramTypes);
 
         return new b.MethodDef(
                 visibility(),
@@ -109,14 +109,13 @@ public class MethodDef extends MemberDef {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append(qualsString());
-        sb.append(returnType).append(' ');
-        sb.append(name);
+        sb.append(returnType).append(' ').append(name);
 
-        // Append generic parameter list.
+        // Append the generic parameter list.
         if (genericParams.length > 0)
             sb.append(Arrays.toString(genericParams));
 
-        // Append parameter list.
+        // Append the parameter list.
         sb.append('(');
         for (int i = 0; i < paramNames.length; ++i) {
             if (i > 0)
@@ -125,7 +124,7 @@ public class MethodDef extends MemberDef {
         }
         sb.append(')');
 
-        // Append body.
+        // Append the body.
         if (body == null)
             sb.append(';');
         else

@@ -60,6 +60,6 @@ public class LiteralSequence extends Expression {
 
     @Override
     public String toString() {
-        return implode(", ", elements);
+        return '{' + implode(", ", elements) + '}';
     }
 }

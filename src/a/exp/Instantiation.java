@@ -14,9 +14,7 @@ public class Instantiation extends Expression {
 
     @Override
     public b.exp.Expression refine() {
-        b.exp.Expression[] refinedArgs = new b.exp.Expression[args.length];
-        for (int i = 0; i < refinedArgs.length; ++i)
-            refinedArgs[i] = args[i].refine();
+        b.exp.Expression[] refinedArgs = Expression.refineAll(args);
         return new b.exp.Instantiation(type.refine(), refinedArgs);
     }
 

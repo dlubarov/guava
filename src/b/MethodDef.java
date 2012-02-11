@@ -50,15 +50,13 @@ public class MethodDef {
         if (body == null && !typeCtx.isAbstract)
             throw new NiftyException("Non-abstract type '%s' has abstract method '%s'", typeCtx.desc, name);
 
-        // Generic parameters
+        // Refine generic parameters.
         MethodGenericInfo[] refinedGenerics = new MethodGenericInfo[genericParams.length];
         for (int i = 0; i < refinedGenerics.length; ++i)
             refinedGenerics[i] = genericParams[i].refine(typeCtx, this, i);
 
-        // Parameter types
-        c.ty.Type[] refinedParamTypes = new c.ty.Type[paramTypes.length];
-        for (int i = 0; i < refinedParamTypes.length; ++i)
-            refinedParamTypes[i] = paramTypes[i].refine(typeCtx, this);
+        // Refine parameter types.
+        c.ty.Type[] refinedParamTypes = Type.refineAll(paramTypes, typeCtx, this);
 
         return new c.MethodDef(
                 typeCtx.desc,

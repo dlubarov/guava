@@ -1,6 +1,9 @@
 package b.exp;
 
 import static util.StringUtils.implode;
+
+import java.util.Arrays;
+
 import c.exp.InstanceMemberInvocation;
 import b.*;
 
@@ -17,13 +20,8 @@ public class Invocation extends Expression {
 
     @Override
     public c.exp.Expression refine(TypeDef typeCtx, MethodDef methodCtx) {
-        c.ty.Type[] refinedGenericArgs = new c.ty.Type[genericArgs.length];
-        for (int i = 0; i < refinedGenericArgs.length; ++i)
-            refinedGenericArgs[i] = genericArgs[i].refine(typeCtx, methodCtx);
-
-        c.exp.Expression[] refinedArgs = new c.exp.Expression[args.length];
-        for (int i = 0; i < refinedArgs.length; ++i)
-            refinedArgs[i] = args[i].refine(typeCtx, methodCtx);
+        c.ty.Type[] refinedGenericArgs = Type.refineAll(genericArgs, typeCtx, methodCtx);
+        c.exp.Expression[] refinedArgs = Expression.refineAll(args, typeCtx, methodCtx);
 
         // We have to deal with these types of invocations:
         //     class get: SomeClass(...)
@@ -51,6 +49,11 @@ public class Invocation extends Expression {
                             targetMemAcc.memberName,
                             refinedGenericArgs, refinedArgs);
             }
+
+            // This is an instance method invocation, but it could have one of two forms:
+            //     exp.method(...) - a normal instance method call
+            //     exp.field(...) - invoking the get method of a field
+            // We postpone resolving this ambiguity by returning the general InstanceMemberInvocation.
             return new InstanceMemberInvocation(
                     owner.refine(typeCtx, methodCtx),
                     targetMemAcc.memberName,
@@ -65,9 +68,11 @@ public class Invocation extends Expression {
 
     @Override
     public String toString() {
-        return String.format("%s%s(%s)",
-                target,
-                genericArgs.length == 0 ? "" : '[' + implode(", ", genericArgs) + ']',
-                implode(", ", args));
+        StringBuilder sb = new StringBuilder();
+        sb.append(target);
+        if (genericArgs.length > 0)
+            sb.append(Arrays.toString(genericArgs));
+        sb.append('(').append(implode(", ", args)).append(')');
+        return sb.toString();
     }
 }

@@ -40,10 +40,12 @@ public class TypeDef {
         String module = source.module;
         Import[] imports = source.imports;
 
+        // Validity checks.
         if (ArrayUtils.hasDuplicates(quals))
             throw new NiftyException("%s.%s has duplicate modifier", module, name);
+        // TODO: check for invalid qualifiers.
 
-        // Imports
+        // Refine imports.
         Set<WildcardImport> wildcardImports = new HashSet<WildcardImport>();
         Set<SpecificImport> specificImports = new HashSet<SpecificImport>();
         for (int i = 0; i < imports.length; ++i) {
@@ -57,7 +59,7 @@ public class TypeDef {
         wildcardImports.add(new WildcardImport(module));
         specificImports.add(new SpecificImport(module, name));
 
-        // Generic parameters
+        // Refine generic parameters.
         b.gen.TypeGenericParam[] refinedGenericParams = new b.gen.TypeGenericParam[genericParams.length];
         for (int i = 0; i < refinedGenericParams.length; ++i) {
             TypeGenericParam genericParam = genericParams[i];
@@ -83,17 +85,14 @@ public class TypeDef {
                     supOf.toArray(new b.Type[supOf.size()]));
         }
 
-        // Parent types
+        // Refine parent types.
         b.Type[] refinedParents;
         if (parents.length == 0 && !(module.equals("core") && name.equals("Top")))
             refinedParents = new b.Type[] {new b.Type("Top")};
-        else {
-            refinedParents = new b.Type[parents.length];
-            for (int i = 0; i < refinedParents.length; ++i)
-                refinedParents[i] = parents[i].refine();
-        }
+        else
+            refinedParents = Type.refineAll(parents);
 
-        // Members
+        // Refine members.
         Set<b.FieldDef> staticFieldDefs = new HashSet<b.FieldDef>(),
                         instanceFieldDefs = new HashSet<b.FieldDef>();
         Set<b.MethodDef> staticMethodDefs = new HashSet<b.MethodDef>(),
