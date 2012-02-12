@@ -28,7 +28,7 @@ public class While extends Statement {
         CodeTree code = new CodeTree(
                 condCode, Opcodes.BOOL_NEG,
                 Opcodes.JUMP_COND, bodyCode.getSize() + 2,
-                bodyCode,   
+                bodyCode,
                 Opcodes.JUMP, -(bodyCode.getSize() + 5 + condCode.getSize())
         );
         return new CompilationResult(code, ctx);
