@@ -1,26 +1,44 @@
 module core;
 
 public type ArrayDeque[T] extends MutableDeque[T] {
-  private CircularBuffer backingBuffer;
+  private CircularBuffer[T] backingBuffer;
+
+  public Unit init(Int initialCapacity) {
+    this.backingBuffer = new CircularBuffer[T](initialCapacity);
+  }
+
+  public Unit init() {
+    this.init(4);
+  }
+
+  public Unit init(Collection[T] source) {
+    this.init(source.size());
+    foreach (T elem in source)
+      this.pushBack(elem);
+  }
 
   public Int size() {
-    return backingBuffer.size();
+    return this.backingBuffer.size();
+  }
+
+  private Int capacity() {
+    return this.backingBuffer.capacity();
   }
 
   public T get(Int index) {
-    return backingBuffer(index);
+    return this.backingBuffer(index);
   }
 
   public T set(Int index, T value) {
-    return backingBuffer(index) = value;
+    return this.backingBuffer(index) = value;
   }
 
   private Bool atCapacity() {
-    return this.size() == this.backingBuffer.capacity();
+    return this.size() == this.capacity();
   }
 
   private Bool wayUnderCapacity() {
-    return this.capacity() > 10 && this.size() * 4 < this.capacity();
+    return this.capacity() > 10 & this.size() * 4 < this.capacity();
   }
 
   private Unit resize(Int newCapacity) {

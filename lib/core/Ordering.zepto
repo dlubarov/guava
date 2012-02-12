@@ -17,26 +17,43 @@ public abstract type PartialOrdering[-T] {
   public Maybe[Relation] compare(T a, T b);
 }
 
-public abstract type TotalOrdering[-T] extends PartialOrdering[T] {
+public abstract type Ordering[-T] extends PartialOrdering[T] {
   public Some[Relation] compare(T a, T b);
 }
 
 public abstract type NaturallyOrdered[-T] {
-  public TotalOrdering[T] naturalOrdering();
+  public Ordering[T] naturalOrdering();
+
+  public Relation compareTo(T that) {
+    return this.naturalOrdering().compare(this, that).get();
+  }
+
+  public Bool <(T that) {
+    return this.compareTo(that) == Relation.LT;
+  }
+
+  public Bool >(T that) {
+    return this.compareTo(that) == Relation.GT;
+  }
+
+  public Bool ==(T that) {
+    return this.compareTo(that) == Relation.EQ;
+  }
+
+  public Bool <=(T that) {
+    return this < that | this == that;
+  }
+
+  public Bool >=(T that) {
+    return this > that | this == that;
+  }
 }
 
-public type ReversePartialOrdering[-T] extends PartialOrdering[T] {
+public type ReverseOrdering[-T] extends Ordering[T] {
   # TODO: implement
 }
 
-public type ReverseOrdering[-T] extends TotalOrdering[T] {
-  # TODO: implement
-}
-
-public type LexicographicPartialOrdering[-T] extends PartialOrdering[Sequence[T]] {
-}
-
-public type LexicographicTotalOrdering[-T] extends TotalOrdering[Sequence[T]] {
+public type LexicographicOrdering[-T] extends Ordering[Sequence[T]] {
   public Some[Relation] compare(Sequence[T] a, Sequence[T] b) {
     Source[T] enumA = a.enumerator(), enumB = b.enumerator();
   }

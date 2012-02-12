@@ -8,13 +8,13 @@ public type DeflatingSerializer[T] extends Serializer[T] {
   }
 
   public Sequence[Byte] serialize(T object) {
-    Sequence[Byte] bytes = helper.serialize(object);
+    Sequence[Byte] bytes = this.helper.serialize(object);
     # TODO: deflate byte sequence.
     return bytes;
   }
 
   public T deserialize(Sequence[Byte] bytes) {
     # TODO: inflate byte sequence.
-    return helper.deserialize(bytes);
+    return this.helper.deserialize(bytes);
   }
 }

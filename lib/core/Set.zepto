@@ -4,16 +4,25 @@ module core;
 public abstract type Set[+T] extends Sequence[T] {
   public static readonly Set[Bottom] empty;
 
-  public static Unit init(Collection[T] source) {
+  public Unit init(Collection[T] source) {
   }
 
-  public Set[T] &(Set[T] that) {
+  # Union.
+  [U > T]
+  public Set[U] |[U](Set[U] that) {
   }
 
-  public Set[T] |(Set[T] that) {
+  # Symmetric difference.
+  [U > T]
+  public Set[U] ^[U](Set[U] that) {
   }
 
-  public Set[T] ^(Set[T] that) {
+  # Intersection.
+  public Set[T] &(Set[Top] that) {
+  }
+
+  # Difference.
+  public Set[T] -(Set[Top] that) {
   }
 
   public Int count(T elem) {
@@ -28,6 +37,9 @@ public abstract type Set[+T] extends Sequence[T] {
 
   public Int hashCode() {
   }
+
+  public String toString() {
+  }
 }
 
 public abstract type MutableSet[T] extends Set[T] {
@@ -36,6 +48,8 @@ public abstract type MutableSet[T] extends Set[T] {
 }
 
 public abstract type ImmutableSet[+T] extends Set[T] {
-  public ImmutableSet[T] +(T elem);
+  [U > T]
+  public ImmutableSet[U] +[U](U elem);
+
   public ImmutableSet[T] -(T elem);
 }

@@ -3,6 +3,10 @@ module core;
 public type Top {
   public Bool ==(Top o) {}
 
+  public Bool !=(Top that) {
+    return !(this == that);
+  }
+
   public Int hashCode() {}
 
   public String toString() {}

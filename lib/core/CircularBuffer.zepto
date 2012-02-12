@@ -12,7 +12,7 @@ public type CircularBuffer[T] extends MutableSequence[T] {
   private Int pos, len;
 
   public Unit init(Int capacity) {
-    this.backingArray = {None() * capacity};
+    this.backingArray = {None()} * capacity;
     this.pos = this.len = 0;
   }
 
@@ -35,14 +35,14 @@ public type CircularBuffer[T] extends MutableSequence[T] {
   }
 
   public T get(Int i) {
-    if (i < 0 || i >= this.len)
+    if (i < 0 | i >= this.len)
       1 / 0; # fail
     return this.backingArray(this.convertIndex(i)).get();
   }
 
   # This cannot be used to add new elements; use the push methods for that.
   public T set(Int i, T value) {
-    if (i < 0 || i >= this.len)
+    if (i < 0 | i >= this.len)
       1 / 0; # fail
     this.backingArray(this.convertIndex(i)) = Some(value);
     return value;
@@ -91,7 +91,7 @@ public type CircularBuffer[T] extends MutableSequence[T] {
     return result;
   }
 
-  public Enumerator[T] enumerator() {
+  public Source[T] enumerator() {
     return new RandomAccessEnumerator[T](this);
   }
 }

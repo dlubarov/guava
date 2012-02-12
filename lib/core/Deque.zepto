@@ -4,6 +4,10 @@ public abstract type MutableDeque[T] extends
     MutableStack[T], MutableQueue[T] {
   public Unit pushFront(T value);
   public Unit pushBack(T value);
+
+  public Unit pushFrontAll(Sequence[T] values);
+  public Unit pushBackAll(Sequence[T] values);
+
   public T popFront();
   public T popBack();
 }
@@ -15,6 +19,12 @@ public abstract type ImmutableDeque[+T] extends
 
   [U > T]
   public ImmutableDeque[U] pushBack[U](U value);
+
+  [U > T]
+  public ImmutableDeque[U] pushFrontAll[U](Sequence[U] values);
+
+  [U > T]
+  public ImmutableDeque[U] pushBackAll[U](Sequence[U] values);
 
   public ImmutableDeque[T] popFront();
 

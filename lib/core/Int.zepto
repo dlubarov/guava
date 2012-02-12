@@ -88,10 +88,24 @@ public sealed type Int extends NaturallyOrdered[Int], Sequence[Bool] {
     return this.toString(16);
   }
 
-  public TotalOrdering[Int] naturalOrdering() {}
+  public Ordering[Int] naturalOrdering() {}
 }
 
-public type AscendingIntegerOrdering extends TotalOrdering[Int] {
+public type AscendingIntOrdering extends Ordering[Int] {
+  private static AscendingIntOrdering singleton;
+
+  private Unit init() {}
+
+  private static Unit init() {
+    AscendingIntOrdering.singleton = new AscendingIntOrdering();
+  }
+
+  public static AscendingIntOrdering get() {
+    return AsendingIntOrdering.singleton;
+  }
+
+  public Some[Relation] compare(Int a, Int b) {
+  }
 }
 
 # The sensible encoding for integers. :-)

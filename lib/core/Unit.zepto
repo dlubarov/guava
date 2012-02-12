@@ -6,7 +6,7 @@ public sealed type Unit {
   private Unit init() {}
 
   private static Unit init() {
-    singleton = new Unit();
+    Unit.singleton = new Unit();
   }
 
   public static Unit get() {

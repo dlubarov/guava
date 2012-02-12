@@ -26,11 +26,15 @@ public sealed type SingletonSource[+T] extends Source[T] {
   private readonly T value;
   private Bool used;
 
+  public Unit init(T value) {
+    this.value = value;
+  }
+
   public Maybe[T] take() {
     if (this.used)
       return None();
     this.used = true;
-    return value;
+    return Some(this.value);
   }
 }
 

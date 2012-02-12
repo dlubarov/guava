@@ -25,8 +25,24 @@ public sealed type Char extends NaturallyOrdered[Char] {
   public String toString() {
   }
 
-  public TotalOrdering[Char] naturalOrdering() {}
+  public Ordering[Char] naturalOrdering() {
+    return AscendingCharOrdering();
+  }
 }
 
-public type AscendingCharOrdering extends TotalOrdering[Char] {
+public type AscendingCharOrdering extends Ordering[Char] {
+  private static readonly AscendingCharOrdering singleton;
+
+  private Unit init() {}
+
+  private static Unit init() {
+    AscendingCharOrdering.singleton = new AscendingCharOrdering();
+  }
+
+  public static AscendingCharOrdering get() {
+    return AscendingCharOrdering.singleton;
+  }
+
+  public Some[Relation] compare(Char a, Char b) {
+  }
 }

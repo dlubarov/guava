@@ -1,14 +1,19 @@
 module core;
 
-public abstract type Queue[+T] extends Sequence[T] {
-}
-
-public abstract type MutableQueue[T] extends Queue[T], MutableSequence[T] {
+public abstract type MutableQueue[T] extends MutableSequence[T] {
   public Unit pushBack(T value);
+
+  public Unit pushBackAll(Sequence[T] values);
+
   public T popFront();
 }
 
-public abstract type ImmutableQueue[T] extends Queue[T], ImmutableSequence[T] {
-  public ImmutableQueue[T] pushBack(T value);
+public abstract type ImmutableQueue[+T] extends ImmutableSequence[T] {
+  [U > T]
+  public ImmutableQueue[U] pushBack[U](U value);
+
+  [U > T]
+  public ImmutableQueue[U] pushBackAll[U](Sequence[U] values);
+
   public ImmutableQueue[T] popFront();
 }
