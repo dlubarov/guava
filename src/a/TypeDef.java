@@ -93,10 +93,10 @@ public class TypeDef {
             refinedParents = Type.refineAll(parents);
 
         // Refine members.
-        Set<b.FieldDef> staticFieldDefs = new HashSet<b.FieldDef>(),
-                        instanceFieldDefs = new HashSet<b.FieldDef>();
-        Set<b.MethodDef> staticMethodDefs = new HashSet<b.MethodDef>(),
-                         instanceMethodDefs = new HashSet<b.MethodDef>();
+        Set<b.FieldDef> staticFieldDefs = new LinkedHashSet<b.FieldDef>(),
+                        instanceFieldDefs = new LinkedHashSet<b.FieldDef>();
+        Set<b.MethodDef> staticMethodDefs = new LinkedHashSet<b.MethodDef>(),
+                         instanceMethodDefs = new LinkedHashSet<b.MethodDef>();
         for (MemberDef memberDef : memberDefs)
             if (memberDef instanceof FieldDef) {
                 b.FieldDef[] fieldDefs = ((FieldDef) memberDef).refine();

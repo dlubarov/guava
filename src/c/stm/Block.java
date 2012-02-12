@@ -13,11 +13,14 @@ public class Block extends Statement {
     @Override
     public CompilationResult compile(CodeContext ctx) {
         CodeContext originalCtx = ctx;
+
         CodeTree[] codeParts = new CodeTree[parts.length];
-        for (Statement part : parts) {
-            CompilationResult res = part.compile(ctx);
+        for (int i = 0; i < codeParts.length; ++i) {
+            CompilationResult res = parts[i].compile(ctx);
+            codeParts[i] = res.code;
             ctx = res.newCtx;
         }
+
         return new CompilationResult(
                 new CodeTree((Object[]) codeParts),
                 originalCtx);

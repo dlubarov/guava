@@ -19,13 +19,16 @@ public class LocalDef extends Statement {
 
     @Override
     public CompilationResult compile(CodeContext ctx) {
-        List<CodeTree> l = new ArrayList<CodeTree>();
+        List<CodeTree> assignments = new ArrayList<CodeTree>();
         for (int i = 0; i < names.length; ++i) {
-            if (initVals[i] != null)
-                l.add(new LocalAssignment(names[i], initVals[i]).compile(ctx));
+            // TODO: this is not good, it allows "Int x = x;".
+            // But adding the local after generating the assignment code is problematic,
+            // because LocalAssignment needs the destination local index.
             ctx = ctx.addLocal(type, names[i]);
+            if (initVals[i] != null)
+                assignments.add(new LocalAssignment(names[i], initVals[i]).compile(ctx));
         }
-        CodeTree allCode = new CodeTree(l.toArray());
+        CodeTree allCode = new CodeTree(assignments.toArray());
         return new CompilationResult(allCode, ctx);
     }
 

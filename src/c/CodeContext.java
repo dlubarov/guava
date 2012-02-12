@@ -18,10 +18,12 @@ public class CodeContext {
         this.method = method;
 
         locals = new ArrayList<LocalInfo>();
-        if (!method.isStatic)
-            locals.add(new LocalInfo(type.thisType(), "this"));
-        for (int i = 0; i < method.paramNames.length; ++i)
-            locals.add(new LocalInfo(method.paramTypes[i], method.paramNames[i]));
+        if (method != null) {
+            if (!method.isStatic)
+                locals.add(new LocalInfo(type.thisType(), "this"));
+            for (int i = 0; i < method.paramNames.length; ++i)
+                locals.add(new LocalInfo(method.paramTypes[i], method.paramNames[i]));
+        }
     }
 
     public CodeContext(CodeContext src) {
@@ -53,9 +55,15 @@ public class CodeContext {
         for (LocalInfo loc : locals)
             if (loc.name.equals(name))
                 throw new NiftyException("Duplicate local: '%s'.", name);
+
         CodeContext newCtx = new CodeContext(this);
         newCtx.locals.add(new LocalInfo(type, name));
         return newCtx;
+    }
+
+    @Override
+    public String toString() {
+        return locals.toString();
     }
 
     public static class LocalInfo {
@@ -65,6 +73,11 @@ public class CodeContext {
         public LocalInfo(Type type, String name) {
             this.type = type;
             this.name = name;
+        }
+
+        @Override
+        public String toString() {
+            return String.format("%s %s", type, name);
         }
     }
 }

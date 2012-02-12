@@ -31,11 +31,12 @@ public class Assignment extends Expression {
         if (left instanceof Invocation) {
             Invocation inv = (Invocation) left;
             if (inv.genericArgs.length > 0)
-                throw new NiftyException("wtf? %s", this);
+                throw new NiftyException("wtf is this? %s", this);
             Expression[] args = new Expression[inv.args.length + 1];
             System.arraycopy(inv.args, 0, args, 0, inv.args.length);
             args[inv.args.length] = right;
-            return new Invocation(inv.target, Type.NONE, args).refine();
+            Expression newTarget = new MemberAccess(inv.target, "set");
+            return new Invocation(newTarget, Type.NONE, args).refine();
         }
 
         throw new NiftyException("assignment to non-lval: %s", left);

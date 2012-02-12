@@ -26,7 +26,9 @@ public class InstanceFieldGet extends Expression {
                 options.add(superDef.getInstanceField(fieldName));
             } catch (NoSuchElementException e) {}
         if (options.isEmpty())
-            throw new NiftyException("%s has no field named %s", target, fieldName);
+            throw new NoSuchElementException(String.format(
+                    "%s has no field '%s'. Its type is %s.",
+                    target, fieldName, target.inferType(ctx)));
         if (options.size() > 1)
             throw new NiftyException("%s inherits multiple fields named %s", target, fieldName);
         return options.iterator().next();

@@ -12,7 +12,7 @@ public class Project {
     }
 
     public b.Project refine() {
-        Set<b.TypeDef> typeDefs = new HashSet<b.TypeDef>();
+        Set<b.TypeDef> typeDefs = new LinkedHashSet<b.TypeDef>();
         for (SourceFile sourceFile : sourceFiles)
             for (b.TypeDef typeDef : sourceFile.refine())
                 typeDefs.add(typeDef);

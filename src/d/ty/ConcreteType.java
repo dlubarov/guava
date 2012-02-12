@@ -12,6 +12,7 @@ public class ConcreteType {
     public final ConcreteType[] genericArgs;
 
     public ConcreteType(TypeDef rawType, ConcreteType[] genericArgs) {
+        assert rawType != null;
         this.rawType = rawType;
         this.genericArgs = genericArgs;
     }
@@ -27,7 +28,7 @@ public class ConcreteType {
         if (myGenericArgsForThat == null)
             return false; // the raw types don't even fit
 
-        // Check each generic argument
+        // Check each generic argument.
         for (int i = 0; i < myGenericArgsForThat.length; ++i) {
             ConcreteType myGenericArg = myGenericArgsForThat[i].toConcrete(genericArgs);
             ConcreteType requiredGenericArg = that.genericArgs[i];
@@ -45,9 +46,10 @@ public class ConcreteType {
                         return false;
                     break;
             }
+            // TODO: check generic bounds here.
         }
 
-        // If we got here, the generic arguments all fit
+        // If we got here, the generic arguments all fit.
         return true;
     }
 

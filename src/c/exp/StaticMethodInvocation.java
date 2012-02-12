@@ -4,6 +4,8 @@ import static util.StringUtils.implode;
 
 import java.util.Arrays;
 
+import util.ArrayUtils;
+
 import c.*;
 import c.ty.Type;
 
@@ -42,10 +44,14 @@ public class StaticMethodInvocation extends Expression {
     public CodeTree compile(CodeContext ctx) {
         MethodDef m = getMethod(ctx);
         int methodIndex = ctx.method.getMethodTableIndex(m);
+
         int[] genericArgIndices = m.getFullTypeTableIndices(genericArgs);
+        Integer[] genericArgIndicesBoxed = ArrayUtils.boxArray(genericArgIndices);
+        CodeTree genericArgIndicesTree = new CodeTree((Object[]) genericArgIndicesBoxed);
+
         return new CodeTree(
                 Expression.compileAll(args, ctx),
-                Opcodes.INVOKE_STATIC, methodIndex, genericArgIndices
+                Opcodes.INVOKE_STATIC, methodIndex, genericArgIndicesTree
         );
     }
 

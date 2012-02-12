@@ -44,16 +44,6 @@ public final class God {
         allTypes.put(type.desc, type);
         if (type instanceof NativeTypeDef)
             nativeTypes.add((NativeTypeDef) type);
-
-        // Invoke the static initializer, if there is one.
-        // TODO: non-native static initializers won't work with native types...
-        for (ConcreteMethodDef m : type.staticMethods)
-            if (m.desc.equals(new RawMethod(true, type.desc, "init", 0, TypeDesc.NONE)))
-                m.invoke(ConcreteType.NONE);
-
-        // When Unit is loaded, we would like a reference to Unit.singleton.
-        if (type.desc.equals(RawType.coreUnit))
-            ;
     }
 
     public static MethodDef resolveMethod(RawMethod desc) {
@@ -65,5 +55,22 @@ public final class God {
 
     public static void newMethod(MethodDef method) {
         allMethods.put(method.desc, method);
+    }
+
+    public static void linkAll() {
+        for (TypeDef typeDef : allTypes.values())
+            typeDef.link();
+    }
+
+    public static void runStaticInitializers() {
+        for (TypeDef typeDef : allTypes.values()) {
+            for (ConcreteMethodDef m : typeDef.staticMethods)
+                if (m.desc.equals(new RawMethod(true, typeDef.desc, "init", 0, TypeDesc.NONE)))
+                    m.invoke(ConcreteType.NONE);
+
+            if (typeDef.desc.equals(RawType.coreUnit)) {
+                // TODO: Load a reference to Unit.singleton.
+            }
+        }
     }
 }

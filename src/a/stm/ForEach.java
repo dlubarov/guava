@@ -36,9 +36,10 @@ public class ForEach extends Statement {
          *         }
          *     }
          */
-        String iterId = VariableGenerator.randomId("iter");
+        String iterId = VariableGenerator.randomId("enumerator");
+        String maybeId = VariableGenerator.randomId("maybe");
         Variable iterVar = new Variable(iterId);
-        Variable elemVar = new Variable(elemName);
+        Variable maybeVar = new Variable(maybeId);
 
         return new Block(
                 new LocalDef(
@@ -49,7 +50,7 @@ public class ForEach extends Statement {
                         )
                 ),
                 new LocalDef(
-                        elemType, elemName,
+                        new Type("Maybe", new Type[] {elemType}), maybeId,
                         new Invocation(
                                 new MemberAccess(iterVar, "take"),
                                 Type.NONE, Expression.NONE
@@ -59,15 +60,22 @@ public class ForEach extends Statement {
                         new PrefixOperation(
                                 "!",
                                 new Invocation(
-                                        new MemberAccess(elemVar, "isEmpty"),
+                                        new MemberAccess(maybeVar, "isEmpty"),
                                         Type.NONE, Expression.NONE
                                 )
                         ),
                         new Block(
+                                new LocalDef(
+                                        elemType, elemName,
+                                        new Invocation(
+                                                new MemberAccess(maybeVar, "get"),
+                                                Type.NONE, Expression.NONE
+                                        )
+                                ),
                                 body,
                                 new Evaluation(
                                         new Assignment(
-                                                elemVar,
+                                                maybeVar,
                                                 new Invocation(
                                                         new MemberAccess(iterVar, "take"),
                                                         Type.NONE, Expression.NONE)

@@ -15,7 +15,7 @@ public abstract class Type {
 
     protected abstract Type[] getSubtypes(TypeDef typeCtx, MethodDef methodCtx);
 
-    public final ParameterizedType[] getConcreteSupertypes(TypeDef typeCtx, MethodDef methodCtx) {
+    public ParameterizedType[] getConcreteSupertypes(TypeDef typeCtx, MethodDef methodCtx) {
         Set<ParameterizedType> result = new HashSet<ParameterizedType>();
         for (Type supertype : getSupertypes(typeCtx, methodCtx))
             if (supertype instanceof ParameterizedType)
@@ -53,11 +53,11 @@ public abstract class Type {
     // Convert this to some supertype. Useful for getting the generic arguments associated with
     // some supertype. If we call String.asSupertype(Sequence), we should get Sequence[Char].
     public ParameterizedType asSupertype(RawType supertype, CodeContext ctx) {
-        // Different concrete supertypes may have different parameterizations.
+        // Different supertypes may have different parameterizations.
         Set<ParameterizedType> parameterizations = new HashSet<ParameterizedType>();
-        for (ParameterizedType concreteSuper : getConcreteSupertypes(ctx.type, ctx.method))
+        for (Type sup : getSupertypes(ctx.type, ctx.method))
             try {
-                parameterizations.add(concreteSuper.asSupertype(supertype, ctx));
+                parameterizations.add(sup.asSupertype(supertype, ctx));
             } catch (IllegalArgumentException e) {}
         if (parameterizations.isEmpty())
             throw new IllegalArgumentException(String.format(

@@ -7,7 +7,7 @@ import d.ty.ConcreteType;
 import d.ty.desc.*;
 
 public class NativeBool extends NativeObject {
-    public static final NativeBool TRUE = new NativeBool(true), FALSE = new NativeBool(false);
+    public static final NativeBool TRUE, FALSE;
 
     public static final NativeTypeDef TYPE;
 
@@ -104,5 +104,8 @@ public class NativeBool extends NativeObject {
                 return new NativeBool();
             }
         };
+
+        TRUE = new NativeBool(true);
+        FALSE = new NativeBool(false);
     }
 }

@@ -10,7 +10,7 @@ public class Project {
     public final Map<RawType, TypeDef> typeDefs;
 
     public Project(TypeDef[] typeDefs) {
-        this.typeDefs = new HashMap<RawType, TypeDef>();
+        this.typeDefs = new LinkedHashMap<RawType, TypeDef>(typeDefs.length);
         for (TypeDef typeDef : typeDefs) {
             typeDef.project = this;
             this.typeDefs.put(typeDef.desc, typeDef);

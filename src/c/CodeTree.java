@@ -1,5 +1,7 @@
 package c;
 
+import java.util.Arrays;
+
 public final class CodeTree {
     private final Object[] children;
     private int[] memCode = null;
@@ -7,7 +9,8 @@ public final class CodeTree {
 
     public CodeTree(Object... children) {
         for (Object child : children)
-            assert child instanceof Integer || child instanceof CodeTree;
+            assert child instanceof Integer || child instanceof CodeTree
+                : "found " + child.getClass() + " in CodeTree";
         this.children = children;
     }
 
@@ -39,5 +42,10 @@ public final class CodeTree {
         int n = flatten(code, 0);
         assert n == code.length;
         return memCode = code;
+    }
+
+    @Override
+    public String toString() {
+        return "CodeTree" + Arrays.toString(children);
     }
 }

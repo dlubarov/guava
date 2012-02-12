@@ -110,7 +110,7 @@ public class MethodDef {
         return result;
     }
 
-    public d.MethodDef refine(TypeDef owner) {
+    public d.MethodDef compile(TypeDef owner) {
         if (body == null)
             return new d.AbstractMethodDef(refineDesc());
 

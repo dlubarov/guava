@@ -4,6 +4,8 @@ import static util.StringUtils.implode;
 
 import java.util.*;
 
+import util.ArrayUtils;
+
 import common.NiftyException;
 
 import c.*;
@@ -34,9 +36,13 @@ public class InstanceMethodInvocation extends Expression {
                 options.add(superDef.getInstanceMethod(methodName, genericArgs, argTypes, ctx));
             } catch (NoSuchElementException e) {}
         if (options.isEmpty())
-            throw new NoSuchElementException(String.format("%s has no method named %s", target, methodName));
+            throw new NoSuchElementException(String.format(
+                    "%s has no method named '%s' with argument types %s.",
+                    target, methodName, Arrays.toString(argTypes)));
         if (options.size() > 1)
-            throw new NiftyException("%s inherits multiple methods named %s", target, methodName);
+            throw new NiftyException(
+                    "%s inherits multiple methods named '%s'.",
+                    target, methodName);
         return options.iterator().next();
     }
 
@@ -61,19 +67,25 @@ public class InstanceMethodInvocation extends Expression {
     public CodeTree compile(CodeContext ctx) {
         MethodDef m = getMethod(ctx);
         int methodIndex = ctx.method.getMethodTableIndex(m);
+
         int[] genericArgIndices = m.getFullTypeTableIndices(genericArgs);
+        Integer[] genericArgIndicesBoxed = ArrayUtils.boxArray(genericArgIndices);
+        CodeTree genericArgIndicesTree = new CodeTree((Object[]) genericArgIndicesBoxed);
+
         return new CodeTree(
                 target.compile(ctx),
                 Expression.compileAll(args, ctx),
-                Opcodes.INVOKE_VIRTUAL, methodIndex, genericArgIndices
+                Opcodes.INVOKE_VIRTUAL, methodIndex, genericArgIndicesTree
         );
     }
 
     @Override
     public String toString() {
-        return String.format("%s.%s%s(%s)",
-                target, methodName,
-                genericArgs.length == 0 ? "" : '[' + implode(", ", genericArgs) + ']',
-                implode(", ", args));
+        StringBuilder sb = new StringBuilder();
+        sb.append(target).append('.').append(methodName);
+        if (genericArgs.length > 0)
+            sb.append(Arrays.toString(genericArgs));
+        sb.append('(').append(implode(", ", args)).append(')');
+        return sb.toString();
     }
 }

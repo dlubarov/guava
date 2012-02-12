@@ -41,7 +41,11 @@ public class InstanceMemberInvocation extends Expression {
             return normalInvocation;
         if (fieldGetIsValid)
             return fieldGetInvocation;
-        throw new NiftyException("no such method: %s.%s", target, memberName);
+        throw new NiftyException(
+                "No such method: '%s.%s' with argument types %s. Target has type %s.",
+                target, memberName,
+                Arrays.toString(Expression.inferAllTypes(args, ctx)),
+                target.inferType(ctx));
     }
 
     @Override
@@ -57,7 +61,7 @@ public class InstanceMemberInvocation extends Expression {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append(target);
+        sb.append(target).append('.').append(memberName);
         if (genericArgs.length > 0)
             sb.append(Arrays.toString(genericArgs));
         sb.append('(').append(implode(", ", args)).append(')');

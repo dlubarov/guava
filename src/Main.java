@@ -9,7 +9,11 @@ import parse.SourceFileParser;
 import util.FileUtils;
 
 public class Main {
-    private static final boolean printA = true, printB = true, printC = true;
+    private static final boolean
+            printA = true,
+            printB = true,
+            printC = true,
+            printD = true;
 
     public static void main(String[] args) throws IOException {
         // Parse source files.
@@ -45,6 +49,16 @@ public class Main {
         if (printC) {
             System.out.println("--- PROJECT C ---");
             System.out.print(cProj);
+            System.out.println();
+        }
+
+        // Compile (c -> d)!
+        d.TypeDef[] dProj = cProj.compile();
+        if (printD) {
+            System.out.println("--- PROJECT D ---");
+            for (d.TypeDef typeDef : dProj) {
+                System.out.println(typeDef);
+            }
             System.out.println();
         }
     }

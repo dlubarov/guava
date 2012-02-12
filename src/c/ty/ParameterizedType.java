@@ -33,8 +33,8 @@ public class ParameterizedType extends Type {
 
     @Override
     public Type[] getSupertypes(TypeDef typeCtx, MethodDef methodCtx) {
-        assert rawType.equals(typeCtx.desc);
-        return typeCtx.parentsWithGenerics(genericArgs);
+        TypeDef myTypeDef = typeCtx.owner.resolve(rawType);
+        return myTypeDef.parentsWithGenerics(genericArgs);
     }
 
     @Override
@@ -47,15 +47,21 @@ public class ParameterizedType extends Type {
     }
 
     @Override
+    public final ParameterizedType[] getConcreteSupertypes(TypeDef typeCtx, MethodDef methodCtx) {
+        // I'm already a concrete type.
+        return new ParameterizedType[] {this};
+    }
+
+    @Override
     public boolean isSubtype(Type that, TypeDef typeCtx, MethodDef methodCtx) {
-        assert rawType.equals(typeCtx.desc);
+        TypeDef myTypeDef = typeCtx.owner.resolve(rawType);
         if (that instanceof ParameterizedType) {
             ParameterizedType thatParamType = (ParameterizedType) that;
             if (rawType.equals(thatParamType.rawType)) {
                 if (genericArgs.length != thatParamType.genericArgs.length)
                     throw new NiftyException("%s has wrong number of generic arguments", rawType);
                 for (int i = 0; i < genericArgs.length; ++i) {
-                    Variance var = typeCtx.genericInfos[i].var;
+                    Variance var = myTypeDef.genericInfos[i].var;
                     Type thisGenArg = genericArgs[i];
                     Type thatGenArg = thatParamType.genericArgs[i];
                     switch (var) {

@@ -104,13 +104,17 @@ public class TypeDef {
                 if (!argTypes[i].isSubtype(expectedTypeWithGens, null, ctx.method))
                     continue methodSearch;
             }
+
+            options.add(method);
         }
 
         // There should be exactly one matching method, which we return.
         if (options.isEmpty())
-            throw new NoSuchElementException("no matching static method found");
+            throw new NoSuchElementException(String.format(
+                    "No matching static method found for '%s.%s'",
+                    desc, name));
         if (options.size() > 1)
-            throw new NiftyException("ambiguous static method call %s", name);
+            throw new NiftyException("Ambiguous static method call '%s'.", name);
         return options.iterator().next();
     }
 
@@ -142,6 +146,8 @@ public class TypeDef {
         // Search my own methods.
         methodSearch:
         for (MethodDef meth : instanceMethodDefs) {
+            if (meth.isStatic)
+                continue;
             if (!name.equals(meth.name))
                 continue;
             if (genericArgs.length != meth.genericInfos.length)
@@ -171,7 +177,7 @@ public class TypeDef {
         return options.iterator().next();
     }
 
-    public d.TypeDef refine() {
+    public d.TypeDef compile() {
         // Refine my generic variances.
         // TODO: This discards generic bounds. Shouldn't the VM's instanceof code use this info?
         Variance[] genericVariances = new Variance[genericInfos.length];
@@ -180,22 +186,34 @@ public class TypeDef {
 
         // Get a list of all my instance field names, including inherited fields.
         String[] instanceFieldNames = new String[instanceFieldDefs.length];
-        // FIXME: need to include inherited instance fields.
+        // FIXME high: need to include inherited instance fields.
         for (int i = 0; i < instanceFieldNames.length; ++i)
             instanceFieldNames[i] = instanceFieldDefs[i].name;
 
         // Compile static methods.
-        d.ConcreteMethodDef[] refinedStaticMethods = new d.ConcreteMethodDef[staticMethodDefs.length];
-        for (int i = 0; i < refinedStaticMethods.length; ++i)
-            refinedStaticMethods[i] = (ConcreteMethodDef) staticMethodDefs[i].refine(this);
+        d.ConcreteMethodDef[] compiledStaticMethods = new d.ConcreteMethodDef[staticMethodDefs.length];
+        for (int i = 0; i < compiledStaticMethods.length; ++i)
+            try {
+                compiledStaticMethods[i] = (ConcreteMethodDef) staticMethodDefs[i].compile(this);
+            } catch (RuntimeException e) {
+                throw new NiftyException(e,
+                        "Refinement (c->d) error in static method '%s'.",
+                        staticMethodDefs[i].name);
+            }
 
         // Compile instance methods.
-        d.MethodDef[] refinedInstanceMethods = new d.MethodDef[instanceMethodDefs.length];
-        for (int i = 0; i < refinedInstanceMethods.length; ++i)
-            refinedInstanceMethods[i] = instanceMethodDefs[i].refine(this);
+        d.MethodDef[] compiledInstanceMethods = new d.MethodDef[instanceMethodDefs.length];
+        for (int i = 0; i < compiledInstanceMethods.length; ++i)
+            try {
+                compiledInstanceMethods[i] = instanceMethodDefs[i].compile(this);
+            } catch (RuntimeException e) {
+                throw new NiftyException(e,
+                        "Refinement (c->d) error in instance method '%s'.",
+                        instanceMethodDefs[i].name);
+            }
 
         Map<d.RawMethod, d.RawMethod> virtualMethodDescTable = new HashMap<d.RawMethod, d.RawMethod>();
-        // FIXME populate vtable
+        // FIXME high: populate vtable
 
         // Figure out what my generic arguments are for each supertype.
         // For example, String's generic arguments for Sequence are {Char}.
@@ -210,8 +228,8 @@ public class TypeDef {
                 genericVariances,
                 staticFieldDefs.length,
                 instanceFieldNames,
-                refinedStaticMethods,
-                refinedInstanceMethods,
+                compiledStaticMethods,
+                compiledInstanceMethods,
                 virtualMethodDescTable,
                 superGenericDescs);
     }
