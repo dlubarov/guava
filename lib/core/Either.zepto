@@ -1,0 +1,55 @@
+module core;
+
+# A value of one of two possible types.
+
+# This is often returned by methods which mau fail and would like to return
+# some information about the failure when they do. By convention, Left is used
+# for failure information and Right is used for the result on success.
+
+public abstract type Either[+A, +B] {
+  public Either[B, A] swap();
+
+  public Either[C, D] map[C, D](Function1[A, C] f, Function1[B, D] g);
+
+  public R fold[R](Function1[A, R] f, Function1[B, R] g);
+}
+
+public type Left[+A] extends Either[A, Bottom] {
+  public readonly A value;
+
+  public Unit init(A value) {
+    this.value = value;
+  }
+
+  public Either[Bottom, A] swap() {
+    return new Right[A](this.value);
+  }
+
+  public Either[C, D] map[C, D](Function1[A, C] f, Function1[Bottom, D] g) {
+    return new Left[C](f(this.value));
+  }
+
+  public R fold[R](Function1[A, R] f, Function1[Bottom, R] g) {
+    return f(this.value);
+  }
+}
+
+public type Right[+B] extends Either[Bottom, B] {
+  public readonly B value;
+
+  public Unit init(B value) {
+    this.value = value;
+  }
+
+  public Either[B, Bottom] swap() {
+    return new Left[B](this.value);
+  }
+
+  public Either[C, D] map[C, D](Function1[Bottom, C] f, Function1[B, D] g) {
+    return new Right[D](g(this.value));
+  }
+
+  public R fold[R](Function1[Bottom, R] f, Function1[B, R] g) {
+    return g(this.value);
+  }
+}

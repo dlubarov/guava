@@ -80,7 +80,7 @@ public class MethodDefParser extends Parser<MemberDef> {
                 // Parse the comma.
                 if (s.charAt(p) != ',')
                     break;
-                p = optWS(s, p);
+                p = optWS(s, p + 1);
 
                 // Parse the next generic parameter name.
                 resGenParam = IdentifierParser.singleton.parse(s, p);
