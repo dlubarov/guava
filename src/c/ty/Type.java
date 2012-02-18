@@ -27,6 +27,7 @@ public abstract class Type {
     }
 
     public boolean isSubtype(Type that, TypeDef typeCtx, MethodDef methodCtx) {
+        // TODO: inefficient search
         if (equals(that))
             return true;
         for (Type supertype : getSupertypes(typeCtx, methodCtx))

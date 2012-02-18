@@ -22,7 +22,7 @@ public class InstanceFieldGet extends Expression {
         Set<FieldDef> options = new HashSet<FieldDef>();
         for (ParameterizedType concreteSuper : targetType.getConcreteSupertypes(ctx.type, ctx.method))
             try {
-                TypeDef superDef = ctx.project.resolve(concreteSuper.rawType);
+                TypeDef superDef = Project.singleton.resolve(concreteSuper.rawType);
                 options.add(superDef.getInstanceField(fieldName));
             } catch (NoSuchElementException e) {}
         if (options.isEmpty())

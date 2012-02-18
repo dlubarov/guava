@@ -33,7 +33,7 @@ public class ParameterizedType extends Type {
 
     @Override
     public Type[] getSupertypes(TypeDef typeCtx, MethodDef methodCtx) {
-        TypeDef myTypeDef = typeCtx.owner.resolve(rawType);
+        TypeDef myTypeDef = Project.singleton.resolve(rawType);
         return myTypeDef.parentsWithGenerics(genericArgs);
     }
 
@@ -54,7 +54,7 @@ public class ParameterizedType extends Type {
 
     @Override
     public boolean isSubtype(Type that, TypeDef typeCtx, MethodDef methodCtx) {
-        TypeDef myTypeDef = typeCtx.owner.resolve(rawType);
+        TypeDef myTypeDef = Project.singleton.resolve(rawType);
         if (that instanceof ParameterizedType) {
             ParameterizedType thatParamType = (ParameterizedType) that;
             if (rawType.equals(thatParamType.rawType)) {

@@ -10,7 +10,6 @@ import b.imp.*;
 import common.*;
 
 public class TypeDef {
-    public Project project;
     public final WildcardImport[] wildcardImports;
     public final SpecificImport[] specificImports;
 
@@ -60,7 +59,7 @@ public class TypeDef {
         if (options.isEmpty())
             for (WildcardImport imp : wildcardImports) {
                 RawType qualifiedType = new RawType(imp.module, type);
-                if (project.hasType(qualifiedType))
+                if (Project.singleton.hasType(qualifiedType))
                     options.add(qualifiedType);
             }
         if (options.isEmpty())

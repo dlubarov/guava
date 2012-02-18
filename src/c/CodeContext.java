@@ -7,13 +7,11 @@ import common.NiftyException;
 import c.ty.Type;
 
 public class CodeContext {
-    public final Project project;
     public final TypeDef type;
     public final MethodDef method;
     private final List<LocalInfo> locals;
 
-    public CodeContext(Project project, TypeDef type, MethodDef method) {
-        this.project = project;
+    public CodeContext(TypeDef type, MethodDef method) {
         this.type = type;
         this.method = method;
 
@@ -27,7 +25,6 @@ public class CodeContext {
     }
 
     public CodeContext(CodeContext src) {
-        this.project = src.project;
         this.type = src.type;
         this.method = src.method;
         this.locals = new ArrayList<LocalInfo>(src.locals);

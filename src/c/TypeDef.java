@@ -10,7 +10,6 @@ import common.*;
 import d.ConcreteMethodDef;
 
 public class TypeDef {
-    public Project owner;
     public final TypeVisibility visibility;
     public final boolean isAbstract;
     public final boolean isSealed;
@@ -53,7 +52,7 @@ public class TypeDef {
         result.add(desc);
         for (ParameterizedType parent : parents)
             if (!result.contains(parent.rawType)) {
-                TypeDef parentDef = owner.resolve(parent.rawType);
+                TypeDef parentDef = Project.singleton.resolve(parent.rawType);
                 result.addAll(parentDef.allSupertypes());
             }
         return result;
@@ -129,7 +128,7 @@ public class TypeDef {
         // Search my parents' fields.
         for (ParameterizedType parent : parents)
             try {
-                options.add(owner.resolve(parent.rawType).getInstanceField(name));
+                options.add(Project.singleton.resolve(parent.rawType).getInstanceField(name));
             } catch (NoSuchElementException e) {}
 
         // There should be exactly one matching field.
@@ -164,7 +163,7 @@ public class TypeDef {
         if (options.isEmpty() && !name.equals("init"))
             for (ParameterizedType parent : parents)
                 try {
-                    TypeDef parentDef = owner.resolve(parent.rawType);
+                    TypeDef parentDef = Project.singleton.resolve(parent.rawType);
                     MethodDef meth = parentDef.getInstanceMethod(name, genericArgs, argTypes, ctx);
                     options.add(meth);
                 } catch (NoSuchElementException e) {}
@@ -219,7 +218,7 @@ public class TypeDef {
         // For example, String's generic arguments for Sequence are {Char}.
         Map<RawType, d.ty.desc.TypeDesc[]> superGenericDescs = new HashMap<RawType, d.ty.desc.TypeDesc[]>();
         for (RawType supertype : allSupertypes()) {
-            ParameterizedType thisAsSuper = thisType().asSupertype(supertype, new CodeContext(owner, this, null));
+            ParameterizedType thisAsSuper = thisType().asSupertype(supertype, new CodeContext(this, null));
             superGenericDescs.put(supertype, thisAsSuper.refine().genericArgs);
         }
 

@@ -7,14 +7,17 @@ import java.util.*;
 import common.*;
 
 public class Project {
+    public static Project singleton = null;
+
     public final Map<RawType, TypeDef> typeDefs;
 
     public Project(TypeDef[] typeDefs) {
+        assert singleton == null : "Multiple instantiations of Project.";
+        singleton = this;
+
         this.typeDefs = new LinkedHashMap<RawType, TypeDef>(typeDefs.length);
-        for (TypeDef typeDef : typeDefs) {
-            typeDef.project = this;
+        for (TypeDef typeDef : typeDefs)
             this.typeDefs.put(typeDef.desc, typeDef);
-        }
     }
 
     public boolean hasType(RawType type) {

@@ -29,7 +29,7 @@ public class StaticMethodInvocation extends Expression {
     private MethodDef getMethod(CodeContext ctx) {
         // TODO: It would be possible to avoid inferring types for each arg, instead using hasType.
         Type[] argTypes = Expression.inferAllTypes(args, ctx);
-        TypeDef ownerDef = ctx.project.resolve(owner);
+        TypeDef ownerDef = Project.singleton.resolve(owner);
         return ownerDef.getStaticMethod(methodName, genericArgs, argTypes, ctx);
     }
 

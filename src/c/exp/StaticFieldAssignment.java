@@ -18,12 +18,12 @@ public class StaticFieldAssignment extends Expression {
 
     @Override
     public Type inferType(CodeContext ctx) {
-        return ctx.project.resolve(owner).getStaticField(fieldName).type;
+        return Project.singleton.resolve(owner).getStaticField(fieldName).type;
     }
 
     @Override
     public CodeTree compile(CodeContext ctx) {
-        TypeDef ownerDef = ctx.project.resolve(owner);
+        TypeDef ownerDef = Project.singleton.resolve(owner);
         int fieldIndex = ownerDef.getStaticFieldIndex(fieldName);
         return new CodeTree(
                 value.compile(ctx),

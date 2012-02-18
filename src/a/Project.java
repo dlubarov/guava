@@ -5,9 +5,14 @@ import static util.StringUtils.implode;
 import java.util.*;
 
 public class Project {
+    public static Project singleton = null;
+
     public final SourceFile[] sourceFiles;
 
     public Project(SourceFile[] sourceFiles) {
+        assert singleton == null : "Multiple instantiations of Project.";
+        singleton = this;
+
         this.sourceFiles = sourceFiles;
     }
 

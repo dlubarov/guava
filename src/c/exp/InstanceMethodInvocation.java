@@ -32,7 +32,7 @@ public class InstanceMethodInvocation extends Expression {
         Set<MethodDef> options = new HashSet<MethodDef>();
         for (ParameterizedType concreteSuper : targetType.getConcreteSupertypes(ctx.type, ctx.method))
             try {
-                TypeDef superDef = ctx.project.resolve(concreteSuper.rawType);
+                TypeDef superDef = Project.singleton.resolve(concreteSuper.rawType);
                 options.add(superDef.getInstanceMethod(methodName, genericArgs, argTypes, ctx));
             } catch (NoSuchElementException e) {}
         if (options.isEmpty())

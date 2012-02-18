@@ -114,7 +114,7 @@ public class MethodDef {
         if (body == null)
             return new d.AbstractMethodDef(refineDesc());
 
-        CodeContext ctx = new CodeContext(owner.owner, owner, this);
+        CodeContext ctx = new CodeContext(owner, this);
         CompilationResult result = body.compile(ctx);
         int numLocals = result.newCtx.getNumLocals();
         int[] bytecode = result.code.getCode();
