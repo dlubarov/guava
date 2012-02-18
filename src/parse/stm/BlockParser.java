@@ -31,7 +31,7 @@ public class BlockParser extends Parser<Block> {
 
         // Parse "}".
         if (s.charAt(p++) != '}')
-            throw new NiftyException("Missing closing '}' in block statement.");
+            throw new NiftyException("Expecting statement or '}' in block.");
 
         Statement[] partsArr = parts.toArray(new Statement[parts.size()]);
         return new Success<Block>(new Block(partsArr), p);

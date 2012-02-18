@@ -30,6 +30,8 @@ public class LiteralDoubleParser extends Parser<Expression> {
 
         // Parse digits after the decimal point.
         Success<String> resRight = parseDigits(s, p);
+        if (resRight.value.isEmpty())
+            return null; // Don't allow e.g. "2.", mainly for ease of parsing.
         p = resRight.rem;
 
         String combined = resLeft.value + '.' + resRight.value;
