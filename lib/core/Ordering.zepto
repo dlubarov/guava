@@ -1,7 +1,7 @@
 module core;
 
 # Used to enforce trichotomy.
-public type Relation {
+public sealed type Relation {
   public static readonly Relation LT, GT, EQ;
 
   private static Unit init() {
@@ -21,42 +21,80 @@ public type Relation {
   }
 }
 
+# A partial ordering of T.
 public abstract type PartialOrdering[-T] {
   public Maybe[Relation] compare(T a, T b);
 }
 
+# A total ordering of T.
 public abstract type Ordering[-T] extends PartialOrdering[T] {
   public Some[Relation] compare(T a, T b);
 }
 
-public abstract type NaturallyOrdered[-T] {
-  public Ordering[T] naturalOrdering();
-
-  public Relation compareTo(T that) {
-    return this.naturalOrdering().compare(this, that).get();
-  }
+# A type which has a natural partial ordering with respect to T.
+public abstract type NaturallyPartiallyOrdered[-T] {
+  public Maybe[Relation] compareTo(T that);
 
   public Bool <(T that) {
-    return this.compareTo(that) == Relation.LT;
+    return this.compareTo(that) == new Some[Relation](Relation.LT);
   }
 
   public Bool >(T that) {
-    return this.compareTo(that) == Relation.GT;
+    return this.compareTo(that) == new Some[Relation](Relation.GT);
   }
 
-  public Bool ==(T that) {
-    return this.compareTo(that) == Relation.EQ;
+  public Bool ==(Top that) {
+    # TODO: switch on that
   }
 
   public Bool <=(T that) {
-    return this < that | this == that;
+    Maybe[Relation] rel = this.compareTo(that);
+    return rel == new Some[Relation](Relation.LT) | rel == new Some[Relation](Relation.EQ);
   }
 
   public Bool >=(T that) {
-    return this > that | this == that;
+    Maybe[Relation] rel = this.compareTo(that);
+    return rel == new Some[Relation](Relation.GT) | rel == new Some[Relation](Relation.EQ);
   }
 }
 
+# A type which has a natural total ordering with respect to T.
+public abstract type NaturallyOrdered[-T] extends NaturallyPartiallyOrdered[T] {
+  public Some[Relation] compareTo(T that);
+}
+
+# The natural partial ordering of a type which has one.
+[T < NaturallyPartiallyOrdered[T]]
+public sealed type NaturalPartialOrdering[-T] extends Ordering[T] {
+  public Maybe[Relation] compare(T a, T b) {
+    return a.compareTo(b);
+  }
+}
+
+# The natural total ordering of a type which has one.
+[T < NaturallyOrdered[T]]
+public sealed type NaturalOrdering[-T] extends Ordering[T] {
+  public Some[Relation] compare(T a, T b) {
+    return a.compareTo(b);
+  }
+}
+
+# A wrapper around a partial ordering which gives us the opposite.
+public type ReversePartialOrdering[-T] extends Ordering[T] {
+  private readonly PartialOrdering[T] original;
+
+  public Unit init(PartialOrdering[T] original) {
+    this.original = original;
+  }
+
+  public Maybe[Relation] compare(T a, T b) {
+    foreach (Relation rel in this.original.compare(a, b))
+      return new Some[Relation](rel.flip());
+    return None();
+  }
+}
+
+# A wrapper around a total ordering which gives us the opposite.
 public type ReverseOrdering[-T] extends Ordering[T] {
   private readonly Ordering[T] original;
 
@@ -64,13 +102,14 @@ public type ReverseOrdering[-T] extends Ordering[T] {
     this.original = original;
   }
 
-  public Relation compareTo(T that) {
-    return original.compareTo(that).flip();
+  public Some[Relation] compare(T a, T b) {
+    return new Some[Relation](this.original.compare(a, b).get().flip());
   }
 }
 
 public type LexicographicOrdering[-T] extends Ordering[Sequence[T]] {
   public Some[Relation] compare(Sequence[T] a, Sequence[T] b) {
     Source[T] enumA = a.enumerator(), enumB = b.enumerator();
+    # TODO: incomplete
   }
 }

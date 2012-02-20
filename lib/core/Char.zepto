@@ -2,47 +2,38 @@ module core;
 
 public sealed type Char extends NaturallyOrdered[Char] {
   public Unit init(Int ord) {
+    # native code
+  }
+
+  public Relation compareTo(Char that) {
+    # native code
   }
 
   public Char toUpperCase() {
+    # native code
   }
 
   public Char toLowerCase() {
+    # native code
   }
 
   public Bool isLetter() {
+    # native code
   }
 
   public Bool isDigit() {
+    # native code
   }
 
-  public Bool ==(Top o) {}
+  public Bool ==(Top o) {
+    # native code
+  }
 
   public Int hashCode() {
     return new Int(this).hashCode();
   }
 
   public String toString() {
-  }
-
-  public Ordering[Char] naturalOrdering() {
-    return AscendingCharOrdering();
-  }
-}
-
-public type AscendingCharOrdering extends Ordering[Char] {
-  private static readonly AscendingCharOrdering singleton;
-
-  private Unit init() {}
-
-  private static Unit init() {
-    AscendingCharOrdering.singleton = new AscendingCharOrdering();
-  }
-
-  public static AscendingCharOrdering get() {
-    return AscendingCharOrdering.singleton;
-  }
-
-  public Some[Relation] compare(Char a, Char b) {
+    # native code
   }
 }

@@ -30,6 +30,8 @@ public sealed type Int extends NaturallyOrdered[Int], Sequence[Bool] {
   public Int >>(Int that) {}
   public Int >>>(Int that) {}
 
+  public Relation compareTo(Int that) {}
+
   public Int rotateLeft(Int distance) {}
   public Int rotateRight(Int distance) {}
 
@@ -86,41 +88,6 @@ public sealed type Int extends NaturallyOrdered[Int], Sequence[Bool] {
 
   public String toHexString() {
     return this.toString(16);
-  }
-
-  public Ordering[Int] naturalOrdering() {}
-}
-
-public type AscendingIntOrdering extends Ordering[Int] {
-  private static AscendingIntOrdering singleton;
-
-  private Unit init() {}
-
-  private static Unit init() {
-    AscendingIntOrdering.singleton = new AscendingIntOrdering();
-  }
-
-  public static AscendingIntOrdering get() {
-    return AscendingIntOrdering.singleton;
-  }
-
-  public Some[Relation] compare(Int a, Int b) {
-  }
-}
-
-public type DescendingIntOrdering extends ReverseOrdering[Int] {
-  private static DescendingIntOrdering singleton;
-
-  private Unit init() {
-    ReverseOrdering.init(this, AscendingIntOrdering());
-  }
-
-  private static Unit init() {
-    DescendingIntOrdering.singleton = new DescendingIntOrdering();
-  }
-
-  public static DescendingIntOrdering get() {
-    return DescendingIntOrdering.singleton;
   }
 }
 
