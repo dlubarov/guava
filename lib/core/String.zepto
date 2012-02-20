@@ -6,9 +6,17 @@ public type String extends Sequence[Char] {
   public Unit init(Sequence[Char] source) {
   }
 
+  public String +(String that) {
+    return new String(Sequence.+(this, that));
+  }
+
   public String join(Sequence[Top] seq) {
   }
 
   public String split(Sequence[Char] delim) {
+  }
+
+  public String format(Sequence[Top] args) {
+    # TODO: implement string formatting
   }
 }

@@ -51,10 +51,10 @@ public sealed type RandomAccessEnumerator[+T] extends Source[T] {
   }
 
   public Maybe[T] take() {
-    if (this.index >= seq.size())
+    if (this.index >= this.seq.size())
       return None();
-    T result = this.seq(index);
-    index = index + 1;
-    return result;
+    T result = this.seq(this.index);
+    this.index = this.index + 1;
+    return new Some[T](result);
   }
 }

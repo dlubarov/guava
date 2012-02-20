@@ -8,11 +8,11 @@ public abstract type Point2D[T] {
   }
 
   public Int hashCode() {
-    return {this.getX().hashCode(), this.getY().hashCode()}.hashCode();
+    return {this.getX(), this.getY()}.hashCode();
   }
 
   public String toString() {
-    return "(%s, %s)".format(this.getX(), this.getY());
+    return "(%s, %s)".format({this.getX(), this.getY()});
   }
 }
 
