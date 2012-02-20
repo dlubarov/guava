@@ -9,11 +9,15 @@ public type DynamicArray[T] extends MutableStack[T] {
   }
 
   private Unit expand() {
-    Sequence[Maybe[T]] nones = {None()} * (backingArray.size() * 2);
+    Sequence[Maybe[T]] nones = {None()} * (this.backingArray.size() * 2);
     MutableArray[Maybe[T]] newArray = new MutableArray[Maybe[T]](nones);
-    for (Int i = 0; i < backingArray.size(); i = i + 1)
-      newArray(i) = backingArray(i);
+    for (Int i = 0; i < this.backingArray.size(); i = i + 1)
+      newArray(i) = this.backingArray(i);
     this.backingArray = newArray;
+  }
+
+  private Bool tooSmall() {
+    return this.n < this.backingArray.size() / 4;
   }
 
   private Unit shrink() {
@@ -24,14 +28,14 @@ public type DynamicArray[T] extends MutableStack[T] {
   public Unit pushBack(T value) {
     if (this.n == this.backingArray.size())
       this.expand();
-    this.backingArray(this.n) = Some(value);
+    this.backingArray(this.n) = new Some[T](value);
     this.n = this.n + 1;
   }
 
   public T popBack() {
     this.n = this.n - 1;
-    this.backingArray(n) = None();
-    if (small)
+    this.backingArray(this.n) = None();
+    if (this.tooSmall())
       this.shrink();
   }
 
@@ -40,6 +44,6 @@ public type DynamicArray[T] extends MutableStack[T] {
   }
 
   public T set(Int i, T value) {
-    this.backingArray(i) = Some(value);
+    this.backingArray(i) = new Some[T](value);
   }
 }

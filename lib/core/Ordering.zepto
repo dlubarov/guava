@@ -5,12 +5,20 @@ public type Relation {
   public static readonly Relation LT, GT, EQ;
 
   private static Unit init() {
-    LT = new Relation();
-    GT = new Relation();
-    EQ = new Relation();
+    Relation.LT = new Relation();
+    Relation.GT = new Relation();
+    Relation.EQ = new Relation();
   }
 
   private Unit init() {}
+
+  public Relation flip() {
+    if (this == Relation.LT)
+      return Relation.GT;
+    if (this == Relation.GT)
+      return Relation.LT;
+    return Relation.EQ;
+  }
 }
 
 public abstract type PartialOrdering[-T] {
@@ -50,7 +58,15 @@ public abstract type NaturallyOrdered[-T] {
 }
 
 public type ReverseOrdering[-T] extends Ordering[T] {
-  # TODO: implement
+  private readonly Ordering[T] original;
+
+  public Unit init(Ordering[T] original) {
+    this.original = original;
+  }
+
+  public Relation compareTo(T that) {
+    return original.compareTo(that).flip();
+  }
 }
 
 public type LexicographicOrdering[-T] extends Ordering[Sequence[T]] {

@@ -34,7 +34,7 @@ public sealed type SingletonSource[+T] extends Source[T] {
     if (this.used)
       return None();
     this.used = true;
-    return Some(this.value);
+    return new Some[T](this.value);
   }
 }
 

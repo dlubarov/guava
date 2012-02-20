@@ -44,13 +44,13 @@ public type CircularBuffer[T] extends MutableSequence[T] {
   public T set(Int i, T value) {
     if (i < 0 | i >= this.len)
       1 / 0; # fail
-    this.backingArray(this.convertIndex(i)) = Some(value);
+    this.backingArray(this.convertIndex(i)) = new Some[T](value);
     return value;
   }
 
   private Unit clear(Int i) {
     # Set an entry to None, allowing the GC to delete the old value.
-    this.backingARray(this.convertIndex(i)) = None();
+    this.backingArray(this.convertIndex(i)) = None();
   }
 
   private Unit wrapPos() {

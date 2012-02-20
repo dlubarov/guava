@@ -101,10 +101,26 @@ public type AscendingIntOrdering extends Ordering[Int] {
   }
 
   public static AscendingIntOrdering get() {
-    return AsendingIntOrdering.singleton;
+    return AscendingIntOrdering.singleton;
   }
 
   public Some[Relation] compare(Int a, Int b) {
+  }
+}
+
+public type DescendingIntOrdering extends ReverseOrdering[Int] {
+  private static DescendingIntOrdering singleton;
+
+  private Unit init() {
+    ReverseOrdering.init(AscendingIntOrdering());
+  }
+
+  private static Unit init() {
+    DescendingIntOrdering.singleton = new DescendingIntOrdering();
+  }
+
+  public static DescendingIntOrdering get() {
+    return DescendingIntOrdering.singleton;
   }
 }
 
@@ -132,7 +148,7 @@ public type BigEndianIntSerializer extends Serializer[Int] {
   public Int deserialize(Sequence[Byte] bytes) {
     Int n = 0;
     foreach (Byte b in bytes)
-      n = (n << 8) | b;
+      n = (n << 8) | new Int(b); # TODO: cast shouldn't be needed
     return n;
   }
 }

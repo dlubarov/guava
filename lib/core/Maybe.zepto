@@ -10,12 +10,8 @@ public abstract type Maybe[+T] extends Collection[T] {
 public sealed type Some[+T] extends Maybe[T] {
   public readonly T value;
 
-  private Unit init(T value) {
+  public Unit init(T value) {
     this.value = value;
-  }
-
-  public static Some[T] get(T value) {
-    return new Some(value);
   }
 
   public T get() {
