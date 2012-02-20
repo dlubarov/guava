@@ -22,7 +22,7 @@ public class Instantiation extends Expression {
     private MethodDef getConstructor(CodeContext ctx) {
         TypeDef typeDef = Project.singleton.resolve(type.rawType);
         Type[] argTypes = Expression.inferAllTypes(args, ctx);
-        return typeDef.getInstanceMethod("init", Type.NONE, argTypes, ctx);
+        return typeDef.getInstanceMethod("init", type.genericArgs, Type.NONE, argTypes, ctx);
     }
 
     @Override

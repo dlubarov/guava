@@ -112,7 +112,7 @@ public type DescendingIntOrdering extends ReverseOrdering[Int] {
   private static DescendingIntOrdering singleton;
 
   private Unit init() {
-    ReverseOrdering.init(AscendingIntOrdering());
+    ReverseOrdering.init(this, AscendingIntOrdering());
   }
 
   private static Unit init() {

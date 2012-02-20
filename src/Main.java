@@ -10,8 +10,8 @@ import util.FileUtils;
 
 public class Main {
     private static final boolean
-            printA = true,
-            printB = true,
+            printA = false,
+            printB = false,
             printC = true,
             printD = true;
 
@@ -48,7 +48,7 @@ public class Main {
         c.Project cProj = bProj.refine();
         if (printC) {
             System.out.println("--- PROJECT C ---");
-            System.out.print(cProj);
+            System.out.println(cProj);
             System.out.println();
         }
 

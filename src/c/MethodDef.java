@@ -44,6 +44,9 @@ public class MethodDef {
         fullTypeTable = new ArrayList<Type>();
         methodTable = new ArrayList<MethodDef>();
         stringTable = new ArrayList<String>();
+
+        if (isStatic && TypeUtils.containsTypeParams(paramTypes))
+            throw new NiftyException("Static method '%s.%s' takes type parameter.", owner, name);
     }
 
     public int getRawTypeTableIndex(RawType t) {

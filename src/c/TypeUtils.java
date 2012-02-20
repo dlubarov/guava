@@ -35,4 +35,17 @@ public final class TypeUtils {
         }
         throw new IllegalArgumentException("no common subtype for " + Arrays.toString(types));
     }
+
+    public static boolean containsTypeParams(Type[] types) {
+        for (Type ty : types) {
+            if (ty instanceof TypeGenericType)
+                return true;
+            if (ty instanceof ParameterizedType) {
+                Type[] genericArgs = ((ParameterizedType) ty).genericArgs;
+                if (containsTypeParams(genericArgs))
+                    return true;
+            }
+        }
+        return false;
+    }
 }

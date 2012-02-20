@@ -36,8 +36,14 @@ public class StaticMethodInvocation extends Expression {
     @Override
     public Type inferType(CodeContext ctx) {
         MethodDef m = getMethod(ctx);
-        // TODO: Will need to add possible type generics once static invocation of instance methods is supported.
-        return m.returnType.withGenericArgs(null, genericArgs);
+        Type[] typeGenerics;
+        if (m.isStatic)
+            typeGenerics = null;
+        else {
+            Type thisType = args[0].inferType(ctx);
+            typeGenerics = thisType.asSupertype(owner, ctx).genericArgs;
+        }
+        return m.returnType.withGenericArgs(typeGenerics, genericArgs);
     }
 
     @Override
