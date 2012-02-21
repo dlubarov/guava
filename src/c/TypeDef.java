@@ -1,8 +1,8 @@
 package c;
 
-import static util.StringUtils.*;
-
 import java.util.*;
+
+import util.StringUtils;
 
 import c.gen.*;
 import c.ty.*;
@@ -272,30 +272,17 @@ public class TypeDef {
 
     @Override
     public String toString() {
-        List<String> members = new LinkedList<String>();
-        for (FieldDef f : staticFieldDefs)
-            members.add(indent(f.toString()));
-        for (FieldDef f : instanceFieldDefs)
-            members.add(indent(f.toString()));
-        for (MethodDef m : staticMethodDefs)
-            members.add(indent(m.toString()));
-        for (MethodDef m : instanceMethodDefs)
-            members.add(indent(m.toString()));
-
-        String body = implode("\n\n", members);
-        if (body.isEmpty())
-            body = "{}";
-        else
-            body = String.format("{\n%s\n}", body);
-
-        return String.format(
-                "%stype %s%s extends %s %s",
-                qualsString(),
-                desc,
-                genericInfos.length == 0
-                        ? ""
-                        : Arrays.toString(genericInfos),
-                Arrays.toString(parents),
-                body);
+        StringBuilder sb = new StringBuilder();
+        sb.append(qualsString());
+        sb.append("type ").append(desc);
+        if (genericInfos.length > 0)
+            sb.append(Arrays.toString(genericInfos));
+        sb.append(" extends ").append(Arrays.toString(parents));
+        sb.append(" {");
+        for (Object[] memberDefs : new Object[][] {
+                staticFieldDefs, instanceFieldDefs, staticMethodDefs, instanceMethodDefs})
+            for (Object memberDef : memberDefs)
+                sb.append('\n').append(StringUtils.indent(memberDef)).append('\n');
+        return sb.append('}').toString();
     }
 }
