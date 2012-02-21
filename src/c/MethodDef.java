@@ -49,6 +49,51 @@ public class MethodDef {
             throw new NiftyException("Static method '%s.%s' takes type parameter.", owner, name);
     }
 
+    public boolean canImplement(MethodDef that) {
+        assert !(isStatic || that.isStatic);
+
+        // Abstract methods can't implement anything.
+        if (body == null)
+            return false;
+
+        // Check the name.
+        if (!name.equals(that.name))
+            return false;
+
+        // For converting stuff into the generics of my owner.
+        TypeDef ownerDef = Project.singleton.resolve(owner);
+        // FIXME: method generics, method ctx
+        Type[] ownerGenerics = ownerDef.thisType().asSupertype(that.owner, new CodeContext(ownerDef, null)).genericArgs;
+
+        // Check the return type.
+        // FIXME: method generics, method ctx
+        if (!returnType.isSubtype(that.returnType.withGenericArgs(ownerGenerics, null), ownerDef, null))
+            return false;
+
+        // Check each parameter type.
+        if (paramTypes.length != that.paramTypes.length)
+            return false;
+        for (int i = 0; i < paramTypes.length; ++i)
+            if (!paramTypes[i].isSupertype(that.paramTypes[i].withGenericArgs(ownerGenerics, null), ownerDef, null))
+                return false;
+
+        // Check method generics.
+        if (genericInfos.length != that.genericInfos.length)
+            return false;
+        for (int i = 0; i < genericInfos.length; ++i)
+            ; // TODO: check generic constraints.
+
+        // Check visibility.
+        if (visibility.lessAccessible(that.visibility))
+            throw new NiftyException("Can't override with less visible method.");
+
+        // Can't override sealed methods.
+        if (that.isSealed)
+            throw new NiftyException("Can't override sealed method '%s'.", name);
+
+        return true;
+    }
+
     public int getRawTypeTableIndex(RawType t) {
         for (int i = 0; i < rawTypeTable.size(); ++i)
             if (rawTypeTable.get(i).equals(t))
@@ -95,7 +140,7 @@ public class MethodDef {
         return result;
     }
 
-    private d.RawMethod refineDesc() {
+    public d.RawMethod refineDesc() {
         return new d.RawMethod(isStatic, owner, name, genericInfos.length, refineParamTypes());
     }
 

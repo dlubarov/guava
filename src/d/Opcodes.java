@@ -85,11 +85,11 @@ public final class Opcodes {
                     break;
                 case INVOKE_STATIC:
                     sb.append("INVOKE_STATIC index=" + code[++i]);
-                    // FIXME low: don't know # generic args, can't advance i
+                    // TODO presentation: don't know # generic args, can't advance i
                     break;
                 case INVOKE_VIRTUAL:
                     sb.append("INVOKE_VIRTUAL vtableIndex=" + code[++i]);
-                    // FIXME low: don't know # generic args, can't advance i
+                    // TODO presentation: don't know # generic args, can't advance i
                     break;
                 case NEW:
                     sb.append("NEW " + code[++i]);

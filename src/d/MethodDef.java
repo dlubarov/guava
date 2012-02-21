@@ -6,6 +6,7 @@ public abstract class MethodDef {
 
     public MethodDef(RawMethod desc) {
         this.desc = desc;
+        God.newMethod(this);
     }
 
     public abstract void link();

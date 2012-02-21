@@ -60,13 +60,17 @@ public class TypeDef {
             method.link();
         for (MethodDef method : instanceMethods)
             method.link();
-        for (RawMethod aDesc : virtualMethodDescTable.keySet()) {
-            RawMethod bDesc = virtualMethodDescTable.get(aDesc);
-            MethodDef a = God.resolveMethod(aDesc), b = God.resolveMethod(bDesc);
-            if (!(b instanceof ConcreteMethodDef))
-                throw new RuntimeException("vtable points to abstract method " + b);
-            virtualMethodTable.put(a, (ConcreteMethodDef) b);
-        }
+
+        // Unless this is an abstract type, populate the virtual method table.
+        if (virtualMethodDescTable != null)
+            for (RawMethod aDesc : virtualMethodDescTable.keySet()) {
+                RawMethod bDesc = virtualMethodDescTable.get(aDesc);
+                MethodDef a = God.resolveMethod(aDesc), b = God.resolveMethod(bDesc);
+                if (!(b instanceof ConcreteMethodDef))
+                    throw new RuntimeException("vtable points to abstract method " + b);
+                virtualMethodTable.put(a, (ConcreteMethodDef) b);
+            }
+
         for (RawType superDesc : superGenericDescs.keySet()) {
             TypeDesc[] superArgDescs = superGenericDescs.get(superDesc);
             TypeDef supertype = God.resolveType(superDesc);
@@ -75,6 +79,7 @@ public class TypeDef {
                 superArgs[i] = superArgDescs[i].toSuper();
             superGenerics.put(supertype, superArgs);
         }
+
         virtualMethodDescTable = null;
         superGenericDescs = null;
     }

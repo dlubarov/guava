@@ -7,7 +7,7 @@ import util.StringUtils;
 import c.gen.*;
 import c.ty.*;
 import common.*;
-import d.ConcreteMethodDef;
+import d.*;
 
 public class TypeDef {
     public final TypeVisibility visibility;
@@ -203,6 +203,69 @@ public class TypeDef {
         return options.iterator().next();
     }
 
+    // Fetch all instance methods which this type inherits, including overridden methods.
+    // These are used to generate keys for the virtual method descriptor table.
+    private Set<MethodDef> allInheritedInstanceMethods() {
+        Set<MethodDef> methods = new HashSet<MethodDef>();
+        for (MethodDef m : instanceMethodDefs)
+            methods.add(m);
+        for (ParameterizedType parent : parents) {
+            TypeDef parentDef = Project.singleton.resolve(parent.rawType);
+            methods.addAll(parentDef.allInheritedInstanceMethods());
+        }
+        return methods;
+    }
+
+    private boolean hasSupertype(RawType sup) {
+        try {
+            thisType().asSupertype(sup, new CodeContext(this, null));
+            return true;
+        } catch (IllegalArgumentException e) {
+            return false;
+        }
+    }
+
+    // Find my implementation of an instance method.
+    private MethodDef getImplementation(MethodDef method) {
+        if (!hasSupertype(method.owner))
+            throw new NoSuchElementException("This should be caught...");
+
+        // Try my instance methods.
+        Set<MethodDef> options = new HashSet<MethodDef>();
+        for (MethodDef m : instanceMethodDefs) {
+            if (m.canImplement(method))
+                options.add(m);
+        }
+
+        // If nothing was found yet, try my parents.
+        if (options.isEmpty())
+            for (ParameterizedType parent : parents) {
+                TypeDef parentDef = Project.singleton.resolve(parent.rawType);
+                try {
+                    options.add(parentDef.getImplementation(method));
+                } catch (NoSuchElementException e) {}
+            }
+
+        if (options.isEmpty())
+            throw new NoSuchElementException(String.format(
+                    "Type '%s' has no implementation of '%s.%s'.",
+                    desc, method.owner, method.name));
+
+        // FIXME: Attempt to narrow down to 1 with canImplement checks.
+
+        if (options.size() > 1) {
+            String[] optionDescs = new String[options.size()];
+            int i = 0;
+            for (MethodDef m : options)
+                optionDescs[i++] = m.owner + " " + m.name;
+            throw new NiftyException(
+                    "Type '%s' has multiple implementations of '%s.%s': %s.",
+                    desc, method.owner, method.name, Arrays.toString(optionDescs));
+        }
+
+        return options.iterator().next();
+    }
+
     public d.TypeDef compile() {
         // Refine my generic variances.
         // TODO: This discards generic bounds. Shouldn't the VM's instanceof code use this info?
@@ -238,8 +301,17 @@ public class TypeDef {
                         instanceMethodDefs[i].name);
             }
 
-        Map<d.RawMethod, d.RawMethod> virtualMethodDescTable = new HashMap<d.RawMethod, d.RawMethod>();
-        // FIXME high: populate vtable
+        // Populate the virtual method descriptor table.
+        Map<d.RawMethod, d.RawMethod> virtualMethodDescTable;
+        if (isAbstract)
+            virtualMethodDescTable = null;
+        else {
+            virtualMethodDescTable = new HashMap<d.RawMethod, d.RawMethod>();
+            for (MethodDef m : allInheritedInstanceMethods()) {
+                MethodDef impl = getImplementation(m);
+                virtualMethodDescTable.put(m.refineDesc(), impl.refineDesc());
+            }
+        }
 
         // Figure out what my generic arguments are for each supertype.
         // For example, String's generic arguments for Sequence are {Char}.
@@ -275,9 +347,13 @@ public class TypeDef {
         StringBuilder sb = new StringBuilder();
         sb.append(qualsString());
         sb.append("type ").append(desc);
+
         if (genericInfos.length > 0)
             sb.append(Arrays.toString(genericInfos));
-        sb.append(" extends ").append(Arrays.toString(parents));
+
+        if (parents.length > 0)
+            sb.append(" extends ").append(StringUtils.implode(", ", parents));
+
         sb.append(" {");
         for (Object[] memberDefs : new Object[][] {
                 staticFieldDefs, instanceFieldDefs, staticMethodDefs, instanceMethodDefs})

@@ -9,6 +9,10 @@ public enum MethodVisibility {
         this.s = s;
     }
 
+    public boolean lessAccessible(MethodVisibility that) {
+        return ordinal() > that.ordinal();
+    }
+
     @Override
     public String toString() {
         return s;

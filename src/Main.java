@@ -12,7 +12,7 @@ public class Main {
     private static final boolean
             printA = false,
             printB = false,
-            printC = true,
+            printC = false,
             printD = true;
 
     public static void main(String[] args) throws IOException {
