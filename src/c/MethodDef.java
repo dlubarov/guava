@@ -4,7 +4,7 @@ import java.util.*;
 
 import common.*;
 
-import c.ty.Type;
+import c.ty.*;
 import c.gen.MethodGenericInfo;
 import c.stm.*;
 
@@ -50,6 +50,7 @@ public class MethodDef {
     }
 
     public boolean canImplement(MethodDef that) {
+        // No overriding of static methods.
         assert !(isStatic || that.isStatic);
 
         // Abstract methods can't implement anything.
@@ -60,26 +61,35 @@ public class MethodDef {
         if (!name.equals(that.name))
             return false;
 
-        // For converting stuff into the generics of my owner.
-        TypeDef ownerDef = Project.singleton.resolve(owner);
-        // FIXME: method generics, method ctx
-        Type[] ownerGenerics = ownerDef.thisType().asSupertype(that.owner, new CodeContext(ownerDef, null)).genericArgs;
-
-        // Check the return type.
-        // FIXME: method generics, method ctx
-        if (!returnType.isSubtype(that.returnType.withGenericArgs(ownerGenerics, null), ownerDef, null))
-            return false;
-
-        // Check each parameter type.
+        // Check argument counts.
         if (paramTypes.length != that.paramTypes.length)
             return false;
-        for (int i = 0; i < paramTypes.length; ++i)
-            if (!paramTypes[i].isSupertype(that.paramTypes[i].withGenericArgs(ownerGenerics, null), ownerDef, null))
-                return false;
-
-        // Check method generics.
         if (genericInfos.length != that.genericInfos.length)
             return false;
+
+        // For converting stuff into the generics of my owner.
+        TypeDef ownerDef = Project.singleton.resolve(owner);
+        Type[] ownerGenerics = ownerDef.thisType().asSupertype(that.owner, new CodeContext(ownerDef, null)).genericArgs;
+        Type[] methodGenerics = new Type[genericInfos.length];
+        for (int i = 0; i < methodGenerics.length; ++i)
+            methodGenerics[i] = new MethodGenericType(i);
+
+        // Check the return type.
+        {
+            Type thatReturnType = that.returnType.withGenericArgs(ownerGenerics, methodGenerics);
+            if (!returnType.isSubtype(thatReturnType, ownerDef, this))
+                return false;
+        }
+
+        // Check each parameter type.
+        for (int i = 0; i < paramTypes.length; ++i) {
+            Type thatParamType = that.paramTypes[i];
+            thatParamType = thatParamType.withGenericArgs(ownerGenerics, methodGenerics);
+            if (!paramTypes[i].isSupertype(thatParamType, ownerDef, this))
+                return false;
+        }
+
+        // Check method generics.
         for (int i = 0; i < genericInfos.length; ++i)
             ; // TODO: check generic constraints.
 
