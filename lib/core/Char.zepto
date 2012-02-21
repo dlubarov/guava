@@ -5,7 +5,7 @@ public sealed type Char extends NaturallyOrdered[Char] {
     # native code
   }
 
-  public Relation compareTo(Char that) {
+  public Some[Relation] compareTo(Char that) {
     # native code
   }
 

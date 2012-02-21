@@ -78,4 +78,8 @@ public type ArrayDeque[T] extends MutableDeque[T] {
       this.shrink();
     return result;
   }
+
+  public Source[T] enumerator() {
+    return new RandomAccessEnumerator[T](this);
+  }
 }

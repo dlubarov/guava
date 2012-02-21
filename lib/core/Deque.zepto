@@ -1,19 +1,26 @@
 module core;
 
-public abstract type MutableDeque[T] extends
-    MutableStack[T], MutableQueue[T] {
+public abstract type MutableDeque[T] extends MutableStack[T], MutableQueue[T] {
   public Unit pushFront(T value);
+
   public Unit pushBack(T value);
 
-  public Unit pushFrontAll(Sequence[T] values);
-  public Unit pushBackAll(Sequence[T] values);
+  public Unit pushFrontAll(Sequence[T] values) {
+    foreach (T value in values)
+      this.pushFront(value);
+  }
+
+  public Unit pushBackAll(Sequence[T] values) {
+    foreach (T value in values)
+      this.pushBack(value);
+  }
 
   public T popFront();
+
   public T popBack();
 }
 
-public abstract type ImmutableDeque[+T] extends
-    ImmutableStack[T], ImmutableQueue[T] {
+public abstract type ImmutableDeque[+T] extends ImmutableStack[T], ImmutableQueue[T] {
   [U > T]
   public ImmutableDeque[U] pushFront[U](U value);
 
@@ -21,10 +28,20 @@ public abstract type ImmutableDeque[+T] extends
   public ImmutableDeque[U] pushBack[U](U value);
 
   [U > T]
-  public ImmutableDeque[U] pushFrontAll[U](Sequence[U] values);
+  public ImmutableDeque[U] pushFrontAll[U](Sequence[U] values) {
+    ImmutableDeque[U] result = this;
+    foreach (U value in values)
+      result = result.pushFront[U](value);
+    return result;
+  }
 
   [U > T]
-  public ImmutableDeque[U] pushBackAll[U](Sequence[U] values);
+  public ImmutableDeque[U] pushBackAll[U](Sequence[U] values) {
+    ImmutableDeque[U] result = this;
+    foreach (U value in values)
+      result = result.pushBack[U](value);
+    return result;
+  }
 
   public ImmutableDeque[T] popFront();
 

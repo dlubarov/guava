@@ -1,6 +1,6 @@
 module core;
 
-public sealed type Byte extends NaturallyOrdered[Byte], Sequence[Bool] {
+public sealed type Byte extends NaturallyOrdered[Byte] {
   public Unit init(Int n) {}
 
   public Byte +() {}
@@ -22,7 +22,7 @@ public sealed type Byte extends NaturallyOrdered[Byte], Sequence[Bool] {
   public Byte >>(Byte that) {}
   public Byte >>>(Byte that) {}
 
-  public Relation compareTo(Byte that) {}
+  public Some[Relation] compareTo(Byte that) {}
 
   public Byte rotateLeft(Int distance) {}
   public Byte rotateRight(Int distance) {}

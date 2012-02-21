@@ -2,7 +2,7 @@ module core;
 
 # A group of elements with a finite size.
 
-public type Collection[+T] extends Enumerable[T] {
+public abstract type Collection[+T] extends Enumerable[T] {
   public Int size() {
     Int n = 0;
     foreach (T x in this)
@@ -25,8 +25,20 @@ public type Collection[+T] extends Enumerable[T] {
     return n;
   }
 
+  public Int count(Function1[T, Bool] p) {
+    Int n = 0;
+    foreach (T x in this)
+      if (p(x))
+        n = n + 1;
+    return n;
+  }
+
   public Bool contains(T elem) {
     return this.count(elem) > 0;
+  }
+
+  public Bool contains(Function1[T, Bool] p) {
+    return this.count(p) > 0;
   }
 
   public Collection[T] map(Function1[T, T] f) {

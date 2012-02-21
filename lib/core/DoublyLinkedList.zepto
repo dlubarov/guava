@@ -3,8 +3,10 @@ module core;
 public abstract type DoublyLinkedList[+T] extends Sequence[T] {
 }
 
-public type MutableDoublyLinkedList[T] extends Sequence[T] {
-}
+# TODO: write DLL types
 
-public type ImmutableDoublyLinkedList[+T] extends Sequence[T] {
-}
+#public type MutableDoublyLinkedList[T] extends Sequence[T] {
+#}
+#
+#public type ImmutableDoublyLinkedList[+T] extends Sequence[T] {
+#}

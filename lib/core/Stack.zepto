@@ -3,7 +3,10 @@ module core;
 public abstract type MutableStack[T] extends MutableSequence[T] {
   public Unit pushBack(T value);
 
-  public Unit pushBackAll(Sequence[T] values);
+  public Unit pushBackAll(Sequence[T] values) {
+    foreach (T value in values)
+      this.pushBack(value);
+  }
 
   public T popBack();
 }
@@ -13,7 +16,12 @@ public abstract type ImmutableStack[+T] extends ImmutableSequence[T] {
   public ImmutableStack[U] pushBack[U](U value);
 
   [U > T]
-  public ImmutableStack[U] pushBackAll[U](Sequence[U] values);
+  public ImmutableStack[U] pushBackAll[U](Sequence[U] values) {
+    ImmutableStack[U] result = this;
+    foreach (U value in values)
+      result = result.pushBack[U](value);
+    return result;
+  }
 
   public ImmutableStack[T] popBack();
 }

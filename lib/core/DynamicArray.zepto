@@ -46,4 +46,8 @@ public type DynamicArray[T] extends MutableStack[T] {
   public T set(Int i, T value) {
     this.backingArray(i) = new Some[T](value);
   }
+
+  public Source[T] enumerator() {
+    return new RandomAccessEnumerator[T](this);
+  }
 }
