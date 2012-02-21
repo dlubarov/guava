@@ -5,6 +5,7 @@ public abstract type Point2D[T] {
   public T getY();
 
   public Bool ==(Top o) {
+    # TODO: switch on o
   }
 
   public Int hashCode() {
@@ -22,5 +23,13 @@ public type IntPoint2D extends Point2D[Int] {
   public Unit init(Int x, Int y) {
     this.x = x;
     this.y = y;
+  }
+
+  public Int getX() {
+    return this.x;
+  }
+
+  public Int getY() {
+    return this.y;
   }
 }

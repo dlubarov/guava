@@ -1,4 +1,15 @@
 module re;
 
+# Matches one or more occurrences of another regular language.
+
 public type Plus[T] extends RegularLanguage[T] {
+  public readonly RegularLanguage[T] inner;
+
+  public Unit init(RegularLanguage[T] inner) {
+    this.inner = inner;
+  }
+
+  public Bool contains(Sequence[T] str) {
+    # TODO: plus contains
+  }
 }

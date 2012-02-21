@@ -1,9 +1,14 @@
 module core;
 
-public type String extends Sequence[Char] {
-  private MutableArray[Char] chars;
+public sealed type String extends Sequence[Char] {
+  private MutableArray[Char] backingArray;
 
   public Unit init(Sequence[Char] source) {
+    this.backingArray = new MutableArray[Char](source);
+  }
+
+  public Char get(Int index) {
+    return this.backingArray(index);
   }
 
   public String +(String that) {
@@ -18,5 +23,9 @@ public type String extends Sequence[Char] {
 
   public String format(Sequence[Top] args) {
     # TODO: implement string formatting
+  }
+
+  public Source[Char] enumerator() {
+    return this.backingArray.enumerator();
   }
 }

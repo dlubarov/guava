@@ -11,10 +11,7 @@ public abstract type Collection[+T] extends Enumerable[T] {
   }
 
   public Bool isEmpty() {
-    foreach (T elem in this)
-      return false;
-    return true;
-    #return this.size() == 0;
+    return this.size() == 0;
   }
 
   public Int count(T elem) {

@@ -1,4 +1,15 @@
 module re;
 
 public type Atom[T] extends RegularLanguage[T] {
+  public readonly T value;
+
+  public Unit init(T value) {
+    this.value = value;
+  }
+
+  public Bool contains(Sequence[T] str) {
+    if (str.size() != 1)
+      return false;
+    return str.getFront() == this.value;
+  }
 }

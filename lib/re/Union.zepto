@@ -1,4 +1,16 @@
 module re;
 
 public type Union[T] extends RegularLanguage[T] {
+  public readonly Collection[RegularLanguage[T]] parts;
+
+  public Unit init(Collection[RegularLanguage[T]] parts) {
+    this.parts = new MutableArray[RegularLanguage[T]](parts);
+  }
+
+  public Bool contains(Sequence[T] str) {
+    foreach (RegularLanguage[T] part in this.parts)
+      if (part.contains(str))
+        return true;
+    return false;
+  }
 }

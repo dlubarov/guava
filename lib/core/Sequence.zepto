@@ -1,6 +1,6 @@
 module core;
 
-public type Sequence[+T] extends Collection[T] {
+public abstract type Sequence[+T] extends Collection[T] {
   public Sequence[T] +(Sequence[T] that) {
   }
 
@@ -75,7 +75,7 @@ public abstract type MutableSequence[T] extends Sequence[T] {
   T set(Int index, T value);
 }
 
-public type ImmutableSequence[+T] extends Sequence[T] {
+public abstract type ImmutableSequence[+T] extends Sequence[T] {
   # TODO: A method like this makes sense, but needs a name that
   # doesn't conflict with ImmutableMap.with(k, v).
 

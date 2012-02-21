@@ -1,4 +1,13 @@
 module re;
 
 public type Star[T] extends RegularLanguage[T] {
+  public readonly RegularLanguage[T] inner;
+
+  public Unit init(RegularLanguage[T] inner) {
+    this.inner = inner;
+  }
+
+  public Bool contains(Sequence[T] str) {
+    # TODO: star contains
+  }
 }

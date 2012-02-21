@@ -65,7 +65,7 @@ public abstract type NaturallyOrdered[-T] extends NaturallyPartiallyOrdered[T] {
 
 # The natural partial ordering of a type which has one.
 [T < NaturallyPartiallyOrdered[T]]
-public sealed type NaturalPartialOrdering[-T] extends Ordering[T] {
+public sealed type NaturalPartialOrdering[-T] extends PartialOrdering[T] {
   public Maybe[Relation] compare(T a, T b) {
     return a.compareTo(b);
   }
@@ -80,7 +80,7 @@ public sealed type NaturalOrdering[-T] extends Ordering[T] {
 }
 
 # A wrapper around a partial ordering which gives us the opposite.
-public type ReversePartialOrdering[-T] extends Ordering[T] {
+public type ReversePartialOrdering[-T] extends PartialOrdering[T] {
   private readonly PartialOrdering[T] original;
 
   public Unit init(PartialOrdering[T] original) {
