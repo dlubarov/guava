@@ -11,7 +11,8 @@ public sealed type String extends Sequence[Char] {
     return this.backingArray(index);
   }
 
-  public String +(String that) {
+  public String +(Top o) {
+    String that = o.toString();
     return new String(Sequence.+(this, that));
   }
 
@@ -27,5 +28,9 @@ public sealed type String extends Sequence[Char] {
 
   public Source[Char] enumerator() {
     return this.backingArray.enumerator();
+  }
+
+  public String toString() {
+    return this;
   }
 }

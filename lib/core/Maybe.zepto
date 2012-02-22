@@ -26,6 +26,18 @@ public sealed type Some[+T] extends Maybe[T] {
   public Source[T] enumerator() {
     return new SingletonSource[T](this.value);
   }
+
+  public Bool ==(Top o) {
+    # TODO: switch on o
+  }
+
+  public Int hashCode() {
+    return this.value.hashCode();
+  }
+
+  public String toString() {
+    return "Some(%s)".format({this.value});
+  }
 }
 
 public sealed type None extends Maybe[Bottom] {
@@ -51,5 +63,9 @@ public sealed type None extends Maybe[Bottom] {
 
   public Source[Bottom] enumerator() {
     return EmptySource();
+  }
+
+  public String toString() {
+    return "None";
   }
 }
