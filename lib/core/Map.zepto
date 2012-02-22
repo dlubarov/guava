@@ -1,23 +1,47 @@
 module core;
 
-# TODO: Use MapEntry[K, V] type? Would help with ImmutableMap's + method.
+public type MapEntry[K, V] {
+  public readonly K key;
+  public readonly V value;
 
-public abstract type Map[K, V] extends Set[Tuple2[K, V]] {
-  public V get(K key);
+  public Unit init(K key, V value) {
+    this.key = key;
+    this.value = value;
+  }
+
+  public Bool equals(Top o) {
+    # TODO: switch on o
+  }
+
+  public Int hashCode() {
+    return {this.key, this.value}.hashCode();
+  }
+
+  public String toString() {
+    return "%s -> %s".format({this.key, this.value});
+  }
+}
+
+public abstract type Map[K, V] extends Set[MapEntry[K, V]] {
+  public Maybe[V] get(K key);
 
   public Set[K] getKeys();
   public Set[V] getValues();
-  public Set[Tuple2[K, V]] getEntries();
+  public Set[MapEntry[K, V]] getEntries();
 }
 
-# Does no implement MutableSet[Tuple2[K, V]] because users of that
+# Does no implement MutableSet[MapEntry[K, V]] because users of that
 # type would not expect adding an element to remove a distinct element.
 public abstract type MutableMap[K, V] extends Map[K, V] {
   public Unit set(K key, V value);
+
+  public Unit +=(MapEntry[K, V] entry) {
+    this(entry.key) = entry.value;
+  }
 }
 
-# Does no implement ImmutableSet[Tuple2[K, V]] because users of that
+# Does no implement ImmutableSet[MapEntry[K, V]] because users of that
 # type would not expect adding an element to remove a distinct element.
 public abstract type ImmutableMap[K, V] extends Map[K, V] {
-  public ImmutableMap[K, V] with(K key, V value);
+  public ImmutableMap[K, V] +(MapEntry[K, V] entry);
 }
