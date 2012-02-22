@@ -203,6 +203,28 @@ public class TypeDef {
         return options.iterator().next();
     }
 
+    private Set<FieldDef> allInheritedFields() {
+        Set<FieldDef> fieldDefs = new HashSet<FieldDef>();
+        fieldDefs.addAll(Arrays.asList(instanceFieldDefs));
+        for (ParameterizedType parent : parents) {
+            TypeDef parentDef = Project.singleton.resolve(parent.rawType);
+            fieldDefs.addAll(parentDef.allInheritedFields());
+        }
+        return fieldDefs;
+    }
+
+    private Set<String> allInheritedFieldNames() {
+        Set<FieldDef> fieldDefs = allInheritedFields();
+        Set<String> names = new HashSet<String>();
+        for (FieldDef fieldDef : fieldDefs) {
+            String name = fieldDef.name;
+            if (names.contains(name))
+                throw new NiftyException("%s inherits multiple fields named '%s'.", desc, name);
+            names.add(name);
+        }
+        return names;
+    }
+
     // Fetch all instance methods which this type inherits, including overridden methods.
     // These are used to generate keys for the virtual method descriptor table.
     private Set<MethodDef> allInheritedInstanceMethods() {
@@ -232,10 +254,9 @@ public class TypeDef {
 
         // Try my instance methods.
         Set<MethodDef> options = new HashSet<MethodDef>();
-        for (MethodDef m : instanceMethodDefs) {
+        for (MethodDef m : instanceMethodDefs)
             if (m.canImplement(method))
                 options.add(m);
-        }
 
         // If nothing was found yet, try my parents.
         if (options.isEmpty())
@@ -251,7 +272,18 @@ public class TypeDef {
                     "Type '%s' has no implementation of '%s.%s'.",
                     desc, method.owner, method.name));
 
-        // FIXME: Attempt to narrow down to 1 with canImplement checks.
+        // Attempt to narrow down to 1 with canImplement checks.
+        // Example: Suppose Sequence[T] overrides Top.hashCode while Immutable inherits it,
+        // and BitSet implements Sequence[Bool] and Immutable. Then BitSet will have two
+        // implementations of hashCode, Top's and Sequence's. This code should eliminate
+        // Top.hashCode from options.
+        for (MethodDef m1 : new HashSet<MethodDef>(options))
+            for (MethodDef m2 : options)
+                // If m2 overrides m1, remove m1 from options.
+                if (m2 != m1 && m2.canImplement(m1)) {
+                    options.remove(m1);
+                    break;
+                }
 
         if (options.size() > 1) {
             String[] optionDescs = new String[options.size()];
@@ -274,10 +306,8 @@ public class TypeDef {
             genericVariances[i] = genericInfos[i].var;
 
         // Get a list of all my instance field names, including inherited fields.
-        String[] instanceFieldNames = new String[instanceFieldDefs.length];
-        // FIXME high: need to include inherited instance fields.
-        for (int i = 0; i < instanceFieldNames.length; ++i)
-            instanceFieldNames[i] = instanceFieldDefs[i].name;
+        Set<String> instanceFieldNames = allInheritedFieldNames();
+        String[] instanceFieldNamesArr = instanceFieldNames.toArray(new String[instanceFieldNames.size()]);
 
         // Compile static methods.
         d.ConcreteMethodDef[] compiledStaticMethods = new d.ConcreteMethodDef[staticMethodDefs.length];
@@ -325,7 +355,7 @@ public class TypeDef {
                 desc,
                 genericVariances,
                 staticFieldDefs.length,
-                instanceFieldNames,
+                instanceFieldNamesArr,
                 compiledStaticMethods,
                 compiledInstanceMethods,
                 virtualMethodDescTable,
