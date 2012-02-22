@@ -1,5 +1,7 @@
 module core;
 
+# TODO: Use MapEntry[K, V] type? Would help with ImmutableMap's + method.
+
 public abstract type Map[K, V] extends Set[Tuple2[K, V]] {
   public V get(K key);
 

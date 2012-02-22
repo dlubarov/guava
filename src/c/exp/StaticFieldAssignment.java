@@ -24,10 +24,12 @@ public class StaticFieldAssignment extends Expression {
     @Override
     public CodeTree compile(CodeContext ctx) {
         TypeDef ownerDef = Project.singleton.resolve(owner);
+        int ownerIndex = ctx.method.getRawTypeTableIndex(owner);
         int fieldIndex = ownerDef.getStaticFieldIndex(fieldName);
         return new CodeTree(
                 value.compile(ctx),
                 Opcodes.PUT_STATIC_FIELD,
+                ownerIndex,
                 fieldIndex);
     }
 

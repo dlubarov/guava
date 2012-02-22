@@ -6,13 +6,15 @@ import d.ty.desc.TypeDesc;
 import d.ty.nf.NonFinalType;
 
 public abstract class ConcreteMethodDef extends MethodDef {
-    private RawType[] rawTypeDescTable;
+    private static final int STACK_SIZE = 1000;
+
+    public RawType[] rawTypeDescTable;
     public final TypeDef[] rawTypeTable;
 
     public TypeDesc[] fullTypeDescTable;
     public final NonFinalType[] fullTypeTable;
 
-    private RawMethod[] methodDescTable;
+    public RawMethod[] methodDescTable;
     public final MethodDef[] methodTable;
 
     public ConcreteMethodDef(RawMethod desc,
@@ -44,11 +46,13 @@ public abstract class ConcreteMethodDef extends MethodDef {
 
     public abstract void invoke(BaseObject[] stack, int bp, ConcreteType[] genericArgs);
 
+    public final void invoke(BaseObject[] initialStack, ConcreteType[] genericArgs) {
+        BaseObject[] stack = new BaseObject[STACK_SIZE];
+        System.arraycopy(initialStack, 0, stack, 0, initialStack.length);
+        invoke(stack, -1 + initialStack.length, genericArgs);
+    }
+
     public final void invoke(ConcreteType[] genericArgs) {
-        try {
-            invoke(new BaseObject[1000], -1, genericArgs);
-        } catch (ArrayIndexOutOfBoundsException e) {
-            throw new RuntimeException("possible stack overflow", e);
-        }
+        invoke(new BaseObject[0], genericArgs);
     }
 }

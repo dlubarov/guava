@@ -19,7 +19,6 @@ public abstract class NativeObject extends BaseObject {
     static {
         TOP_TYPE = new NativeTypeDef(
                 RawType.coreTop,
-                Variance.NONE,
                 0, new String[0],
 
                 // static methods

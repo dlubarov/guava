@@ -17,7 +17,6 @@ public class NativeConsole extends NativeObject {
     static {
         TYPE = new NativeTypeDef(
                 RawType.coreConsole,
-                Variance.NONE,
                 0, new String[0],
 
                 // static methods

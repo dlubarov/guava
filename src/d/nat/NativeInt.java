@@ -23,7 +23,6 @@ public class NativeInt extends NativeObject {
     static {
         TYPE = new NativeTypeDef(
                 RawType.coreInt,
-                Variance.NONE,
                 2, new String[0],
 
                 // static methods

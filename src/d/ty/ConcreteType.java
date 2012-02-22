@@ -20,7 +20,8 @@ public class ConcreteType {
     // Construct a concrete type with no generic arguments.
     public ConcreteType(TypeDef rawType) {
         this(rawType, NONE);
-        assert rawType.genericVariances.length == 0 : rawType + " requires generic arguments";
+        assert rawType.genericVariances == null || rawType.genericVariances.length == 0 :
+            rawType.desc + " requires generic arguments.";
     }
 
     public boolean isSubtype(ConcreteType that) {

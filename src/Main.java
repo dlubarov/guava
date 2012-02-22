@@ -1,7 +1,8 @@
 import java.io.*;
 import java.util.*;
 
-import common.NiftyException;
+import common.*;
+import d.God;
 
 import a.SourceFile;
 
@@ -13,7 +14,7 @@ public class Main {
             printA = false,
             printB = false,
             printC = false,
-            printD = true;
+            printD = false;
 
     public static void main(String[] args) throws IOException {
         // Parse source files.
@@ -52,14 +53,50 @@ public class Main {
             System.out.println();
         }
 
-        // Compile (c -> d)!
+        // Compile (c -> d).
         d.TypeDef[] dProj = cProj.compile();
         if (printD) {
             System.out.println("--- PROJECT D ---");
             for (d.TypeDef typeDef : dProj) {
                 System.out.println(typeDef);
+                System.out.println();
             }
-            System.out.println();
         }
+
+        // Link and initialize each type.
+        God.linkAll();
+        God.runStaticInitializers();
+
+        // Run main methods.
+        for (d.TypeDef typeDef : dProj)
+            for (d.ConcreteMethodDef methodDef : typeDef.staticMethods) {
+                d.RawMethod desc = methodDef.desc;
+                if (!desc.name.equals("main"))
+                    continue;
+                if (desc.numGenericParams != 0)
+                    continue;
+                if (desc.paramTypes.length != 1)
+                    continue;
+
+                d.ty.desc.TypeDesc first = desc.paramTypes[0];
+                if (!(first instanceof d.ty.desc.ParameterizedTypeDesc))
+                    continue;
+                d.ty.desc.ParameterizedTypeDesc firstParam = (d.ty.desc.ParameterizedTypeDesc) first;
+                if (!firstParam.rawType.equals(RawType.coreSequence))
+                    continue;
+                if (!firstParam.genericArgs[0].equals(d.ty.desc.TypeDesc.coreString))
+                    continue;
+
+                d.BaseObject[] argStrings = new d.BaseObject[args.length];
+                for (int i = 0; i < argStrings.length; ++i)
+                    argStrings[i] = d.VMUtils.makeString(args[i]);
+                d.ty.ConcreteType arrayType = new d.ty.ConcreteType(
+                        d.nat.NativeMutableArray.TYPE,
+                        new d.ty.ConcreteType[] {
+                                new d.ty.ConcreteType(God.resolveType(RawType.coreString))
+                        });
+                d.BaseObject argsArray = new d.nat.NativeMutableArray(arrayType, argStrings);
+                methodDef.invoke(new d.BaseObject[] {argsArray}, d.ty.ConcreteType.NONE);
+            }
     }
 }

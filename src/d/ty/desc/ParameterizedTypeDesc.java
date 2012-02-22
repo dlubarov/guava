@@ -14,6 +14,7 @@ public class ParameterizedTypeDesc extends TypeDesc {
     public ParameterizedTypeDesc(RawType rawType, TypeDesc[] genericArgs) {
         this.rawType = rawType;
         this.genericArgs = genericArgs;
+        assert genericArgs != null;
     }
 
     public ParameterizedTypeDesc(RawType rawType) {

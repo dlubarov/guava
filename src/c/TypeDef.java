@@ -351,6 +351,51 @@ public class TypeDef {
             superGenericDescs.put(supertype, thisAsSuper.refine().genericArgs);
         }
 
+        // If this is a native type, we don't want to create a new d.TypeDef, because
+        // a NativeTypeDef already exists. However, that NativeTypeDef is missing some
+        // information which we need to fill in.
+        if (God.hasType(desc)) {
+            d.TypeDef existingType = God.resolveType(desc);
+            d.nat.NativeTypeDef nativeType = (d.nat.NativeTypeDef) existingType;
+
+            nativeType.genericVariances = genericVariances;
+            nativeType.virtualMethodDescTable = virtualMethodDescTable;
+            nativeType.superGenericDescs = superGenericDescs;
+
+            Set<d.ConcreteMethodDef> allStaticMethods = new HashSet<d.ConcreteMethodDef>();
+            Set<d.MethodDef> allInstanceMethods = new HashSet<d.MethodDef>();
+            for (d.ConcreteMethodDef m : nativeType.staticMethods) {
+                allStaticMethods.add(m);
+                // TODO: hack to replace the non-native dummy method in God's map
+                God.newMethod(m);
+            }
+            for (d.MethodDef m : nativeType.instanceMethods) {
+                allInstanceMethods.add(m);
+                // TODO: hack to replace the non-native dummy method in God's map
+                God.newMethod(m);
+            }
+            for (d.ConcreteMethodDef m : compiledStaticMethods) {
+                boolean contained = false;
+                for (d.ConcreteMethodDef m2 : allStaticMethods)
+                    if (m2.desc.equals(m.desc))
+                        contained = true;
+                if (!contained)
+                    allStaticMethods.add(m);
+            }
+            for (d.MethodDef m : compiledInstanceMethods) {
+                boolean contained = false;
+                for (d.MethodDef m2 : allInstanceMethods)
+                    if (m2.desc.equals(m.desc))
+                        contained = true;
+                if (!contained)
+                    allInstanceMethods.add(m);
+            }
+            nativeType.staticMethods = allStaticMethods.toArray(new d.ConcreteMethodDef[0]);
+            nativeType.instanceMethods = allInstanceMethods.toArray(new d.MethodDef[0]);
+
+            return nativeType;
+        }
+
         return new d.TypeDef(
                 desc,
                 genericVariances,

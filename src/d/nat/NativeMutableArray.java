@@ -11,19 +11,18 @@ public class NativeMutableArray extends NativeObject {
 
     public BaseObject[] contents;
 
-    public NativeMutableArray(BaseObject[] contents) {
-        super(new ConcreteType(TYPE));
+    public NativeMutableArray(ConcreteType type, BaseObject[] contents) {
+        super(type);
         this.contents = contents;
     }
 
-    public NativeMutableArray() {
-        this(null);
+    public NativeMutableArray(ConcreteType type) {
+        this(type, null);
     }
 
     static {
         TYPE = new NativeTypeDef(
                 RawType.coreMutableArray,
-                new Variance[] {Variance.NONVARIANT},
                 0, new String[0],
 
                 // static methods
@@ -84,7 +83,7 @@ public class NativeMutableArray extends NativeObject {
         {
             @Override
             public BaseObject rawInstance(ConcreteType type) {
-                return new NativeMutableArray();
+                return new NativeMutableArray(type);
             }
         };
     }

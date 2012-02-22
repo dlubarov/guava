@@ -2,6 +2,8 @@ package d;
 
 import java.util.Arrays;
 
+import util.StringUtils;
+
 import common.RawType;
 import d.ty.desc.TypeDesc;
 
@@ -45,6 +47,11 @@ public class RawMethod {
     @Override
     public String toString() {
         // TODO: more descriptive toString
-        return String.format("%s.%s", owner, name);
+        StringBuilder sb = new StringBuilder();
+        if (isStatic)
+            sb.append("static ");
+        sb.append(owner).append('.').append(name);
+        sb.append('(').append(StringUtils.implode(", ", paramTypes)).append(')');
+        return sb.toString();
     }
 }

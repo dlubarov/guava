@@ -7,7 +7,7 @@ import util.ArrayUtils;
 import common.*;
 
 import a.gen.GenericConstraint;
-import a.stm.Block;
+import a.stm.*;
 
 public class MethodDef extends MemberDef {
     public final GenericConstraint[] genericConstraints;
@@ -87,6 +87,17 @@ public class MethodDef extends MemberDef {
         // Refine parameter types.
         b.Type[] refinedParamTypes = Type.refineAll(paramTypes);
 
+        // Refine method body.
+        b.stm.Block refinedBody;
+        if (body == null)
+            refinedBody = null;
+        else {
+            Block tweakedBody = body;
+            if (returnType.equals(new Type("Unit")))
+                tweakedBody = new Block(tweakedBody, new Return(null));
+            refinedBody = tweakedBody.refine();
+        }
+
         return new b.MethodDef(
                 visibility(),
                 hasQual("static"), hasQual("sealed"),
@@ -95,7 +106,7 @@ public class MethodDef extends MemberDef {
                 refinedGenericParams,
                 refinedParamTypes,
                 paramNames,
-                body == null ? null : body.refine());
+                refinedBody);
     }
 
     private String qualsString() {

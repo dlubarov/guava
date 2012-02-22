@@ -22,7 +22,9 @@ public class Instantiation extends Expression {
     private MethodDef getConstructor(CodeContext ctx) {
         TypeDef typeDef = Project.singleton.resolve(type.rawType);
         Type[] argTypes = Expression.inferAllTypes(args, ctx);
-        return typeDef.getInstanceMethod("init", type.genericArgs, Type.NONE, argTypes, ctx);
+        MethodDef m = typeDef.getInstanceMethod("init", type.genericArgs, Type.NONE, argTypes, ctx);
+        assert m.owner.equals(type.rawType);
+        return m;
     }
 
     @Override
@@ -31,7 +33,8 @@ public class Instantiation extends Expression {
         return new CodeTree(
                 Opcodes.NEW, ctx.method.getFullTypeTableIndex(type),
                 Opcodes.DUP, Expression.compileAll(args, ctx),
-                Opcodes.INVOKE_STATIC, ctx.method.getMethodTableIndex(constructor));
+                Opcodes.INVOKE_STATIC,
+                ctx.method.getMethodTableIndex(constructor));
     }
 
     @Override

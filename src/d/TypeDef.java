@@ -2,6 +2,8 @@ package d;
 
 import java.util.*;
 
+import util.StringUtils;
+
 import common.*;
 import d.ty.ConcreteType;
 import d.ty.desc.TypeDesc;
@@ -9,13 +11,13 @@ import d.ty.sup.*;
 
 public class TypeDef {
     public final RawType desc;
-    public final Variance[] genericVariances;
+    public Variance[] genericVariances;
 
     public final BaseObject[] staticFields;
     public final int numInstanceFields;
 
-    public final ConcreteMethodDef[] staticMethods;
-    public final MethodDef[] instanceMethods;
+    public ConcreteMethodDef[] staticMethods;
+    public MethodDef[] instanceMethods;
 
     public final IdentityHashMap<String, Integer> virtualFieldTable;
 
@@ -71,6 +73,7 @@ public class TypeDef {
                 virtualMethodTable.put(a, (ConcreteMethodDef) b);
             }
 
+        // Populate the supertype generics table.
         for (RawType superDesc : superGenericDescs.keySet()) {
             TypeDesc[] superArgDescs = superGenericDescs.get(superDesc);
             TypeDef supertype = God.resolveType(superDesc);
@@ -90,7 +93,12 @@ public class TypeDef {
 
     @Override
     public String toString() {
-        // TODO: might want to list members
-        return desc.toString();
+        StringBuilder sb = new StringBuilder();
+        sb.append("type ").append(desc).append(" {");
+        for (MethodDef[] ms : new MethodDef[][] {staticMethods, instanceMethods})
+            for (MethodDef m : ms)
+                sb.append('\n').append(StringUtils.indent(m)).append('\n');
+        sb.append('}');
+        return sb.toString();
     }
 }

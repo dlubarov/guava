@@ -23,7 +23,6 @@ public class NativeChar extends NativeObject {
     static {
         TYPE = new NativeTypeDef(
                 RawType.coreChar,
-                Variance.NONE,
                 0, new String[0],
 
                 // static methods

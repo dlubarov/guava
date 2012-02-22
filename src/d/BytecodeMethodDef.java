@@ -2,10 +2,15 @@ package d;
 
 import static d.Opcodes.*;
 
+import java.util.Map;
+
+import util.StringUtils;
+
 import common.*;
 import d.nat.*;
 import d.ty.ConcreteType;
 import d.ty.desc.TypeDesc;
+import d.ty.nf.NonFinalType;
 
 public class BytecodeMethodDef extends ConcreteMethodDef {
     public final String[] stringTable;
@@ -33,11 +38,12 @@ public class BytecodeMethodDef extends ConcreteMethodDef {
     public void invoke(BaseObject[] stack, int bp, ConcreteType[] genericArgs) {
         int sp = bp + numLocals, ip = 0, op;
 
+        try {
         for (;;) {
             try {
                 op = code[ip++];
             } catch (ArrayIndexOutOfBoundsException e) {
-                throw new NiftyException("execution ran off the end of %s without returning", desc);
+                throw new NiftyException("Execution ran off the end of %s without returning.", desc);
             }
 
             switch (op) {
@@ -72,11 +78,20 @@ public class BytecodeMethodDef extends ConcreteMethodDef {
                     break;
 
                 case CREATE_SEQ: {
+                    int typeTableIndex = code[ip++];
                     int len = code[ip++];
+
+                    BaseObject me = desc.isStatic ? null : stack[bp + 1]; // "this"
+                    assert fullTypeTable[typeTableIndex] != null;
+                    ConcreteType elemType = fullTypeTable[typeTableIndex].toConcrete(me, genericArgs);
+
                     BaseObject[] contents = new BaseObject[len];
                     for (int i = 1; i <= len; ++i)
                         contents[len - i] = stack[sp--];
-                    stack[++sp] = new NativeMutableArray(contents);
+                    ConcreteType arrayType = new ConcreteType(
+                            NativeMutableArray.TYPE,
+                            new ConcreteType[] {elemType});
+                    stack[++sp] = new NativeMutableArray(arrayType, contents);
                     break;
                 }
 
@@ -95,6 +110,9 @@ public class BytecodeMethodDef extends ConcreteMethodDef {
                 case GET_STATIC_FIELD: {
                     int typeTableIndex = code[ip++];
                     int staticFieldIndex = code[ip++];
+                    assert rawTypeTable.length > typeTableIndex :
+                        String.format("Raw type table index %d is out of bounds; table size is %d.",
+                                typeTableIndex, rawTypeTable.length);
                     stack[++sp] = rawTypeTable[typeTableIndex].staticFields[staticFieldIndex];
                     break;
                 }
@@ -133,6 +151,7 @@ public class BytecodeMethodDef extends ConcreteMethodDef {
                 case INVOKE_STATIC: {
                     int methodTableIndex = code[ip++];
                     ConcreteMethodDef m = (ConcreteMethodDef) methodTable[methodTableIndex];
+                    assert m != null : this.desc + " does not appear to have been linked.";
                     BaseObject a = desc.isStatic ? null : stack[bp + 1]; // current object
 
                     // Create array of generic arguments.
@@ -159,7 +178,7 @@ public class BytecodeMethodDef extends ConcreteMethodDef {
                 case INVOKE_VIRTUAL: {
                     int methodTableIndex = code[ip++]; // index into method table
                     MethodDef m = methodTable[methodTableIndex];
-                    assert !m.desc.isStatic : "virtual execution of static method";
+                    assert !m.desc.isStatic : "INVOKE_VIRTUAL was used with a static method.";
                     BaseObject a = desc.isStatic ? null : stack[bp + 1]; // current object
 
                     // Create array of generic arguments.
@@ -177,7 +196,17 @@ public class BytecodeMethodDef extends ConcreteMethodDef {
                     int numArgs = m.desc.paramTypes.length;
                     a = stack[sp - numArgs]; // target
                     TypeDef targetOwner = a.type.rawType;
-                    targetOwner.virtualMethodTable.get(m).invoke(stack, sp - numArgs - 1, newGenericArgs);
+                    ConcreteMethodDef impl = targetOwner.virtualMethodTable.get(m);
+                    if (impl == null)
+                        for (Map.Entry<MethodDef, ConcreteMethodDef> e : targetOwner.virtualMethodTable.entrySet()) {
+                            MethodDef k = e.getKey();
+                            ConcreteMethodDef v = e.getValue();
+                            System.out.printf("%s -> %s\n", k.desc, v.desc);
+                        }
+                    assert impl != null : String.format(
+                            "No implementation for '%s' found in virtual method table of %s.",
+                            m.desc, targetOwner.desc);
+                    impl.invoke(stack, sp - numArgs - 1, newGenericArgs);
                     break;
                 }
 
@@ -216,5 +245,57 @@ public class BytecodeMethodDef extends ConcreteMethodDef {
                     throw new NiftyException("bad opcode in %s: %d", desc, op);
             }
         }
+        } catch (ArrayIndexOutOfBoundsException e) {
+            throw new NiftyException(e, "Possible stack overflow in method '%s'.", desc);
+        } catch (Throwable e) {
+            throw new NiftyException(e, "Error in method '%s'.", desc);
+        }
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(desc).append(" {\n");
+
+        // Append raw type [desc] table.
+        if (rawTypeDescTable == null) {
+            sb.append("    Raw type table:\n");
+            for (TypeDef typeDef : rawTypeTable)
+                sb.append(StringUtils.indent(typeDef.desc, 2)).append('\n');
+        } else {
+            sb.append("    Raw type desc table:\n");
+            for (RawType typeDesc : rawTypeDescTable)
+                sb.append(StringUtils.indent(typeDesc, 2)).append('\n');
+        }
+
+        // Append full type [desc] table.
+        if (fullTypeDescTable == null) {
+            sb.append("    Full type table:\n");
+            for (NonFinalType type : fullTypeTable)
+                sb.append(StringUtils.indent(type, 2)).append('\n');
+        } else {
+            sb.append("    Full type desc table:\n");
+            for (TypeDesc typeDesc : fullTypeDescTable)
+                sb.append(StringUtils.indent(typeDesc, 2)).append('\n');
+        }
+
+        // Append method [desc] table.
+        if (methodDescTable == null) {
+            sb.append("    Method table:\n");
+            for (MethodDef method : methodTable)
+                sb.append(StringUtils.indent(method.desc, 2)).append('\n');
+        } else {
+            sb.append("    Method desc table:\n");
+            for (RawMethod methodDesc : methodDescTable)
+                sb.append(StringUtils.indent(methodDesc, 2)).append('\n');
+        }
+
+        // Append method body.
+        String body = StringUtils.indent(Opcodes.repr(code));
+        if (!body.isEmpty())
+            body = "\n" + body + "\n";
+        sb.append(body);
+
+        return sb.append('}').toString();
     }
 }

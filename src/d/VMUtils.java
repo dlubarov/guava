@@ -8,7 +8,8 @@ public final class VMUtils {
     private VMUtils() {}
 
     public static BaseObject getUnit() {
-        // TODO: getUnit is very slow, should store a direct reference to Unit.singleton.
+        // TODO: getUnit is very slow, and fragile.
+        // Should store a direct reference to Unit.singleton.
         return God.resolveType(RawType.coreUnit).staticFields[0];
     }
 
@@ -16,7 +17,12 @@ public final class VMUtils {
         BaseObject[] chars = new BaseObject[javaString.length()];
         for (int i = 0; i < chars.length; ++i)
             chars[i] = new NativeChar(javaString.charAt(i));
-        BaseObject charArray = new NativeMutableArray(chars);
+        ConcreteType arrayType = new ConcreteType(
+                NativeMutableArray.TYPE,
+                new ConcreteType[] {
+                        new ConcreteType(God.resolveType(RawType.coreChar))
+                });
+        BaseObject charArray = new NativeMutableArray(arrayType, chars);
         TypeDef stringTypeDef = God.resolveType(RawType.coreString);
         NormalObject zeptoString = new NormalObject(new ConcreteType(stringTypeDef));
         zeptoString.fields[0] = charArray;

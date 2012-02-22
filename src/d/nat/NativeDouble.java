@@ -23,7 +23,6 @@ public class NativeDouble extends NativeObject {
     static {
         TYPE = new NativeTypeDef(
                 RawType.coreDouble,
-                Variance.NONE,
                 0, new String[0],
 
                 // static methods

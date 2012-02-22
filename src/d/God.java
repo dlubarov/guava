@@ -23,19 +23,29 @@ public final class God {
         // We need to ensure that NativeInt, NativeBool etc. are loaded, so that their TYPE
         // objects will be created and eventually added to nativeTypes. We might as well just
         // add them manually, as it guarantees initialization and redundant add's won't hurt.
-        nativeTypes.add(NativeObject.TOP_TYPE);
-        nativeTypes.add(NativeBool.TYPE);
-        nativeTypes.add(NativeInt.TYPE);
-        nativeTypes.add(NativeDouble.TYPE);
-        nativeTypes.add(NativeChar.TYPE);
-        nativeTypes.add(NativeMutableArray.TYPE);
-        nativeTypes.add(NativeConsole.TYPE);
+        NativeTypeDef[] nativeTypesArr = {
+                NativeObject.TOP_TYPE,
+                NativeBool.TYPE,
+                NativeInt.TYPE,
+                NativeDouble.TYPE,
+                NativeChar.TYPE,
+                NativeMutableArray.TYPE,
+                NativeConsole.TYPE
+        };
+        for (NativeTypeDef nativeType : nativeTypesArr) {
+            nativeTypes.add(nativeType);
+            allTypes.put(nativeType.desc, nativeType);
+        }
+    }
+
+    public static boolean hasType(RawType desc) {
+        return allTypes.containsKey(desc);
     }
 
     public static TypeDef resolveType(RawType desc) {
         TypeDef result = allTypes.get(desc);
         if (result == null)
-            throw new RuntimeException("failed to resolve " + desc);
+            throw new NoSuchElementException("Failed to resolve " + desc);
         return result;
     }
 
@@ -71,6 +81,7 @@ public final class God {
             if (typeDef.desc.equals(RawType.coreUnit)) {
                 // TODO: Load a reference to Unit.singleton.
             }
+            // TODO: Also load references to LT, GT, EQ.
         }
     }
 }

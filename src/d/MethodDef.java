@@ -10,4 +10,9 @@ public abstract class MethodDef {
     }
 
     public abstract void link();
+
+    @Override
+    public String toString() {
+        return desc.toString();
+    }
 }

@@ -1,7 +1,5 @@
 package d;
 
-import common.NiftyException;
-
 public final class Opcodes {
     public static final int
             POP = 0,
@@ -31,7 +29,7 @@ public final class Opcodes {
 
     public static String repr(int[] code) {
         StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < code.length; ++i)
+        for (int i = 0; i < code.length; ++i) {
             switch (code[i]) {
                 case POP:
                     sb.append("POP");
@@ -60,39 +58,41 @@ public final class Opcodes {
                     break;
                 }
                 case CONST_STRING:
-                    sb.append("CONST_STRING index=" + code[++i]);
+                    sb.append("CONST_STRING stringTableIndex=" + code[++i]);
                     break;
                 case CREATE_SEQ:
-                    sb.append("CREATE_SEQ length=" + code[++i]);
+                    sb.append("CREATE_SEQ fullTypeTableIndex=" + code[++i] + "length=" + code[++i]);
                     break;
                 case GET_LOCAL:
-                    sb.append("GET_LOCAL index=" + code[++i]);
+                    sb.append("GET_LOCAL localIndex=" + code[++i]);
                     break;
                 case PUT_LOCAL:
-                    sb.append("PUT_LOCAL index=" + code[++i]);
+                    sb.append("PUT_LOCAL localIndex=" + code[++i]);
                     break;
                 case GET_STATIC_FIELD:
-                    sb.append("GET_STATIC_FIELD index=" + code[++i]);
+                    sb.append("GET_STATIC_FIELD rawTypeTableIndex=" + code[++i] + " fieldIndex=" + code[++i]);
                     break;
                 case PUT_STATIC_FIELD:
-                    sb.append("PUT_STATIC_FIELD index=" + code[++i]);
+                    sb.append("PUT_STATIC_FIELD rawTypeTableIndex=" + code[++i] + " fieldIndex=" + code[++i]);
                     break;
                 case GET_INSTANCE_FIELD:
-                    sb.append("GET_INSTANCE_FIELD nameIndex=" + code[++i]);
+                    sb.append("GET_INSTANCE_FIELD stringTableIndex=" + code[++i]);
                     break;
                 case PUT_INSTANCE_FIELD:
-                    sb.append("PUT_INSTANCE_FIELD nameIndex=" + code[++i]);
+                    sb.append("PUT_INSTANCE_FIELD stringTableIndex=" + code[++i]);
                     break;
                 case INVOKE_STATIC:
-                    sb.append("INVOKE_STATIC index=" + code[++i]);
+                    sb.append("INVOKE_STATIC methodTableIndex=" + code[++i]);
                     // TODO presentation: don't know # generic args, can't advance i
-                    break;
+                    sb.append("\nCAN'T DO THE REST\n");
+                    return sb.toString();
                 case INVOKE_VIRTUAL:
-                    sb.append("INVOKE_VIRTUAL vtableIndex=" + code[++i]);
+                    sb.append("INVOKE_VIRTUAL methodTableIndex=" + code[++i]);
                     // TODO presentation: don't know # generic args, can't advance i
-                    break;
+                    sb.append("\nCAN'T DO THE REST\n");
+                    return sb.toString();
                 case NEW:
-                    sb.append("NEW " + code[++i]);
+                    sb.append("NEW fullTypeTableIndex=" + code[++i]);
                     break;
                 case JUMP:
                     sb.append(String.format("JUMP %+d", code[++i]));
@@ -107,8 +107,10 @@ public final class Opcodes {
                     sb.append("RETURN");
                     break;
                 default:
-                    throw new NiftyException("bad opcode: %d", code[i]);
+                    sb.append("BAD OPCODE").append(code[i]);
             }
+            sb.append('\n');
+        }
         return sb.toString();
     }
 }

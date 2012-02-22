@@ -6,11 +6,11 @@ import d.*;
 import d.ty.ConcreteType;
 
 public abstract class NativeTypeDef extends TypeDef {
-    // TODO: Get rid of genericVariances, numStaticFields, allInstanceFields. Can infer from source.
-    public NativeTypeDef(RawType desc, Variance[] genericVariances,
+    // TODO: Get rid of numStaticFields, allInstanceFields. Can infer from source.
+    public NativeTypeDef(RawType desc,
             int numStaticFields, String[] allInstanceFields,
             NativeMethodDef[] staticMethods, NativeMethodDef[] instanceMethods) {
-        super(desc, genericVariances,
+        super(desc, null,
                 numStaticFields, allInstanceFields,
                 staticMethods, instanceMethods,
                 null, null);

@@ -7,6 +7,8 @@ import d.ty.nf.NonFinalType;
 import d.ty.sup.SuperType;
 
 public abstract class TypeDesc {
+    public static final TypeDesc[] NONE = new TypeDesc[0];
+
     public static final TypeDesc
             coreTop = new ParameterizedTypeDesc(RawType.coreTop),
             coreBottom = new ParameterizedTypeDesc(RawType.coreBottom),
@@ -17,7 +19,6 @@ public abstract class TypeDesc {
             coreString = new ParameterizedTypeDesc(RawType.coreString);
 
     public static final TypeDesc[]
-            NONE = new TypeDesc[0],
             coreTopOnly = new TypeDesc[] {coreTop},
             coreBottomOnly = new TypeDesc[] {coreBottom},
             coreIntOnly = new TypeDesc[] {coreInt},

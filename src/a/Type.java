@@ -32,6 +32,21 @@ public class Type {
     }
 
     @Override
+    public boolean equals(Object o) {
+        try {
+            Type that = (Type) o;
+            return rawType.equals(that.rawType) && Arrays.equals(genericArgs, that.genericArgs);
+        } catch (ClassCastException e) {
+            return false;
+        }
+    }
+
+    @Override
+    public int hashCode() {
+        return toString().hashCode();
+    }
+
+    @Override
     public String toString() {
         if (genericArgs.length == 0)
             return rawType;
