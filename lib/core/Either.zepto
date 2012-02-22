@@ -9,7 +9,8 @@ module core;
 public abstract type Either[+A, +B] {
   public Either[B, A] swap();
 
-  public Either[C, D] map[C, D](Function1[A, C] f, Function1[B, D] g);
+  public Either[C, B] mapLeft[C](Function1[A, C] f);
+  public Either[A, C] mapRight[C](Function1[B, C] f);
 
   public R fold[R](Function1[A, R] f, Function1[B, R] g);
 }
@@ -21,12 +22,16 @@ public type Left[+A] extends Either[A, Bottom] {
     this.value = value;
   }
 
-  public Either[Bottom, A] swap() {
+  public Right[A] swap() {
     return new Right[A](this.value);
   }
 
-  public Either[C, D] map[C, D](Function1[A, C] f, Function1[Bottom, D] g) {
+  public Left[C] mapLeft[C](Function1[A, C] f) {
     return new Left[C](f(this.value));
+  }
+
+  public Left[A] mapRight[C](Function1[Bottom, C] f) {
+    return this;
   }
 
   public R fold[R](Function1[A, R] f, Function1[Bottom, R] g) {
@@ -41,12 +46,16 @@ public type Right[+B] extends Either[Bottom, B] {
     this.value = value;
   }
 
-  public Either[B, Bottom] swap() {
+  public Left[B] swap() {
     return new Left[B](this.value);
   }
 
-  public Either[C, D] map[C, D](Function1[Bottom, C] f, Function1[B, D] g) {
-    return new Right[D](g(this.value));
+  public Right[B] mapLeft[C](Function1[Bottom, C] f) {
+    return this;
+  }
+
+  public Right[C] mapRight[C](Function1[B, C] f) {
+    return new Right[C](f(this.value));
   }
 
   public R fold[R](Function1[Bottom, R] f, Function1[B, R] g) {

@@ -41,3 +41,8 @@ public abstract type Collection[+T] extends Enumerable[T] {
   public Collection[T] map(Function1[T, T] f) {
   }
 }
+
+# TODO: Consider adding MutableCollection and ImmutableCollection.
+# Both would have a method called something like toImmutable().
+# ImmutableCollection's implementation would return 'this', while
+# MutableCollection's (or Collection's?) would make a new ImmutableArray.

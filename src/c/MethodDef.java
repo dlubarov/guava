@@ -75,11 +75,9 @@ public class MethodDef {
             methodGenerics[i] = new MethodGenericType(i);
 
         // Check the return type.
-        {
-            Type thatReturnType = that.returnType.withGenericArgs(ownerGenerics, methodGenerics);
-            if (!returnType.isSubtype(thatReturnType, ownerDef, this))
-                return false;
-        }
+        Type thatReturnType = that.returnType.withGenericArgs(ownerGenerics, methodGenerics);
+        if (!returnType.isSubtype(thatReturnType, ownerDef, this))
+            return false;
 
         // Check each parameter type.
         for (int i = 0; i < paramTypes.length; ++i) {

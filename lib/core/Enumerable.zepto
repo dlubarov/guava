@@ -1,5 +1,17 @@
 module core;
 
+# An object which provides enumerations of Ts.
+# Instances of this type can be used in a foreach statement.
+
+# This type does not guarantee any order of enumeration, or even
+# a consistent order or number of elements.
+
+# Enumerating an instance of Enumerable should not change its state,
+# with the possible exception of random seeds, cache state, etc.
+
+# In particular, objects which can only provide a single enumeration
+# of Ts should not have this type. They should instead be Source[T]s.
+
 public abstract type Enumerable[+T] {
   public Source[T] enumerator();
 }
