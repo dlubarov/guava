@@ -1,14 +1,16 @@
 module core;
 
+# TODO: Think about semantics of pushFrontAll. Order of pushing seems abiguous.
+
 public abstract type MutableDeque[T] extends MutableStack[T], MutableQueue[T] {
   public Unit pushFront(T value);
 
   public Unit pushBack(T value);
 
-  public Unit pushFrontAll(Sequence[T] values) {
-    foreach (T value in values)
-      this.pushFront(value);
-  }
+  #public Unit pushFrontAll(Sequence[T] values) {
+  #  foreach (T value in values)
+  #    this.pushFront(value);
+  #}
 
   public Unit pushBackAll(Sequence[T] values) {
     foreach (T value in values)
@@ -27,13 +29,13 @@ public abstract type ImmutableDeque[+T] extends ImmutableStack[T], ImmutableQueu
   [U > T]
   public ImmutableDeque[U] pushBack[U](U value);
 
-  [U > T]
-  public ImmutableDeque[U] pushFrontAll[U](Sequence[U] values) {
-    ImmutableDeque[U] result = this;
-    foreach (U value in values)
-      result = result.pushFront[U](value);
-    return result;
-  }
+  #[U > T]
+  #public ImmutableDeque[U] pushFrontAll[U](Sequence[U] values) {
+  #  ImmutableDeque[U] result = this;
+  #  foreach (U value in values)
+  #    result = result.pushFront[U](value);
+  #  return result;
+  #}
 
   [U > T]
   public ImmutableDeque[U] pushBackAll[U](Sequence[U] values) {

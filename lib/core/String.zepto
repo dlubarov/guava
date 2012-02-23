@@ -17,6 +17,13 @@ public sealed type String extends Sequence[Char] {
   }
 
   public String join(Sequence[Top] seq) {
+    MutableStack[Char] buffer = new DynamicArray[Char]();
+    foreach (Top o in seq) {
+      if (!buffer.isEmpty())
+        buffer.pushBackAll(this);
+      buffer.pushBackAll(o.toString());
+    }
+    return new String(buffer);
   }
 
   public String split(Sequence[Char] delim) {

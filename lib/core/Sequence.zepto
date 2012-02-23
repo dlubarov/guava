@@ -42,10 +42,19 @@ public abstract type Sequence[+T] extends Collection[T] {
   }
 
   public Sequence[T] reverse() {
+    MutableDeque[T] deque = new ArrayDeque[T]();
+    foreach (T elem in this)
+      deque.pushFront(elem);
+    return deque;
   }
 
   # Repeat this sequence k times.
   public Sequence[T] *(Int k) {
+    MutableStack[T] stack = new DynamicArray[T]();
+    for (Int i = 0; i < k; i = i + 1)
+      foreach (T elem in this)
+        stack.pushBack(elem);
+    return stack;
   }
 
   public Sequence[T] map(Function1[T, T] f) {

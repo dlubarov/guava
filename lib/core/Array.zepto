@@ -33,7 +33,7 @@ public type ImmutableArray[+T] extends Sequence[T] {
     ImmutableArray.empty = new ImmutableArray[Bottom]();
   }
 
-  private readonly MutableArray backingArray;
+  private readonly MutableArray[T] backingArray;
 
   public Unit init(Collection[T] source) {
     this.backingArray = new MutableArray[T](source);
@@ -43,7 +43,11 @@ public type ImmutableArray[+T] extends Sequence[T] {
     this.init(new MutableArray[T]());
   }
 
+  public Int size() {
+    return this.backingArray.size();
+  }
+
   public Source[T] enumerator() {
-    return new RandomAccessEnumerator[T](this);
+    return new RandomAccessEnumerator[T](this.backingArray);
   }
 }

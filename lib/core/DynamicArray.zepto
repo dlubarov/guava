@@ -8,6 +8,10 @@ public type DynamicArray[T] extends MutableStack[T] {
     this.backingArray = new MutableArray[Maybe[T]]({None()});
   }
 
+  public Int size() {
+    return this.n;
+  }
+
   private Unit expand() {
     Sequence[Maybe[T]] nones = {None()} * (this.backingArray.size() * 2);
     MutableArray[Maybe[T]] newArray = new MutableArray[Maybe[T]](nones);
