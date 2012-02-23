@@ -72,7 +72,7 @@ public class BytecodeMethodDef extends ConcreteMethodDef {
                         break;
 
                     case CONST_STRING:
-                        stack[++sp] = VMUtils.makeString(stringTable[ip++]);
+                        stack[++sp] = VMUtils.makeString(stringTable[code[ip++]]);
                         break;
 
                     case CREATE_SEQ: {
@@ -200,6 +200,7 @@ public class BytecodeMethodDef extends ConcreteMethodDef {
                                 "No implementation for '%s' found in virtual method table of %s.",
                                 m.desc, targetOwner.desc);
                         impl.invoke(stack, sp - numArgs - 1, newGenericArgs);
+                        sp -= numArgs;
                         break;
                     }
 

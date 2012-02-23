@@ -2,7 +2,7 @@ package b;
 
 import java.util.Arrays;
 
-import common.RawType;
+import common.*;
 
 public class Type {
     public static final Type[] NONE = new Type[0];
@@ -32,10 +32,18 @@ public class Type {
                     return new c.ty.TypeGenericType(index);
             }
         }
+
         RawType refinedRawType = typeCtx.qualifyType(rawType);
         c.ty.Type[] refinedGenericArgs = new c.ty.Type[genericArgs.length];
         for (int i = 0; i < refinedGenericArgs.length; ++i)
             refinedGenericArgs[i] = genericArgs[i].refine(typeCtx, methodCtx);
+
+        TypeDef rawTypeDef = Project.singleton.typeDefs.get(refinedRawType);
+        if (genericArgs.length != rawTypeDef.genericParams.length)
+            throw new NiftyException(
+                    "%s was given %d generic arguments; expecting %d.",
+                    refinedRawType, genericArgs.length, rawTypeDef.genericParams.length);
+
         return new c.ty.ParameterizedType(refinedRawType, refinedGenericArgs);
     }
 
