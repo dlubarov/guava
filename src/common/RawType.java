@@ -8,6 +8,7 @@ public class RawType {
         coreBottom = new RawType("core", "Bottom"),
         coreUnit = new RawType("core", "Unit"),
         coreInt = new RawType("core", "Int"),
+        coreByte = new RawType("core", "Byte"),
         coreChar = new RawType("core", "Char"),
         coreBool = new RawType("core", "Bool"),
         coreDouble = new RawType("core", "Double"),
@@ -17,7 +18,8 @@ public class RawType {
         coreSequence = new RawType("core", "Sequence"),
         coreSource = new RawType("core", "Source"),
         coreString = new RawType("core", "String"),
-        coreConsole = new RawType("core", "Console");
+        coreConsole = new RawType("core", "Console"),
+        coreRelation = new RawType("core", "Relation");
 
     public final String module, name;
 

@@ -75,7 +75,10 @@ public abstract type NaturallyPartiallyOrdered[-T] {
 
   public sealed Bool <=(T that) {
     PossibleRelation rel = this.compareTo(that);
-    return rel == Relation.LT | rel == Relation.EQ;
+    # FIXME
+    Bool a = Top.==(rel, Relation.LT), b = Top.==(rel, Relation.EQ);
+    return a | b;
+    #return rel == Relation.LT | rel == Relation.EQ;
   }
 
   public sealed Bool >=(T that) {

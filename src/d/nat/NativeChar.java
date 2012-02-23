@@ -42,7 +42,22 @@ public class NativeChar extends NativeObject {
                             }
                         },
 
-                        // TODO: override comparison for efficiency
+                        // compareTo
+                        new NativeMethodDef(new RawMethod(false, RawType.coreChar, "compareTo", 0, TypeDesc.coreCharOnly)) {
+                            @Override
+                            public void invoke(BaseObject[] stack, int bp, ConcreteType[] genericArgs) {
+                                char a = ((NativeChar) stack[bp + 1]).value;
+                                char b = ((NativeChar) stack[bp + 2]).value;
+                                BaseObject rel;
+                                if (a < b)
+                                    rel = VMUtils.getLT();
+                                else if (a > b)
+                                    rel = VMUtils.getGT();
+                                else
+                                    rel = VMUtils.getEQ();
+                                stack[bp + 1] = rel;
+                            }
+                        },
 
                         // ==, hashCode, toString
                         new NativeMethodDef(new RawMethod(false, RawType.coreChar, "==", 0, TypeDesc.coreTopOnly)) {

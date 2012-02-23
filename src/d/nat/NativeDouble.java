@@ -89,7 +89,22 @@ public class NativeDouble extends NativeObject {
                             }
                         },
 
-                        // TODO: override comparison for efficiency
+                        // compareTo
+                        new NativeMethodDef(new RawMethod(false, RawType.coreDouble, "compareTo", 0, TypeDesc.coreDoubleOnly)) {
+                            @Override
+                            public void invoke(BaseObject[] stack, int bp, ConcreteType[] genericArgs) {
+                                double x = ((NativeDouble) stack[bp + 1]).value;
+                                double y = ((NativeDouble) stack[bp + 2]).value;
+                                BaseObject rel;
+                                if (x < y)
+                                    rel = VMUtils.getLT();
+                                else if (x > y)
+                                    rel = VMUtils.getGT();
+                                else
+                                    rel = VMUtils.getEQ();
+                                stack[bp + 1] = rel;
+                            }
+                        },
 
                         // ==, hashCode, toString
                         new NativeMethodDef(new RawMethod(false, RawType.coreDouble, "==", 0, TypeDesc.coreTopOnly)) {

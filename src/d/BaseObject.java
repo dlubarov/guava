@@ -22,7 +22,7 @@ public abstract class BaseObject {
     @Override
     public String toString() {
         return String.format("%s@%d",
-                type.toString(),
+                type,
                 System.identityHashCode(this));
     }
 }

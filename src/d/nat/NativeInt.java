@@ -131,7 +131,22 @@ public class NativeInt extends NativeObject {
                             }
                         },
 
-                        // TODO: override comparison for efficiency
+                        // compareTo
+                        new NativeMethodDef(new RawMethod(false, RawType.coreInt, "compareTo", 0, TypeDesc.coreIntOnly)) {
+                            @Override
+                            public void invoke(BaseObject[] stack, int bp, ConcreteType[] genericArgs) {
+                                int n = ((NativeInt) stack[bp + 1]).value;
+                                int m = ((NativeInt) stack[bp + 2]).value;
+                                BaseObject rel;
+                                if (n < m)
+                                    rel = VMUtils.getLT();
+                                else if (n > m)
+                                    rel = VMUtils.getGT();
+                                else
+                                    rel = VMUtils.getEQ();
+                                stack[bp + 1] = rel;
+                            }
+                        },
 
                         // ==, hashCode, toString
                         new NativeMethodDef(new RawMethod(false, RawType.coreInt, "==", 0, TypeDesc.coreTopOnly)) {
