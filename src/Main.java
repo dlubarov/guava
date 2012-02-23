@@ -14,7 +14,7 @@ public class Main {
             printA = false,
             printB = false,
             printC = false,
-            printD = true;
+            printD = false;
 
     public static void main(String[] args) throws IOException {
         // Parse source files.
