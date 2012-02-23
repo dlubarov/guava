@@ -1,5 +1,8 @@
 module core;
 
+# A sequence is a collection of values with a meaningful and consistent
+# order. This could be insertion order, natural order, or anything else.
+
 public abstract type Sequence[+T] extends Collection[T] {
   public Sequence[T] +(Sequence[T] that) {
   }

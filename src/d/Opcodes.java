@@ -46,21 +46,27 @@ public final class Opcodes {
                 case POP:
                     sb.append("POP");
                     break;
+
                 case DUP:
                     sb.append("DUP");
                     break;
+
                 case CONST_TRUE:
                     sb.append("CONST_TRUE");
                     break;
+
                 case CONST_FALSE:
                     sb.append("CONST_FALSE");
                     break;
+
                 case CONST_INT:
                     sb.append("CONST_INT " + code[++i]);
                     break;
+
                 case CONST_CHAR:
                     sb.append(String.format("CONST_CHAR '%c'", code[++i]));
                     break;
+
                 case CONST_DOUBLE: {
                     int i1 = code[++i];
                     int i0 = code[++i];
@@ -69,30 +75,39 @@ public final class Opcodes {
                     sb.append(String.format("CONST_DOUBLE %f", d));
                     break;
                 }
+
                 case CONST_STRING:
                     sb.append("CONST_STRING \"" + stringTable[code[++i]] + '"');
                     break;
+
                 case CREATE_SEQ:
                     sb.append("CREATE_SEQ elemType=" + fullTypeDescTable[code[++i]] + ", length=" + code[++i]);
                     break;
+
                 case GET_LOCAL:
                     sb.append("GET_LOCAL localIndex=" + code[++i]);
                     break;
+
                 case PUT_LOCAL:
                     sb.append("PUT_LOCAL localIndex=" + code[++i]);
                     break;
+
                 case GET_STATIC_FIELD:
                     sb.append("GET_STATIC_FIELD owner=" + rawTypeDescTable[code[++i]] + " fieldIndex=" + code[++i]);
                     break;
+
                 case PUT_STATIC_FIELD:
                     sb.append("PUT_STATIC_FIELD owner=" + rawTypeDescTable[code[++i]] + " fieldIndex=" + code[++i]);
                     break;
+
                 case GET_INSTANCE_FIELD:
                     sb.append("GET_INSTANCE_FIELD " + stringTable[code[++i]]);
                     break;
+
                 case PUT_INSTANCE_FIELD:
                     sb.append("PUT_INSTANCE_FIELD " + stringTable[code[++i]]);
                     break;
+
                 case INVOKE_STATIC: {
                     int methodTableIdx = code[++i];
                     RawMethod m = methodDescTable[methodTableIdx];
@@ -105,6 +120,7 @@ public final class Opcodes {
                     sb.append(", genericArgs=").append(Arrays.toString(genArgs));
                     break;
                 }
+
                 case INVOKE_VIRTUAL: {
                     int methodTableIdx = code[++i];
                     RawMethod m = methodDescTable[methodTableIdx];
@@ -117,21 +133,27 @@ public final class Opcodes {
                     sb.append(", genericArgs=").append(Arrays.toString(genArgs));
                     break;
                 }
+
                 case NEW:
                     sb.append("NEW " + fullTypeDescTable[code[++i]]);
                     break;
+
                 case JUMP:
                     sb.append(String.format("JUMP %+d", code[++i]));
                     break;
+
                 case JUMP_COND:
                     sb.append(String.format("JUMP_COND %+d", code[++i]));
                     break;
+
                 case BOOL_NEG:
                     sb.append("BOOL_NEG");
                     break;
+
                 case RETURN:
                     sb.append("RETURN");
                     break;
+
                 default:
                     throw new NiftyException("Bad opcode: %d.", code[i]);
             }

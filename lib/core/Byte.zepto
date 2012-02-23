@@ -22,7 +22,7 @@ public sealed type Byte extends NaturallyOrdered[Byte] {
   public Byte >>(Byte that) {}
   public Byte >>>(Byte that) {}
 
-  public Some[Relation] compareTo(Byte that) {}
+  public Relation compareTo(Byte that) {}
 
   public Byte rotateLeft(Int distance) {}
   public Byte rotateRight(Int distance) {}

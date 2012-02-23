@@ -13,7 +13,7 @@ public sealed type Double extends NaturallyOrdered[Double] {
   public Double /(Double x) {}
   public Double %(Double x) {}
 
-  public Some[Relation] compareTo(Double that) {}
+  public Relation compareTo(Double that) {}
 
   public static Double min(Double a, Double b) {}
   public static Double max(Double a, Double b) {}

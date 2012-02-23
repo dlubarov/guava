@@ -1,7 +1,33 @@
 module core;
 
+public sealed type PossibleRelation {
+  public static readonly Relation NONE;
+
+  private static Unit init() {
+    PossibleRelation.NONE = new PossibleRelation();
+  }
+
+  private Unit init() {}
+
+  public PossibleRelation flip() {
+    return PossibleRelation.NONE;
+  }
+
+  public String toString() {
+    # TODO: use switch
+    if (this == PossibleRelation.NONE)
+      return "NONE";
+    if (this == Relation.LT)
+      return "LT";
+    if (this == Relation.GT)
+      return "GT";
+    if (this == Relation.EQ)
+      return "EQ";
+  }
+}
+
 # Used to enforce trichotomy.
-public sealed type Relation {
+public sealed type Relation extends PossibleRelation {
   public static readonly Relation LT, GT, EQ;
 
   private static Unit init() {
@@ -23,50 +49,50 @@ public sealed type Relation {
 
 # A partial ordering of T.
 public abstract type PartialOrdering[-T] {
-  public Maybe[Relation] compare(T a, T b);
+  public PossibleRelation compare(T a, T b);
 }
 
 # A total ordering of T.
 public abstract type Ordering[-T] extends PartialOrdering[T] {
-  public Some[Relation] compare(T a, T b);
+  public Relation compare(T a, T b);
 }
 
 # A type which has a natural partial ordering with respect to T.
 public abstract type NaturallyPartiallyOrdered[-T] {
-  public Maybe[Relation] compareTo(T that);
+  public PossibleRelation compareTo(T that);
 
-  public Bool <(T that) {
-    return this.compareTo(that) == new Some[Relation](Relation.LT);
+  public sealed Bool <(T that) {
+    return this.compareTo(that) == Relation.LT;
   }
 
-  public Bool >(T that) {
-    return this.compareTo(that) == new Some[Relation](Relation.GT);
+  public sealed Bool >(T that) {
+    return this.compareTo(that) == Relation.GT;
   }
 
   public Bool ==(Top that) {
     # TODO: switch on that
   }
 
-  public Bool <=(T that) {
-    Maybe[Relation] rel = this.compareTo(that);
-    return rel == new Some[Relation](Relation.LT) | rel == new Some[Relation](Relation.EQ);
+  public sealed Bool <=(T that) {
+    PossibleRelation rel = this.compareTo(that);
+    return rel == Relation.LT | rel == Relation.EQ;
   }
 
-  public Bool >=(T that) {
-    Maybe[Relation] rel = this.compareTo(that);
-    return rel == new Some[Relation](Relation.GT) | rel == new Some[Relation](Relation.EQ);
+  public sealed Bool >=(T that) {
+    PossibleRelation rel = this.compareTo(that);
+    return rel == Relation.GT | rel == Relation.EQ;
   }
 }
 
 # A type which has a natural total ordering with respect to T.
 public abstract type NaturallyOrdered[-T] extends NaturallyPartiallyOrdered[T] {
-  public Some[Relation] compareTo(T that);
+  public Relation compareTo(T that);
 }
 
 # The natural partial ordering of a type which has one.
 [T < NaturallyPartiallyOrdered[T]]
 public sealed type NaturalPartialOrdering[-T] extends PartialOrdering[T] {
-  public Maybe[Relation] compare(T a, T b) {
+  public PossibleRelation compare(T a, T b) {
     return a.compareTo(b);
   }
 }
@@ -74,7 +100,7 @@ public sealed type NaturalPartialOrdering[-T] extends PartialOrdering[T] {
 # The natural total ordering of a type which has one.
 [T < NaturallyOrdered[T]]
 public sealed type NaturalOrdering[-T] extends Ordering[T] {
-  public Some[Relation] compare(T a, T b) {
+  public Relation compare(T a, T b) {
     return a.compareTo(b);
   }
 }
@@ -87,10 +113,8 @@ public type ReversePartialOrdering[-T] extends PartialOrdering[T] {
     this.original = original;
   }
 
-  public Maybe[Relation] compare(T a, T b) {
-    foreach (Relation rel in this.original.compare(a, b))
-      return new Some[Relation](rel.flip());
-    return None();
+  public PossibleRelation compare(T a, T b) {
+    return this.original.compare(a, b).flip();
   }
 }
 
@@ -102,13 +126,13 @@ public type ReverseOrdering[-T] extends Ordering[T] {
     this.original = original;
   }
 
-  public Some[Relation] compare(T a, T b) {
-    return new Some[Relation](this.original.compare(a, b).get().flip());
+  public Relation compare(T a, T b) {
+    return this.original.compare(a, b).flip();
   }
 }
 
 public type LexicographicOrdering[-T] extends Ordering[Sequence[T]] {
-  public Some[Relation] compare(Sequence[T] a, Sequence[T] b) {
+  public Relation compare(Sequence[T] a, Sequence[T] b) {
     Source[T] enumA = a.enumerator(), enumB = b.enumerator();
     # TODO: incomplete
   }

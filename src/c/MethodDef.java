@@ -57,6 +57,10 @@ public class MethodDef {
         if (body == null)
             return false;
 
+        // Any concrete instance method can implement itself.
+        if (this == that)
+            return true;
+
         // Check the name.
         if (!name.equals(that.name))
             return false;
@@ -97,7 +101,8 @@ public class MethodDef {
 
         // Can't override sealed methods.
         if (that.isSealed)
-            throw new NiftyException("Can't override sealed method '%s'.", name);
+            throw new NiftyException("'%s' can't override sealed method '%s'.",
+                    refineDesc(), that.refineDesc());
 
         return true;
     }
