@@ -35,10 +35,17 @@ public class Instantiation extends Expression {
         int typeIdx = ctx.method.getFullTypeTableIndex(type);
         int constructorIdx = ctx.method.getMethodTableIndex(constructor);
         return new CodeTree(
+                // Stack: []
                 Opcodes.NEW, typeIdx,
-                Opcodes.DUP, Expression.compileAll(args, ctx),
+                // Stack: [obj]
+                Opcodes.DUP,
+                // Stack: [obj, obj]
+                Expression.compileAll(args, ctx),
+                // Stack: [obj, obj, arg...]
                 Opcodes.INVOKE_STATIC, constructorIdx,
+                // Stack: [obj, unit]
                 Opcodes.POP
+                // Stack: [obj]
         );
     }
 

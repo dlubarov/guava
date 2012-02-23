@@ -31,10 +31,12 @@ public class InstanceFieldAssignment extends Expression {
         getField(ctx); // Ensure that the field exists.
         int fieldNameIndex = ctx.method.getStringTableIndex(fieldName);
         return new CodeTree(
-                target.compile(ctx),
                 value.compile(ctx),
+                Opcodes.DUP,
+                target.compile(ctx),
                 Opcodes.PUT_INSTANCE_FIELD,
-                fieldNameIndex);
+                fieldNameIndex
+        );
     }
 
     @Override

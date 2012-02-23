@@ -111,6 +111,7 @@ public class BytecodeMethodDef extends ConcreteMethodDef {
                     assert rawTypeTable.length > typeTableIndex :
                         String.format("Raw type table index %d is out of bounds; table size is %d.",
                                 typeTableIndex, rawTypeTable.length);
+                    assert sp + 1 >= 0 : "Stack pointer is " + sp + ".";
                     stack[++sp] = rawTypeTable[typeTableIndex].staticFields[staticFieldIndex];
                     break;
                 }
@@ -139,8 +140,8 @@ public class BytecodeMethodDef extends ConcreteMethodDef {
                     String fieldName = stringTable[stringTableIndex];
                     assert fieldName.intern() == fieldName : "String in literal pool wasn't interned.";
 
-                    BaseObject newValue = stack[sp--];
                     BaseObject target = stack[sp--];
+                    BaseObject newValue = stack[sp--];
                     int fieldIndex = target.type.rawType.virtualFieldTable.get(fieldName);
                     target.fields[fieldIndex] = newValue;
                     break;

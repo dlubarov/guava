@@ -28,9 +28,10 @@ public class StaticFieldAssignment extends Expression {
         int fieldIndex = ownerDef.getStaticFieldIndex(fieldName);
         return new CodeTree(
                 value.compile(ctx),
+                Opcodes.DUP,
                 Opcodes.PUT_STATIC_FIELD,
-                ownerIndex,
-                fieldIndex);
+                ownerIndex, fieldIndex
+        );
     }
 
     @Override

@@ -22,8 +22,10 @@ public class LocalAssignment extends Expression {
     public CodeTree compile(CodeContext ctx) {
         return new CodeTree(
                 value.compile(ctx),
+                Opcodes.DUP,
                 Opcodes.PUT_LOCAL,
-                ctx.getLocalIndex(name));
+                ctx.getLocalIndex(name)
+        );
     }
 
     @Override
