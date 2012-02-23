@@ -5,6 +5,12 @@ module core;
 
 public abstract type Sequence[+T] extends Collection[T] {
   public Sequence[T] +(Sequence[T] that) {
+    List[T] l = EmptyList();
+    foreach (T elem in this)
+      l = new NonEmptyList[T](elem, l);
+    foreach (T elem in that)
+      l = new NonEmptyList[T](elem, l);
+    return l.reverse();
   }
 
   # The index a is inclusive, while b is exclusive.
@@ -50,11 +56,11 @@ public abstract type Sequence[+T] extends Collection[T] {
 
   # Repeat this sequence k times.
   public Sequence[T] *(Int k) {
-    MutableStack[T] stack = new DynamicArray[T]();
+    List[T] l = EmptyList();
     for (Int i = 0; i < k; i = i + 1)
       foreach (T elem in this)
-        stack.pushBack(elem);
-    return stack;
+        l = new NonEmptyList[T](elem, l);
+    return l.reverse();
   }
 
   public Sequence[T] map(Function1[T, T] f) {

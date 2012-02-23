@@ -16,6 +16,10 @@ public sealed type String extends Sequence[Char] {
     return new String(Sequence.+(this, that));
   }
 
+  public String *(Int k) {
+    return new String(Sequence.*(this, k));
+  }
+
   public String join(Sequence[Top] seq) {
     MutableStack[Char] buffer = new DynamicArray[Char]();
     foreach (Top o in seq) {

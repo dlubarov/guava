@@ -48,6 +48,7 @@ public sealed type RandomAccessEnumerator[+T] extends Source[T] {
 
   public Unit init(Sequence[T] seq) {
     this.seq = seq;
+    this.index = 0;
   }
 
   public Maybe[T] take() {

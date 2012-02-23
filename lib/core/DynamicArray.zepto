@@ -6,6 +6,13 @@ public type DynamicArray[T] extends MutableStack[T] {
 
   public Unit init() {
     this.backingArray = new MutableArray[Maybe[T]]({None()});
+    this.n = 0;
+  }
+
+  public Unit init(Collection[T] source) {
+    this.init();
+    foreach (T elem in source)
+      this.pushBack(elem);
   }
 
   public Int size() {

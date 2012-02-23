@@ -3,7 +3,9 @@ module core;
 public sealed type Unit {
   private static readonly Unit singleton;
 
-  private Unit init() {}
+  private Unit init() {
+    return this;
+  }
 
   private static Unit init() {
     Unit.singleton = new Unit();

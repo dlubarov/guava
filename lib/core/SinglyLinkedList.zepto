@@ -1,12 +1,90 @@
 module core;
 
-public abstract type SinglyLinkedList[+T] extends Sequence[T] {
+public abstract type List[+T] extends ImmutableSequence[T] {
+  public List[T] getRest();
+
+  public List[T] reverse() {
+    List[T] result = EmptyList();
+    foreach (T elem in this)
+      result = new NonEmptyList[T](elem, result);
+    return result;
+  }
+
+  public Source[T] enumerator() {
+    return new ListEnumerator[T](this);
+  }
 }
 
-# TODO: write SLL types
+public type EmptyList extends List[Bottom] {
+  private static readonly EmptyList singleton;
 
-#public type MutableSinglyLinkedList[T] extends Sequence[T] {
-#}
-#
-#public type ImmutableSinglyLinkedList[+T] extends Sequence[T] {
-#}
+  private Unit init() {}
+
+  private static Unit init() {
+    EmptyList.singleton = new EmptyList();
+  }
+
+  public static EmptyList get() {
+    return EmptyList.singleton;
+  }
+
+  public Bottom getFront() {
+    1 / 0; # fail
+  }
+
+  public List[Bottom] getRest() {
+    1 / 0; # fail
+  }
+
+  public Int size() {
+    return 0;
+  }
+
+  public Bool isEmpty() {
+    return true;
+  }
+}
+
+public sealed type NonEmptyList[+T] extends List[T] {
+  private readonly T value;
+  private readonly List[T] child;
+  private readonly Int n;
+
+  public Unit init(T value, List[T] child) {
+    this.value = value;
+    this.child = child;
+    this.n = child.size() + 1;
+  }
+
+  public T getFront() {
+    return this.value;
+  }
+
+  public List[T] getRest() {
+    return this.child;
+  }
+
+  public Int size() {
+    return this.n;
+  }
+
+  public Bool isEmpty() {
+    return false;
+  }
+}
+
+type ListEnumerator[+T] extends Source[T] {
+  private List[T] source;
+
+  public Unit init(List[T] source) {
+    this.source = source;
+  }
+
+  public Maybe[T] take() {
+    if (this.source.isEmpty())
+      return None();
+    T elem = this.source.getFront();
+    this.source = this.source.getRest();
+    return new Some[T](elem);
+  }
+}
