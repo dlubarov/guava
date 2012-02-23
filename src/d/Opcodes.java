@@ -1,5 +1,11 @@
 package d;
 
+import java.util.Arrays;
+
+import common.RawType;
+
+import d.ty.desc.TypeDesc;
+
 public final class Opcodes {
     public static final int
             POP = 0,
@@ -27,7 +33,13 @@ public final class Opcodes {
 
     private Opcodes() {}
 
-    public static String repr(int[] code) {
+    public static String repr(int[] code,
+            RawType[] rawTypeDescTable, TypeDesc[] fullTypeDescTable,
+            RawMethod[] methodDescTable, String[] stringTable) {
+        assert rawTypeDescTable != null && fullTypeDescTable != null
+                && methodDescTable != null && stringTable != null:
+            "Printing opcodes requires access to descriptor tables.";
+
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < code.length; ++i) {
             switch (code[i]) {
@@ -58,10 +70,10 @@ public final class Opcodes {
                     break;
                 }
                 case CONST_STRING:
-                    sb.append("CONST_STRING stringTableIndex=" + code[++i]);
+                    sb.append("CONST_STRING \"" + stringTable[code[++i]] + '"');
                     break;
                 case CREATE_SEQ:
-                    sb.append("CREATE_SEQ fullTypeTableIndex=" + code[++i] + "length=" + code[++i]);
+                    sb.append("CREATE_SEQ elemType=" + fullTypeDescTable[code[++i]] + ", length=" + code[++i]);
                     break;
                 case GET_LOCAL:
                     sb.append("GET_LOCAL localIndex=" + code[++i]);
@@ -70,27 +82,41 @@ public final class Opcodes {
                     sb.append("PUT_LOCAL localIndex=" + code[++i]);
                     break;
                 case GET_STATIC_FIELD:
-                    sb.append("GET_STATIC_FIELD rawTypeTableIndex=" + code[++i] + " fieldIndex=" + code[++i]);
+                    sb.append("GET_STATIC_FIELD owner=" + rawTypeDescTable[code[++i]] + " fieldIndex=" + code[++i]);
                     break;
                 case PUT_STATIC_FIELD:
-                    sb.append("PUT_STATIC_FIELD rawTypeTableIndex=" + code[++i] + " fieldIndex=" + code[++i]);
+                    sb.append("PUT_STATIC_FIELD owner=" + rawTypeDescTable[code[++i]] + " fieldIndex=" + code[++i]);
                     break;
                 case GET_INSTANCE_FIELD:
-                    sb.append("GET_INSTANCE_FIELD stringTableIndex=" + code[++i]);
+                    sb.append("GET_INSTANCE_FIELD " + stringTable[code[++i]]);
                     break;
                 case PUT_INSTANCE_FIELD:
-                    sb.append("PUT_INSTANCE_FIELD stringTableIndex=" + code[++i]);
+                    sb.append("PUT_INSTANCE_FIELD " + stringTable[code[++i]]);
                     break;
-                case INVOKE_STATIC:
-                    sb.append("INVOKE_STATIC methodTableIndex=" + code[++i]);
-                    // TODO presentation: don't know # generic args, can't advance i
-                    sb.append("\nCAN'T DO THE REST\n");
-                    return sb.toString();
-                case INVOKE_VIRTUAL:
-                    sb.append("INVOKE_VIRTUAL methodTableIndex=" + code[++i]);
-                    // TODO presentation: don't know # generic args, can't advance i
-                    sb.append("\nCAN'T DO THE REST\n");
-                    return sb.toString();
+                case INVOKE_STATIC: {
+                    int methodTableIdx = code[++i];
+                    RawMethod m = methodDescTable[methodTableIdx];
+                    TypeDesc[] genArgs = new TypeDesc[m.numGenericParams];
+                    for (int j = 0; j < genArgs.length; ++j) {
+                        int fullTypeTableIndex = code[++i];
+                        genArgs[j] = fullTypeDescTable[fullTypeTableIndex];
+                    }
+                    sb.append("INVOKE_STATIC " + methodDescTable[methodTableIdx]);
+                    sb.append(", genericArgs=").append(Arrays.toString(genArgs));
+                    break;
+                }
+                case INVOKE_VIRTUAL: {
+                    int methodTableIdx = code[++i];
+                    RawMethod m = methodDescTable[methodTableIdx];
+                    TypeDesc[] genArgs = new TypeDesc[m.numGenericParams];
+                    for (int j = 0; j < genArgs.length; ++j) {
+                        int fullTypeTableIndex = code[++i];
+                        genArgs[j] = fullTypeDescTable[fullTypeTableIndex];
+                    }
+                    sb.append("INVOKE_VIRTUAL " + methodDescTable[methodTableIdx]);
+                    sb.append(", genericArgs=").append(Arrays.toString(genArgs));
+                    break;
+                }
                 case NEW:
                     sb.append("NEW fullTypeTableIndex=" + code[++i]);
                     break;

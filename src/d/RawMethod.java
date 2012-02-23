@@ -46,11 +46,11 @@ public class RawMethod {
 
     @Override
     public String toString() {
-        // TODO: more descriptive toString
         StringBuilder sb = new StringBuilder();
         if (isStatic)
             sb.append("static ");
         sb.append(owner).append('.').append(name);
+        sb.append('[').append(numGenericParams).append(']');
         sb.append('(').append(StringUtils.implode(", ", paramTypes)).append(')');
         return sb.toString();
     }

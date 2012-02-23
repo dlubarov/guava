@@ -24,17 +24,20 @@ public class Instantiation extends Expression {
         Type[] argTypes = Expression.inferAllTypes(args, ctx);
         MethodDef m = typeDef.getInstanceMethod("init", type.genericArgs, Type.NONE, argTypes, ctx);
         assert m.owner.equals(type.rawType);
+        assert m.name.equals("init");
         return m;
     }
 
     @Override
     public CodeTree compile(CodeContext ctx) {
         MethodDef constructor = getConstructor(ctx);
+        int typeIdx = ctx.method.getFullTypeTableIndex(type);
+        int constructorIdx = ctx.method.getMethodTableIndex(constructor);
         return new CodeTree(
-                Opcodes.NEW, ctx.method.getFullTypeTableIndex(type),
+                Opcodes.NEW, typeIdx,
                 Opcodes.DUP, Expression.compileAll(args, ctx),
                 Opcodes.INVOKE_STATIC,
-                ctx.method.getMethodTableIndex(constructor));
+                constructorIdx);
     }
 
     @Override

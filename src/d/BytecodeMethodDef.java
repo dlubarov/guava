@@ -2,8 +2,6 @@ package d;
 
 import static d.Opcodes.*;
 
-import java.util.Map;
-
 import util.StringUtils;
 
 import common.*;
@@ -197,12 +195,6 @@ public class BytecodeMethodDef extends ConcreteMethodDef {
                     a = stack[sp - numArgs]; // target
                     TypeDef targetOwner = a.type.rawType;
                     ConcreteMethodDef impl = targetOwner.virtualMethodTable.get(m);
-                    if (impl == null)
-                        for (Map.Entry<MethodDef, ConcreteMethodDef> e : targetOwner.virtualMethodTable.entrySet()) {
-                            MethodDef k = e.getKey();
-                            ConcreteMethodDef v = e.getValue();
-                            System.out.printf("%s -> %s\n", k.desc, v.desc);
-                        }
                     assert impl != null : String.format(
                             "No implementation for '%s' found in virtual method table of %s.",
                             m.desc, targetOwner.desc);
@@ -291,7 +283,13 @@ public class BytecodeMethodDef extends ConcreteMethodDef {
         }
 
         // Append method body.
-        String body = StringUtils.indent(Opcodes.repr(code));
+        String body;
+        try {
+            body = Opcodes.repr(code, rawTypeDescTable, fullTypeDescTable, methodDescTable, stringTable);
+        } catch (RuntimeException e) {
+            throw new NiftyException(e, "Problem representing code of method '%s'.", desc);
+        }
+        body = StringUtils.indent(body);
         if (!body.isEmpty())
             body = "\n" + body + "\n";
         sb.append(body);

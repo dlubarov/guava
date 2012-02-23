@@ -127,7 +127,7 @@ public class MethodDef {
 
     public int getMethodTableIndex(MethodDef m) {
         for (int i = 0; i < methodTable.size(); ++i)
-            if (methodTable.get(i).equals(m))
+            if (methodTable.get(i) == m)
                 return i;
         methodTable.add(m);
         return methodTable.size() - 1;

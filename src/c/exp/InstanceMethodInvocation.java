@@ -68,7 +68,7 @@ public class InstanceMethodInvocation extends Expression {
         MethodDef m = getMethod(ctx);
         int methodIndex = ctx.method.getMethodTableIndex(m);
 
-        int[] genericArgIndices = m.getFullTypeTableIndices(genericArgs);
+        int[] genericArgIndices = ctx.method.getFullTypeTableIndices(genericArgs);
         Integer[] genericArgIndicesBoxed = ArrayUtils.boxArray(genericArgIndices);
         CodeTree genericArgIndicesTree = new CodeTree((Object[]) genericArgIndicesBoxed);
 
