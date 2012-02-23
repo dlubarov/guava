@@ -7,7 +7,10 @@ import c.*;
 
 public abstract class Type {
     public static final Type[] NONE = new Type[0];
-    public static final Type coreBool = new ParameterizedType(RawType.coreBool, NONE);
+
+    public static final Type
+            coreUnit = new ParameterizedType(RawType.coreUnit, NONE),
+            coreBool = new ParameterizedType(RawType.coreBool, NONE);
 
     public abstract Type withGenericArgs(Type[] typeGenericArgs, Type[] methodGenericArgs);
 

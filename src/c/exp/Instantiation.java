@@ -25,6 +25,7 @@ public class Instantiation extends Expression {
         MethodDef m = typeDef.getInstanceMethod("init", type.genericArgs, Type.NONE, argTypes, ctx);
         assert m.owner.equals(type.rawType);
         assert m.name.equals("init");
+        assert m.returnType.equals(Type.coreUnit);
         return m;
     }
 
@@ -36,8 +37,9 @@ public class Instantiation extends Expression {
         return new CodeTree(
                 Opcodes.NEW, typeIdx,
                 Opcodes.DUP, Expression.compileAll(args, ctx),
-                Opcodes.INVOKE_STATIC,
-                constructorIdx);
+                Opcodes.INVOKE_STATIC, constructorIdx,
+                Opcodes.POP
+        );
     }
 
     @Override

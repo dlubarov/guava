@@ -2,7 +2,7 @@ package d;
 
 import java.util.Arrays;
 
-import common.RawType;
+import common.*;
 
 import d.ty.desc.TypeDesc;
 
@@ -118,7 +118,7 @@ public final class Opcodes {
                     break;
                 }
                 case NEW:
-                    sb.append("NEW fullTypeTableIndex=" + code[++i]);
+                    sb.append("NEW " + fullTypeDescTable[code[++i]]);
                     break;
                 case JUMP:
                     sb.append(String.format("JUMP %+d", code[++i]));
@@ -133,7 +133,7 @@ public final class Opcodes {
                     sb.append("RETURN");
                     break;
                 default:
-                    sb.append("BAD OPCODE").append(code[i]);
+                    throw new NiftyException("Bad opcode: %d.", code[i]);
             }
             sb.append('\n');
         }
