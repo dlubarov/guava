@@ -10,6 +10,12 @@ import d.ty.desc.TypeDesc;
 public class RawMethod {
     public static final RawMethod[] NONE = new RawMethod[0];
 
+    public static final RawMethod
+            coreEnumerable_enumerator = new RawMethod(false, RawType.coreEnumerable, "enumerator", 0, TypeDesc.NONE),
+            coreSource_take = new RawMethod(false, RawType.coreSource, "take", 0, TypeDesc.NONE),
+            coreCollection_isEmpty = new RawMethod(false, RawType.coreCollection, "isEmpty", 0, TypeDesc.NONE),
+            coreMaybe_get = new RawMethod(false, RawType.coreMaybe, "get", 0, TypeDesc.NONE);
+
     public final boolean isStatic;
     public final RawType owner;
     public final String name;

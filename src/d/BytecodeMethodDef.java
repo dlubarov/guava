@@ -50,8 +50,9 @@ public class BytecodeMethodDef extends ConcreteMethodDef {
                         break;
 
                     case DUP: {
-                        BaseObject object = stack[sp];
-                        stack[++sp] = object;
+                        BaseObject value = stack[sp];
+                        assert value != null;
+                        stack[++sp] = value;
                         break;
                     }
 
@@ -116,10 +117,16 @@ public class BytecodeMethodDef extends ConcreteMethodDef {
                             String.format("Raw type table index %d is out of bounds; table size is %d.",
                                     typeTableIndex, rawTypeTable.length);
                         assert sp + 1 >= 0 : "Stack pointer is " + sp + ".";
-                        BaseObject value = rawTypeTable[typeTableIndex].staticFields[staticFieldIndex];
-                        assert value != null : String.format(
-                                "%s's static field #%d is null.",
-                                desc.owner, staticFieldIndex);
+                        TypeDef fieldOwner = rawTypeTable[typeTableIndex];
+                        BaseObject[] staticFields = fieldOwner.staticFields;
+                        BaseObject value = staticFields[staticFieldIndex];
+                        if (value == null) {
+                            fieldOwner.init();
+                            value = staticFields[staticFieldIndex];
+                            assert value != null : String.format(
+                                    "%s's static field #%d is null, even after init.",
+                                    desc.owner, staticFieldIndex);
+                        }
                         stack[++sp] = value;
                         break;
                     }

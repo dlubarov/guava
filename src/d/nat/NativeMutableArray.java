@@ -1,5 +1,7 @@
 package d.nat;
 
+import java.util.*;
+
 import common.*;
 
 import d.*;
@@ -31,7 +33,7 @@ public class NativeMutableArray extends NativeObject {
 
                 // instance methods
                 new NativeMethodDef[] {
-                        // Constructors
+                        // Empty MutableArray constructors
                         new NativeMethodDef(new RawMethod(false, RawType.coreMutableArray, "init", 0, TypeDesc.NONE)) {
                             @Override
                             public void invoke(BaseObject[] stack, int bp, ConcreteType[] genericArgs) {
@@ -40,13 +42,60 @@ public class NativeMutableArray extends NativeObject {
                                 stack[bp + 1] = VMUtils.getUnit();
                             }
                         },
-                        new NativeMethodDef(new RawMethod(false, RawType.coreMutableArray, "init", 0,
-                                new TypeDesc[] {new ParameterizedTypeDesc(RawType.coreCollection,
-                                        new TypeDesc[] {new TypeGenericTypeDesc(0)})})) {
+
+                        // Constructor which copies elements from a given source
+                        new NativeMethodDef(
+                                new RawMethod(false, RawType.coreMutableArray, "init", 0,
+                                        new TypeDesc[] {
+                                                new ParameterizedTypeDesc(
+                                                        RawType.coreCollection,
+                                                        new TypeDesc[] {new TypeGenericTypeDesc(0)})
+                                        }
+                                ),
+                                RawType.NONE,
+                                TypeDesc.NONE,
+                                new RawMethod[] {
+                                    RawMethod.coreEnumerable_enumerator,
+                                    RawMethod.coreSource_take,
+                                    RawMethod.coreCollection_isEmpty,
+                                    RawMethod.coreMaybe_get
+                                }
+                        ) {
                             @Override
                             public void invoke(BaseObject[] stack, int bp, ConcreteType[] genericArgs) {
+                                MethodDef methEnumerator = methodTable[0];
+                                MethodDef methTake = methodTable[1];
+                                MethodDef methIsEmpty = methodTable[2];
+                                MethodDef methGet = methodTable[3];
+
                                 NativeMutableArray arr = (NativeMutableArray) stack[bp + 1];
-                                arr.contents = new BaseObject[0];
+                                BaseObject source = stack[bp + 2];
+
+                                ConcreteMethodDef implEnumerator = source.type.rawType.virtualMethodTable.get(methEnumerator);
+                                implEnumerator.invoke(stack, bp + 1, ConcreteType.NONE);
+                                BaseObject enumerator = stack[bp + 2];
+
+                                ConcreteMethodDef implTake = enumerator.type.rawType.virtualMethodTable.get(methTake);
+                                List<BaseObject> contents = new ArrayList<BaseObject>();
+
+                                for (;;) {
+                                    stack[bp + 1] = enumerator;
+                                    implTake.invoke(stack, bp, ConcreteType.NONE);
+                                    BaseObject maybeNext = stack[bp + 1];
+
+                                    ConcreteMethodDef implIsEmpty = maybeNext.type.rawType.virtualMethodTable.get(methIsEmpty);
+                                    implIsEmpty.invoke(stack, bp, ConcreteType.NONE);
+                                    boolean isEmpty = ((NativeBool) stack[bp + 1]).value;
+                                    if (isEmpty)
+                                        break;
+
+                                    stack[bp + 1] = maybeNext;
+                                    ConcreteMethodDef implGet = maybeNext.type.rawType.virtualMethodTable.get(methGet);
+                                    implGet.invoke(stack, bp, ConcreteType.NONE);
+                                    contents.add(stack[bp + 1]);
+                                }
+
+                                arr.contents = contents.toArray(new BaseObject[contents.size()]);
                                 stack[bp + 1] = VMUtils.getUnit();
                             }
                         },
@@ -66,6 +115,10 @@ public class NativeMutableArray extends NativeObject {
                             public void invoke(BaseObject[] stack, int bp, ConcreteType[] genericArgs) {
                                 BaseObject[] arr = ((NativeMutableArray) stack[bp + 1]).contents;
                                 int i = ((NativeInt) stack[bp + 2]).value;
+                                if (i >= arr.length)
+                                    throw new NiftyException(
+                                            "Array index %d is out of bounds (length=%d).",
+                                            i, arr.length);
                                 BaseObject newVal = stack[bp + 3];
                                 stack[bp + 1] = arr[i] = newVal;
                             }

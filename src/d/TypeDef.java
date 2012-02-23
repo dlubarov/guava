@@ -27,6 +27,9 @@ public class TypeDef {
     public Map<RawType, TypeDesc[]> superGenericDescs;
     public final Map<TypeDef, SuperType[]> superGenerics;
 
+    // 0 = not initialized, 1 = in progress, 2 = initialized
+    public int initializationStatus = 0;
+
     public TypeDef(RawType desc,
             Variance[] genericVariances,
             int numStaticFields,
@@ -85,6 +88,19 @@ public class TypeDef {
 
         virtualMethodDescTable = null;
         superGenericDescs = null;
+    }
+
+    public void init() {
+        if (initializationStatus == 2)
+            return;
+        if (initializationStatus == 1)
+            throw new NiftyException("Circular dependency exists in static initializers.");
+
+        initializationStatus = 1;
+        for (ConcreteMethodDef m : staticMethods)
+            if (m.desc.equals(new RawMethod(true, desc, "init", 0, TypeDesc.NONE)))
+                m.invoke(ConcreteType.NONE);
+        initializationStatus = 2;
     }
 
     public BaseObject rawInstance(ConcreteType type) {

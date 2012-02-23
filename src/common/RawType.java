@@ -17,6 +17,7 @@ public class RawType {
         coreCollection = new RawType("core", "Collection"),
         coreSequence = new RawType("core", "Sequence"),
         coreSource = new RawType("core", "Source"),
+        coreMaybe = new RawType("core", "Maybe"),
         coreString = new RawType("core", "String"),
         coreConsole = new RawType("core", "Console"),
         coreRelation = new RawType("core", "Relation");

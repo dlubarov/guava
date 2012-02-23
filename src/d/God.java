@@ -4,8 +4,6 @@ import java.util.*;
 
 import common.*;
 import d.nat.*;
-import d.ty.ConcreteType;
-import d.ty.desc.TypeDesc;
 
 public final class God {
     private God() {}
@@ -74,9 +72,7 @@ public final class God {
 
     public static void runStaticInitializers() {
         for (TypeDef typeDef : allTypes.values()) {
-            for (ConcreteMethodDef m : typeDef.staticMethods)
-                if (m.desc.equals(new RawMethod(true, typeDef.desc, "init", 0, TypeDesc.NONE)))
-                    m.invoke(ConcreteType.NONE);
+            typeDef.init();
 
             if (typeDef.desc.equals(RawType.coreUnit)) {
                 // TODO: Load a reference to Unit.singleton.
