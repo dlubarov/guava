@@ -3,7 +3,5 @@ module core;
 public abstract type Serializer[T] {
   public Sequence[Byte] serialize(T object);
 
-  public T deserialize(Sequence[Byte] data) {
-    return this.deserialize(data);
-  }
+  public T deserialize(Sequence[Byte] data);
 }

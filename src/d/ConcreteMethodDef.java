@@ -39,9 +39,6 @@ public abstract class ConcreteMethodDef extends MethodDef {
             fullTypeTable[i] = fullTypeDescTable[i].toNonFinal(owner);
         for (int i = 0; i < methodTable.length; ++i)
             methodTable[i] = God.resolveMethod(methodDescTable[i]);
-        rawTypeDescTable = null;
-        fullTypeDescTable = null;
-        methodDescTable = null;
     }
 
     public abstract void invoke(BaseObject[] stack, int bp, ConcreteType[] genericArgs);

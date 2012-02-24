@@ -56,7 +56,15 @@ public class RawMethod {
         if (isStatic)
             sb.append("static ");
         sb.append(owner).append('.').append(name);
-        sb.append('[').append(numGenericParams).append(']');
+        if (numGenericParams > 0) {
+            sb.append('[');
+            for (int i = 0; i < numGenericParams; ++i) {
+                if (i > 0)
+                    sb.append(", ");
+                sb.append('M').append(i);
+            }
+            sb.append(']');
+        }
         sb.append('(').append(StringUtils.implode(", ", paramTypes)).append(')');
         return sb.toString();
     }

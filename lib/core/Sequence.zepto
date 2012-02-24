@@ -123,7 +123,7 @@ public type SequenceSerializer[T] extends Serializer[Sequence[T]] {
     return bytes;
   }
 
-  public Sequence[T] deserialize(Sequence[T] bytes) {
+  public Sequence[T] deserialize(Sequence[Byte] bytes) {
     MutableStack[T] seq = new DynamicArray[T]();
     Int pos = 0;
 

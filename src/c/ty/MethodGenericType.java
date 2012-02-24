@@ -31,7 +31,7 @@ public class MethodGenericType extends Type {
 
     @Override
     public boolean equals(Object o) {
-        return o instanceof MethodGenericType && index == ((MethodGenericType) o).index;
+        return (o instanceof MethodGenericType) && index == ((MethodGenericType) o).index;
     }
 
     @Override

@@ -31,7 +31,7 @@ public class TypeGenericType extends Type {
 
     @Override
     public boolean equals(Object o) {
-        return o instanceof TypeGenericType && index == ((TypeGenericType) o).index;
+        return (o instanceof TypeGenericType) && index == ((TypeGenericType) o).index;
     }
 
     @Override

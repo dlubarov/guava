@@ -13,8 +13,9 @@ public type ArrayDeque[T] extends MutableDeque[T] {
 
   public Unit init(Collection[T] source) {
     this.init(source.size());
-    foreach (T elem in source)
-      this.pushBack(elem);
+    Source[T] enum = source.enumerator();
+    #foreach (T elem in source)
+    #  this.pushBack(elem);
   }
 
   public Int size() {

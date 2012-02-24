@@ -19,7 +19,7 @@ public abstract type ImmutableQueue[+T] extends ImmutableSequence[T] {
   public ImmutableQueue[U] pushBackAll[U](Sequence[U] values) {
     ImmutableQueue[U] result = this;
     foreach (U value in values)
-      this = result.pushBack[U](value);
+      result = result.pushBack[U](value);
     return this;
   }
 

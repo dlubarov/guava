@@ -1,7 +1,7 @@
 module core;
 
 public sealed type PossibleRelation {
-  public static readonly Relation NONE;
+  public static readonly PossibleRelation NONE;
 
   private static Unit init() {
     PossibleRelation.NONE = new PossibleRelation();

@@ -322,14 +322,16 @@ public class TypeDef {
 
         // Compile instance methods.
         d.MethodDef[] compiledInstanceMethods = new d.MethodDef[instanceMethodDefs.length];
-        for (int i = 0; i < compiledInstanceMethods.length; ++i)
+        for (int i = 0; i < compiledInstanceMethods.length; ++i) {
+            MethodDef m = instanceMethodDefs[i];
             try {
-                compiledInstanceMethods[i] = instanceMethodDefs[i].compile(this);
+                compiledInstanceMethods[i] = m.compile(this);
             } catch (RuntimeException e) {
                 throw new NiftyException(e,
-                        "Refinement (c->d) error in instance method '%s'.",
-                        instanceMethodDefs[i].name);
+                        "Refinement (c->d) error in instance method %s.",
+                        m.refineDesc());
             }
+        }
 
         // Populate the virtual method descriptor table.
         Map<d.RawMethod, d.RawMethod> virtualMethodDescTable;

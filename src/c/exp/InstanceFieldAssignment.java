@@ -1,7 +1,9 @@
 package c.exp;
 
+import common.NiftyException;
+
 import c.*;
-import c.ty.Type;
+import c.ty.*;
 import d.Opcodes;
 
 public class InstanceFieldAssignment extends Expression {
@@ -28,7 +30,15 @@ public class InstanceFieldAssignment extends Expression {
 
     @Override
     public CodeTree compile(CodeContext ctx) {
-        getField(ctx); // Ensure that the field exists.
+        FieldDef field = getField(ctx);
+        ParameterizedType targetAsFieldOwner = target.inferType(ctx).asSupertype(field.owner, ctx);
+
+        Type expectedType = field.type;
+        expectedType = expectedType.withGenericArgs(targetAsFieldOwner.genericArgs, null);
+        if (!value.hasType(expectedType, ctx))
+            throw new NiftyException("'%s' does not conform to %s.%s's type of %s.",
+                    value, field.owner, field.name, expectedType);
+
         int fieldNameIndex = ctx.method.getStringTableIndex(fieldName);
         return new CodeTree(
                 value.compile(ctx),

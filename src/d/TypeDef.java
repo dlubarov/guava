@@ -85,9 +85,6 @@ public class TypeDef {
                 superArgs[i] = superArgDescs[i].toSuper();
             superGenerics.put(supertype, superArgs);
         }
-
-        virtualMethodDescTable = null;
-        superGenericDescs = null;
     }
 
     public void init() {
@@ -111,9 +108,21 @@ public class TypeDef {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("type ").append(desc).append(" {");
+
+        // Unless abstract, append the virtual method descriptor table.
+        if (virtualMethodDescTable != null) {
+            sb.append("\n    Virtual method desc table:\n");
+            for (RawMethod a : virtualMethodDescTable.keySet()) {
+                RawMethod b = virtualMethodDescTable.get(a);
+                sb.append(String.format("        %s -> %s\n", a, b));
+            }
+        }
+
+        // Append methods.
         for (MethodDef[] ms : new MethodDef[][] {staticMethods, instanceMethods})
             for (MethodDef m : ms)
                 sb.append('\n').append(StringUtils.indent(m)).append('\n');
+
         sb.append('}');
         return sb.toString();
     }

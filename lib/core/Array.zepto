@@ -1,6 +1,6 @@
 module core;
 
-pubilc type MutableArray[T] extends Sequence[T] {
+pubilc type MutableArray[T] extends MutableSequence[T] {
   public Unit init() {
     # native code
   }
@@ -15,6 +15,16 @@ pubilc type MutableArray[T] extends Sequence[T] {
 
   public T set(Int i, T val) {
     # native code
+  }
+
+  public MutableArray[T] getFront(Int k) {
+    # TODO: write native version
+    return new MutableArray[T](Sequence.getFront(this, k));
+  }
+
+  public MutableArray[T] getBack(Int k) {
+    # TODO: write native version
+    return new MutableArray[T](Sequence.getBack(this, k));
   }
 
   public Int size() {

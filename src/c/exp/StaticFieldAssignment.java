@@ -2,7 +2,7 @@ package c.exp;
 
 import c.*;
 import c.ty.Type;
-import common.RawType;
+import common.*;
 import d.Opcodes;
 
 public class StaticFieldAssignment extends Expression {
@@ -26,6 +26,12 @@ public class StaticFieldAssignment extends Expression {
         TypeDef ownerDef = Project.singleton.resolve(owner);
         int ownerIndex = ctx.method.getRawTypeTableIndex(owner);
         int fieldIndex = ownerDef.getStaticFieldIndex(fieldName);
+
+        Type expectedType = ownerDef.getStaticField(fieldName).type;
+        if (!value.hasType(expectedType, ctx))
+            throw new NiftyException("'%s' does not conform to static field %s.%s's type %s.",
+                    value, owner, fieldName, expectedType);
+
         return new CodeTree(
                 value.compile(ctx),
                 Opcodes.DUP,
