@@ -8,7 +8,7 @@ module core;
 #         a = b;
 #         b = temp;
 #     }
-# In zepto, it doesn't make sense to have a method like
+# In Guava, it doesn't make sense to have a method like
 #     static Unit swap[T](T a, T b);
 # because Int is immutable. But you could instead do
 #     static Unit swap[T](Box[T] a, Box[T] b) {

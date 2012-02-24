@@ -39,13 +39,13 @@ public final class VMUtils {
                 });
         BaseObject charArray = new NativeMutableArray(arrayType, chars);
         TypeDef stringTypeDef = God.resolveType(RawType.coreString);
-        NormalObject zeptoString = new NormalObject(new ConcreteType(stringTypeDef));
-        zeptoString.fields[0] = charArray;
-        return zeptoString;
+        NormalObject guavaString = new NormalObject(new ConcreteType(stringTypeDef));
+        guavaString.fields[0] = charArray;
+        return guavaString;
     }
 
-    public static String extractString(BaseObject zeptoString) {
-        BaseObject[] chars = ((NativeMutableArray) zeptoString.fields[0]).contents;
+    public static String extractString(BaseObject guavaString) {
+        BaseObject[] chars = ((NativeMutableArray) guavaString.fields[0]).contents;
         StringBuilder sb = new StringBuilder();
         for (BaseObject c : chars)
             sb.append(((NativeChar) c).value);

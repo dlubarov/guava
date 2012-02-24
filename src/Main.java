@@ -18,17 +18,17 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
         // Process arguments.
-        List<String> zeptoFiles = new ArrayList<String>(), programArgs = new ArrayList<String>();
+        List<String> guavaFiles = new ArrayList<String>(), programArgs = new ArrayList<String>();
         for (String arg : args) {
-            if (arg.endsWith(".zepto"))
-                zeptoFiles.add(arg);
+            if (arg.endsWith(".guava"))
+                guavaFiles.add(arg);
             else
                 programArgs.add(arg);
         }
 
         // Parse source files.
         List<SourceFile> sourceFiles = new ArrayList<SourceFile>();
-        for (String sourceFileName : zeptoFiles) {
+        for (String sourceFileName : guavaFiles) {
             String source = FileUtils.readFileAsUTF8(new File(sourceFileName));
             try {
                 SourceFile sf = SourceFileParser.singleton.parse(source, 0).value;
