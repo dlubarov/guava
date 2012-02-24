@@ -2,8 +2,10 @@ module test;
 
 type PrintArgs {
   static Unit main(Sequence[String] args) {
-    Console.outln("Received arguments:");
+    Console.outln("Here are the arguments I received:");
     foreach (String arg in args)
       Console.outln(arg);
+    if (args.isEmpty())
+      Console.outln("No arguments to show :-(");
   }
 }

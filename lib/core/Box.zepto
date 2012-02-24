@@ -1,0 +1,30 @@
+module core;
+
+# A mutable container for another object.
+# This is a bit like a reference type in C++. With references, you can write code like
+#     template <class T>
+#     void swap(T& a, T& b) {
+#         T temp(a);
+#         a = b;
+#         b = temp;
+#     }
+# In zepto, it doesn't make sense to have a method like
+#     static Unit swap[T](T a, T b);
+# because Int is immutable. But you could instead do
+#     static Unit swap[T](Box[T] a, Box[T] b) {
+#         T temp = a.get();
+#         a.set(b.get());
+#         b.set(temp);
+#     }
+
+public type Box[T] {
+  private T value;
+
+  public T get() {
+    return this.value;
+  }
+
+  public T set(T value) {
+    this.value = value;
+  }
+}
