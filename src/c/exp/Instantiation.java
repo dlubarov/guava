@@ -1,6 +1,9 @@
 package c.exp;
 
 import static util.StringUtils.implode;
+
+import common.NiftyException;
+
 import c.*;
 import c.ty.*;
 import d.Opcodes;
@@ -21,6 +24,8 @@ public class Instantiation extends Expression {
 
     private MethodDef getConstructor(CodeContext ctx) {
         TypeDef typeDef = Project.singleton.resolve(type.rawType);
+        if (typeDef.isAbstract)
+            throw new NiftyException("Can't instantiate abstract type '%s'.", type);
         Type[] argTypes = Expression.inferAllTypes(args, ctx);
         MethodDef m = typeDef.getInstanceMethod("init", type.genericArgs, Type.NONE, argTypes, ctx);
         assert m.owner.equals(type.rawType);

@@ -19,6 +19,7 @@ public abstract type Sequence[+T] extends Collection[T] {
   }
 
   public T get(Int index) {
+    # TODO implement this
   }
 
   public T getFront() {
@@ -79,7 +80,7 @@ public abstract type Sequence[+T] extends Collection[T] {
   }
 
   public String toString() {
-    return "(" + ", ".join(this) + ")";
+    return "{" + ", ".join(this) + "}";
   }
 }
 

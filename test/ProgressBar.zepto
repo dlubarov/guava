@@ -2,6 +2,13 @@ module test;
 
 type ProgressBar {
   static Unit main(Sequence[String] args) {
+    #MutableStack[Int] numbers = new ArrayDeque[Int]();
+    MutableStack[Int] numbers = new DynamicArray[Int]();
+    for (Int i = 0; i < 10; i = i + 1)
+      numbers.pushBack(i * i);
+    repeat (5)
+      Console.outln(numbers);
+
     Int w = 70;
     for (Int i = 0; i <= w; i = i + 1) {
       Console.out("\r");
@@ -9,6 +16,6 @@ type ProgressBar {
       Console.out("-" * (w - i));
       Console.out(" (" + i + "/" + w + ")");
     }
-    Console.out("\n");
+    Console.outln();
   }
 }

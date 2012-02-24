@@ -11,7 +11,10 @@ public sealed type Int extends NaturallyOrdered[Int] {
 
   public Unit init(Char c) {}
 
-  public Int +() {}
+  public Int +() {
+    # native code
+  }
+
   public Int -() {}
   public Int ~() {}
 
@@ -114,6 +117,7 @@ public type BigEndianIntSerializer extends Serializer[Int] {
 
   public Int deserialize(Sequence[Byte] bytes) {
     Int n = 0;
+    # TODO assert bytes length
     foreach (Byte b in bytes)
       n = (n << 8) | new Int(b); # TODO: cast shouldn't be needed
     return n;

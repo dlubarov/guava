@@ -22,12 +22,12 @@ public class Repeat extends Statement {
         return new Block(
                 new LocalDef(new Type("Int"), counterId, count),
                 new While(
-                        new InfixOperation(counterVar, ">=", new LiteralInt(0)),
+                        new InfixOperation(counterVar, ">", new LiteralInt(0)),
                         new Block(
                                 body,
                                 new Evaluation(new Assignment(
                                         counterVar,
-                                        new InfixOperation(counterVar, "+", new LiteralInt(1))
+                                        new InfixOperation(counterVar, "-", new LiteralInt(1))
                                 ))
                         )
                 )

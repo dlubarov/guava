@@ -8,7 +8,11 @@ public abstract class BaseObject {
 
     public BaseObject(ConcreteType type) {
         this.type = type;
-        fields = new BaseObject[type.rawType.numInstanceFields];
+        int numFields = type.rawType.numInstanceFields;
+        if (numFields == 0)
+            fields = null;
+        else
+            fields = new BaseObject[numFields];
     }
 
     public ConcreteType getGenericArg(TypeDef genericOwner, int index) {

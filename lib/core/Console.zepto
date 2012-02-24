@@ -16,4 +16,22 @@ public sealed abstract type Console {
   public static Unit err(Top o) {
     Console.errString(o.toString());
   }
+
+  public static Unit outln() {
+    Console.outString("\n");
+  }
+
+  public static Unit errln() {
+    Console.errString("\n");
+  }
+
+  public static Unit outln(Top o) {
+    Console.out(o);
+    Console.outln();
+  }
+
+  public static Unit errln(Top o) {
+    Console.err(o);
+    Console.errln();
+  }
 }
