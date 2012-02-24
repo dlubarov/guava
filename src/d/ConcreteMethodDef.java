@@ -6,7 +6,7 @@ import d.ty.desc.TypeDesc;
 import d.ty.nf.NonFinalType;
 
 public abstract class ConcreteMethodDef extends MethodDef {
-    private static final int STACK_SIZE = 1000;
+    private static final int STACK_SIZE = 10000;
 
     public RawType[] rawTypeDescTable;
     public final TypeDef[] rawTypeTable;
@@ -46,7 +46,7 @@ public abstract class ConcreteMethodDef extends MethodDef {
     public final void invoke(BaseObject[] initialStack, ConcreteType[] genericArgs) {
         BaseObject[] stack = new BaseObject[STACK_SIZE];
         System.arraycopy(initialStack, 0, stack, 0, initialStack.length);
-        invoke(stack, -1 + initialStack.length, genericArgs);
+        invoke(stack, -1, genericArgs);
     }
 
     public final void invoke(ConcreteType[] genericArgs) {

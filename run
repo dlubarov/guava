@@ -1,4 +1,4 @@
 set -e
 
 cd bin
-java -ea Main ../{lib,test}/**/*.zepto
+java -ea Main ../{lib,test}/**/*.zepto "$@"

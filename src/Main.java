@@ -17,9 +17,18 @@ public class Main {
             printD = false;
 
     public static void main(String[] args) throws IOException {
+        // Process arguments.
+        List<String> zeptoFiles = new ArrayList<String>(), programArgs = new ArrayList<String>();
+        for (String arg : args) {
+            if (arg.endsWith(".zepto"))
+                zeptoFiles.add(arg);
+            else
+                programArgs.add(arg);
+        }
+
         // Parse source files.
         List<SourceFile> sourceFiles = new ArrayList<SourceFile>();
-        for (String sourceFileName : args) {
+        for (String sourceFileName : zeptoFiles) {
             String source = FileUtils.readFileAsUTF8(new File(sourceFileName));
             try {
                 SourceFile sf = SourceFileParser.singleton.parse(source, 0).value;
@@ -87,9 +96,9 @@ public class Main {
                 if (!firstParam.genericArgs[0].equals(d.ty.desc.TypeDesc.coreString))
                     continue;
 
-                d.BaseObject[] argStrings = new d.BaseObject[args.length];
-                for (int i = 0; i < argStrings.length; ++i)
-                    argStrings[i] = d.VMUtils.makeString(args[i]);
+                d.BaseObject[] argStrings = new d.BaseObject[programArgs.size()];
+                for (int i = 0; i < programArgs.size(); ++i)
+                    argStrings[i] = d.VMUtils.makeString(programArgs.get(i));
                 d.ty.ConcreteType arrayType = new d.ty.ConcreteType(
                         d.nat.NativeMutableArray.TYPE,
                         new d.ty.ConcreteType[] {

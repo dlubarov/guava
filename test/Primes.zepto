@@ -1,0 +1,17 @@
+module test;
+
+type Primes {
+  static Bool isPrime(Int n) {
+    for (Int d = 2; d * d <= n; d = d + 1)
+      if (n % d == 0)
+        return false;
+    return true;
+  }
+
+  static Unit main(Sequence[String] args) {
+    Console.outln("Here are the first few primes:");
+    for (Int n = 0; n < 20; n = n + 1)
+      if (Primes.isPrime(n))
+        Console.outln(n);
+  }
+}

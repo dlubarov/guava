@@ -2,7 +2,8 @@ module test;
 
 type ProgressBar {
   static Unit main(Sequence[String] args) {
-    Int w = 70;
+    Console.outln("Here's a progress bar:");
+    Int w = 50;
     for (Int i = 0; i <= w; i = i + 1) {
       Console.out("\r");
       Console.out("|" * i);
