@@ -1,6 +1,6 @@
 module core;
 
-pubilc type MutableArray[T] extends MutableSequence[T] {
+pubilc sealed type MutableArray[T] extends MutableSequence[T] {
   public Unit init() {
     # native code
   }
@@ -36,7 +36,7 @@ pubilc type MutableArray[T] extends MutableSequence[T] {
   }
 }
 
-public type ImmutableArray[+T] extends Sequence[T] {
+public type ImmutableArray[+T] extends ImmutableSequence[T] {
   public static readonly ImmutableArray[Bottom] empty;
 
   private static Unit init() {

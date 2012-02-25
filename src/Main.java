@@ -77,6 +77,7 @@ public class Main {
         God.runStaticInitializers();
 
         // Run main methods.
+        long t0 = System.nanoTime();
         for (d.TypeDef typeDef : dProj)
             for (d.ConcreteMethodDef methodDef : typeDef.staticMethods) {
                 d.RawMethod desc = methodDef.desc;
@@ -107,5 +108,7 @@ public class Main {
                 d.BaseObject argsArray = new d.nat.NativeMutableArray(arrayType, argStrings);
                 methodDef.invoke(new d.BaseObject[] {argsArray}, d.ty.ConcreteType.NONE);
             }
+        long dt = System.nanoTime() - t0;
+        System.out.printf("Tests took %.2f seconds.\n", dt * 1e-9);
     }
 }

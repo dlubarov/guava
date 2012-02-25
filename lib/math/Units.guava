@@ -1,0 +1,54 @@
+module math;
+
+[D < BasicDimension]
+public abstract type BasicUnit[D] {
+  public readonly String name;
+  public readonly BasicDimension dimension;
+
+  private Unit init(String name, BasicDimension dimension) {
+    this.name = name;
+    this.dimension = dimension;
+  }
+
+  Double ratioToCanonicalUnit();
+
+  public Double ratioTo(BasicUnit[D] that) {
+    return this.ratioToCanonicalUnit() / that.ratioToCanonicalUnit();
+  }
+
+  public String toString() {
+    return this.name;
+  }
+}
+
+[D < BasicDimension]
+sealed type CanonicalBasicUnit[D] extends BasicUnit[D] {
+  public Unit init(String name, BasicDimension dimension) {
+    BasicUnit.init(this, name, dimension);
+  }
+
+  Double ratioToCanonicalUnit() {
+    return 1.0;
+  }
+}
+
+[D < BasicDimension]
+sealed type DerivedBasicUnit[D] extends BasicUnit[D] {
+  private readonly BasicUnit[D] parent;
+  private readonly Double ratio;
+
+  public Unit init(String name, Double ratio, BasicUnit[D] parent) {
+    BasicUnit.init(this, name, parent.dimension);
+    this.ratio = ratio;
+    this.parent = parent;
+  }
+
+  Double ratioToCanonicalUnit() {
+    return this.ratio * this.parent.ratioToCanonicalUnit();
+  }
+}
+
+# TODO: better name? CompoundUnit?
+public sealed type Units {
+  private readonly Map[BasicUnit[BasicDimension], Int] units;
+}

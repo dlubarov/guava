@@ -68,9 +68,9 @@ public final class Opcodes {
                     break;
 
                 case CONST_DOUBLE: {
-                    int i1 = code[++i];
-                    int i0 = code[++i];
-                    long l = ((long) i1) << 32 | i0;
+                    long i1 = code[i++]; i1 &= 0xffffffffL;
+                    long i0 = code[i++]; i0 &= 0xffffffffL;
+                    long l = i1 << 32 | i0;
                     double d = Double.longBitsToDouble(l);
                     sb.append(String.format("CONST_DOUBLE %f", d));
                     break;

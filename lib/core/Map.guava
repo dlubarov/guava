@@ -28,6 +28,9 @@ public abstract type Map[K, V] extends Set[MapEntry[K, V]] {
   public Set[K] getKeys();
   public Set[V] getValues();
   public Set[MapEntry[K, V]] getEntries();
+
+  public ImmutableMap[K, V] toImmutable() {
+  }
 }
 
 # Does no implement MutableSet[MapEntry[K, V]] because users of that
@@ -44,4 +47,8 @@ public abstract type MutableMap[K, V] extends Map[K, V] {
 # type would not expect adding an element to remove a distinct element.
 public abstract type ImmutableMap[K, V] extends Map[K, V] {
   public ImmutableMap[K, V] +(MapEntry[K, V] entry);
+
+  public ImmutableMap[K, V] toImmutable() {
+    return this;
+  }
 }

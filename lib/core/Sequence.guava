@@ -73,6 +73,10 @@ public abstract type Sequence[+T] extends Collection[T] {
   public Sequence[T] replace(Sequence[T] a, Sequence[T] b) {
   }
 
+  public ImmutableSequence[T] toImmutable() {
+    return new ImmutableArray[T](this);
+  }
+
   public Bool ==(Top o) {
   }
 
@@ -100,6 +104,10 @@ public abstract type ImmutableSequence[+T] extends Sequence[T] {
 
   #ImmutableSequence[T] with(Int index, T value) {
   #}
+
+  public ImmutableSequence[T] toImmutable() {
+    return this;
+  }
 }
 
 public type SequenceSerializer[T] extends Serializer[Sequence[T]] {

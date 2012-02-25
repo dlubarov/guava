@@ -1,0 +1,29 @@
+module math;
+
+[D < BasicDimension]
+public sealed type SimpleQuantity[+D] {
+  public readonly Double amount;
+  public readonly BasicUnit[D] unit;
+
+  public Unit init(Double amount, BasicUnit[D] unit) {
+    this.amount = amount;
+    this.unit = unit;
+  }
+
+  public SimpleQuantity[D] in(BasicUnit[D] newUnit) {
+    Double conv = this.unit.ratioTo(newUnit);
+    return new SimpleQuantity[D](this.amount * conv, newUnit);
+  }
+
+  public String toString() {
+    String s = this.amount.toString() + " " + this.unit;
+    if (this.amount != 1.0)
+      s = s + "s";
+    return s;
+  }
+}
+
+public sealed type Quantity {
+  public readonly Double amount;
+  public readonly Units units;
+}

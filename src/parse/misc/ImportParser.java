@@ -13,7 +13,7 @@ public class ImportParser extends Parser<Import> {
     public Success<Import> parse(String s, int p) {
         // Parse the "import" keyword.
         Success<String> resImport = IdentifierParser.singleton.parse(s, p);
-        if (resImport == null || !resImport.equals("import"))
+        if (resImport == null || !resImport.value.equals("import"))
             return null;
         p = resImport.rem;
         p = optWS(s, p);
@@ -44,6 +44,10 @@ public class ImportParser extends Parser<Import> {
             p = resType.rem;
         }
         p = optWS(s, p);
+
+        // Parse the ';'.
+        if (s.charAt(p++) != ';')
+            throw new NiftyException("Missing ';' at end of import.");
 
         Import result = new Import(module, type);
         return new Success<Import>(result, p);

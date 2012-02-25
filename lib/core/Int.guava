@@ -7,7 +7,7 @@ public sealed type Int extends NaturallyOrdered[Int] {
     this.init(s, 10);
   }
 
-  public Unit init(Byte b) {}
+  public Unit init(Byte b, Bool signExtend) {}
 
   public Unit init(Char c) {}
 
@@ -119,7 +119,7 @@ public type BigEndianIntSerializer extends Serializer[Int] {
     Int n = 0;
     # TODO assert bytes length
     foreach (Byte b in bytes)
-      n = (n << 8) | new Int(b); # TODO: cast shouldn't be needed
+      n = (n << 8) | new Int(b, false); # TODO: cast shouldn't be needed
     return n;
   }
 }

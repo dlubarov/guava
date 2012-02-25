@@ -1,0 +1,25 @@
+module math;
+
+public abstract type BasicDimension {
+  # TIME, MASS, DISTANCE, CHARGE, TEMPERATURE, DATA_LENGTH;
+}
+
+public type Time extends BasicDimension {
+  public static readonly BasicUnit[Time] SECOND,
+      MILLISECOND,
+      MINUTE, HOUR, DAY;
+
+  private Unit init() {
+    Time.SECOND = new CanonicalBasicUnit[Time]("second", this);
+
+    Time.MILLISECOND = new DerivedBasicUnit[Time]("millisecond", 0.001, Time.SECOND);
+
+    Time.MINUTE = new DerivedBasicUnit[Time]("minute", 60.0, Time.SECOND);
+    Time.HOUR = new DerivedBasicUnit[Time]("hour", 60.0, Time.MINUTE);
+    Time.DAY = new DerivedBasicUnit[Time]("day", 24.0, Time.HOUR);
+  }
+
+  private static Unit init() {
+    new Time();
+  }
+}

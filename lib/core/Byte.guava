@@ -40,16 +40,16 @@ public sealed type Byte extends NaturallyOrdered[Byte] {
   }
 
   public Byte signum() {
-    return new Byte(new Int(this).signum());
+    return new Byte(new Int(this, false).signum());
   }
 
   public Bool ==(Top o) {}
 
   public Int hashCode() {
-    return new Int(this).hashCode();
+    return new Int(this, false).hashCode();
   }
 
   public String toString() {
-    return new Int(this).toString();
+    return new Int(this, false).toString();
   }
 }

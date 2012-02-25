@@ -56,6 +56,14 @@ public class BytecodeMethodDef extends ConcreteMethodDef {
                         break;
                     }
 
+                    case CONST_TRUE:
+                        stack[++sp] = NativeBool.TRUE;
+                        break;
+
+                    case CONST_FALSE:
+                        stack[++sp] = NativeBool.FALSE;
+                        break;
+
                     case CONST_INT:
                         stack[++sp] = new NativeInt(code[ip++]);
                         break;
@@ -64,13 +72,14 @@ public class BytecodeMethodDef extends ConcreteMethodDef {
                         stack[++sp] = new NativeChar((char) code[ip++]);
                         break;
 
-                    case CONST_TRUE:
-                        stack[++sp] = NativeBool.TRUE;
+                    case CONST_DOUBLE: {
+                        long i1 = code[ip++]; i1 &= 0xffffffffL;
+                        long i0 = code[ip++]; i0 &= 0xffffffffL;
+                        long l = i1 << 32 | i0;
+                        double d = Double.longBitsToDouble(l);
+                        stack[++sp] = new NativeDouble(d);
                         break;
-
-                    case CONST_FALSE:
-                        stack[++sp] = NativeBool.FALSE;
-                        break;
+                    }
 
                     case CONST_STRING:
                         stack[++sp] = VMUtils.makeString(stringTable[code[ip++]]);
