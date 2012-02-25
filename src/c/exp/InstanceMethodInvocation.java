@@ -6,7 +6,7 @@ import java.util.*;
 
 import util.ArrayUtils;
 
-import common.NiftyException;
+import common.*;
 
 import c.*;
 import c.ty.*;
@@ -63,18 +63,76 @@ public class InstanceMethodInvocation extends Expression {
         return method.returnType.withGenericArgs(targetAsMethodOwner.genericArgs, genericArgs);
     }
 
+    private static Integer getNativeOp(MethodDef m) {
+        if (m.owner.equals(RawType.coreBool)) {
+            if (m.paramTypes.length == 0) {
+                if (m.name.equals("!"))
+                    return Opcodes.BOOL_NEG;
+            }
+        }
+        if (m.owner.equals(RawType.coreInt)) {
+            if (m.paramTypes.length == 0) {
+                if (m.name.equals("-"))
+                    return Opcodes.INT_NEG;
+            }
+            if (m.paramTypes.length == 1) {
+                Type paramTy = m.paramTypes[0];
+                if (m.name.equals("+") && paramTy.equals(Type.coreInt))
+                    return Opcodes.INT_ADD;
+                if (m.name.equals("-") && paramTy.equals(Type.coreInt))
+                    return Opcodes.INT_SUB;
+                if (m.name.equals("*") && paramTy.equals(Type.coreInt))
+                    return Opcodes.INT_MUL;
+                if (m.name.equals("/") && paramTy.equals(Type.coreInt))
+                    return Opcodes.INT_DIV;
+                if (m.name.equals("%") && paramTy.equals(Type.coreInt))
+                    return Opcodes.INT_MOD;
+                if (m.name.equals("|") && paramTy.equals(Type.coreInt))
+                    return Opcodes.INT_IOR;
+                if (m.name.equals("^") && paramTy.equals(Type.coreInt))
+                    return Opcodes.INT_XOR;
+                if (m.name.equals("&") && paramTy.equals(Type.coreInt))
+                    return Opcodes.INT_AND;
+                if (m.name.equals("<<") && paramTy.equals(Type.coreInt))
+                    return Opcodes.INT_LSHIFT;
+                if (m.name.equals(">>>") && paramTy.equals(Type.coreInt))
+                    return Opcodes.INT_RSHIFT_UNSIGNED;
+                if (m.name.equals(">>") && paramTy.equals(Type.coreInt))
+                    return Opcodes.INT_RSHIFT_SIGNED;
+                if (m.name.equals("compareTo") && paramTy.equals(Type.coreInt))
+                    return Opcodes.INT_COMPARETO;
+                if (m.name.equals("<") && paramTy.equals(Type.coreInt))
+                    return Opcodes.INT_LT;
+                if (m.name.equals("<=") && paramTy.equals(Type.coreInt))
+                    return Opcodes.INT_LTE;
+                if (m.name.equals(">") && paramTy.equals(Type.coreInt))
+                    return Opcodes.INT_GT;
+                if (m.name.equals(">=") && paramTy.equals(Type.coreInt))
+                    return Opcodes.INT_GTE;
+            }
+        }
+        return null;
+    }
+
     @Override
     public CodeTree compile(CodeContext ctx) {
         MethodDef m = getMethod(ctx);
-        int methodIndex = ctx.method.getMethodTableIndex(m);
+        CodeTree targetCode = target.compile(ctx);
+        CodeTree argumentCode = Expression.compileAll(args, ctx);
 
+        // Try to use a native op, if possible.
+        Integer nativeOp = getNativeOp(m);
+        if (nativeOp != null)
+            return new CodeTree(targetCode, argumentCode, nativeOp);
+
+        // Do a normal virtual method invokation.
+        int methodIndex = ctx.method.getMethodTableIndex(m);
         int[] genericArgIndices = ctx.method.getFullTypeTableIndices(genericArgs);
         Integer[] genericArgIndicesBoxed = ArrayUtils.boxArray(genericArgIndices);
         CodeTree genericArgIndicesTree = new CodeTree((Object[]) genericArgIndicesBoxed);
 
         return new CodeTree(
-                target.compile(ctx),
-                Expression.compileAll(args, ctx),
+                targetCode, argumentCode,
                 Opcodes.INVOKE_VIRTUAL, methodIndex, genericArgIndicesTree
         );
     }

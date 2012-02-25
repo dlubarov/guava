@@ -38,7 +38,7 @@ public class NativeChar extends NativeObject {
                                 NativeChar c = (NativeChar) stack[bp + 1];
                                 int ord = ((NativeInt) stack[bp + 2]).value;
                                 c.value = (char) ord;
-                                stack[bp + 1] = VMUtils.getUnit();
+                                stack[bp + 1] = God.objUnit;
                             }
                         },
 
@@ -50,11 +50,11 @@ public class NativeChar extends NativeObject {
                                 char b = ((NativeChar) stack[bp + 2]).value;
                                 BaseObject rel;
                                 if (a < b)
-                                    rel = VMUtils.getLT();
+                                    rel = God.objLT;
                                 else if (a > b)
-                                    rel = VMUtils.getGT();
+                                    rel = God.objGT;
                                 else
-                                    rel = VMUtils.getEQ();
+                                    rel = God.objEQ;
                                 stack[bp + 1] = rel;
                             }
                         },

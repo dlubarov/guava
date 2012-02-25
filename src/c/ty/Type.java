@@ -10,6 +10,7 @@ public abstract class Type {
 
     public static final Type
             coreUnit = new ParameterizedType(RawType.coreUnit, NONE),
+            coreInt = new ParameterizedType(RawType.coreInt, NONE),
             coreBool = new ParameterizedType(RawType.coreBool, NONE);
 
     public abstract Type withGenericArgs(Type[] typeGenericArgs, Type[] methodGenericArgs);

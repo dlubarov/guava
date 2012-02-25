@@ -10,6 +10,7 @@ public final class Opcodes {
     public static final int
             POP = 0,
             DUP = 1,
+            // Literals
             CONST_TRUE = 10,
             CONST_FALSE = 11,
             CONST_INT = 12,
@@ -17,19 +18,40 @@ public final class Opcodes {
             CONST_DOUBLE = 14,
             CONST_STRING = 15,
             CREATE_SEQ = 18,
+            // Locals and fields
             GET_LOCAL = 20,
             PUT_LOCAL = 21,
             GET_STATIC_FIELD = 22,
             PUT_STATIC_FIELD = 23,
             GET_INSTANCE_FIELD = 24,
             PUT_INSTANCE_FIELD = 25,
+            // Methods
             INVOKE_STATIC = 30,
             INVOKE_VIRTUAL = 31,
             NEW = 40,
+            // Control
             JUMP = 50,
             JUMP_COND = 51,
+            RETURN = 55,
+            // Common operations
             BOOL_NEG = 60,
-            RETURN = 70;
+            INT_NEG = 100,
+            INT_ADD = 110,
+            INT_SUB = 111,
+            INT_MUL = 112,
+            INT_DIV = 113,
+            INT_MOD = 114,
+            INT_IOR = 115,
+            INT_XOR = 116,
+            INT_AND = 117,
+            INT_LSHIFT = 118,
+            INT_RSHIFT_UNSIGNED = 119,
+            INT_RSHIFT_SIGNED = 120,
+            INT_COMPARETO = 121,
+            INT_LT = 122,
+            INT_LTE = 123,
+            INT_GT = 124,
+            INT_GTE = 125;
 
     private Opcodes() {}
 
@@ -146,12 +168,63 @@ public final class Opcodes {
                     sb.append(String.format("JUMP_COND %+d", code[++i]));
                     break;
 
+                case RETURN:
+                    sb.append("RETURN");
+                    break;
+
                 case BOOL_NEG:
                     sb.append("BOOL_NEG");
                     break;
-
-                case RETURN:
-                    sb.append("RETURN");
+                case INT_NEG:
+                    sb.append("INT_NEG");
+                    break;
+                case INT_ADD:
+                    sb.append("INT_ADD");
+                    break;
+                case INT_SUB:
+                    sb.append("INT_SUB");
+                    break;
+                case INT_MUL:
+                    sb.append("INT_MUL");
+                    break;
+                case INT_DIV:
+                    sb.append("INT_DIV");
+                    break;
+                case INT_MOD:
+                    sb.append("INT_MOD");
+                    break;
+                case INT_IOR:
+                    sb.append("INT_IOR");
+                    break;
+                case INT_XOR:
+                    sb.append("INT_XOR");
+                    break;
+                case INT_AND:
+                    sb.append("INT_AND");
+                    break;
+                case INT_LSHIFT:
+                    sb.append("INT_LSHIFT");
+                    break;
+                case INT_RSHIFT_UNSIGNED:
+                    sb.append("INT_RSHIFT_UNSIGNED");
+                    break;
+                case INT_RSHIFT_SIGNED:
+                    sb.append("INT_RSHIFT_SIGNED");
+                    break;
+                case INT_COMPARETO:
+                    sb.append("INT_COMPARETO");
+                    break;
+                case INT_LT:
+                    sb.append("INT_LT");
+                    break;
+                case INT_LTE:
+                    sb.append("INT_LTE");
+                    break;
+                case INT_GT:
+                    sb.append("INT_GT");
+                    break;
+                case INT_GTE:
+                    sb.append("INT_GTE");
                     break;
 
                 default:

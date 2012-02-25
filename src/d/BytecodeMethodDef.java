@@ -254,16 +254,120 @@ public class BytecodeMethodDef extends ConcreteMethodDef {
                         break;
                     }
 
-                    case BOOL_NEG:
-                        assert stack[sp] instanceof NativeBool : "Trying to negate " + stack[sp] + ".";
-                        stack[sp] = new NativeBool(!((NativeBool) stack[sp]).value);
-                        break;
-
                     case RETURN:
                         // TODO: this copy shouldn't be necessary if the INVOKE_s accounted for
                         // numLocals of the invoked method when reading the return value
                         stack[bp + 1] = stack[sp];
                         return;
+
+                    case BOOL_NEG:
+                        assert stack[sp] instanceof NativeBool;
+                        stack[sp] = new NativeBool(!((NativeBool) stack[sp]).value);
+                        break;
+                    case INT_NEG:
+                        stack[sp] = new NativeInt(-((NativeInt) stack[sp]).value);
+                        break;
+                    case INT_ADD: {
+                        int b = ((NativeInt) stack[sp]).value;
+                        int a = ((NativeInt) stack[--sp]).value;
+                        stack[sp] = new NativeInt(a + b);
+                        break;
+                    }
+                    case INT_SUB: {
+                        int b = ((NativeInt) stack[sp]).value;
+                        int a = ((NativeInt) stack[--sp]).value;
+                        stack[sp] = new NativeInt(a - b);
+                        break;
+                    }
+                    case INT_MUL: {
+                        int b = ((NativeInt) stack[sp]).value;
+                        int a = ((NativeInt) stack[--sp]).value;
+                        stack[sp] = new NativeInt(a * b);
+                        break;
+                    }
+                    case INT_DIV: {
+                        int b = ((NativeInt) stack[sp]).value;
+                        int a = ((NativeInt) stack[--sp]).value;
+                        stack[sp] = new NativeInt(a / b);
+                        break;
+                    }
+                    case INT_MOD: {
+                        int b = ((NativeInt) stack[sp]).value;
+                        int a = ((NativeInt) stack[--sp]).value;
+                        stack[sp] = new NativeInt(a % b);
+                        break;
+                    }
+                    case INT_IOR: {
+                        int b = ((NativeInt) stack[sp]).value;
+                        int a = ((NativeInt) stack[--sp]).value;
+                        stack[sp] = new NativeInt(a | b);
+                        break;
+                    }
+                    case INT_XOR: {
+                        int b = ((NativeInt) stack[sp]).value;
+                        int a = ((NativeInt) stack[--sp]).value;
+                        stack[sp] = new NativeInt(a ^ b);
+                        break;
+                    }
+                    case INT_AND: {
+                        int b = ((NativeInt) stack[sp]).value;
+                        int a = ((NativeInt) stack[--sp]).value;
+                        stack[sp] = new NativeInt(a & b);
+                        break;
+                    }
+                    case INT_LSHIFT: {
+                        int b = ((NativeInt) stack[sp]).value;
+                        int a = ((NativeInt) stack[--sp]).value;
+                        stack[sp] = new NativeInt(a << b);
+                        break;
+                    }
+                    case INT_RSHIFT_UNSIGNED: {
+                        int b = ((NativeInt) stack[sp]).value;
+                        int a = ((NativeInt) stack[--sp]).value;
+                        stack[sp] = new NativeInt(a >>> b);
+                        break;
+                    }
+                    case INT_RSHIFT_SIGNED: {
+                        int b = ((NativeInt) stack[sp]).value;
+                        int a = ((NativeInt) stack[--sp]).value;
+                        stack[sp] = new NativeInt(a >> b);
+                        break;
+                    }
+                    case INT_COMPARETO: {
+                        int b = ((NativeInt) stack[sp]).value;
+                        int a = ((NativeInt) stack[--sp]).value;
+                        if (a < b)
+                            stack[sp] = God.objLT;
+                        else if (a > b)
+                            stack[sp] = God.objGT;
+                        else
+                            stack[sp] = God.objEQ;
+                        break;
+                    }
+                    case INT_LT: {
+                        int b = ((NativeInt) stack[sp]).value;
+                        int a = ((NativeInt) stack[--sp]).value;
+                        stack[sp] = new NativeBool(a < b);
+                        break;
+                    }
+                    case INT_LTE: {
+                        int b = ((NativeInt) stack[sp]).value;
+                        int a = ((NativeInt) stack[--sp]).value;
+                        stack[sp] = new NativeBool(a <= b);
+                        break;
+                    }
+                    case INT_GT: {
+                        int b = ((NativeInt) stack[sp]).value;
+                        int a = ((NativeInt) stack[--sp]).value;
+                        stack[sp] = new NativeBool(a > b);
+                        break;
+                    }
+                    case INT_GTE: {
+                        int b = ((NativeInt) stack[sp]).value;
+                        int a = ((NativeInt) stack[--sp]).value;
+                        stack[sp] = new NativeBool(a >= b);
+                        break;
+                    }
 
                     default:
                         throw new NiftyException("bad opcode in %s: %d", desc, op);

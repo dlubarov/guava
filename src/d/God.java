@@ -13,6 +13,8 @@ public final class God {
 
     private static final Set<NativeTypeDef> nativeTypes;
 
+    public static BaseObject objUnit, objLT, objGT, objEQ;
+
     static {
         allTypes = new HashMap<RawType, TypeDef>();
         allMethods = new HashMap<RawMethod, MethodDef>();
@@ -75,9 +77,15 @@ public final class God {
             typeDef.init();
 
             if (typeDef.desc.equals(RawType.coreUnit)) {
-                // TODO: Load a reference to Unit.singleton.
+                // TODO: Fragile...
+                objUnit = typeDef.staticFields[0];
             }
-            // TODO: Also load references to LT, GT, EQ.
+            if (typeDef.desc.equals(RawType.coreRelation)) {
+                // TODO: Fragile...
+                objLT = typeDef.staticFields[0];
+                objGT = typeDef.staticFields[1];
+                objEQ = typeDef.staticFields[2];
+            }
         }
     }
 }

@@ -40,7 +40,7 @@ public class NativeByte extends NativeObject {
                                 NativeByte n = (NativeByte) stack[bp + 1];
                                 int m = ((NativeInt) stack[bp + 2]).value;
                                 n.value = (byte) m;
-                                stack[bp + 1] = VMUtils.getUnit();
+                                stack[bp + 1] = God.objUnit;
                             }
                         },
 
@@ -141,11 +141,11 @@ public class NativeByte extends NativeObject {
                                 int m = ((NativeByte) stack[bp + 2]).value;
                                 BaseObject rel;
                                 if (n < m)
-                                    rel = VMUtils.getLT();
+                                    rel = God.objLT;
                                 else if (n > m)
-                                    rel = VMUtils.getGT();
+                                    rel = God.objGT;
                                 else
-                                    rel = VMUtils.getEQ();
+                                    rel = God.objEQ;
                                 stack[bp + 1] = rel;
                             }
                         },

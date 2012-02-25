@@ -97,11 +97,11 @@ public class NativeDouble extends NativeObject {
                                 double y = ((NativeDouble) stack[bp + 2]).value;
                                 BaseObject rel;
                                 if (x < y)
-                                    rel = VMUtils.getLT();
+                                    rel = God.objLT;
                                 else if (x > y)
-                                    rel = VMUtils.getGT();
+                                    rel = God.objGT;
                                 else
-                                    rel = VMUtils.getEQ();
+                                    rel = God.objEQ;
                                 stack[bp + 1] = rel;
                             }
                         },
