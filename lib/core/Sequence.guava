@@ -16,10 +16,14 @@ public abstract type Sequence[+T] extends Collection[T] {
   # The index a is inclusive, while b is exclusive.
   # Fails if b >= size().
   public Sequence[T] subsequence(Int a, Int b) {
+    # TODO: implement this
   }
 
   public T get(Int index) {
-    # TODO implement this
+    Source[T] enum = this.enumerator();
+    repeat (index)
+      enum.take();
+    return enum.take().get();
   }
 
   public T getFront() {
@@ -30,9 +34,11 @@ public abstract type Sequence[+T] extends Collection[T] {
     return this(this.size() - 1);
   }
 
+  # Undefined behavior if l > size().
   public Sequence[T] getFront(Int l) {
   }
 
+  # Undefined behavior if l > size().
   public Sequence[T] getBack(Int l) {
   }
 

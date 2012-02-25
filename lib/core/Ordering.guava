@@ -61,11 +61,11 @@ public abstract type Ordering[-T] extends PartialOrdering[T] {
 public abstract type NaturallyPartiallyOrdered[-T] {
   public PossibleRelation compareTo(T that);
 
-  public sealed Bool <(T that) {
+  public Bool <(T that) {
     return this.compareTo(that) == Relation.LT;
   }
 
-  public sealed Bool >(T that) {
+  public Bool >(T that) {
     return this.compareTo(that) == Relation.GT;
   }
 
@@ -73,12 +73,12 @@ public abstract type NaturallyPartiallyOrdered[-T] {
     # TODO: switch on that
   }
 
-  public sealed Bool <=(T that) {
+  public Bool <=(T that) {
     PossibleRelation rel = this.compareTo(that);
     return rel == Relation.LT | rel == Relation.EQ;
   }
 
-  public sealed Bool >=(T that) {
+  public Bool >=(T that) {
     PossibleRelation rel = this.compareTo(that);
     return rel == Relation.GT | rel == Relation.EQ;
   }

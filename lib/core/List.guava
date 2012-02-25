@@ -3,6 +3,8 @@ module core;
 public abstract type List[+T] extends ImmutableSequence[T] {
   public List[T] getRest();
 
+  public List[T] getBack(Int l);
+
   public List[T] reverse() {
     List[T] result = EmptyList();
     foreach (T elem in this)
@@ -36,6 +38,10 @@ public type EmptyList extends List[Bottom] {
     1 / 0; # fail
   }
 
+  public List[Bottom] getBack(Int l) {
+    return this;
+  }
+
   public Int size() {
     return 0;
   }
@@ -48,12 +54,12 @@ public type EmptyList extends List[Bottom] {
 public sealed type NonEmptyList[+T] extends List[T] {
   private readonly T value;
   private readonly List[T] child;
-  private readonly Int n;
+  private readonly Int len;
 
   public Unit init(T value, List[T] child) {
     this.value = value;
     this.child = child;
-    this.n = child.size() + 1;
+    this.len = child.size() + 1;
   }
 
   public T getFront() {
@@ -64,8 +70,14 @@ public sealed type NonEmptyList[+T] extends List[T] {
     return this.child;
   }
 
+  public List[T] getBack(Int l) {
+    if (l >= this.len)
+      return this;
+    return this.child.getBack(l);
+  }
+
   public Int size() {
-    return this.n;
+    return this.len;
   }
 
   public Bool isEmpty() {

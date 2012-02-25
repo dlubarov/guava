@@ -34,6 +34,10 @@ public sealed type Int extends NaturallyOrdered[Int] {
   public Int >>>(Int that) {}
 
   public Relation compareTo(Int that) {}
+  public Bool <(Int that) {}
+  public Bool <=(Int that) {}
+  public Bool >(Int that) {}
+  public Bool >=(Int that) {}
 
   public Int rotateLeft(Int distance) {}
   public Int rotateRight(Int distance) {}
