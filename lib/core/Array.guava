@@ -27,6 +27,10 @@ pubilc sealed type MutableArray[T] extends MutableSequence[T] {
     return new MutableArray[T](Sequence.getBack(this, k));
   }
 
+  public MutableArray[T] *(Int k) {
+    # native code
+  }
+
   public Int size() {
     # native code
   }

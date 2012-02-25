@@ -1,6 +1,6 @@
 module core;
 
-public sealed type String extends Sequence[Char] {
+public sealed type String extends ImmutableSequence[Char] {
   private MutableArray[Char] backingArray;
 
   public Unit init(Sequence[Char] source) {
@@ -17,7 +17,7 @@ public sealed type String extends Sequence[Char] {
   }
 
   public String *(Int k) {
-    return new String(Sequence.*(this, k));
+    return new String(this.backingArray * k);
   }
 
   public String join(Sequence[Top] seq) {

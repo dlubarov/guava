@@ -12,6 +12,7 @@ import d.ty.nf.NonFinalType;
 
 public class BytecodeMethodDef extends ConcreteMethodDef {
     public final String[] stringTable;
+    public final BaseObject[] zeptoStringTable;
 
     private final int numLocals; // includes "this"
     private final int[] code;
@@ -27,9 +28,17 @@ public class BytecodeMethodDef extends ConcreteMethodDef {
         for (int i = 0; i < stringTable.length; ++i)
             stringTable[i] = stringTable[i].intern();
         this.stringTable = stringTable;
+        zeptoStringTable = new BaseObject[stringTable.length];
 
         this.numLocals = numLocals;
         this.code = bytecode;
+    }
+
+    @Override
+    public void link() {
+        super.link();
+        for (int i = 0; i < zeptoStringTable.length; ++i)
+            zeptoStringTable[i] = VMUtils.makeString(stringTable[i]);
     }
 
     @Override
@@ -81,9 +90,12 @@ public class BytecodeMethodDef extends ConcreteMethodDef {
                         break;
                     }
 
-                    case CONST_STRING:
-                        stack[++sp] = VMUtils.makeString(stringTable[code[ip++]]);
+                    case CONST_STRING: {
+                        int stringIdx = code[ip++];
+                        //stack[++sp] = VMUtils.makeString(stringTable[stringIdx]);
+                        stack[++sp] = zeptoStringTable[stringIdx];
                         break;
+                    }
 
                     case CREATE_SEQ: {
                         int typeTableIndex = code[ip++];

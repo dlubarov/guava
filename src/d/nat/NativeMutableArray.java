@@ -124,6 +124,21 @@ public class NativeMutableArray extends NativeObject {
                             }
                         },
 
+                        // repeat
+                        new NativeMethodDef(new RawMethod(false, RawType.coreMutableArray, "*", 0, TypeDesc.coreIntOnly)) {
+                            @Override
+                            public void invoke(BaseObject[] stack, int bp, ConcreteType[] genericArgs) {
+                                NativeMutableArray arr = (NativeMutableArray) stack[bp + 1];
+                                BaseObject[] contents = arr.contents;
+                                int l = contents.length, k = ((NativeInt) stack[bp + 2]).value;
+                                BaseObject[] newContents = new BaseObject[l * k];
+                                for (int i = 0; i < k; ++i)
+                                    for (int j = 0; j < l; ++j)
+                                        newContents[i * l + j] = contents[j];
+                                stack[bp + 1] = new NativeMutableArray(arr.type, newContents);
+                            }
+                        },
+
                         // size
                         new NativeMethodDef(new RawMethod(false, RawType.coreMutableArray, "size", 0, TypeDesc.NONE)) {
                             @Override

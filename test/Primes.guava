@@ -9,9 +9,10 @@ type Primes {
   }
 
   static Unit main(Sequence[String] args) {
-    Console.outln("Here are the first few primes:");
+    Console.out("Here are the first few primes:");
     for (Int n = 0; n < 20; n = n + 1)
       if (Primes.isPrime(n))
-        Console.outln(n);
+        Console.out(" " + n);
+    Console.outln();
   }
 }
