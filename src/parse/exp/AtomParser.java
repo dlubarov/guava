@@ -8,21 +8,17 @@ public class AtomParser extends Parser<Expression> {
     public static final Parser<Expression> singleton = new AtomParser().memo();
     private AtomParser() {}
 
-    private static final Parser<Expression>[] atomParsers;
-
-    static {
-        atomParsers = new Parser[] {
-                ParentheticalExpressionParser.singleton,
-                LiteralSequenceParser.singleton,
-                LiteralDoubleParser.singleton,
-                LiteralIntParser.singleton,
-                LiteralBoolParser.singleton,
-                LiteralCharParser.singleton,
-                LiteralStringParser.singleton,
-                InstantiationParser.singleton,
-                VarParser.singleton
-        };
-    }
+    private static final Parser<Expression>[] atomParsers = new Parser[] {
+            ParentheticalExpressionParser.singleton,
+            LiteralSequenceParser.singleton,
+            LiteralDoubleParser.singleton,
+            LiteralIntParser.singleton,
+            LiteralBoolParser.singleton,
+            LiteralCharParser.singleton,
+            LiteralStringParser.singleton,
+            InstantiationParser.singleton,
+            VarParser.singleton
+    };
 
     @Override
     public Success<Expression> parse(String s, int p) {

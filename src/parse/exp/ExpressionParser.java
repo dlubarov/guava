@@ -23,8 +23,7 @@ public class ExpressionParser extends Parser<Expression> {
 
         // Try parsing a simple assignment.
         if (s.charAt(p) == '=') {
-            ++p;
-            p = optWS(s, p);
+            p = optWS(s, p + 1);
 
             Success<Expression> resRight = parse(s, p);
             if (resRight == null)

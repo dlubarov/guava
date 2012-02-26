@@ -116,6 +116,7 @@ public class InstanceMethodInvocation extends Expression {
 
     @Override
     public CodeTree compile(CodeContext ctx) {
+        // FIXME: use INVOKE_STATIC where possible.
         MethodDef m = getMethod(ctx);
         CodeTree targetCode = target.compile(ctx);
         CodeTree argumentCode = Expression.compileAll(args, ctx);
