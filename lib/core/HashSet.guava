@@ -1,0 +1,112 @@
+module core;
+
+# A standard hash set (aka hash table) using separate chaining.
+# Provides fast +=, -=, and contains, assuming that T has a good
+# hash function, and both T.== and T.hashCode are reasonably fast.
+
+public sealed type HashSet[T] extends MutableSet[T] {
+  private MutableSequence[ImmutableSet[T]] buckets;
+  private Int count;
+
+  public Unit init(Int initialCapacity) {
+    if (initialCapacity < 1)
+      1 / 0; # fail
+    this.buckets = new MutableArray[ImmutableSet[T]]({new ListSet[T]()} * initialCapacity);
+  }
+
+  public Unit init() {
+    this.init(4);
+  }
+
+  private Int bucketIndexFor(Top elem) {
+    return elem.hashCode() % this.buckets.size();
+  }
+
+  private ImmutableSet[T] bucketFor(Top elem) {
+    return this.buckets(this.bucketIndexFor(elem));
+  }
+
+  public Bool contains(Top elem) {
+    return this.bucketFor(elem).contains(elem);
+  }
+
+  private Bool shouldExpand() {
+    return this.size() > this.buckets.size();
+  }
+
+  private Bool shouldShrink() {
+    return false; # TODO: shouldShrink
+  }
+
+  private Unit resize(Int newCapacity) {
+    MutableSequence[ImmutableSet[T]] newBuckets = new MutableArray[ImmutableSet[T]]({new ListSet[T]()} * newCapacity);
+    foreach (T elem in this) {
+      Int idx = elem.hashCode() % newCapacity;
+      newBuckets(idx) = newBuckets(idx) + elem;
+    }
+    this.buckets = newBuckets;
+  }
+
+  private Unit expand() {
+    this.resize(this.buckets.size() * 2);
+  }
+
+  private Unit shrink() {
+    this.resize(this.buckets.size() / 2);
+  }
+
+  public Bool +=(T elem) {
+    Int idx = this.bucketIndexFor(elem);
+    ImmutableSet[T] bucket = this.buckets(idx);
+    if (bucket.contains(elem))
+      return false;
+    if (this.shouldExpand())
+      this.expand();
+    this.buckets(idx) = bucket + elem;
+    this.count = this.count + 1;
+    return true;
+  }
+
+  public Bool -=(T elem) {
+    Int idx = this.bucketIndexFor(elem);
+    ImmutableSet[T] bucket = this.buckets(idx);
+    if (!bucket.contains(elem))
+      return false;
+    this.buckets(idx) = bucket - elem;
+    this.count = this.count - 1;
+    if (this.shouldShrink())
+      this.shrink();
+    return true;
+  }
+
+  public Int size() {
+    return this.count;
+  }
+
+  public Source[T] enumerator() {
+    # TODO: impl
+  }
+}
+
+type HashSetEnumerator[T] extends Source[T] {
+  Source[Set[T]] bucketEnum;
+  Source[T] elemEnum;
+
+  public Unit init(Sequence[Set[T]] buckets) {
+    this.bucketEnum = buckets.enumerator();
+    # There must be at least one bucket.
+    this.elemEnum = this.bucketEnum.take().get().enumerator();
+  }
+
+  public Maybe[T] take() {
+    Maybe[T] maybeElem = this.elemEnum.take();
+    while (maybeElem.isEmpty()) {
+      Maybe[Set[T]] maybeBucket = this.bucketEnum.take();
+      if (maybeBucket.isEmpty())
+        return None();
+      this.elemEnum = maybeBucket.get().enumerator();
+      maybeElem = this.elemEnum.take();
+    }
+    return maybeElem;
+  }
+}

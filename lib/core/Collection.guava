@@ -3,6 +3,7 @@ module core;
 # A group of elements with a finite size.
 
 public abstract type Collection[+T] extends Enumerable[T] {
+  # The number of elements in this collection.
   public Int size() {
     Int n = 0;
     foreach (T x in this)
@@ -10,11 +11,13 @@ public abstract type Collection[+T] extends Enumerable[T] {
     return n;
   }
 
+  # Test whether this collection has no elements.
   public Bool isEmpty() {
     return this.size() == 0;
   }
 
-  public Int count(T elem) {
+  # Count the number of times some element comes up in this set.
+  public Int count(Top elem) {
     Int n = 0;
     foreach (T x in this)
       if (x == elem)
@@ -22,7 +25,8 @@ public abstract type Collection[+T] extends Enumerable[T] {
     return n;
   }
 
-  public Int count(Function1[T, Bool] p) {
+  # Count the number of elements satisfying some predicate.
+  public Int countSatisfying(Function1[Top, Bool] p) {
     Int n = 0;
     foreach (T x in this)
       if (p(x))
@@ -30,15 +34,33 @@ public abstract type Collection[+T] extends Enumerable[T] {
     return n;
   }
 
-  public Bool contains(T elem) {
+  # Test whether this contains a particular element.
+  public Bool contains(Top elem) {
     return this.count(elem) > 0;
   }
 
-  public Bool contains(Function1[T, Bool] p) {
+  # Test whether this contains an element satisfying some predicate.
+  public Bool containsSatisfying(Function1[Top, Bool] p) {
     return this.count(p) > 0;
   }
 
-  public Collection[T] map(Function1[T, T] f) {
+  # Transform each element according to some function, and return the resulting collection.
+  [U > T]
+  public Collection[U] map[U](Function1[T, U] f) {
+    MutableStack[U] stack = new DynamicArray[U]();
+    foreach (T elem in this)
+      stack.pushBack(f(elem));
+    return stack;
+  }
+
+  # Filter this collection according to some predicate.
+  # Only the elements for which p holds will be included in the new collection.
+  public Collection[T] filter(Function1[T, Bool] p) {
+    MutableStack[T] stack = new DynamicArray[T]();
+    foreach (T elem in this)
+      if (p(elem))
+        stack.pushBack(elem);
+    return stack;
   }
 }
 

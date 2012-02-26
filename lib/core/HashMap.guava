@@ -1,0 +1,5 @@
+module core;
+
+#public sealed type HashMap[A, B] extends MutableMap[A, B] {
+  # FIXME: implement hash map
+#}

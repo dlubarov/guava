@@ -25,8 +25,8 @@ public abstract type Set[+T] extends Sequence[T] {
   public Set[T] -(Set[Top] that) {
   }
 
-  public Int count(T elem) {
-    if (this.contains(elem))
+  public Int count(T value) {
+    if (this.contains(value))
       return 1;
     else
       return 0;
@@ -43,15 +43,19 @@ public abstract type Set[+T] extends Sequence[T] {
 }
 
 public abstract type MutableSet[T] extends Set[T] {
-  public Unit +=(T elem);
-  public Unit -=(T elem);
+  public Bool +=(T value);
+  public Bool -=(T value);
 }
 
 public abstract type ImmutableSet[+T] extends Set[T] {
   # TODO: use :+
   # TODO: empty
   [U > T]
-  public ImmutableSet[U] +[U](U elem);
+  public ImmutableSet[U] +[U](U value);
 
-  public ImmutableSet[T] -(T elem);
+  public ImmutableSet[T] +(T value) {
+    return this.+[T](value);
+  }
+
+  public ImmutableSet[T] -(T value);
 }

@@ -54,6 +54,27 @@ public abstract type Sequence[+T] extends Collection[T] {
     return this.getBack(s.size()) == s;
   }
 
+  # Return the index of the first occurrence of subsequence, beginning at some specified index.
+  # Returns -1 if the subsequence is not found.
+  public Int indexOf(Sequence[T] subseq, Int start) {
+    for (Int i = 0; i <= this.size() - subseq.size(); i = i + 1)
+      if (this.subsequence(i, i + subseq.size()) == subseq)
+        return i;
+    return -1;
+  }
+
+  public Int indexOf(Sequence[T] subseq) {
+    return this.indexOf(subseq, 0);
+  }
+
+  public Int indexOf(T value, Int start) {
+    return this.indexOf({value}, start);
+  }
+
+  public Int indexOf(T value) {
+    return this.indexOf({value}, 0);
+  }
+
   public Sequence[T] reverse() {
     MutableDeque[T] deque = new ArrayDeque[T]();
     foreach (T elem in this)
@@ -63,6 +84,8 @@ public abstract type Sequence[+T] extends Collection[T] {
 
   # Repeat this sequence k times.
   public Sequence[T] *(Int k) {
+    if (k < 0)
+      1 / 0; # fail
     List[T] l = EmptyList();
     for (Int i = 0; i < k; i = i + 1)
       foreach (T elem in this)

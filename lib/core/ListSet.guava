@@ -1,0 +1,37 @@
+module core;
+
+# A wrapper around List which ensures that no duplicates can be added,
+# and provides a remove method.
+
+public sealed type ListSet[+T] extends ImmutableSet[T] {
+  private List[T] backingList;
+
+  public Unit init() {
+    this.backingList = EmptyList();
+  }
+
+  [U > T]
+  public ListSet[U] +[U](U value) {
+    if (this.contains(value))
+      return this;
+    ListSet[U] copy = new ListSet[U]();
+    copy.backingList = new NonEmptyList[U](value, this.backingList);
+    return copy;
+  }
+
+  public ListSet[T] -(T value) {
+    ListSet[T] copy = new ListSet[T]();
+    foreach (T elem in this)
+      if (elem != value)
+        copy.backingList = new NonEmptyList[T](elem, copy.backingList);
+    return copy;
+  }
+
+  public Int size() {
+    return this.backingList.size();
+  }
+
+  public Source[T] enumerator() {
+    return this.backingList.enumerator();
+  }
+}

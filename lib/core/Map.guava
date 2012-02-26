@@ -1,6 +1,6 @@
 module core;
 
-public type MapEntry[K, V] {
+public type MapEntry[+K, +V] {
   public readonly K key;
   public readonly V value;
 
@@ -22,14 +22,25 @@ public type MapEntry[K, V] {
   }
 }
 
-public abstract type Map[K, V] extends Set[MapEntry[K, V]] {
+public abstract type Map[K, +V] extends Set[MapEntry[K, V]] {
   public Maybe[V] get(K key);
 
-  public Set[K] getKeys();
-  public Set[V] getValues();
-  public Set[MapEntry[K, V]] getEntries();
+  public Set[K] getKeys() {
+    MutableSet[K] keys = new HashSet[K]();
+    foreach (MapEntry[K, V] entry in this)
+      keys += entry.key;
+    return keys;
+  }
+
+  public Set[V] getValues() {
+    MutableSet[V] values = new HashSet[V]();
+    foreach (MapEntry[K, V] entry in this)
+      values += entry.value;
+    return values;
+  }
 
   public ImmutableMap[K, V] toImmutable() {
+    # TODO: construct some immutable set
   }
 }
 
@@ -43,9 +54,10 @@ public abstract type MutableMap[K, V] extends Map[K, V] {
   }
 }
 
-# Does no implement ImmutableSet[MapEntry[K, V]] because users of that
+# Does no implement ImmutableSet[MapEntry[K, +V]] because users of that
 # type would not expect adding an element to remove a distinct element.
 public abstract type ImmutableMap[K, V] extends Map[K, V] {
+  # TODO: :+
   public ImmutableMap[K, V] +(MapEntry[K, V] entry);
 
   public ImmutableMap[K, V] toImmutable() {
