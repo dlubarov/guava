@@ -4,7 +4,7 @@
 | |_| | |_| | (_| |\ V / (_| |
  \____|\__,_|\__,_| \_/ \__,_|
 
-Guava is a modern OOP language with a powerful, expressive type system.
+Guava is an OOP language with a powerful type system.
 
 Guava has native types, but no primitive types. For example, a Char object is
 implemented as a native type for efficiency. But unlike a Java char, Char has
@@ -37,7 +37,12 @@ method.
 Guava has no null references. Instead, it has a Maybe type similar to Haskell's
 Maybe or Scala's Option.
 
-Guava's standard library embraces inheritance in a major way. For example, the MutableDeque type extends MutbleStack and MutableQueue. If you write a function which reverses a MutableStack, you can feed it an ArrayDeque, a DynamicArray, a MutableSinglyLinkedList, etc. Guava's powerful type system and careful API design allow these relationships to be expressed, while strictly adhering to substitutability.
+Guava's standard library embraces inheritance in a major way. For example, the
+MutableDeque type extends MutbleStack and MutableQueue. If you write a function
+which reverses a MutableStack, you can feed it an ArrayDeque, a DynamicArray, a
+MutableSinglyLinkedList, etc. Guava's powerful type system and careful API
+design allow these relationships to be expressed, while strictly adhering to
+substitutability.
 
 
 ##############
