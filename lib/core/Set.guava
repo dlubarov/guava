@@ -48,6 +48,8 @@ public abstract type MutableSet[T] extends Set[T] {
 }
 
 public abstract type ImmutableSet[+T] extends Set[T] {
+  # TODO: use :+
+  # TODO: empty
   [U > T]
   public ImmutableSet[U] +[U](U elem);
 
