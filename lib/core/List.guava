@@ -17,7 +17,7 @@ public abstract type List[+T] extends ImmutableSequence[T] {
   }
 }
 
-public type EmptyList extends List[Bottom] {
+public sealed type EmptyList extends List[Bottom] {
   private static readonly EmptyList singleton;
 
   private Unit init() {}
@@ -85,7 +85,7 @@ public sealed type NonEmptyList[+T] extends List[T] {
   }
 }
 
-type ListEnumerator[+T] extends Source[T] {
+sealed type ListEnumerator[+T] extends Source[T] {
   private List[T] source;
 
   public Unit init(List[T] source) {

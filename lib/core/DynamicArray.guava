@@ -1,6 +1,6 @@
 module core;
 
-public type DynamicArray[T] extends MutableStack[T] {
+public sealed type DynamicArray[T] extends MutableStack[T] {
   private MutableArray[Maybe[T]] backingArray;
   private Int n;
 

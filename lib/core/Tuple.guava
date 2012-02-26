@@ -16,7 +16,7 @@ public abstract type Tuple {
   }
 }
 
-public type Tuple2[+A, +B] extends Tuple {
+public sealed type Tuple2[+A, +B] extends Tuple {
   public readonly A first;
   public readonly B second;
 

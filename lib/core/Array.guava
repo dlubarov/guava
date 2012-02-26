@@ -40,7 +40,7 @@ pubilc sealed type MutableArray[T] extends MutableSequence[T] {
   }
 }
 
-public type ImmutableArray[+T] extends ImmutableSequence[T] {
+public sealed type ImmutableArray[+T] extends ImmutableSequence[T] {
   public static readonly ImmutableArray[Bottom] empty;
 
   private static Unit init() {

@@ -15,7 +15,7 @@ public abstract type Either[+A, +B] {
   public R fold[R](Function1[A, R] f, Function1[B, R] g);
 }
 
-public type Left[+A] extends Either[A, Bottom] {
+public sealed type Left[+A] extends Either[A, Bottom] {
   public readonly A value;
 
   public Unit init(A value) {
@@ -39,7 +39,7 @@ public type Left[+A] extends Either[A, Bottom] {
   }
 }
 
-public type Right[+B] extends Either[Bottom, B] {
+public sealed type Right[+B] extends Either[Bottom, B] {
   public readonly B value;
 
   public Unit init(B value) {

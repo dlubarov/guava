@@ -7,7 +7,7 @@ module core;
 # This does not extend MutableDeque despite supporting similar methods, since users
 # expect to be able to add elements to a MutableDeque safely.
 
-public type CircularBuffer[T] extends MutableSequence[T] {
+public sealed type CircularBuffer[T] extends MutableSequence[T] {
   private readonly MutableArray[Maybe[T]] backingArray;
   private Int pos, len;
 

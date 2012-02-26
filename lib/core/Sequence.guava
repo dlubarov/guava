@@ -139,7 +139,7 @@ public abstract type ImmutableSequence[+T] extends Sequence[T] {
   }
 }
 
-public type SequenceSerializer[T] extends Serializer[Sequence[T]] {
+public sealed type SequenceSerializer[T] extends Serializer[Sequence[T]] {
   private readonly Serializer[T] elementSerializer;
 
   public Unit init(Serializer[T] elementSerializer) {

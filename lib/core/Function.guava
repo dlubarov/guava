@@ -12,7 +12,7 @@ public abstract type Function2[-T1, -T2, +R] {
   public R get(T1 v1, T2 v2);
 }
 
-public type ConstantFunction0[+R] extends Function0[R] {
+public sealed type ConstantFunction0[+R] extends Function0[R] {
   private readonly R value;
 
   public Unit init(R value) {
@@ -24,7 +24,7 @@ public type ConstantFunction0[+R] extends Function0[R] {
   }
 }
 
-public type IdentityFunction[T] extends Function1[T, T] {
+public sealed type IdentityFunction[T] extends Function1[T, T] {
   public Unit init() {}
 
   public T get(T v) {

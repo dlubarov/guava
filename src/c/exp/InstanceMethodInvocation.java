@@ -118,6 +118,7 @@ public class InstanceMethodInvocation extends Expression {
     public CodeTree compile(CodeContext ctx) {
         // FIXME: use INVOKE_STATIC where possible.
         MethodDef m = getMethod(ctx);
+        TypeDef owner = Project.singleton.resolve(m.owner);
         CodeTree targetCode = target.compile(ctx);
         CodeTree argumentCode = Expression.compileAll(args, ctx);
 
@@ -132,9 +133,13 @@ public class InstanceMethodInvocation extends Expression {
         Integer[] genericArgIndicesBoxed = ArrayUtils.boxArray(genericArgIndices);
         CodeTree genericArgIndicesTree = new CodeTree((Object[]) genericArgIndicesBoxed);
 
+        // Can we make a cheap static call, or do we need to go through the vtable?
+        boolean canUseStatic = m.isSealed || owner.isSealed;
+        int invokeOp = canUseStatic ? Opcodes.INVOKE_STATIC : Opcodes.INVOKE_VIRTUAL;
+        
         return new CodeTree(
                 targetCode, argumentCode,
-                Opcodes.INVOKE_VIRTUAL, methodIndex, genericArgIndicesTree
+                invokeOp, methodIndex, genericArgIndicesTree
         );
     }
 

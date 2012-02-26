@@ -17,7 +17,7 @@ module core;
 #         b.set(temp);
 #     }
 
-public type Box[T] {
+public sealed type Box[T] {
   private T value;
 
   public T get() {

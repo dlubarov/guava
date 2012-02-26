@@ -190,7 +190,6 @@ public class BytecodeMethodDef extends ConcreteMethodDef {
                     case INVOKE_STATIC: {
                         int methodTableIndex = code[ip++];
                         ConcreteMethodDef m = (ConcreteMethodDef) methodTable[methodTableIndex];
-                        assert m != null : this.desc + " does not appear to have been linked.";
                         BaseObject a = desc.isStatic ? null : stack[bp + 1]; // current object
 
                         // Create array of generic arguments.
@@ -215,7 +214,7 @@ public class BytecodeMethodDef extends ConcreteMethodDef {
                     }
 
                     case INVOKE_VIRTUAL: {
-                        int methodTableIndex = code[ip++]; // index into method table
+                        int methodTableIndex = code[ip++];
                         MethodDef m = methodTable[methodTableIndex];
                         assert !m.desc.isStatic : "INVOKE_VIRTUAL was used with a static method.";
                         BaseObject a = desc.isStatic ? null : stack[bp + 1]; // current object
