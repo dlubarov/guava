@@ -81,6 +81,14 @@ public class BytecodeMethodDef extends ConcreteMethodDef {
                         stack[++sp] = new NativeChar((char) code[ip++]);
                         break;
 
+                    case CONST_LONG: {
+                        long i1 = code[ip++]; i1 &= 0xffffffffL;
+                        long i0 = code[ip++]; i0 &= 0xffffffffL;
+                        long l = i1 << 32 | i0;
+                        stack[++sp] = new NativeLong(l);
+                        break;
+                    }
+
                     case CONST_DOUBLE: {
                         long i1 = code[ip++]; i1 &= 0xffffffffL;
                         long i0 = code[ip++]; i0 &= 0xffffffffL;

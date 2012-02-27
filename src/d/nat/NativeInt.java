@@ -33,6 +33,24 @@ public class NativeInt extends NativeObject {
                 // instance methods
                 new NativeMethodDef[] {
                         // Constructors
+                        new NativeMethodDef(new RawMethod(false, RawType.coreInt, "init", 0, TypeDesc.coreIntOnly)) {
+                            @Override
+                            public void invoke(BaseObject[] stack, int bp, ConcreteType[] genericArgs) {
+                                NativeInt n = (NativeInt) stack[bp + 1];
+                                long l = ((NativeLong) stack[bp + 2]).value;
+                                n.value = (int) l;
+                                stack[bp + 1] = God.objUnit;
+                            }
+                        },
+                        new NativeMethodDef(new RawMethod(false, RawType.coreInt, "init", 0, TypeDesc.coreByteOnly)) {
+                            @Override
+                            public void invoke(BaseObject[] stack, int bp, ConcreteType[] genericArgs) {
+                                NativeInt n = (NativeInt) stack[bp + 1];
+                                byte b = ((NativeByte) stack[bp + 2]).value;
+                                n.value = b;
+                                stack[bp + 1] = God.objUnit;
+                            }
+                        },
                         new NativeMethodDef(new RawMethod(false, RawType.coreInt, "init", 0, TypeDesc.coreCharOnly)) {
                             @Override
                             public void invoke(BaseObject[] stack, int bp, ConcreteType[] genericArgs) {
@@ -115,12 +133,28 @@ public class NativeInt extends NativeObject {
                                 stack[bp + 1] = new NativeInt(n & m);
                             }
                         },
+                        new NativeMethodDef(new RawMethod(false, RawType.coreInt, "|", 0, TypeDesc.coreLongOnly)) {
+                            @Override
+                            public void invoke(BaseObject[] stack, int bp, ConcreteType[] genericArgs) {
+                                int n = ((NativeInt) stack[bp + 1]).value;
+                                long l = ((NativeLong) stack[bp + 2]).value;
+                                stack[bp + 1] = new NativeLong(n & 0xFFFFFFFFL | l);
+                            }
+                        },
                         new NativeMethodDef(new RawMethod(false, RawType.coreInt, "|", 0, TypeDesc.coreIntOnly)) {
                             @Override
                             public void invoke(BaseObject[] stack, int bp, ConcreteType[] genericArgs) {
                                 int n = ((NativeInt) stack[bp + 1]).value;
                                 int m = ((NativeInt) stack[bp + 2]).value;
                                 stack[bp + 1] = new NativeInt(n | m);
+                            }
+                        },
+                        new NativeMethodDef(new RawMethod(false, RawType.coreInt, "|", 0, TypeDesc.coreByteOnly)) {
+                            @Override
+                            public void invoke(BaseObject[] stack, int bp, ConcreteType[] genericArgs) {
+                                int n = ((NativeInt) stack[bp + 1]).value;
+                                byte b = ((NativeByte) stack[bp + 2]).value;
+                                stack[bp + 1] = new NativeInt(n | b & 0xFF);
                             }
                         },
                         new NativeMethodDef(new RawMethod(false, RawType.coreInt, "^", 0, TypeDesc.coreIntOnly)) {

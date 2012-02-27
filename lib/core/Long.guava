@@ -1,0 +1,140 @@
+module core;
+
+public sealed type Long extends NaturallyOrdered[Long] {
+  public static readonly Long MIN_VALUE, MAX_VALUE;
+
+  public Unit init(String s, Int radix) {}
+
+  public Unit init(String s) {
+    this.init(s, 10);
+  }
+
+  public Unit init(Int n) {} # sign extends
+  public Unit init(Byte b) {} # sign extends
+  public Unit init(Char c) {}
+
+  public Long +() {}
+  public Long -() {}
+  public Long ~() {}
+
+  public Long +(Long that) {}
+  public Long -(Long that) {}
+
+  public Long *(Long that) {}
+  public Long /(Long that) {}
+  public Long %(Long that) {}
+
+  public Long |(Long that) {}
+  public Long |(Int that) {}
+  public Long |(Byte that) {}
+
+  public Long ^(Long that) {}
+  public Long &(Long that) {}
+
+  public Long <<(Int distance) {}
+  public Long >>(Int distance) {}
+  public Long >>>(Int distance) {}
+
+  public Relation compareTo(Long that) {}
+  public Bool <(Long that) {}
+  public Bool <=(Long that) {}
+  public Bool >(Long that) {}
+  public Bool >=(Long that) {}
+
+  public Long rotateLeft(Int distance) {}
+  public Long rotateRight(Int distance) {}
+
+  public static Long min(Long a, Long b) {
+    if (a < b)
+      return a;
+    return b;
+  }
+
+  public static Long max(Long a, Long b) {
+    if (a > b)
+      return a;
+    return b;
+  }
+
+  public Int signum() {
+    if (this > 0L)
+      return 1;
+    if (this < 0L)
+      return -1;
+    return 0;
+  }
+
+  public Bool ==(Top o) {}
+
+  public Int hashCode() {}
+
+  public String toString(Int radix) {}
+
+  public String toString() {
+    return this.toString(10);
+  }
+
+  public String toBinaryString() {
+    return this.toString(2);
+  }
+
+  public String toOctalString() {
+    return this.toString(8);
+  }
+
+  public String toHexString() {
+    return this.toString(16);
+  }
+}
+
+# The sensible encoding for integers. :-)
+public type BigEndianLongSerializer extends Serializer[Long] {
+  private static readonly BigEndianLongSerializer singleton;
+
+  private Unit init() {}
+
+  private static Unit init() {
+    BigEndianLongSerializer.singleton = new BigEndianLongSerializer();
+  }
+
+  public static BigEndianLongSerializer get() {
+    return BigEndianLongSerializer.singleton;
+  }
+
+  public Sequence[Byte] serialize(Long n) {
+    MutableDeque[Byte] bytes = new ArrayDeque[Byte](8);
+    for (Int i = 0; i < 8; i = i + 1)
+      bytes.pushFront(new Byte(n << 8 * i));
+    return bytes;
+  }
+
+  public Long deserialize(Sequence[Byte] bytes) {
+    Long n = 0L;
+    # TODO assert bytes length
+    foreach (Byte b in bytes)
+      n = n << 8 | b;
+    return n;
+  }
+}
+
+public type LittleEndianLongSerializer extends Serializer[Long] {
+  private static readonly LittleEndianLongSerializer singleton;
+
+  private Unit init() {}
+
+  private static Unit init() {
+    LittleEndianLongSerializer.singleton = new LittleEndianLongSerializer();
+  }
+
+  public static LittleEndianLongSerializer get() {
+    return LittleEndianLongSerializer.singleton;
+  }
+
+  public Sequence[Byte] serialize(Long n) {
+    return BigEndianLongSerializer().serialize(n).reverse();
+  }
+
+  public Long deserialize(Sequence[Byte] bytes) {
+    return BigEndianLongSerializer().deserialize(bytes.reverse());
+  }
+}

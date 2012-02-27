@@ -15,8 +15,9 @@ public final class Opcodes {
             CONST_FALSE = 11,
             CONST_INT = 12,
             CONST_CHAR = 13,
-            CONST_DOUBLE = 14,
-            CONST_STRING = 15,
+            CONST_LONG = 14,
+            CONST_DOUBLE = 15,
+            CONST_STRING = 16,
             CREATE_SEQ = 18,
             // Locals and fields
             GET_LOCAL = 20,
@@ -69,7 +70,6 @@ public final class Opcodes {
                 case POP:
                     sb.append("POP");
                     break;
-
                 case DUP:
                     sb.append("DUP");
                     break;
@@ -77,25 +77,30 @@ public final class Opcodes {
                 case CONST_TRUE:
                     sb.append("CONST_TRUE");
                     break;
-
                 case CONST_FALSE:
                     sb.append("CONST_FALSE");
                     break;
-
                 case CONST_INT:
                     sb.append("CONST_INT " + code[++i]);
                     break;
-
                 case CONST_CHAR:
                     sb.append(String.format("CONST_CHAR '%c'", code[++i]));
                     break;
+
+                case CONST_LONG: {
+                    long i1 = code[i++]; i1 &= 0xffffffffL;
+                    long i0 = code[i++]; i0 &= 0xffffffffL;
+                    long l = i1 << 32 | i0;
+                    sb.append("CONST_LONG " + l);
+                    break;
+                }
 
                 case CONST_DOUBLE: {
                     long i1 = code[i++]; i1 &= 0xffffffffL;
                     long i0 = code[i++]; i0 &= 0xffffffffL;
                     long l = i1 << 32 | i0;
                     double d = Double.longBitsToDouble(l);
-                    sb.append(String.format("CONST_DOUBLE %f", d));
+                    sb.append("CONST_DOUBLE " + d);
                     break;
                 }
 

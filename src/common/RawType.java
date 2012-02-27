@@ -8,6 +8,7 @@ public class RawType {
         coreBottom = new RawType("core", "Bottom"),
         coreUnit = new RawType("core", "Unit"),
         coreInt = new RawType("core", "Int"),
+        coreLong = new RawType("core", "Long"),
         coreByte = new RawType("core", "Byte"),
         coreChar = new RawType("core", "Char"),
         coreBool = new RawType("core", "Bool"),

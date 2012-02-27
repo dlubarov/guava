@@ -21,11 +21,24 @@ public class LiteralIntParser extends Parser<Expression> {
         if (sb.length() == 0)
             return null;
 
+        // See if this has a long literal suffix.
+        boolean isLong = s.charAt(p) == 'l' || s.charAt(p) == 'L';
+        if (isLong)
+            ++p;
+
+        if (isLong)
+            try {
+                long n = Long.parseLong(sb.toString());
+                return new Success<Expression>(new LiteralLong(n), p);
+            } catch (NumberFormatException e) {
+                throw new NiftyException("Literal long '%s' is too large.", sb);
+            }
+
         try {
             int n = Integer.parseInt(sb.toString());
             return new Success<Expression>(new LiteralInt(n), p);
         } catch (NumberFormatException e) {
-            throw new NiftyException("Literal int %s is too large.", sb);
+            throw new NiftyException("Literal int '%s' is too large.", sb);
         }
     }
 }

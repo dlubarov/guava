@@ -44,6 +44,24 @@ public class NativeByte extends NativeObject {
                                 stack[bp + 1] = God.objUnit;
                             }
                         },
+                        new NativeMethodDef(new RawMethod(false, RawType.coreByte, "init", 0, TypeDesc.coreLongOnly)) {
+                            @Override
+                            public void invoke(BaseObject[] stack, int bp, ConcreteType[] genericArgs) {
+                                NativeByte n = (NativeByte) stack[bp + 1];
+                                long m = ((NativeLong) stack[bp + 2]).value;
+                                n.value = (byte) m;
+                                stack[bp + 1] = God.objUnit;
+                            }
+                        },
+                        new NativeMethodDef(new RawMethod(false, RawType.coreByte, "init", 0, TypeDesc.coreCharOnly)) {
+                            @Override
+                            public void invoke(BaseObject[] stack, int bp, ConcreteType[] genericArgs) {
+                                NativeByte n = (NativeByte) stack[bp + 1];
+                                char c = ((NativeChar) stack[bp + 2]).value;
+                                n.value = (byte) c;
+                                stack[bp + 1] = God.objUnit;
+                            }
+                        },
 
                         // Unary methods
                         new NativeMethodDef(new RawMethod(false, RawType.coreByte, "+", 0, TypeDesc.NONE)) {

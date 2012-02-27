@@ -9,14 +9,11 @@ public sealed type Int extends NaturallyOrdered[Int] {
     this.init(s, 10);
   }
 
-  public Unit init(Byte b, Bool signExtend) {}
-
+  public Unit init(Long l) {}
+  public Unit init(Byte b) {} # sign extends
   public Unit init(Char c) {}
 
-  public Int +() {
-    # native code
-  }
-
+  public Int +() {}
   public Int -() {}
   public Int ~() {}
 
@@ -27,13 +24,16 @@ public sealed type Int extends NaturallyOrdered[Int] {
   public Int /(Int that) {}
   public Int %(Int that) {}
 
+  public Long |(Long that) {}
   public Int |(Int that) {}
+  public Int |(Byte that) {}
+
   public Int ^(Int that) {}
   public Int &(Int that) {}
 
-  public Int <<(Int that) {}
-  public Int >>(Int that) {}
-  public Int >>>(Int that) {}
+  public Int <<(Int distance) {}
+  public Int >>(Int distance) {}
+  public Int >>>(Int distance) {}
 
   public Relation compareTo(Int that) {}
   public Bool <(Int that) {}
@@ -64,22 +64,9 @@ public sealed type Int extends NaturallyOrdered[Int] {
     return 0;
   }
 
-  public Int bitCount() {}
-
-  public Int lowestOneBit() {}
-  public Int highestOneBit() {}
-
-  public Int numLeadingZeros() {}
-  public Int numTrailingZeros() {}
-
-  public Int reverseBits() {}
-  public Int reverseBytes() {}
-
   public Bool ==(Top o) {}
 
-  public Int hashCode() {
-    return this;
-  }
+  public Int hashCode() {}
 
   public String toString(Int radix) {}
 
@@ -125,7 +112,7 @@ public type BigEndianIntSerializer extends Serializer[Int] {
     Int n = 0;
     # TODO assert bytes length
     foreach (Byte b in bytes)
-      n = (n << 8) | new Int(b, false); # TODO: cast shouldn't be needed
+      n = n << 8 | b;
     return n;
   }
 }

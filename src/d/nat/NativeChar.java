@@ -42,6 +42,15 @@ public class NativeChar extends NativeObject {
                                 stack[bp + 1] = God.objUnit;
                             }
                         },
+                        new NativeMethodDef(new RawMethod(false, RawType.coreChar, "init", 0, TypeDesc.coreByteOnly)) {
+                            @Override
+                            public void invoke(BaseObject[] stack, int bp, ConcreteType[] genericArgs) {
+                                NativeChar c = (NativeChar) stack[bp + 1];
+                                byte ord = ((NativeByte) stack[bp + 2]).value;
+                                c.value = (char) ord;
+                                stack[bp + 1] = God.objUnit;
+                            }
+                        },
 
                         // compareTo
                         new NativeMethodDef(new RawMethod(false, RawType.coreChar, "compareTo", 0, TypeDesc.coreCharOnly)) {
@@ -57,6 +66,38 @@ public class NativeChar extends NativeObject {
                                 else
                                     rel = God.objEQ;
                                 stack[bp + 1] = rel;
+                            }
+                        },
+
+                        // toUpperCase, toLowerCase
+                        new NativeMethodDef(new RawMethod(false, RawType.coreChar, "toUpperCase", 0, TypeDesc.NONE)) {
+                            @Override
+                            public void invoke(BaseObject[] stack, int bp, ConcreteType[] genericArgs) {
+                                char c = ((NativeChar) stack[bp + 1]).value;
+                                stack[bp + 1] = new NativeChar(Character.toUpperCase(c));
+                            }
+                        },
+                        new NativeMethodDef(new RawMethod(false, RawType.coreChar, "toLowerCase", 0, TypeDesc.NONE)) {
+                            @Override
+                            public void invoke(BaseObject[] stack, int bp, ConcreteType[] genericArgs) {
+                                char c = ((NativeChar) stack[bp + 1]).value;
+                                stack[bp + 1] = new NativeChar(Character.toLowerCase(c));
+                            }
+                        },
+
+                        // isLetter, isDigit
+                        new NativeMethodDef(new RawMethod(false, RawType.coreChar, "isLetter", 0, TypeDesc.NONE)) {
+                            @Override
+                            public void invoke(BaseObject[] stack, int bp, ConcreteType[] genericArgs) {
+                                char c = ((NativeChar) stack[bp + 1]).value;
+                                stack[bp + 1] = new NativeBool(Character.isLetter(c));
+                            }
+                        },
+                        new NativeMethodDef(new RawMethod(false, RawType.coreChar, "isDigit", 0, TypeDesc.NONE)) {
+                            @Override
+                            public void invoke(BaseObject[] stack, int bp, ConcreteType[] genericArgs) {
+                                char c = ((NativeChar) stack[bp + 1]).value;
+                                stack[bp + 1] = new NativeBool(Character.isDigit(c));
                             }
                         },
 

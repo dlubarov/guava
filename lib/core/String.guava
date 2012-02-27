@@ -33,6 +33,12 @@ public sealed type String extends ImmutableSequence[Char] {
   public String split(Sequence[Char] delim) {
   }
 
+  public String toUpperCase() {
+  }
+
+  public String toLowerCase() {
+  }
+
   public String format(Sequence[Top] args) {
     # TODO: implement string formatting
   }

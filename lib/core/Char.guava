@@ -6,7 +6,7 @@ public sealed type Char extends NaturallyOrdered[Char] {
   }
 
   public Unit init(Byte ord) {
-    this.init(new Int(ord, false));
+    # native code
   }
 
   public Relation compareTo(Char that) {
@@ -34,7 +34,7 @@ public sealed type Char extends NaturallyOrdered[Char] {
   }
 
   public Int hashCode() {
-    return new Int(this).hashCode();
+    # native code
   }
 
   public String toString() {

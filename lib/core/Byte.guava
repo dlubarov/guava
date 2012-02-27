@@ -2,6 +2,7 @@ module core;
 
 public sealed type Byte extends NaturallyOrdered[Byte] {
   public Unit init(Int n) {}
+  public Unit init(Long n) {}
   public Unit init(Char c) {}
 
   public Byte +() {}
@@ -40,17 +41,17 @@ public sealed type Byte extends NaturallyOrdered[Byte] {
     return b;
   }
 
-  public Byte signum() {
-    return new Byte(new Int(this, false).signum());
+  public Int signum() {
+    return new Int(this).signum();
   }
 
   public Bool ==(Top o) {}
 
   public Int hashCode() {
-    return new Int(this, false).hashCode();
+    return new Int(this).hashCode();
   }
 
   public String toString() {
-    return new Int(this, false).toString();
+    return new Int(this).toString();
   }
 }
