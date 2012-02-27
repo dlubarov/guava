@@ -1,6 +1,6 @@
 module core;
 
-public abstract type Maybe[+T] extends Collection[T] {
+public abstract type Maybe[+T] extends ImmutableCollection[T] {
   public T get();
 
   [U > T]

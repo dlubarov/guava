@@ -62,9 +62,19 @@ public abstract type Collection[+T] extends Enumerable[T] {
         stack.pushBack(elem);
     return stack;
   }
+
+  public ImmutableCollection[T] toImmutable() {
+    return new ImmutableArray[T](this);
+  }
 }
 
-# TODO: Consider adding MutableCollection and ImmutableCollection.
-# Both would have a method called something like toImmutable().
-# ImmutableCollection's implementation would return 'this', while
-# MutableCollection's (or Collection's?) would make a new ImmutableArray.
+# I don't think there's any point to have a MutableCollection type,
+# since there aren't any mutating methods which are common to all
+# collections. It is a bit funny to not have one when we have
+# MutableSequence and ImmutableCollection, though.
+
+public abstract type ImmutableCollection[+T] extends Collection[T] {
+  public ImmutableCollection[T] toImmutable() {
+    return this;
+  }
+}

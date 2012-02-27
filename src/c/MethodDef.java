@@ -73,7 +73,12 @@ public class MethodDef {
 
         // For converting stuff into the generics of my owner.
         TypeDef ownerDef = Project.singleton.resolve(owner);
-        Type[] ownerGenerics = ownerDef.thisType().asSupertype(that.owner, new CodeContext(ownerDef, null)).genericArgs;
+        Type[] ownerGenerics;
+        try {
+            ownerGenerics = ownerDef.thisType().asSupertype(that.owner, new CodeContext(ownerDef, null)).genericArgs;
+        } catch (IllegalArgumentException e) {
+            return false;
+        }
         Type[] methodGenerics = new Type[genericInfos.length];
         for (int i = 0; i < methodGenerics.length; ++i)
             methodGenerics[i] = new MethodGenericType(i);
