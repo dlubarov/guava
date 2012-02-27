@@ -5,6 +5,10 @@ public sealed type Char extends NaturallyOrdered[Char] {
     # native code
   }
 
+  public Unit init(Byte ord) {
+    this.init(new Int(ord, false));
+  }
+
   public Relation compareTo(Char that) {
     # native code
   }

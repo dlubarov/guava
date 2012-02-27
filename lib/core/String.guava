@@ -45,3 +45,19 @@ public sealed type String extends ImmutableSequence[Char] {
     return this;
   }
 }
+
+public type ASCIISerializer extends Serializer[Sequence[Char]] {
+  public Sequence[Byte] serialize(Sequence[Char] chars) {
+    MutableStack[Byte] bytes = new DynamicArray[Byte]();
+    foreach (Char c in chars)
+      bytes.pushBack(new Byte(c));
+    return bytes;
+  }
+
+  public String deserialize(Sequence[Byte] bytes) {
+    MutableStack[Char] chars = new DynamicArray[Char]();
+    foreach (Byte b in bytes)
+      chars.pushBack(new Char(b));
+    return new String(chars);
+  }
+}

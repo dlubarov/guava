@@ -1,5 +1,7 @@
 module core;
 
+# TODO: rename to encode/decode?
+
 public abstract type Serializer[T] {
   public Sequence[Byte] serialize(T object);
 

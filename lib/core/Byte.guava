@@ -2,6 +2,7 @@ module core;
 
 public sealed type Byte extends NaturallyOrdered[Byte] {
   public Unit init(Int n) {}
+  public Unit init(Char c) {}
 
   public Byte +() {}
   public Byte -() {}
