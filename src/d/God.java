@@ -29,7 +29,7 @@ public final class God {
                 NativeInt.TYPE,
                 NativeDouble.TYPE,
                 NativeChar.TYPE,
-                NativeMutableArray.TYPE,
+                NativeArray.TYPE,
                 NativeConsole.TYPE
         };
         for (NativeTypeDef nativeType : nativeTypesArr) {

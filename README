@@ -11,9 +11,9 @@ implemented as a native type for efficiency. But unlike a Java char, Char has
 methods, inherits from object, and can be used as a generic argument.
 
 Guava also has array types, but to the programmer, they look no different from
-any other types. Although MutableArray is a native type, it fits nicely into the
-type hierarchy: it extends Array, which extends Sequence, which extends
-Collection, etc.
+any other types. Although Array is a native type, it fits nicely into the type
+hierarchy: it extends Array, which extends Sequence, which extends Collection,
+etc.
 
 As in Scala, Guava lets you specify the variance of generic parameters. So an
 Array[Char] is also an Array[Object], and an Ordering[Sequence] is also an
@@ -25,7 +25,7 @@ Guava has a Top type which, like Java's Object, sits at the top of the type hier
 
 Guava supports operator overloading. The expression "x + y" is just syntactic
 sugar for "x.+(y)". Types can also overload the subscript operator by
-implementing "get" and/or "set" methods. For example, the type MutableArray[T]
+implementing "get" and/or "set" methods. For example, the type Array[T]
 contains methods which look like this:
   T get(Int idx);
   T set(Int idx, T val);

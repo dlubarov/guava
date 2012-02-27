@@ -11,7 +11,7 @@ public sealed type HashSet[T] extends MutableSet[T] {
   public Unit init(Int initialCapacity) {
     if (initialCapacity < 1)
       1 / 0; # fail
-    this.buckets = new MutableArray[ImmutableSet[T]]({new ListSet[T]()} * initialCapacity);
+    this.buckets = new Array[ImmutableSet[T]]({new ListSet[T]()} * initialCapacity);
   }
 
   public Unit init() {
@@ -39,7 +39,7 @@ public sealed type HashSet[T] extends MutableSet[T] {
   }
 
   private Unit resize(Int newCapacity) {
-    MutableSequence[ImmutableSet[T]] newBuckets = new MutableArray[ImmutableSet[T]]({new ListSet[T]()} * newCapacity);
+    MutableSequence[ImmutableSet[T]] newBuckets = new Array[ImmutableSet[T]]({new ListSet[T]()} * newCapacity);
     foreach (T elem in this) {
       Int idx = elem.hashCode() % newCapacity;
       newBuckets(idx) = newBuckets(idx) + elem;

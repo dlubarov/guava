@@ -12,11 +12,11 @@ public final class VMUtils {
         for (int i = 0; i < chars.length; ++i)
             chars[i] = new NativeChar(javaString.charAt(i));
         ConcreteType arrayType = new ConcreteType(
-                NativeMutableArray.TYPE,
+                NativeArray.TYPE,
                 new ConcreteType[] {
                         new ConcreteType(God.resolveType(RawType.coreChar))
                 });
-        BaseObject charArray = new NativeMutableArray(arrayType, chars);
+        BaseObject charArray = new NativeArray(arrayType, chars);
         TypeDef stringTypeDef = God.resolveType(RawType.coreString);
         NormalObject guavaString = new NormalObject(new ConcreteType(stringTypeDef));
         guavaString.fields[0] = charArray;
@@ -24,7 +24,7 @@ public final class VMUtils {
     }
 
     public static String extractString(BaseObject guavaString) {
-        BaseObject[] chars = ((NativeMutableArray) guavaString.fields[0]).contents;
+        BaseObject[] chars = ((NativeArray) guavaString.fields[0]).contents;
         StringBuilder sb = new StringBuilder();
         for (BaseObject c : chars)
             sb.append(((NativeChar) c).value);

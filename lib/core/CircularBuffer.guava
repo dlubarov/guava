@@ -8,11 +8,11 @@ module core;
 # expect to be able to add elements to a MutableDeque safely.
 
 public sealed type CircularBuffer[T] extends MutableSequence[T] {
-  private readonly MutableArray[Maybe[T]] backingArray;
+  private readonly Array[Maybe[T]] backingArray;
   private Int pos, len;
 
   public Unit init(Int capacity) {
-    this.backingArray = new MutableArray[Maybe[T]]({None()} * capacity);
+    this.backingArray = new Array[Maybe[T]]({None()} * capacity);
     this.pos = this.len = 0;
   }
 

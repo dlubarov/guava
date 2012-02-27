@@ -8,23 +8,23 @@ import d.*;
 import d.ty.ConcreteType;
 import d.ty.desc.*;
 
-public class NativeMutableArray extends NativeObject {
+public class NativeArray extends NativeObject {
     public static final NativeTypeDef TYPE;
 
     public BaseObject[] contents;
 
-    public NativeMutableArray(ConcreteType type, BaseObject[] contents) {
+    public NativeArray(ConcreteType type, BaseObject[] contents) {
         super(type);
         this.contents = contents;
     }
 
-    public NativeMutableArray(ConcreteType type) {
+    public NativeArray(ConcreteType type) {
         this(type, null);
     }
 
     static {
         TYPE = new NativeTypeDef(
-                RawType.coreMutableArray,
+                RawType.coreArray,
                 0, new String[0],
 
                 // static methods
@@ -33,19 +33,19 @@ public class NativeMutableArray extends NativeObject {
 
                 // instance methods
                 new NativeMethodDef[] {
-                        // Empty MutableArray constructors
-                        new NativeMethodDef(new RawMethod(false, RawType.coreMutableArray, "init", 0, TypeDesc.NONE)) {
+                        // empty array constructor
+                        new NativeMethodDef(new RawMethod(false, RawType.coreArray, "init", 0, TypeDesc.NONE)) {
                             @Override
                             public void invoke(BaseObject[] stack, int bp, ConcreteType[] genericArgs) {
-                                NativeMutableArray arr = (NativeMutableArray) stack[bp + 1];
+                                NativeArray arr = (NativeArray) stack[bp + 1];
                                 arr.contents = new BaseObject[0];
                                 stack[bp + 1] = God.objUnit;
                             }
                         },
 
-                        // Constructor which copies elements from a given source
+                        // constructor which copies elements from a given source
                         new NativeMethodDef(
-                                new RawMethod(false, RawType.coreMutableArray, "init", 0,
+                                new RawMethod(false, RawType.coreArray, "init", 0,
                                         new TypeDesc[] {
                                                 new ParameterizedTypeDesc(
                                                         RawType.coreCollection,
@@ -68,7 +68,7 @@ public class NativeMutableArray extends NativeObject {
                                 MethodDef methIsEmpty = methodTable[2];
                                 MethodDef methGet = methodTable[3];
 
-                                NativeMutableArray arr = (NativeMutableArray) stack[bp + 1];
+                                NativeArray arr = (NativeArray) stack[bp + 1];
                                 BaseObject source = stack[bp + 2];
 
                                 ConcreteMethodDef implEnumerator = source.type.rawType.virtualMethodTable.get(methEnumerator);
@@ -101,19 +101,19 @@ public class NativeMutableArray extends NativeObject {
                         },
 
                         // get and set
-                        new NativeMethodDef(new RawMethod(false, RawType.coreMutableArray, "get", 0, TypeDesc.coreIntOnly)) {
+                        new NativeMethodDef(new RawMethod(false, RawType.coreArray, "get", 0, TypeDesc.coreIntOnly)) {
                             @Override
                             public void invoke(BaseObject[] stack, int bp, ConcreteType[] genericArgs) {
-                                BaseObject[] arr = ((NativeMutableArray) stack[bp + 1]).contents;
+                                BaseObject[] arr = ((NativeArray) stack[bp + 1]).contents;
                                 int i = ((NativeInt) stack[bp + 2]).value;
                                 stack[bp + 1] = arr[i];
                             }
                         },
-                        new NativeMethodDef(new RawMethod(false, RawType.coreMutableArray, "set", 0,
+                        new NativeMethodDef(new RawMethod(false, RawType.coreArray, "set", 0,
                                 new TypeDesc[] {TypeDesc.coreInt, new TypeGenericTypeDesc(0)})) {
                             @Override
                             public void invoke(BaseObject[] stack, int bp, ConcreteType[] genericArgs) {
-                                BaseObject[] arr = ((NativeMutableArray) stack[bp + 1]).contents;
+                                BaseObject[] arr = ((NativeArray) stack[bp + 1]).contents;
                                 int i = ((NativeInt) stack[bp + 2]).value;
                                 if (i >= arr.length)
                                     throw new NiftyException(
@@ -125,25 +125,25 @@ public class NativeMutableArray extends NativeObject {
                         },
 
                         // repeat
-                        new NativeMethodDef(new RawMethod(false, RawType.coreMutableArray, "*", 0, TypeDesc.coreIntOnly)) {
+                        new NativeMethodDef(new RawMethod(false, RawType.coreArray, "*", 0, TypeDesc.coreIntOnly)) {
                             @Override
                             public void invoke(BaseObject[] stack, int bp, ConcreteType[] genericArgs) {
-                                NativeMutableArray arr = (NativeMutableArray) stack[bp + 1];
+                                NativeArray arr = (NativeArray) stack[bp + 1];
                                 BaseObject[] contents = arr.contents;
                                 int l = contents.length, k = ((NativeInt) stack[bp + 2]).value;
                                 BaseObject[] newContents = new BaseObject[l * k];
                                 for (int i = 0; i < k; ++i)
                                     for (int j = 0; j < l; ++j)
                                         newContents[i * l + j] = contents[j];
-                                stack[bp + 1] = new NativeMutableArray(arr.type, newContents);
+                                stack[bp + 1] = new NativeArray(arr.type, newContents);
                             }
                         },
 
                         // size
-                        new NativeMethodDef(new RawMethod(false, RawType.coreMutableArray, "size", 0, TypeDesc.NONE)) {
+                        new NativeMethodDef(new RawMethod(false, RawType.coreArray, "size", 0, TypeDesc.NONE)) {
                             @Override
                             public void invoke(BaseObject[] stack, int bp, ConcreteType[] genericArgs) {
-                                BaseObject[] arr = ((NativeMutableArray) stack[bp + 1]).contents;
+                                BaseObject[] arr = ((NativeArray) stack[bp + 1]).contents;
                                 stack[bp + 1] = new NativeInt(arr.length);
                             }
                         },
@@ -151,7 +151,7 @@ public class NativeMutableArray extends NativeObject {
         {
             @Override
             public BaseObject rawInstance(ConcreteType type) {
-                return new NativeMutableArray(type);
+                return new NativeArray(type);
             }
         };
     }

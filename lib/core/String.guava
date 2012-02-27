@@ -1,10 +1,10 @@
 module core;
 
 public sealed type String extends ImmutableSequence[Char] {
-  private MutableArray[Char] backingArray;
+  private Array[Char] backingArray;
 
   public Unit init(Sequence[Char] source) {
-    this.backingArray = new MutableArray[Char](source);
+    this.backingArray = new Array[Char](source);
   }
 
   public Char get(Int index) {

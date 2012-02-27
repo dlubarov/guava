@@ -117,9 +117,9 @@ public class BytecodeMethodDef extends ConcreteMethodDef {
                         for (int i = 1; i <= len; ++i)
                             contents[len - i] = stack[sp--];
                         ConcreteType arrayType = new ConcreteType(
-                                NativeMutableArray.TYPE,
+                                NativeArray.TYPE,
                                 new ConcreteType[] {elemType});
-                        stack[++sp] = new NativeMutableArray(arrayType, contents);
+                        stack[++sp] = new NativeArray(arrayType, contents);
                         break;
                     }
 

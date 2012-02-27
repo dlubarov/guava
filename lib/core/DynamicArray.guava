@@ -1,11 +1,11 @@
 module core;
 
 public sealed type DynamicArray[T] extends MutableStack[T] {
-  private MutableArray[Maybe[T]] backingArray;
+  private Array[Maybe[T]] backingArray;
   private Int n;
 
   public Unit init() {
-    this.backingArray = new MutableArray[Maybe[T]]({None()});
+    this.backingArray = new Array[Maybe[T]]({None()});
     this.n = 0;
   }
 
@@ -21,7 +21,7 @@ public sealed type DynamicArray[T] extends MutableStack[T] {
 
   private Unit expand() {
     Sequence[Maybe[T]] nones = {None()} * (this.backingArray.size() * 2);
-    MutableArray[Maybe[T]] newArray = new MutableArray[Maybe[T]](nones);
+    Array[Maybe[T]] newArray = new Array[Maybe[T]](nones);
     for (Int i = 0; i < this.backingArray.size(); i = i + 1)
       newArray(i) = this.backingArray(i);
     this.backingArray = newArray;

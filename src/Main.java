@@ -101,11 +101,11 @@ public class Main {
                 for (int i = 0; i < programArgs.size(); ++i)
                     argStrings[i] = d.VMUtils.makeString(programArgs.get(i));
                 d.ty.ConcreteType arrayType = new d.ty.ConcreteType(
-                        d.nat.NativeMutableArray.TYPE,
+                        d.nat.NativeArray.TYPE,
                         new d.ty.ConcreteType[] {
                                 new d.ty.ConcreteType(God.resolveType(RawType.coreString))
                         });
-                d.BaseObject argsArray = new d.nat.NativeMutableArray(arrayType, argStrings);
+                d.BaseObject argsArray = new d.nat.NativeArray(arrayType, argStrings);
                 methodDef.invoke(new d.BaseObject[] {argsArray}, d.ty.ConcreteType.NONE);
             }
         long dt = System.nanoTime() - t0;

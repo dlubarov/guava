@@ -1,10 +1,10 @@
 module re;
 
 public type Union[T] extends RegularLanguage[T] {
-  public readonly Collection[RegularLanguage[T]] parts;
+  public readonly ImmutableCollection[RegularLanguage[T]] parts;
 
   public Unit init(Collection[RegularLanguage[T]] parts) {
-    this.parts = new MutableArray[RegularLanguage[T]](parts);
+    this.parts = parts.toImmutable();
   }
 
   public Bool contains(Sequence[T] str) {

@@ -1,6 +1,6 @@
 module core;
 
-pubilc sealed type MutableArray[T] extends MutableSequence[T] {
+pubilc sealed type Array[T] extends MutableSequence[T] {
   public Unit init() {
     # native code
   }
@@ -17,17 +17,17 @@ pubilc sealed type MutableArray[T] extends MutableSequence[T] {
     # native code
   }
 
-  public MutableArray[T] getFront(Int k) {
+  public Array[T] getFront(Int k) {
     # TODO: write native version
-    return new MutableArray[T](Sequence.getFront(this, k));
+    return new Array[T](Sequence.getFront(this, k));
   }
 
-  public MutableArray[T] getBack(Int k) {
+  public Array[T] getBack(Int k) {
     # TODO: write native version
-    return new MutableArray[T](Sequence.getBack(this, k));
+    return new Array[T](Sequence.getBack(this, k));
   }
 
-  public MutableArray[T] *(Int k) {
+  public Array[T] *(Int k) {
     # native code
   }
 
@@ -43,18 +43,18 @@ pubilc sealed type MutableArray[T] extends MutableSequence[T] {
 public sealed type ImmutableArray[+T] extends ImmutableSequence[T] {
   public static readonly ImmutableArray[Bottom] empty;
 
+  private readonly Array[T] backingArray;
+
   private static Unit init() {
     ImmutableArray.empty = new ImmutableArray[Bottom]();
   }
 
-  private readonly MutableArray[T] backingArray;
-
   public Unit init(Collection[T] source) {
-    this.backingArray = new MutableArray[T](source);
+    this.backingArray = new Array[T](source);
   }
 
   public Unit init() {
-    this.init(new MutableArray[T]());
+    this.init(new Array[T]());
   }
 
   public Int size() {
