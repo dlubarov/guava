@@ -2,6 +2,29 @@ module core;
 
 public abstract type Source[+T] {
   public Maybe[T] take();
+
+  public Sequence[T] takeUpTo(Int n) {
+    MutableStack[T] stack = new DynamicArray[T]();
+    if (n <= 0)
+      return stack;
+    Maybe[T] elem = this.take();
+    while (stack.size() < n & !elem.isEmpty()) {
+      stack.pushBack(elem.get());
+      elem = this.take();
+    }
+    return stack;
+  }
+
+  # Read all data from this source.
+  public Sequence[T] takeAll() {
+    MutableStack[T] stack = new DynamicArray[T]();
+    Maybe[T] elem = this.take();
+    while (!elem.isEmpty()) {
+      stack.pushBack(elem.get());
+      elem = this.take();
+    }
+    return stack;
+  }
 }
 
 public sealed type EmptySource extends Source[Bottom] {
@@ -39,7 +62,11 @@ public sealed type SingletonSource[+T] extends Source[T] {
 }
 
 public abstract type InfiniteSource[+T] extends Source[T] {
-  public Some[T] maybeTake();
+  public Some[T] take();
+
+  public Bottom takeAll() {
+    1 / 0; # fail
+  }
 }
 
 public sealed type RandomAccessEnumerator[+T] extends Source[T] {
