@@ -1,6 +1,6 @@
-module test;
+module demo;
 
-type AllTests {
+type AllDemos {
   static Unit main(Sequence[String] args) {
     Console.outln("Here are the arguments I received:");
     foreach (String arg in args)
@@ -9,7 +9,7 @@ type AllTests {
       Console.outln("No arguments to show :-(");
 
     UnitConversions.run();
+    PrimeGenerator.run();
     ProgressBar.run();
-    Primes.run();
   }
 }

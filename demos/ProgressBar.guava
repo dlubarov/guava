@@ -1,4 +1,4 @@
-module test;
+module demo;
 
 type ProgressBar {
   static Unit run() {
