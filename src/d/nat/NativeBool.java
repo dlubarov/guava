@@ -8,13 +8,14 @@ import d.ty.desc.*;
 
 public class NativeBool extends NativeObject {
     public static final NativeBool TRUE, FALSE;
+    public static final ConcreteType CONCRETE_TYPE;
 
     public static final NativeTypeDef TYPE;
 
     public final boolean value;
 
     public NativeBool(boolean value) {
-        super(new ConcreteType(TYPE));
+        super(CONCRETE_TYPE);
         this.value = value;
     }
 
@@ -103,6 +104,8 @@ public class NativeBool extends NativeObject {
                 return new NativeBool();
             }
         };
+
+        CONCRETE_TYPE = new ConcreteType(TYPE);
 
         TRUE = new NativeBool(true);
         FALSE = new NativeBool(false);

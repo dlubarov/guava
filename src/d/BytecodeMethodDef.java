@@ -247,8 +247,13 @@ public class BytecodeMethodDef extends ConcreteMethodDef {
                     case NEW: {
                         int typeTableIndex = code[ip++];
                         BaseObject me = desc.isStatic ? null : stack[bp + 1]; // "this"
-                        assert fullTypeTable[typeTableIndex] != null;
                         stack[++sp] = fullTypeTable[typeTableIndex].toConcrete(me, genericArgs).rawInstance();
+                        break;
+                    }
+
+                    case NEW_NO_GENERICS: {
+                        int typeTableIndex = code[ip++];
+                        stack[++sp] = rawTypeTable[typeTableIndex].rawInstanceNoGenerics();
                         break;
                     }
 

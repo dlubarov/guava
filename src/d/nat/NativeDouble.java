@@ -8,11 +8,12 @@ import d.ty.desc.*;
 
 public class NativeDouble extends NativeObject {
     public static final NativeTypeDef TYPE;
+    public static final ConcreteType CONCRETE_TYPE;
 
     public double value;
 
     public NativeDouble(double value) {
-        super(new ConcreteType(TYPE));
+        super(CONCRETE_TYPE);
         this.value = value;
     }
 
@@ -141,5 +142,7 @@ public class NativeDouble extends NativeObject {
                 return new NativeDouble();
             }
         };
+
+        CONCRETE_TYPE = new ConcreteType(TYPE);
     }
 }

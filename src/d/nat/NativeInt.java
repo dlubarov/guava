@@ -8,11 +8,12 @@ import d.ty.desc.*;
 
 public class NativeInt extends NativeObject {
     public static final NativeTypeDef TYPE;
+    public static final ConcreteType CONCRETE_TYPE;
 
     public int value;
 
     public NativeInt(int value) {
-        super(new ConcreteType(TYPE));
+        super(CONCRETE_TYPE);
         this.value = value;
     }
 
@@ -215,6 +216,8 @@ public class NativeInt extends NativeObject {
                 return new NativeInt();
             }
         };
+
+        CONCRETE_TYPE = new ConcreteType(TYPE);
 
         // TODO: less fragile way?
         TYPE.staticFields[0] = new NativeInt(Integer.MIN_VALUE);

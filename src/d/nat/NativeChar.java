@@ -8,11 +8,12 @@ import d.ty.desc.*;
 
 public class NativeChar extends NativeObject {
     public static final NativeTypeDef TYPE;
+    public static final ConcreteType CONCRETE_TYPE;
 
     public char value;
 
     public NativeChar(char value) {
-        super(new ConcreteType(TYPE));
+        super(CONCRETE_TYPE);
         this.value = value;
     }
 
@@ -87,11 +88,14 @@ public class NativeChar extends NativeObject {
                                 stack[bp + 1] = VMUtils.makeString(Character.toString(c));
                             }
                         },
-                }) {
+                })
+        {
             @Override
             public BaseObject rawInstance(ConcreteType type) {
                 return new NativeChar();
             }
         };
+
+        CONCRETE_TYPE = new ConcreteType(TYPE);
     }
 }

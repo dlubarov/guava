@@ -3,7 +3,7 @@ module test;
 import math.*;
 
 type UnitConversions {
-  static Unit main(Sequence[String] args) {
+  static Unit run() {
     SimpleQuantity[Time] day = new SimpleQuantity[Time](1.0, Time.DAY);
 
     Console.outln("1 day...");

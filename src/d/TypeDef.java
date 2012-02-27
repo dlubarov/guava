@@ -30,6 +30,8 @@ public class TypeDef {
     // 0 = not initialized, 1 = in progress, 2 = initialized
     public int initializationStatus = 0;
 
+    private ConcreteType typeNoGenerics = null;
+
     public TypeDef(RawType desc,
             Variance[] genericVariances,
             int numStaticFields,
@@ -56,6 +58,9 @@ public class TypeDef {
 
         this.superGenericDescs = superGenericDescs;
         superGenerics = new HashMap<TypeDef, SuperType[]>();
+
+        if (genericVariances == null || genericVariances.length == 0)
+            typeNoGenerics = new ConcreteType(this);
 
         God.newType(this);
     }
@@ -102,6 +107,11 @@ public class TypeDef {
 
     public BaseObject rawInstance(ConcreteType type) {
         return new NormalObject(type);
+    }
+
+    public BaseObject rawInstanceNoGenerics() {
+        assert this.genericVariances.length == 0;
+        return new NormalObject(typeNoGenerics);
     }
 
     @Override

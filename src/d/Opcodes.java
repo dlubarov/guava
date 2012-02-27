@@ -29,6 +29,7 @@ public final class Opcodes {
             INVOKE_STATIC = 30,
             INVOKE_VIRTUAL = 31,
             NEW = 40,
+            NEW_NO_GENERICS = 41,
             // Control
             JUMP = 50,
             JUMP_COND = 51,
@@ -158,6 +159,10 @@ public final class Opcodes {
 
                 case NEW:
                     sb.append("NEW " + fullTypeDescTable[code[++i]]);
+                    break;
+
+                case NEW_NO_GENERICS:
+                    sb.append("NEW_NO_GENERICS " + rawTypeDescTable[code[++i]]);
                     break;
 
                 case JUMP:

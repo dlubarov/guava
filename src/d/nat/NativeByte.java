@@ -8,11 +8,12 @@ import d.ty.desc.*;
 
 public class NativeByte extends NativeObject {
     public static final NativeTypeDef TYPE;
+    public static final ConcreteType CONCRETE_TYPE;
 
     public byte value;
 
     public NativeByte(byte value) {
-        super(new ConcreteType(TYPE));
+        super(CONCRETE_TYPE);
         this.value = value;
     }
 
@@ -185,6 +186,8 @@ public class NativeByte extends NativeObject {
                 return new NativeByte();
             }
         };
+
+        CONCRETE_TYPE = new ConcreteType(TYPE);
 
         // TODO: less fragile way?
         TYPE.staticFields[0] = new NativeByte(Byte.MIN_VALUE);

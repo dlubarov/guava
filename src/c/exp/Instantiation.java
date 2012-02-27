@@ -37,11 +37,21 @@ public class Instantiation extends Expression {
     @Override
     public CodeTree compile(CodeContext ctx) {
         MethodDef constructor = getConstructor(ctx);
-        int typeIdx = ctx.method.getFullTypeTableIndex(type);
         int constructorIdx = ctx.method.getMethodTableIndex(constructor);
+
+        // If type has no generic arguments, use the more efficient NEW_NO_GENERICS.
+        int typeIdx, newOp;
+        if (type.genericArgs.length == 0) {
+            typeIdx = ctx.method.getRawTypeTableIndex(type.rawType);
+            newOp = Opcodes.NEW_NO_GENERICS;
+        } else {
+            typeIdx = ctx.method.getFullTypeTableIndex(type);
+            newOp = Opcodes.NEW;
+        }
+
         return new CodeTree(
                 // Stack: []
-                Opcodes.NEW, typeIdx,
+                newOp, typeIdx,
                 // Stack: [obj]
                 Opcodes.DUP,
                 // Stack: [obj, obj]

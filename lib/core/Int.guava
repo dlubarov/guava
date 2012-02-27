@@ -1,6 +1,8 @@
 module core;
 
 public sealed type Int extends NaturallyOrdered[Int] {
+  public static readonly Int MIN_VALUE, MAX_VALUE;
+
   public Unit init(String s, Int radix) {}
 
   public Unit init(String s) {
