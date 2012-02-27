@@ -14,9 +14,26 @@ public sealed type Double extends NaturallyOrdered[Double] {
   public Double %(Double x) {}
 
   public Relation compareTo(Double that) {}
+  public Bool <(Double that) {}
+  public Bool <=(Double that) {}
+  public Bool >(Double that) {}
+  public Bool >=(Double that) {}
 
-  public static Double min(Double a, Double b) {}
-  public static Double max(Double a, Double b) {}
+  public Double min(Double that) {
+    return new NaturalOrdering[Double]().min(this, that);
+  }
+
+  public Double max(Double that) {
+    return new NaturalOrdering[Double]().max(this, that);
+  }
+
+  public Int signum() {
+    if (this > 0.0)
+      return 1;
+    if (this < 0.0)
+      return -1;
+    return 0;
+  }
 
   public Bool ==(Top o) {}
   public Int hashCode() {}

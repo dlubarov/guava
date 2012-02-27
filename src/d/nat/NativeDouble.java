@@ -106,6 +106,38 @@ public class NativeDouble extends NativeObject {
                                 stack[bp + 1] = rel;
                             }
                         },
+                        new NativeMethodDef(new RawMethod(false, RawType.coreDouble, "<", 0, TypeDesc.coreDoubleOnly)) {
+                            @Override
+                            public void invoke(BaseObject[] stack, int bp, ConcreteType[] genericArgs) {
+                                double x = ((NativeDouble) stack[bp + 1]).value;
+                                double y = ((NativeDouble) stack[bp + 2]).value;
+                                stack[bp + 1] = new NativeBool(x < y);
+                            }
+                        },
+                        new NativeMethodDef(new RawMethod(false, RawType.coreDouble, "<=", 0, TypeDesc.coreDoubleOnly)) {
+                            @Override
+                            public void invoke(BaseObject[] stack, int bp, ConcreteType[] genericArgs) {
+                                double x = ((NativeDouble) stack[bp + 1]).value;
+                                double y = ((NativeDouble) stack[bp + 2]).value;
+                                stack[bp + 1] = new NativeBool(x <= y);
+                            }
+                        },
+                        new NativeMethodDef(new RawMethod(false, RawType.coreDouble, ">", 0, TypeDesc.coreDoubleOnly)) {
+                            @Override
+                            public void invoke(BaseObject[] stack, int bp, ConcreteType[] genericArgs) {
+                                double x = ((NativeDouble) stack[bp + 1]).value;
+                                double y = ((NativeDouble) stack[bp + 2]).value;
+                                stack[bp + 1] = new NativeBool(x > y);
+                            }
+                        },
+                        new NativeMethodDef(new RawMethod(false, RawType.coreDouble, ">=", 0, TypeDesc.coreDoubleOnly)) {
+                            @Override
+                            public void invoke(BaseObject[] stack, int bp, ConcreteType[] genericArgs) {
+                                double x = ((NativeDouble) stack[bp + 1]).value;
+                                double y = ((NativeDouble) stack[bp + 2]).value;
+                                stack[bp + 1] = new NativeBool(x >= y);
+                            }
+                        },
 
                         // ==, hashCode, toString
                         new NativeMethodDef(new RawMethod(false, RawType.coreDouble, "==", 0, TypeDesc.coreTopOnly)) {

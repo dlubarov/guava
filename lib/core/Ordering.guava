@@ -92,6 +92,8 @@ public abstract type NaturallyOrdered[-T] extends NaturallyPartiallyOrdered[T] {
 # The natural partial ordering of a type which has one.
 [T < NaturallyPartiallyOrdered[T]]
 public sealed type NaturalPartialOrdering[-T] extends PartialOrdering[T] {
+  public Unit init() {}
+
   public PossibleRelation compare(T a, T b) {
     return a.compareTo(b);
   }
@@ -100,8 +102,22 @@ public sealed type NaturalPartialOrdering[-T] extends PartialOrdering[T] {
 # The natural total ordering of a type which has one.
 [T < NaturallyOrdered[T]]
 public sealed type NaturalOrdering[-T] extends Ordering[T] {
+  public Unit init() {}
+
   public Relation compare(T a, T b) {
     return a.compareTo(b);
+  }
+
+  public T min(T a, T b) {
+    if (b < a)
+      return b;
+    return a;
+  }
+
+  public T max(T a, T b) {
+    if (b > a)
+      return b;
+    return a;
   }
 }
 

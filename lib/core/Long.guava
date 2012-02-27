@@ -35,25 +35,21 @@ public sealed type Long extends NaturallyOrdered[Long] {
   public Long >>(Int distance) {}
   public Long >>>(Int distance) {}
 
+  public Long rotateLeft(Int distance) {}
+  public Long rotateRight(Int distance) {}
+
   public Relation compareTo(Long that) {}
   public Bool <(Long that) {}
   public Bool <=(Long that) {}
   public Bool >(Long that) {}
   public Bool >=(Long that) {}
 
-  public Long rotateLeft(Int distance) {}
-  public Long rotateRight(Int distance) {}
-
-  public static Long min(Long a, Long b) {
-    if (a < b)
-      return a;
-    return b;
+  public Long min(Long that) {
+    return new NaturalOrdering[Long]().min(this, that);
   }
 
-  public static Long max(Long a, Long b) {
-    if (a > b)
-      return a;
-    return b;
+  public Long max(Long that) {
+    return new NaturalOrdering[Long]().max(this, that);
   }
 
   public Int signum() {

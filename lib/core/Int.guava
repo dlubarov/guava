@@ -35,25 +35,21 @@ public sealed type Int extends NaturallyOrdered[Int] {
   public Int >>(Int distance) {}
   public Int >>>(Int distance) {}
 
+  public Int rotateLeft(Int distance) {}
+  public Int rotateRight(Int distance) {}
+
   public Relation compareTo(Int that) {}
   public Bool <(Int that) {}
   public Bool <=(Int that) {}
   public Bool >(Int that) {}
   public Bool >=(Int that) {}
 
-  public Int rotateLeft(Int distance) {}
-  public Int rotateRight(Int distance) {}
-
-  public static Int min(Int a, Int b) {
-    if (a < b)
-      return a;
-    return b;
+  public Int min(Int that) {
+    return new NaturalOrdering[Int]().min(this, that);
   }
 
-  public static Int max(Int a, Int b) {
-    if (a > b)
-      return a;
-    return b;
+  public Int max(Int that) {
+    return new NaturalOrdering[Int]().max(this, that);
   }
 
   public Int signum() {

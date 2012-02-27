@@ -29,16 +29,12 @@ public sealed type Byte extends NaturallyOrdered[Byte] {
   public Byte rotateLeft(Int distance) {}
   public Byte rotateRight(Int distance) {}
 
-  public static Byte min(Byte a, Byte b) {
-    if (a < b)
-      return a;
-    return b;
+  public Byte min(Byte that) {
+    return new NaturalOrdering[Byte]().min(this, that);
   }
 
-  public static Byte max(Byte a, Byte b) {
-    if (a > b)
-      return a;
-    return b;
+  public Byte max(Byte that) {
+    return new NaturalOrdering[Byte]().max(this, that);
   }
 
   public Int signum() {
