@@ -1,7 +1,7 @@
 module math;
 
 [D < BasicDimension]
-public sealed type SimpleQuantity[+D] {
+public sealed type SimpleQuantity[D] extends NaturallyOrdered[SimpleQuantity[D]] {
   public readonly Double amount;
   public readonly BasicUnit[D] unit;
 
@@ -13,6 +13,55 @@ public sealed type SimpleQuantity[+D] {
   public SimpleQuantity[D] in(BasicUnit[D] newUnit) {
     Double conv = this.unit.ratioTo(newUnit);
     return new SimpleQuantity[D](this.amount * conv, newUnit);
+  }
+
+  public SimpleQuantity[D] +() {
+    return this;
+  }
+
+  public SimpleQuantity[D] -() {
+    return this * -1.0;
+  }
+
+  public SimpleQuantity[D] +(SimpleQuantity[D] that) {
+    Double totalAmount = this.amount + that.in(this.unit).amount;
+    return new SimpleQuantity[D](totalAmount, this.unit);
+  }
+
+  public SimpleQuantity[D] -(SimpleQuantity[D] that) {
+    return this + -that;
+  }
+
+  public SimpleQuantity[D] *(Double s) {
+    return new SimpleQuantity[D](this.amount * s, this.unit);
+  }
+
+  public SimpleQuantity[D] /(Double d) {
+    return new SimpleQuantity[D](this.amount / d, this.unit);
+  }
+
+  public SimpleQuantity[D] %(Double d) {
+    return new SimpleQuantity[D](this.amount % d, this.unit);
+  }
+
+  public Relation compareTo(SimpleQuantity[D] that) {
+    return this.amount.compareTo(that.in(this.unit).amount);
+  }
+
+  public SimpleQuantity[D] min(SimpleQuantity[D] that) {
+    return new NaturalOrdering[SimpleQuantity[D]]().min(this, that);
+  }
+
+  public SimpleQuantity[D] max(SimpleQuantity[D] that) {
+    return new NaturalOrdering[SimpleQuantity[D]]().max(this, that);
+  }
+
+  public Bool ==(Top o) {
+    # TODO: switch on o
+  }
+
+  public Int hashCode() {
+    return {this.amount, this.unit}.hashCode();
   }
 
   public String toString() {
