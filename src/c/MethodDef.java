@@ -25,6 +25,8 @@ public class MethodDef {
     private final List<MethodDef> methodTable;
     private final List<String> stringTable;
 
+    private int mostLiveLocals = 0;
+
     public MethodDef(RawType owner,
             MethodVisibility visibility, boolean isStatic, boolean isSealed,
             Type returnType, String name, MethodGenericInfo[] genericInfos,
@@ -112,6 +114,10 @@ public class MethodDef {
         return true;
     }
 
+    public void observeNumLocals(int n) {
+        mostLiveLocals = Math.max(mostLiveLocals, n);
+    }
+
     public int getRawTypeTableIndex(RawType t) {
         for (int i = 0; i < rawTypeTable.size(); ++i)
             if (rawTypeTable.get(i).equals(t))
@@ -182,7 +188,6 @@ public class MethodDef {
 
         CodeContext ctx = new CodeContext(owner, this);
         CompilationResult result = body.compile(ctx);
-        int numLocals = result.newCtx.getNumLocals();
         int[] bytecode = result.code.getCode();
 
         return new d.BytecodeMethodDef(
@@ -191,7 +196,7 @@ public class MethodDef {
                 refineFullTypeTable(),
                 refineMethodTable(),
                 stringTable.toArray(new String[stringTable.size()]),
-                numLocals,
+                mostLiveLocals,
                 bytecode);
     }
 

@@ -11,10 +11,7 @@ public class Block extends Statement {
 
     @Override
     public b.stm.Block refine() {
-        b.stm.Statement[] refinedParts = new b.stm.Statement[parts.length];
-        for (int i = 0; i < refinedParts.length; ++i)
-            refinedParts[i] = parts[i].refine();
-        return new b.stm.Block(refinedParts);
+        return new b.stm.Block(Statement.refineAll(parts));
     }
 
     @Override

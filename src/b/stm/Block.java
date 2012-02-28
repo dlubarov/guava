@@ -12,10 +12,7 @@ public class Block extends Statement {
 
     @Override
     public c.stm.Block refine(TypeDef typeCtx, MethodDef methodCtx) {
-        c.stm.Statement[] refinedParts = new c.stm.Statement[parts.length];
-        for (int i = 0; i < refinedParts.length; ++i)
-            refinedParts[i] = parts[i].refine(typeCtx, methodCtx);
-        return new c.stm.Block(refinedParts);
+        return new c.stm.Block(Statement.refineAll(parts, typeCtx, methodCtx));
     }
 
     @Override

@@ -9,6 +9,7 @@ public abstract class Type {
     public static final Type[] NONE = new Type[0];
 
     public static final Type
+            coreTop = new ParameterizedType(RawType.coreTop, NONE),
             coreUnit = new ParameterizedType(RawType.coreUnit, NONE),
             coreInt = new ParameterizedType(RawType.coreInt, NONE),
             coreBool = new ParameterizedType(RawType.coreBool, NONE);

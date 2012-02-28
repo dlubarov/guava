@@ -88,16 +88,16 @@ public final class Opcodes {
                     break;
 
                 case CONST_LONG: {
-                    long i1 = code[i++]; i1 &= 0xffffffffL;
-                    long i0 = code[i++]; i0 &= 0xffffffffL;
+                    long i1 = code[++i]; i1 &= 0xffffffffL;
+                    long i0 = code[++i]; i0 &= 0xffffffffL;
                     long l = i1 << 32 | i0;
                     sb.append("CONST_LONG " + l);
                     break;
                 }
 
                 case CONST_DOUBLE: {
-                    long i1 = code[i++]; i1 &= 0xffffffffL;
-                    long i0 = code[i++]; i0 &= 0xffffffffL;
+                    long i1 = code[++i]; i1 &= 0xffffffffL;
+                    long i0 = code[++i]; i0 &= 0xffffffffL;
                     long l = i1 << 32 | i0;
                     double d = Double.longBitsToDouble(l);
                     sb.append("CONST_DOUBLE " + d);

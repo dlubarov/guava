@@ -58,6 +58,7 @@ public sealed type None extends Maybe[Bottom] {
   }
 
   public Bottom get() {
+    1 / 0; # fail
   }
 
   [U > Bottom]

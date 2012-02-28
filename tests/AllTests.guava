@@ -2,5 +2,6 @@ module tests;
 
 public type AllTests {
   static Unit main(Sequence[String] args) {
+    ;
   }
 }

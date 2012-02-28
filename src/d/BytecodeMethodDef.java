@@ -126,16 +126,15 @@ public class BytecodeMethodDef extends ConcreteMethodDef {
                     case GET_LOCAL: {
                         int localIndex = code[ip++];
                         BaseObject value = stack[bp + localIndex + 1];
-                        assert value != null : String.format(
-                                "%s's local #%d is null.",
-                                desc, localIndex);
+                        assert value != null;
                         stack[++sp] = value;
                         break;
                     }
 
                     case PUT_LOCAL: {
                         int localIndex = code[ip++];
-                        stack[bp + localIndex + 1] = stack[sp--];
+                        BaseObject value = stack[sp--];
+                        stack[bp + localIndex + 1] = value;
                         break;
                     }
 
@@ -145,7 +144,6 @@ public class BytecodeMethodDef extends ConcreteMethodDef {
                         assert rawTypeTable.length > typeTableIndex :
                             String.format("Raw type table index %d is out of bounds; table size is %d.",
                                     typeTableIndex, rawTypeTable.length);
-                        assert sp + 1 >= 0 : "Stack pointer is " + sp + ".";
                         TypeDef fieldOwner = rawTypeTable[typeTableIndex];
                         BaseObject[] staticFields = fieldOwner.staticFields;
                         BaseObject value = staticFields[staticFieldIndex];
@@ -190,6 +188,8 @@ public class BytecodeMethodDef extends ConcreteMethodDef {
 
                         BaseObject target = stack[sp--];
                         BaseObject newValue = stack[sp--];
+                        assert target.type.rawType.virtualFieldTable.containsKey(fieldName) :
+                            String.format("%s does not have field %s", target, fieldName);
                         int fieldIndex = target.type.rawType.virtualFieldTable.get(fieldName);
                         target.fields[fieldIndex] = newValue;
                         break;
@@ -241,7 +241,6 @@ public class BytecodeMethodDef extends ConcreteMethodDef {
 
                         int numArgs = m.desc.paramTypes.length;
                         a = stack[sp - numArgs]; // target
-                        assert a != null : "null target for INVOKE_VIRTUAL";
                         TypeDef targetOwner = a.type.rawType;
                         ConcreteMethodDef impl = targetOwner.virtualMethodTable.get(m);
                         assert impl != null : String.format(

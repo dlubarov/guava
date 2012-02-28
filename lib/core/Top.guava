@@ -10,4 +10,8 @@ public type Top {
   public Int hashCode() {}
 
   public String toString() {}
+
+  public sealed Bool instanceOf[T]() {}
+
+  public sealed T cast[T]() {}
 }

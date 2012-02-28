@@ -16,7 +16,7 @@ public abstract type Sequence[+T] extends Collection[T] {
   # The index a is inclusive, while b is exclusive.
   # Fails if b >= size().
   public Sequence[T] subsequence(Int a, Int b) {
-    # TODO: implement this
+    # TODO: implement subsequence
   }
 
   public T get(Int index) {
@@ -36,10 +36,12 @@ public abstract type Sequence[+T] extends Collection[T] {
 
   # Undefined behavior if l > size().
   public Sequence[T] getFront(Int l) {
+    # TODO: write getFront
   }
 
   # Undefined behavior if l > size().
   public Sequence[T] getBack(Int l) {
+    # TODO: write getBack
   }
 
   public Bool startsWith(Sequence[T] s) {
@@ -94,12 +96,15 @@ public abstract type Sequence[+T] extends Collection[T] {
   }
 
   public Sequence[T] map(Function1[T, T] f) {
+    # TODO: write map
   }
 
   public Sequence[T] replace(T a, T b) {
+    # TODO: write replace
   }
 
   public Sequence[T] replace(Sequence[T] a, Sequence[T] b) {
+    # TODO: write replace
   }
 
   public ImmutableSequence[T] toImmutable() {
@@ -107,9 +112,11 @@ public abstract type Sequence[+T] extends Collection[T] {
   }
 
   public Bool ==(Top o) {
+    # TODO: write ==
   }
 
   public Int hashCode() {
+    # TODO: write hashCode
   }
 
   public String toString() {

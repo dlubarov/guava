@@ -2,9 +2,12 @@ package c.stm;
 
 import java.util.*;
 
+import common.NiftyException;
+
 import c.*;
 import c.exp.*;
 import c.ty.Type;
+import d.Opcodes;
 
 public class LocalDef extends Statement {
     public final Type type;
@@ -25,8 +28,16 @@ public class LocalDef extends Statement {
             // But adding the local after generating the assignment code is problematic,
             // because LocalAssignment needs the destination local index.
             ctx = ctx.addLocal(type, names[i]);
-            if (initVals[i] != null)
-                assignments.add(new LocalAssignment(names[i], initVals[i]).compile(ctx));
+            if (initVals[i] != null) {
+                if (!initVals[i].hasType(type, ctx))
+                    throw new NiftyException("'%s' does not conform to %s's type of %s.",
+                            initVals[i], names[i], type);
+                CodeTree assignment = new CodeTree(
+                                initVals[i].compile(ctx),
+                                Opcodes.PUT_LOCAL,
+                                ctx.getLocalIndex(names[i]));
+                assignments.add(assignment);
+            }
         }
         CodeTree allCode = new CodeTree(assignments.toArray());
         return new CompilationResult(allCode, ctx);

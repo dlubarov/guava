@@ -22,6 +22,8 @@ public class CodeContext {
             for (int i = 0; i < method.paramNames.length; ++i)
                 locals.add(new LocalInfo(method.paramTypes[i], method.paramNames[i]));
         }
+        if (method != null)
+            method.observeNumLocals(locals.size());
     }
 
     public CodeContext(CodeContext src) {
@@ -44,10 +46,6 @@ public class CodeContext {
         throw new NoSuchElementException(String.format("no local named %s", name));
     }
 
-    public int getNumLocals() {
-        return locals.size();
-    }
-
     public CodeContext addLocal(Type type, String name) {
         for (LocalInfo loc : locals)
             if (loc.name.equals(name))
@@ -55,6 +53,7 @@ public class CodeContext {
 
         CodeContext newCtx = new CodeContext(this);
         newCtx.locals.add(new LocalInfo(type, name));
+        method.observeNumLocals(newCtx.locals.size());
         return newCtx;
     }
 

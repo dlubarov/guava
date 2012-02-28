@@ -116,7 +116,6 @@ public class InstanceMethodInvocation extends Expression {
 
     @Override
     public CodeTree compile(CodeContext ctx) {
-        // FIXME: use INVOKE_STATIC where possible.
         MethodDef m = getMethod(ctx);
         TypeDef owner = Project.singleton.resolve(m.owner);
         CodeTree targetCode = target.compile(ctx);

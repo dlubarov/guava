@@ -14,6 +14,8 @@ public final class God {
     private static final Set<NativeTypeDef> nativeTypes;
 
     public static BaseObject objUnit, objLT, objGT, objEQ;
+    
+    public static boolean initializationComplete = false;
 
     static {
         allTypes = new HashMap<RawType, TypeDef>();
@@ -73,6 +75,7 @@ public final class God {
     }
 
     public static void runStaticInitializers() {
+        assert !initializationComplete;
         for (TypeDef typeDef : allTypes.values()) {
             typeDef.init();
 
@@ -87,5 +90,6 @@ public final class God {
                 objEQ = typeDef.staticFields[2];
             }
         }
+        initializationComplete = true;
     }
 }
