@@ -15,6 +15,9 @@ public class Return extends Statement {
 
     @Override
     public CompilationResult compile(CodeContext ctx) {
+        if (value == null)
+            return new CompilationResult(new CodeTree(Opcodes.RETURN_UNIT), ctx);
+
         if (!value.hasType(ctx.method.returnType, ctx))
             throw new NiftyException(
                     "Return value '%s' does not conform to method's return type, %s.",
@@ -27,6 +30,8 @@ public class Return extends Statement {
 
     @Override
     public String toString() {
+        if (value == null)
+            return "return;";
         return String.format("return %s;", value);
     }
 }

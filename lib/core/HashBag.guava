@@ -1,0 +1,82 @@
+module core;
+
+# A bag (aka multiset) implementation backed by a HashMap.
+
+public type HashBag[T] extends Collection[T] {
+  readonly MutableMap[T, Int] countMap;
+  private Int numItems;
+
+  public Unit init() {
+    this.countMap = new HashMap[T, Int]();
+    this.numItems = 0;
+  }
+
+  public Unit init(Collection[T] source) {
+    this.init();
+    foreach (T elem in source)
+      this += elem;
+  }
+
+  public Int size() {
+    return this.numItems;
+  }
+
+  public Int count(T elem) {
+    if (this.countMap.contains(elem))
+      return this.countMap(elem);
+    return 0;
+  }
+
+  public Unit +=(T elem) {
+    this.countMap(elem) = this.countMap(elem) + 1;
+    this.numItems = this.numItems + 1;
+  }
+
+  # Remove an item from the bag. If this bag contains multiple
+  # copies of the element, only one will be removed.
+  # Returns true if an item was removed, false if it was not found.
+  public Unit -=(T elem) {
+    # TODO: switch on n
+    Int n = this.count(elem);
+    if (n == 0)
+      return;
+    if (n == 1)
+      this.countMap -= elem;
+    else
+      this.countMap(elem) = n - 1;
+    this.numItems = this.numItems - 1;
+  }
+
+  public Source[T] enumerator() {
+    if (this.isEmpty())
+      return EmptySource();
+    return new HashBagEnumerator[T](this);
+  }
+}
+
+# Assumes that the bag contains at least one item.
+type HashBagEnumerator[+T] extends Source[T] {
+  private readonly Source[MapEntry[T, Int]] entryEnum;
+  private T elem;
+  private Int numLeft;
+
+  Unit init(HashBag[T] source) {
+    this.entryEnum = source.countMap.enumerator();
+    MapEntry[T, Int] entry = this.entryEnum.take().get();
+    this.elem = entry.key;
+    this.numLeft = entry.value;
+  }
+
+  public Maybe[T] take() {
+    if (this.numLeft == 0) {
+      Maybe[MapEntry[T, Int]] maybeEntry = this.entryEnum.take();
+      if (maybeEntry.isEmpty())
+        return None();
+      MapEntry[T, Int] entry = maybeEntry.get();
+      this.elem = entry.key;
+      this.numLeft = entry.value;
+    }
+    this.numLeft = this.numLeft - 1;
+    return new Some[T](this.elem);
+  }
+}

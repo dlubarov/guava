@@ -283,6 +283,15 @@ public class BytecodeMethodDef extends ConcreteMethodDef {
                         stack[bp + 1] = stack[sp];
                         return;
 
+                    case RETURN_UNIT:
+                        if (!God.initializationComplete) {
+                            TypeDef unitDef = God.resolveType(RawType.coreUnit);
+                            if (unitDef.initializationStatus == 0)
+                                unitDef.init();
+                        }
+                        stack[bp + 1] = God.objUnit;
+                        return;
+
                     case BOOL_NEG:
                         assert stack[sp] instanceof NativeBool;
                         stack[sp] = new NativeBool(!((NativeBool) stack[sp]).value);

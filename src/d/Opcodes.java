@@ -35,6 +35,7 @@ public final class Opcodes {
             JUMP = 50,
             JUMP_COND = 51,
             RETURN = 55,
+            RETURN_UNIT = 56,
             // Common operations
             BOOL_NEG = 60,
             INT_NEG = 100,
@@ -180,6 +181,9 @@ public final class Opcodes {
 
                 case RETURN:
                     sb.append("RETURN");
+                    break;
+                case RETURN_UNIT:
+                    sb.append("RETURN_UNIT");
                     break;
 
                 case BOOL_NEG:

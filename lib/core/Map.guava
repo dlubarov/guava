@@ -23,7 +23,11 @@ public type MapEntry[+K, +V] {
 }
 
 public abstract type Map[K, +V] extends Set[MapEntry[K, V]] {
-  public Maybe[V] get(K key);
+  public Maybe[V] tryGet(K key);
+
+  public V get(K key) {
+    return this.tryGet(key).get();
+  }
 
   public Set[K] getKeys() {
     MutableSet[K] keys = new HashSet[K]();
@@ -40,7 +44,7 @@ public abstract type Map[K, +V] extends Set[MapEntry[K, V]] {
   }
 
   public ImmutableMap[K, V] toImmutable() {
-    # TODO: construct some immutable set
+    # TODO: construct some immutable map
   }
 }
 
@@ -52,6 +56,8 @@ public abstract type MutableMap[K, V] extends Map[K, V] {
   public Unit +=(MapEntry[K, V] entry) {
     this(entry.key) = entry.value;
   }
+
+  public Unit -=(K key);
 }
 
 # Does no implement ImmutableSet[MapEntry[K, +V]] because users of that
@@ -59,6 +65,8 @@ public abstract type MutableMap[K, V] extends Map[K, V] {
 public abstract type ImmutableMap[K, V] extends Map[K, V] {
   # TODO: :+
   public ImmutableMap[K, V] +(MapEntry[K, V] entry);
+
+  public ImmutableMap[K, V] -(K key);
 
   public ImmutableMap[K, V] toImmutable() {
     return this;

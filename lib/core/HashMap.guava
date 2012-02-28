@@ -1,5 +1,31 @@
 module core;
 
-#public sealed type HashMap[A, B] extends MutableMap[A, B] {
-  # FIXME: implement hash map
-#}
+# A standard hash map (aka hash table) using separate chaining.
+
+public sealed type HashMap[K, V] extends MutableMap[K, V] {
+  public Unit init() {
+    # FIXME: implement hash map
+  }
+
+  public Unit init(Set[MapEntry[K, V]] source) {
+    this.init();
+    foreach (MapEntry[K, V] entry in source)
+      this += entry;
+  }
+
+  public Maybe[V] tryGet(K key) {
+    # FIXME: implement hash map
+  }
+
+  public Unit set(K key, V value) {
+    # FIXME: implement hash map
+  }
+
+  public Unit -=(K key) {
+    # FIXME: implement hash map
+  }
+
+  public Source[MapEntry[K, V]] enumerator() {
+    # FIXME: implement hash map
+  }
+}
