@@ -1,9 +1,0 @@
-module core;
-
-public sealed abstract type Math {
-  public static Int fibonacci(Int n) {
-  }
-
-  public static Int factorial(Int n) {
-  }
-}

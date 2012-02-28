@@ -135,7 +135,7 @@ public class InstanceMethodInvocation extends Expression {
         // Can we make a cheap static call, or do we need to go through the vtable?
         boolean canUseStatic = m.isSealed || owner.isSealed;
         int invokeOp = canUseStatic ? Opcodes.INVOKE_STATIC : Opcodes.INVOKE_VIRTUAL;
-        
+
         return new CodeTree(
                 targetCode, argumentCode,
                 invokeOp, methodIndex, genericArgIndicesTree

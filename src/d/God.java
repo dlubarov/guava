@@ -14,7 +14,7 @@ public final class God {
     private static final Set<NativeTypeDef> nativeTypes;
 
     public static BaseObject objUnit, objLT, objGT, objEQ;
-    
+
     public static boolean initializationComplete = false;
 
     static {
