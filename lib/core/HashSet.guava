@@ -55,28 +55,26 @@ public sealed type HashSet[T] extends MutableSet[T] {
     this.resize(this.buckets.size() / 2);
   }
 
-  public Bool +=(T elem) {
+  public Unit +=(T elem) {
     Int idx = this.bucketIndexFor(elem);
     ImmutableSet[T] bucket = this.buckets(idx);
     if (bucket.contains(elem))
-      return false;
+      return;
     if (this.shouldExpand())
       this.expand();
     this.buckets(idx) = bucket + elem;
     this.count = this.count + 1;
-    return true;
   }
 
-  public Bool -=(T elem) {
+  public Unit -=(T elem) {
     Int idx = this.bucketIndexFor(elem);
     ImmutableSet[T] bucket = this.buckets(idx);
     if (!bucket.contains(elem))
-      return false;
+      return;
     this.buckets(idx) = bucket - elem;
     this.count = this.count - 1;
     if (this.shouldShrink())
       this.shrink();
-    return true;
   }
 
   public Int size() {
@@ -84,7 +82,7 @@ public sealed type HashSet[T] extends MutableSet[T] {
   }
 
   public Source[T] enumerator() {
-    # TODO: impl
+    return new HashSetEnumerator[T](this.buckets);
   }
 }
 

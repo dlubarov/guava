@@ -1,0 +1,40 @@
+module core;
+
+# An OrderedSet is a sequence, meaning that its order of enumeration
+# is meaningful and consistent. It is also a set, meaning that it
+# contains no duplicate elements.
+
+# Note that this is not a SORTED set. The order of an OrderedSet
+# could be the natural order of its elements, but it could also be
+# insertion order, or something else.
+
+public abstract type OrderedSet[+T] extends Sequence[T], Set[T] {
+  public Bool ==(Top o) {
+    switch (o) {
+      Sequence[Top] that ->
+        return Sequence.==(this, that);
+      Set[Top] that ->
+        return Set.==(this, that);
+      other ->
+        return false;
+    }
+  }
+
+  public Int hashCode() {
+    return Sequence.hashCode(this);
+  }
+
+  public String toString() {
+    return Sequence.toString(this);
+  }
+
+  public ImmutableOrderedSet[T] toImmutable() {
+    # TODO: construct some ImmutableOrderedSet
+  }
+}
+
+public abstract type ImmutableOrderedSet[+T] extends OrderedSet[T] {
+  public ImmutableOrderedSet[T] toImmutable() {
+    return this;
+  }
+}

@@ -2,11 +2,6 @@ module core;
 
 # A Set is a collection which contains no duplicate elements.
 public abstract type Set[+T] extends Sequence[T] {
-  public static readonly Set[Bottom] empty;
-
-  public Unit init(Collection[T] source) {
-  }
-
   # Union.
   [U > T]
   public Set[U] |[U](Set[U] that) {
@@ -43,13 +38,22 @@ public abstract type Set[+T] extends Sequence[T] {
 }
 
 public abstract type MutableSet[T] extends Set[T] {
-  public Bool +=(T value);
-  public Bool -=(T value);
+  # Add some object to the set. If the object is already contained
+  # in the set, this method succeeds but has no effect.
+  public Unit +=(T value);
+
+  # Remove some object from the set. If it wasn't in the set to begin
+  # with, this method succeeds but has no effect.
+  public Unit -=(T value);
 }
 
 public abstract type ImmutableSet[+T] extends Set[T] {
+  public static readonly ImmutableSet[Bottom] empty;
+
+  # TODO: set empty
+
   # TODO: use :+
-  # TODO: empty
+
   [U > T]
   public ImmutableSet[U] +[U](U value);
 
