@@ -1,0 +1,116 @@
+module core;
+
+# A container of simple, common mathematical functions and constants.
+
+public sealed abstract type Math {
+  public static readonly Double PI, E;
+
+  private static Unit init() {
+    Math.PI = 3.14159265358979323;
+    Math.E = 2.71828183;
+  }
+
+  # The greatest common denominator of two integers.
+  private static Int gcd(Int a, Int b) {
+    if (b == 0)
+      return a;
+    return Math.gcd(b, a % b);
+  }
+
+  # The least common multiple of two integers.
+  private static Int lcm(Int a, Int b) {
+    return a * b / Math.gcd(a, b);
+  }
+
+  # The power function, i.e., x raised to the power of y.
+  public static Double pow(Double x, Double y) {
+    # TODO: impl
+  }
+
+  # The exponential function.
+  public static Double exp(Double x) {
+    return Math.pow(Math.E, x);
+  }
+
+  # The square root function.
+  public static Double sqrt(Double x) {
+    return Math.pow(x, 0.5);
+  }
+
+  # The sine of an angle (given in radians).
+  public static Double sin(Double ang) {
+    # TODO: impl
+  }
+
+  # The cosine of an angle (given in radians).
+  public static Double cos(Double ang) {
+    # TODO: impl
+  }
+
+  # The tangent of an angle (given in radians).
+  public static Double tan(Double ang) {
+    # TODO: impl
+  }
+
+  # The arc sine function.
+  public static Double asin(Double x) {
+    # TODO: impl
+  }
+
+  # The arc cosine function.
+  public static Double acos(Double x) {
+    # TODO: impl
+  }
+
+  # The arc tangent function.
+  public static Double atan(Double x) {
+    # TODO: impl
+  }
+
+  # The angle, in radians, from the origin (0, 0) to the point (x, y).
+  public static Double atan2(Double y, Double x) {
+    # TODO: impl
+  }
+
+  # The hyperbolic sine function.
+  public static Double sinh(Double x) {
+    return (Math.exp(x) - Math.exp(-x)) * 0.5;
+  }
+
+  # The hyperbolic cosine function.
+  public static Double cosh(Double x) {
+    return (Math.exp(x) + Math.exp(-x)) * 0.5;
+  }
+
+  # The hyperbolic tangent function.
+  public static Double tanh(Double x) {
+    return Math.sinh(x) / Math.cosh(x);
+  }
+
+  # Convert from degrees to radians.
+  public static Double deg2rad(Double degrees) {
+    return degrees * Math.PI / 180.0;
+  }
+
+  # Convert from radians to degrees.
+  public static Double rad2deg(Double radians) {
+    return radians * 180.0 / Math.PI;
+  }
+
+  # The natural logarithm of a number.
+  public static Double log(Double x) {
+    # FIXME: impl
+  }
+
+  public static Double log2(Double x) {
+    return Math.log(x) / Math.log(2.0);
+  }
+
+  public static Double log10(Double x) {
+    return Math.log(x) / Math.log(10.0);
+  }
+
+  public static Double log(Double x, Double base) {
+    return Math.log(x) / Math.log(base);
+  }
+}
