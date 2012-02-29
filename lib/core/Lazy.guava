@@ -1,0 +1,17 @@
+module core;
+
+public sealed type Lazy[T] {
+  private Maybe[T] value;
+  private readonly Function0[T] computation;
+
+  public Unit init(Function0[T] computation) {
+    this.computation = computation;
+    this.value = None();
+  }
+
+  public T get() {
+    if (this.value.isEmpty())
+      this.value = new Some[T](this.computation());
+    return this.value.get();
+  }
+}
