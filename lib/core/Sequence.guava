@@ -112,7 +112,24 @@ public abstract type Sequence[+T] extends Collection[T] {
   }
 
   public Bool ==(Top o) {
-    # TODO: write ==
+    switch (o) {
+      Sequence[Top] that -> {
+        Source[Top] enumA = this.enumerator();
+        Source[Top] enumB = that.enumerator();
+        forever {
+          Maybe[Top] maybeA = enumA.take();
+          Maybe[Top] maybeB = enumB.take();
+          if (maybeA.isEmpty() & maybeB.isEmpty())
+            return true;
+          if (maybeA.isEmpty() | maybeB.isEmpty())
+            return false;
+          if (maybeA() != maybeB())
+            return false;
+        }
+      }
+      other ->
+        return false;
+    }
   }
 
   public Int hashCode() {
