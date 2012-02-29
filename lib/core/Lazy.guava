@@ -14,4 +14,16 @@ public sealed type Lazy[T] {
       this.value = new Some[T](this.computation());
     return this.value.get();
   }
+
+  public Bool ==(Object o) {
+    return this() == o;
+  }
+
+  public Int hashCode() {
+    return this().hashCode();
+  }
+
+  public String toString() {
+    return this().toString();
+  }
 }
