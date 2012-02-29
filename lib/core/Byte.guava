@@ -37,6 +37,12 @@ public sealed type Byte extends NaturallyOrdered[Byte] {
     return new NaturalOrdering[Byte]().max(this, that);
   }
 
+  public Byte abs() {
+    if (this < new Byte(0))
+      return -this;
+    return this;
+  }
+
   public Int signum() {
     return new Int(this).signum();
   }

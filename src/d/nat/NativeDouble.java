@@ -32,6 +32,44 @@ public class NativeDouble extends NativeObject {
 
                 // instance methods
                 new NativeMethodDef[] {
+                        // Constructors
+                        new NativeMethodDef(new RawMethod(false, RawType.coreDouble, "init", 0, TypeDesc.coreLongOnly)) {
+                            @Override
+                            public void invoke(BaseObject[] stack, int bp, ConcreteType[] genericArgs) {
+                                NativeDouble d = (NativeDouble) stack[bp + 1];
+                                long l = ((NativeLong) stack[bp + 2]).value;
+                                d.value = l;
+                                stack[bp + 1] = God.objUnit;
+                            }
+                        },
+                        new NativeMethodDef(new RawMethod(false, RawType.coreDouble, "init", 0, TypeDesc.coreIntOnly)) {
+                            @Override
+                            public void invoke(BaseObject[] stack, int bp, ConcreteType[] genericArgs) {
+                                NativeDouble d = (NativeDouble) stack[bp + 1];
+                                int i = ((NativeInt) stack[bp + 2]).value;
+                                d.value = i;
+                                stack[bp + 1] = God.objUnit;
+                            }
+                        },
+                        new NativeMethodDef(new RawMethod(false, RawType.coreDouble, "init", 0, TypeDesc.coreByteOnly)) {
+                            @Override
+                            public void invoke(BaseObject[] stack, int bp, ConcreteType[] genericArgs) {
+                                NativeDouble d = (NativeDouble) stack[bp + 1];
+                                byte b = ((NativeByte) stack[bp + 2]).value;
+                                d.value = b;
+                                stack[bp + 1] = God.objUnit;
+                            }
+                        },
+                        new NativeMethodDef(new RawMethod(false, RawType.coreDouble, "init", 0, TypeDesc.coreStringOnly)) {
+                            @Override
+                            public void invoke(BaseObject[] stack, int bp, ConcreteType[] genericArgs) {
+                                NativeDouble d = (NativeDouble) stack[bp + 1];
+                                String s = VMUtils.extractString(stack[bp + 2]);
+                                d.value = Double.parseDouble(s);
+                                stack[bp + 1] = God.objUnit;
+                            }
+                        },
+
                         // Unary methods
                         new NativeMethodDef(new RawMethod(false, RawType.coreDouble, "+", 0, TypeDesc.NONE)) {
                             @Override

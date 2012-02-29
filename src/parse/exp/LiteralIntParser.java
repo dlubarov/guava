@@ -31,14 +31,14 @@ public class LiteralIntParser extends Parser<Expression> {
                 long n = Long.parseLong(sb.toString());
                 return new Success<Expression>(new LiteralLong(n), p);
             } catch (NumberFormatException e) {
-                throw new NiftyException("Literal long '%s' is too large.", sb);
+                throw new NiftyException("Literal Long '%s' is too large.", sb);
             }
 
         try {
             int n = Integer.parseInt(sb.toString());
             return new Success<Expression>(new LiteralInt(n), p);
         } catch (NumberFormatException e) {
-            throw new NiftyException("Literal int '%s' is too large.", sb);
+            throw new NiftyException("Literal Int '%s' is too large.", sb);
         }
     }
 }

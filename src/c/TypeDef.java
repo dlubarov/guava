@@ -127,8 +127,8 @@ public class TypeDef {
         // There should be exactly one matching method, which we return.
         if (options.isEmpty())
             throw new NoSuchElementException(String.format(
-                    "No matching static method found for '%s.%s'.",
-                    desc, name));
+                    "No matching static method found for %s.%s with argument types %s.",
+                    desc, name, Arrays.toString(argTypes)));
         if (options.size() > 1)
             throw new NiftyException("Ambiguous static method call '%s'.", name);
         return options.iterator().next();

@@ -52,6 +52,12 @@ public sealed type Long extends NaturallyOrdered[Long] {
     return new NaturalOrdering[Long]().max(this, that);
   }
 
+  public Long abs() {
+    if (this < 0L)
+      return -this;
+    return this;
+  }
+
   public Int signum() {
     if (this > 0L)
       return 1;

@@ -52,6 +52,12 @@ public sealed type Int extends NaturallyOrdered[Int] {
     return new NaturalOrdering[Int]().max(this, that);
   }
 
+  public Int abs() {
+    if (this < 0)
+      return -this;
+    return this;
+  }
+
   public Int signum() {
     if (this > 0)
       return 1;

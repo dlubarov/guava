@@ -1,7 +1,11 @@
 module core;
 
+# TODO: write round, ceil, floor, etc.
+
 public sealed type Double extends NaturallyOrdered[Double] {
+  public Unit init(Long n) {}
   public Unit init(Int n) {}
+  public Unit init(Byte n) {}
   public Unit init(String s) {}
 
   public Double +() {}
@@ -25,6 +29,12 @@ public sealed type Double extends NaturallyOrdered[Double] {
 
   public Double max(Double that) {
     return new NaturalOrdering[Double]().max(this, that);
+  }
+
+  public Double abs() {
+    if (this < 0.0)
+      return -this;
+    return this;
   }
 
   public Int signum() {
