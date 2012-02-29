@@ -1,0 +1,112 @@
+module math;
+
+# Note that this uses Ints, not BigInts, so it cannot handle arbitrarily
+# complex rationals.
+
+public type Rational extends NaturallyOrdered[Rational] {
+  public readonly Int numerator, denominator;
+
+  public Unit init(Int num, Int den) {
+    if (den == 0)
+      1 / 0; # fail
+    # FIXME: negative a, b
+    Int d = Math.gcd(num, den);
+    if (den < 0)
+      d = -d;
+    this.numerator = num / d;
+    this.denominator = den / d;
+  }
+
+  public Unit init(Int n) {
+    this.numerator = n;
+    this.denominator = 1;
+  }
+
+  public Rational +() {
+    return this;
+  }
+
+  public Rational -() {
+    return new Rational(-this.numerator, this.denominator);
+  }
+
+  public Rational reciprocal() {
+    return new Rational(this.denominator, this.numerator);
+  }
+
+  public Rational *(Int k) {
+    return new Rational(this.numerator * k, this.denominator);
+  }
+
+  public Rational /(Int k) {
+    return new Rational(this.numerator, this.denominator * k);
+  }
+
+  public Rational *(Rational that) {
+    return new Rational(
+        this.numerator * that.numerator,
+        this.denominator * that.denominator);
+  }
+
+  public Rational /(Rational that) {
+    return this * that.reciprocal();
+  }
+
+  public Rational +(Rational that) {
+    Int d = Math.lcm(this.denominator, that.denominator);
+    Int n = this.numerator * (d / this.denominator)
+          + that.numerator * (d / that.denominator);
+    return new Rational(n, d);
+  }
+
+  public Rational -(Rational that) {
+    return this + -that;
+  }
+
+  public Rational min(Rational that) {
+    if (that < this)
+      return that;
+    return this;
+  }
+
+  public Rational max(Rational that) {
+    if (that > this)
+      return that;
+    return this;
+  }
+
+  public Rational abs() {
+    return new Rational(this.numerator.abs(), this.denominator);
+  }
+
+  public Int signum() {
+    return this.numerator.signum() / this.denominator.signum();
+  }
+
+  public Relation compareTo(Rational that) {
+    switch ((this - that).signum()) {
+      -1 -> return Relation.LT;
+       0 -> return Relation.EQ;
+      +1 -> return Relation.GT;
+      other -> 1 / 0; # fail
+    }
+  }
+
+  public Bool equals(Top o) {
+    switch (o) {
+      Rational that ->
+        return this.numerator == that.numerator &
+               this.denominator == that.denominator;
+      other ->
+        return false;
+    }
+  }
+
+  public Int hashCode() {
+    return {this.numerator, this.denominator}.hashCode();
+  }
+
+  public String toString() {
+    return this.numerator.toString() + "/" + this.denominator;
+  }
+}

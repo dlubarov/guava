@@ -1,0 +1,77 @@
+module math;
+
+public type Complex {
+  public readonly Double re, im;
+
+  public Unit init(Double re, Double im) {
+    this.re = re;
+    this.im = im;
+  }
+
+  public Complex +() {
+    return this;
+  }
+
+  public Complex -() {
+    return new Complex(-this.re, -this.im);
+  }
+
+  public Complex conjugate() {
+    return new Complex(this.re, -this.im);
+  }
+
+  public Complex reciprocal() {
+    return this.conjugate() / (this.re * this.re + this.im * this.im);
+  }
+
+  public Complex +(Complex that) {
+    return new Complex(this.re + that.re, this.im + that.im);
+  }
+
+  public Complex -(Complex that) {
+    return this + -that;
+  }
+
+  public Complex *(Double k) {
+    return new Complex(this.re * k, this.im * k);
+  }
+
+  public Complex /(Double k) {
+    return new Complex(this.re / k, this.im / k);
+  }
+
+  public Complex *(Complex that) {
+    Double re = this.re * that.re - this.im * that.im;
+    Double im = this.im * that.re + this.re * that.im;
+    return new Complex(re, im);
+  }
+
+  public Complex /(Complex that) {
+    Double re = (this.re * that.re + this.im * that.im)
+              / (that.re * that.re + that.im * that.im);
+    Double im = (this.im * that.re - this.re * that.im)
+              / (that.re * that.re + that.im * that.im);
+    return new Complex(re, im);
+  }
+
+  public Double abs() {
+    return Math.sqrt(this.re * this.re + this.im * this.im);
+  }
+
+  public Bool ==(Top o) {
+    switch (o) {
+      Complex that ->
+        return this.re == that.re & this.im == that.im;
+      other ->
+        return false;
+    }
+  }
+
+  public Int hashCode() {
+    return {this.re, this.im}.hashCode();
+  }
+
+  public String toString() {
+    return "%f + %fi".format({this.re, this.im});
+  }
+}
