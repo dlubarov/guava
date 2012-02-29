@@ -2,6 +2,19 @@ module tests;
 
 public type AllTests {
   static Unit main(Sequence[String] args) {
-    ;
+    Some[Int] s1 = new Some[Int](1);
+    Some[Int] s2 = new Some[Int](2);
+    Some[Int] s3 = new Some[Int](3);
+
+    if (s1 == s2)
+      1 / 0;
+    if (s2 == s3)
+      1 / 0;
+    if (s1 != s1)
+      1 / 0;
+    if (s2 != new Some[Int](2))
+      1 / 0;
+
+    Console.outln("All tests passed.\n");
   }
 }

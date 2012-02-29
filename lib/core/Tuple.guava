@@ -4,7 +4,12 @@ public abstract type Tuple {
   public Sequence[Top] toSequence();
 
   public Bool ==(Top o) {
-    # TODO: switch on o
+    switch (o) {
+      Tuple that ->
+        return this.toSequence() == that.toSequence();
+      other ->
+        return false;
+    }
   }
 
   public Int hashCode() {

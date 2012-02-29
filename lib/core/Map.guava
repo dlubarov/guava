@@ -10,7 +10,12 @@ public type MapEntry[+K, +V] {
   }
 
   public Bool equals(Top o) {
-    # TODO: switch on o
+    switch (o) {
+      MapEntry[Top, Top] that ->
+        return this.key == that.key & this.value == that.value;
+      other ->
+        return false;
+    }
   }
 
   public Int hashCode() {

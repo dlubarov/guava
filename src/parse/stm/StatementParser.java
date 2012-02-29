@@ -3,28 +3,25 @@ package parse.stm;
 import parse.*;
 import a.stm.Statement;
 
-@SuppressWarnings("unchecked")
 public class StatementParser extends Parser<Statement> {
     public static final Parser<Statement> singleton = new StatementParser().memo();
     private StatementParser() {}
 
-    private static final Parser<Statement>[] statementParsers;
-
-    static {
-        statementParsers = new Parser[] {
-                BlockParser.singleton,
-                PassParser.singleton,
-                IfParser.singleton,
-                WhileParser.singleton,
-                ForParser.singleton,
-                ForEachParser.singleton,
-                RepeatParser.singleton,
-                ForeverParser.singleton,
-                ReturnParser.singleton,
-                EvaluationParser.singleton,
-                LocalDefParser.singleton,
-        };
-    }
+    @SuppressWarnings("unchecked")
+    private static final Parser<Statement>[] statementParsers = new Parser[] {
+        BlockParser.singleton,
+        PassParser.singleton,
+        IfParser.singleton,
+        WhileParser.singleton,
+        ForParser.singleton,
+        ForEachParser.singleton,
+        SwitchParser.singleton,
+        RepeatParser.singleton,
+        ForeverParser.singleton,
+        ReturnParser.singleton,
+        EvaluationParser.singleton,
+        LocalDefParser.singleton,
+    };
 
     @Override
     public Success<Statement> parse(String s, int p) {

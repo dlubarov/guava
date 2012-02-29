@@ -5,7 +5,12 @@ public abstract type Point2D[T] {
   public T getY();
 
   public Bool ==(Top o) {
-    # TODO: switch on o
+    switch (o) {
+      Point2D[Top] that ->
+        return this.getX() == that.getX() & this.getY() == that.getY();
+      other ->
+        return false;
+    }
   }
 
   public Int hashCode() {

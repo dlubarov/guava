@@ -35,7 +35,7 @@ public class ConcreteType {
             ConcreteType requiredGenericArg = that.genericArgs[i];
             switch (that.rawType.genericVariances[i]) {
                 case COVARIANT:
-                    if (!requiredGenericArg.isSubtype(myGenericArg))
+                    if (!myGenericArg.isSubtype(requiredGenericArg))
                         return false;
                     break;
                 case NONVARIANT:
@@ -43,7 +43,7 @@ public class ConcreteType {
                         return false;
                     break;
                 case CONTRAVARIANT:
-                    if (!myGenericArg.isSubtype(requiredGenericArg))
+                    if (!requiredGenericArg.isSubtype(myGenericArg))
                         return false;
                     break;
             }

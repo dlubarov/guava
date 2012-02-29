@@ -19,7 +19,7 @@ public abstract class BaseObject {
         return type.rawType.superGenerics.get(genericOwner)[index].toConcrete(type.genericArgs);
     }
 
-    public boolean isInstance(ConcreteType thatType) {
+    public boolean instanceOf(ConcreteType thatType) {
         return type.isSubtype(thatType);
     }
 

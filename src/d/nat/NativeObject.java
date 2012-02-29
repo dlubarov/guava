@@ -51,18 +51,18 @@ public abstract class NativeObject extends BaseObject {
                             }
                         },
 
-                        new NativeMethodDef(new RawMethod(false, RawType.coreTop, "isInstance", 1, TypeDesc.NONE)) {
+                        new NativeMethodDef(new RawMethod(false, RawType.coreTop, "instanceOf", 1, TypeDesc.NONE)) {
                             @Override
                             public void invoke(BaseObject[] stack, int bp, ConcreteType[] genericArgs) {
                                 BaseObject o = stack[bp + 1];
-                                stack[bp + 1] = new NativeBool(o.isInstance(genericArgs[0]));
+                                stack[bp + 1] = new NativeBool(o.instanceOf(genericArgs[0]));
                             }
                         },
                         new NativeMethodDef(new RawMethod(false, RawType.coreTop, "cast", 1, TypeDesc.NONE)) {
                             @Override
                             public void invoke(BaseObject[] stack, int bp, ConcreteType[] genericArgs) {
                                 BaseObject o = stack[bp + 1];
-                                if (!o.isInstance(genericArgs[0]))
+                                if (!o.instanceOf(genericArgs[0]))
                                     throw new NiftyException(
                                             "Failed cast: %s is not a %s.",
                                             o, genericArgs[0]);

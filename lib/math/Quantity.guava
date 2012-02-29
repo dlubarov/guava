@@ -57,7 +57,12 @@ public sealed type SimpleQuantity[D] extends NaturallyOrdered[SimpleQuantity[D]]
   }
 
   public Bool ==(Top o) {
-    # TODO: switch on o
+    switch (o) {
+      SimpleQuantity[D] that ->
+        return this.amount == that.in(this.unit).amount;
+      other ->
+        return false;
+    }
   }
 
   public Int hashCode() {

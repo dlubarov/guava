@@ -36,14 +36,15 @@ public type HashBag[T] extends Collection[T] {
   # copies of the element, only one will be removed.
   # Returns true if an item was removed, false if it was not found.
   public Unit -=(T elem) {
-    # TODO: switch on n
     Int n = this.count(elem);
-    if (n == 0)
-      return;
-    if (n == 1)
-      this.countMap -= elem;
-    else
-      this.countMap(elem) = n - 1;
+    switch (n) {
+      0 ->
+        return;
+      1 ->
+        this.countMap -= elem;
+      other ->
+        this.countMap(elem) = n - 1;
+    }
     this.numItems = this.numItems - 1;
   }
 

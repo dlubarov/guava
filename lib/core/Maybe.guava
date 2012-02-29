@@ -32,7 +32,12 @@ public sealed type Some[+T] extends Maybe[T] {
   }
 
   public Bool ==(Top o) {
-    # TODO: switch on o
+    switch (o) {
+      Some[Top] that ->
+        return this.value == that.value;
+      other ->
+        return false;
+    }
   }
 
   public Int hashCode() {

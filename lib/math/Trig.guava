@@ -1,0 +1,25 @@
+module math;
+
+public abstract sealed type Trig {
+  # The sine of an angle (given in radians).
+  public static Double sin(Double ang) {
+  }
+
+  # The cosine of an angle (given in radians).
+  public static Double cos(Double ang) {
+  }
+
+  # The tangent of an angle (given in radians).
+  public static Double cos(Double ang) {
+  }
+
+  # TODO: atan, atan2, etc.
+
+  # Convert from degrees to radians.
+  public static Double deg2rad(Double degrees) {
+  }
+
+  # Convert from radians to degrees.
+  public static Double rad2deg(Double radians) {
+  }
+}

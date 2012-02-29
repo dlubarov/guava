@@ -14,15 +14,16 @@ public sealed type PossibleRelation {
   }
 
   public String toString() {
-    # TODO: use switch
-    if (this == PossibleRelation.NONE)
-      return "NONE";
-    if (this == Relation.LT)
-      return "LT";
-    if (this == Relation.GT)
-      return "GT";
-    if (this == Relation.EQ)
-      return "EQ";
+    switch (this) {
+      PossibleRelation.NONE ->
+        return "NONE";
+      Relation.LT ->
+        return "LT";
+      Relation.GT ->
+        return "GT";
+      Relation.EQ ->
+        return "EQ";
+    }
   }
 }
 
@@ -69,10 +70,6 @@ public abstract type NaturallyPartiallyOrdered[-T] {
     return this.compareTo(that) == Relation.GT;
   }
 
-  public Bool ==(Top that) {
-    # TODO: switch on that
-  }
-
   public Bool <=(T that) {
     PossibleRelation rel = this.compareTo(that);
     return rel == Relation.LT | rel == Relation.EQ;
@@ -81,6 +78,15 @@ public abstract type NaturallyPartiallyOrdered[-T] {
   public Bool >=(T that) {
     PossibleRelation rel = this.compareTo(that);
     return rel == Relation.GT | rel == Relation.EQ;
+  }
+
+  public Bool ==(Top o) {
+    switch (o) {
+      T that ->
+        return this.compareTo(that) == Relation.EQ;
+      other ->
+        return false;
+    }
   }
 }
 
