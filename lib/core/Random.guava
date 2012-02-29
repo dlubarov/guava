@@ -1,0 +1,48 @@
+module core;
+
+public type Random {
+  private Long seed;
+
+  public static Random mainInstance;
+
+  public Unit init(Long seed) {
+    this.seed = seed;
+  }
+
+  public Unit init() {
+    this.seed = Random.mainInstance.nextLong();
+  }
+
+  private static Unit init() {
+    Random.mainInstance = new Random(123456L);
+  }
+
+  public static Random get() {
+    return Random.mainInstance;
+  }
+
+  private Unit advanceState() {
+    # Credit to Donald Knuth.
+    Long a = 6364136223846793005L,
+         c = 1442695040888963407L;
+    this.seed = a * this.seed + c;
+  }
+
+  public Long nextLong() {
+    this.advanceState();
+    return this.seed;
+  }
+
+  public Int nextInt() {
+    return new Int(this.nextLong());
+  }
+
+  public Double nextDouble() {
+    Long d = ~0L ^ 1L << 63; # all bits set except for the sign bit
+    return new Double(this.nextLong() & d) / new Double(d);
+  }
+
+  public Double nextSignedDouble() {
+    return (this.nextDouble() - 0.5) * 2.0;
+  }
+}
