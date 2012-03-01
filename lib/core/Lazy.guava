@@ -15,7 +15,12 @@ public sealed type Lazy[T] {
     return this.value.get();
   }
 
-  public Bool ==(Object o) {
+  # TODO: better name?
+  public Bool hasEvaluated() {
+    return !this.value.isEmpty();
+  }
+
+  public Bool ==(Top o) {
     return this() == o;
   }
 
