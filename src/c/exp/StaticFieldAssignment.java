@@ -33,7 +33,7 @@ public class StaticFieldAssignment extends Expression {
                     value, owner, fieldName, expectedType);
 
         return new CodeTree(
-                value.compile(ctx),
+                value.compileWithTypeHint(expectedType, ctx),
                 Opcodes.DUP,
                 Opcodes.PUT_STATIC_FIELD,
                 ownerIndex, fieldIndex

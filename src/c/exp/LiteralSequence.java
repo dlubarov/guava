@@ -15,24 +15,60 @@ public class LiteralSequence extends Expression {
         this.elements = elements;
     }
 
+    // If type is an Array, Collection, etc., get its element type.
+    private static Type getElemType(Type type, CodeContext ctx) {
+        try {
+            return type.asSupertype(RawType.coreEnumerable, ctx).genericArgs[0];
+        } catch (IllegalArgumentException e) {
+            return null;
+        }
+    }
+
     @Override
     public ParameterizedType inferType(CodeContext ctx) {
         Type[] elementTypes = new Type[elements.length];
         for (int i = 0; i < elementTypes.length; ++i)
             elementTypes[i] = elements[i].inferType(ctx);
         Type elementType = TypeUtils.union(elementTypes);
-        return new ParameterizedType(RawType.coreSequence, new Type[] {elementType});
+        return new ParameterizedType(RawType.coreArray, new Type[] {elementType});
     }
 
     @Override
-    public CodeTree compile(CodeContext ctx) {
-        Type elementType = inferType(ctx).genericArgs[0];
+    public boolean hasType(Type type, CodeContext ctx) {
+        Type elemType = getElemType(type, ctx);
+        if (elemType != null) {
+            Type myType = new ParameterizedType(RawType.coreArray, new Type[] {elemType});
+            if (!myType.isSubtype(type, ctx))
+                return false; // type is something like List[elemType]
+            for (Expression elem : elements)
+                if (!elem.hasType(elemType, ctx))
+                    return false;
+            return true;
+        }
+        return super.hasType(type, ctx);
+    }
+
+    private CodeTree compileWithElemType(Type elementType, CodeContext ctx) {
         return new CodeTree(
                 Expression.compileAll(elements, ctx),
                 Opcodes.CREATE_SEQ,
                 ctx.method.getFullTypeTableIndex(elementType),
                 elements.length
         );
+    }
+
+    @Override
+    public CodeTree compile(CodeContext ctx) {
+        Type elementType = inferType(ctx).genericArgs[0];
+        return compileWithElemType(elementType, ctx);
+    }
+
+    @Override
+    public CodeTree compileWithTypeHint(Type requiredType, CodeContext ctx) {
+        Type elementType = getElemType(requiredType, ctx);
+        if (elementType == null)
+            return super.compileWithTypeHint(requiredType, ctx);
+        return compileWithElemType(elementType, ctx);
     }
 
     @Override

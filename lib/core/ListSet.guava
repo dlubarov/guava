@@ -4,10 +4,23 @@ module core;
 # and provides a remove method.
 
 public sealed type ListSet[+T] extends ImmutableSet[T] {
+  public static readonly ListSet[Bottom] empty;
+
   private List[T] backingList;
 
-  public Unit init() {
+  private Unit init() {
     this.backingList = EmptyList();
+  }
+
+  private Unit init(Collection[T] source) {
+    this.init();
+    foreach (T elem in source)
+      if (!this.contains(elem))
+        this.backingList = new NonEmptyList[T](elem, this.backingList);
+  }
+
+  private static Unit init() {
+    ListSet.empty = new ListSet[Bottom]();
   }
 
   [U > T]

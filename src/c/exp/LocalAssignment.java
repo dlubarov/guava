@@ -27,7 +27,7 @@ public class LocalAssignment extends Expression {
             throw new NiftyException("'%s' does not conform to %s's type of %s.",
                     value, name, expectedType);
         return new CodeTree(
-                value.compile(ctx),
+                value.compileWithTypeHint(expectedType, ctx),
                 Opcodes.DUP,
                 Opcodes.PUT_LOCAL,
                 ctx.getLocalIndex(name)

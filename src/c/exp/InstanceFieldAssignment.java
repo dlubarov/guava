@@ -41,7 +41,7 @@ public class InstanceFieldAssignment extends Expression {
 
         int fieldNameIndex = ctx.method.getStringTableIndex(fieldName);
         return new CodeTree(
-                value.compile(ctx),
+                value.compileWithTypeHint(expectedType, ctx),
                 Opcodes.DUP,
                 target.compile(ctx),
                 Opcodes.PUT_INSTANCE_FIELD,

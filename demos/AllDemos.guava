@@ -9,7 +9,9 @@ type AllDemos {
       Console.outln("No arguments to show :-(");
 
     UnitConversions.run();
+    Console.outln();
     PrimeGenerator.run();
+    Console.outln();
     ProgressBar.run();
   }
 }

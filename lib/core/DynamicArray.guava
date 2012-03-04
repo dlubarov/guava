@@ -5,7 +5,7 @@ public sealed type DynamicArray[T] extends MutableStack[T] {
   private Int n;
 
   public Unit init() {
-    this.backingArray = new Array[Maybe[T]]({None()});
+    this.backingArray = {None()};
     this.n = 0;
   }
 

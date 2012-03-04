@@ -24,13 +24,17 @@ public class Return extends Statement {
             return new CompilationResult(new CodeTree(Opcodes.RETURN_UNIT), ctx);
         }
 
+        // compileWithTypeHint does this check for us, but it is nice
+        // to have an error which is specific to return statements.
         if (!value.hasType(ctx.method.returnType, ctx))
             throw new NiftyException(
                     "Return value '%s' does not conform to method's return type, %s.",
                     value, ctx.method.returnType);
 
         return new CompilationResult(
-                new CodeTree(value.compile(ctx), Opcodes.RETURN),
+                new CodeTree(
+                        value.compileWithTypeHint(ctx.method.returnType, ctx),
+                        Opcodes.RETURN),
                 ctx);
     }
 

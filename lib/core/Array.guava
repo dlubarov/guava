@@ -5,7 +5,20 @@ pubilc sealed type Array[T] extends MutableSequence[T] {
     # native code
   }
 
+  # Builds an array by copying the elements from some collection.
   public Unit init(Collection[T] source) {
+    # native code
+  }
+
+  # Builds an array of length l by repeatedly calling f for each element.
+  public Unit init(Int l, Function0[T] f) {
+    # native code
+    #this.init(l, (Int i) => T { return f(); });
+  }
+
+  # Builds an array of length l by repeatedly calling f for each element.
+  # The argument passed to f is the index that is being filled.
+  public Unit init(Int l, Function1[Int, T] f) {
     # native code
   }
 

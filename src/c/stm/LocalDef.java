@@ -2,8 +2,6 @@ package c.stm;
 
 import java.util.*;
 
-import common.NiftyException;
-
 import c.*;
 import c.exp.*;
 import c.ty.Type;
@@ -29,11 +27,8 @@ public class LocalDef extends Statement {
             // because LocalAssignment needs the destination local index.
             ctx = ctx.addLocal(type, names[i]);
             if (initVals[i] != null) {
-                if (!initVals[i].hasType(type, ctx))
-                    throw new NiftyException("'%s' does not conform to %s's type of %s.",
-                            initVals[i], names[i], type);
                 CodeTree assignment = new CodeTree(
-                                initVals[i].compile(ctx),
+                                initVals[i].compileWithTypeHint(type, ctx),
                                 Opcodes.PUT_LOCAL,
                                 ctx.getLocalIndex(names[i]));
                 assignments.add(assignment);

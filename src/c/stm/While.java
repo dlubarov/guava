@@ -2,8 +2,6 @@ package c.stm;
 
 import static util.StringUtils.indent;
 
-import common.NiftyException;
-
 import c.*;
 import c.exp.Expression;
 import c.ty.Type;
@@ -20,10 +18,7 @@ public class While extends Statement {
 
     @Override
     public CompilationResult compile(CodeContext ctx) {
-        if (!cond.hasType(Type.coreBool, ctx))
-            throw new NiftyException("Condition '%s' must have type Bool.", cond);
-
-        CodeTree condCode = cond.compile(ctx);
+        CodeTree condCode = cond.compileWithTypeHint(Type.coreBool, ctx);
         CodeTree bodyCode = body.compile(ctx).code;
         CodeTree code = new CodeTree(
                 condCode, Opcodes.BOOL_NEG,

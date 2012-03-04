@@ -1,6 +1,6 @@
 package c.exp;
 
-import common.RawType;
+import common.*;
 
 import c.*;
 import c.ty.*;
@@ -15,6 +15,12 @@ public abstract class Expression {
     }
 
     public abstract CodeTree compile(CodeContext ctx);
+
+    public CodeTree compileWithTypeHint(Type requiredType, CodeContext ctx) {
+        if (!hasType(requiredType, ctx))
+            throw new NiftyException("'%s' does not conform to expected type %s.", this, requiredType);
+        return compile(ctx);
+    }
 
     public static Type[] inferAllTypes(Expression[] expressions, CodeContext ctx) {
         Type[] types = new Type[expressions.length];

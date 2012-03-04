@@ -12,7 +12,7 @@ public sealed type CircularBuffer[T] extends MutableSequence[T] {
   private Int pos, len;
 
   public Unit init(Int capacity) {
-    this.backingArray = new Array[Maybe[T]]({None()} * capacity);
+    this.backingArray = {None().cast[Maybe[T]]()} * capacity;
     this.pos = this.len = 0;
   }
 

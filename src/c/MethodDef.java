@@ -100,7 +100,7 @@ public class MethodDef {
 
         // Check method generics.
         for (int i = 0; i < genericInfos.length; ++i)
-            ; // TODO: check generic constraints.
+            ; // TODO: check generic constraints. (Mine must be weaker.)
 
         // Check visibility.
         if (visibility.lessAccessible(that.visibility))
