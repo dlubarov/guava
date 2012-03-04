@@ -37,6 +37,13 @@ public type Random {
     return new Int(this.nextLong());
   }
 
+  public Int nextInt(Int ceil) {
+    if (ceil <= 0)
+      1 / 0; # fail
+    Int mask = ~0 ^ 1 << 31; # mask to zero the sign bit
+    return (this.nextInt() & mask) % ceil;
+  }
+
   public Double nextDouble() {
     Long d = ~0L ^ 1L << 63; # all bits set except for the sign bit
     return new Double(this.nextLong() & d) / new Double(d);

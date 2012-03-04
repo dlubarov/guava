@@ -92,7 +92,7 @@ public type Rational extends NaturallyOrdered[Rational] {
     }
   }
 
-  public Bool equals(Top o) {
+  public Bool ==(Top o) {
     switch (o) {
       Rational that ->
         return this.numerator == that.numerator &

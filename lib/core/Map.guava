@@ -9,7 +9,7 @@ public type MapEntry[+K, +V] {
     this.value = value;
   }
 
-  public Bool equals(Top o) {
+  public Bool ==(Top o) {
     switch (o) {
       MapEntry[Top, Top] that ->
         return this.key == that.key & this.value == that.value;
