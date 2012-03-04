@@ -19,9 +19,12 @@ public class ChainParser extends Parser<Expression> {
         p = resBase.rem;
         p = optWS(s, p);
 
-        Success<GenericsAndArgumentsParser.GenericsAndArgs> resGenericsAndArgs =
-                GenericsAndArgumentsParser.singleton.parse(s, p);
-        if (resGenericsAndArgs != null) {
+        // Parse any invocations.
+        Success<GenericsAndArgumentsParser.GenericsAndArgs> resGenericsAndArgs;
+        for (;;) {
+            resGenericsAndArgs = GenericsAndArgumentsParser.singleton.parse(s, p);
+            if (resGenericsAndArgs == null)
+                break;
             GenericsAndArgumentsParser.GenericsAndArgs val = resGenericsAndArgs.value;
             exp = new Invocation(exp, val.genericArgs, val.arguments);
             p = resGenericsAndArgs.rem;
@@ -43,9 +46,11 @@ public class ChainParser extends Parser<Expression> {
             p = resMember.rem;
             p = optWS(s, p);
 
-            // Parse the invocation, if there is one.
-            resGenericsAndArgs = GenericsAndArgumentsParser.singleton.parse(s, p);
-            if (resGenericsAndArgs != null) {
+            // Parse any invocations.
+            for (;;) {
+                resGenericsAndArgs = GenericsAndArgumentsParser.singleton.parse(s, p);
+                if (resGenericsAndArgs == null)
+                    break;
                 GenericsAndArgumentsParser.GenericsAndArgs val = resGenericsAndArgs.value;
                 exp = new Invocation(exp, val.genericArgs, val.arguments);
                 p = resGenericsAndArgs.rem;
