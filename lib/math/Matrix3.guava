@@ -1,0 +1,63 @@
+module math;
+
+public sealed type Matrix3 {
+  private readonly Sequence[Sequence[Double]] data;
+
+  private Unit init(Sequence[Sequence[Double]] data) {
+    this.data = data;
+  }
+
+  public Unit init(Double m00, Double m01, Double m02,
+                   Double m10, Double m11, Double m12,
+                   Double m20, Double m21, Double m22) {
+    this.init({{m00, m01, m02}, {m10, m11, m12}, {m20, m21, m22}});
+  }
+
+  public static Matrix3 rotationMatrixX(Double a) {
+    # TODO: impl
+    return new Matrix3(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+  }
+
+  public static Matrix3 rotationMatrixY(Double a) {
+    # TODO: impl
+    return new Matrix3(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+  }
+
+  public static Matrix3 rotationMatrixZ(Double a) {
+    # TODO: impl
+    return new Matrix3(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+  }
+
+  public Double get(Int r, Int c) {
+    return this.data(r)(c);
+  }
+
+  public Matrix3 *(Double k) {
+    # TODO: impl
+  }
+
+  public Matrix3 *(Matrix3 that) {
+    # TODO: impl
+  }
+
+  public Vector3 *(Vector3 v) {
+    # TODO: impl
+  }
+
+  public Bool ==(Top o) {
+    switch (o) {
+      Matrix3 that ->
+        return this.data == that.data;
+      other ->
+        return false;
+    }
+  }
+
+  public Int hashCode() {
+    return this.data.hashCode();
+  }
+
+  public String toString() {
+    return this.data.toString();
+  }
+}

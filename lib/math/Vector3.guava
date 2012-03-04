@@ -1,0 +1,103 @@
+module math;
+
+public sealed type Vector3 {
+  public readonly Double x, y, z;
+
+  public Unit init(Double x, Double y, Double z) {
+    this.x = x;
+    this.y = y;
+    this.z = z;
+  }
+
+  public Unit init(Sequence[Double] values) {
+    if (values.size() != 3)
+      1 / 0; # fail
+    this.x = values(0);
+    this.y = values(1);
+    this.z = values(2);
+  }
+
+  public Double get(Int d) {
+    switch (d) {
+      0 ->
+        return this.x;
+      1 ->
+        return this.y;
+      2 ->
+        return this.z;
+      other ->
+        1 / 0; # fail
+    }
+  }
+
+  public Vector3 +() {
+    return this;
+  }
+
+  public Vector3 -() {
+    return this * -1.0;
+  }
+
+  public Vector3 +(Vector3 that) {
+    return new Vector3(this.x + that.x, this.y + that.y, this.z + that.z);
+  }
+
+  public Vector3 -(Vector3 that) {
+    return this + -that;
+  }
+
+  public Vector3 *(Double k) {
+    return new Vector3(this.x * k, this.y * k, this.z * k);
+  }
+
+  public Vector3 /(Double k) {
+    return this * (1.0 / k);
+  }
+
+  public Double euclideanDistanceTo(Vector3 that) {
+    return (this - that).norm();
+  }
+
+  public Double normSquared() {
+    return this.x * this.x + this.y * this.y + this.z * this.z;
+  }
+
+  public Double norm() {
+    return Math.sqrt(this.normSquared());
+  }
+
+  public Vector3 normalized() {
+    return this / this.norm();
+  }
+
+  public Double dot(Vector3 that) {
+    return this.x * that.x + this.y * that.y + this.z * that.z;
+  }
+
+  public Vector3 cross(Vector3 that) {
+    # TODO
+  }
+
+  public Matrix3 crossProductMatrix() {
+    return new Matrix3(0.0, -this.z, this.y,
+                       this.z, 0.0, -this.x,
+                       -this.y, this.x, 0.0);
+  }
+
+  public Bool ==(Top o) {
+    switch (o) {
+      Vector3 that ->
+        return this.x == that.x & this.y == that.y & this.z == that.z;
+      other ->
+        return false;
+    }
+  }
+
+  public Int hashCode() {
+    return {this.x, this.y, this.z}.hashCode();
+  }
+
+  public String toString() {
+    return "(%f, %f, %f)".format({this.x, this.y, this.z});
+  }
+}
