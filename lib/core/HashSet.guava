@@ -12,21 +12,28 @@ public sealed type HashSet[T] extends MutableSet[T] {
     if (initialCapacity < 1)
       1 / 0; # fail
     this.buckets = {ListSet.empty.cast[ImmutableSet[T]]()} * initialCapacity;
+    this.count = 0;
   }
 
   public Unit init() {
     this.init(4);
   }
 
-  private Int bucketIndexFor(Top elem) {
+  public Unit init(Collection[T] source) {
+    this.init(source.size());
+    foreach (T elem in source)
+      this += elem;
+  }
+
+  private Int bucketIndexFor(T elem) {
     return elem.hashCode() % this.buckets.size();
   }
 
-  private ImmutableSet[T] bucketFor(Top elem) {
+  private ImmutableSet[T] bucketFor(T elem) {
     return this.buckets(this.bucketIndexFor(elem));
   }
 
-  public Bool contains(Top elem) {
+  public Bool contains(T elem) {
     return this.bucketFor(elem).contains(elem);
   }
 
@@ -87,10 +94,10 @@ public sealed type HashSet[T] extends MutableSet[T] {
 }
 
 type HashSetEnumerator[T] extends Source[T] {
-  Source[Set[T]] bucketEnum;
-  Source[T] elemEnum;
+  private Source[ImmutableSet[T]] bucketEnum;
+  private Source[T] elemEnum;
 
-  public Unit init(Sequence[Set[T]] buckets) {
+  Unit init(Array[ImmutableSet[T]] buckets) {
     this.bucketEnum = buckets.enumerator();
     # There must be at least one bucket.
     this.elemEnum = this.bucketEnum.take().get().enumerator();
@@ -99,7 +106,7 @@ type HashSetEnumerator[T] extends Source[T] {
   public Maybe[T] take() {
     Maybe[T] maybeElem = this.elemEnum.take();
     while (maybeElem.isEmpty()) {
-      Maybe[Set[T]] maybeBucket = this.bucketEnum.take();
+      Maybe[ImmutableSet[T]] maybeBucket = this.bucketEnum.take();
       if (maybeBucket.isEmpty())
         return None();
       this.elemEnum = maybeBucket.get().enumerator();

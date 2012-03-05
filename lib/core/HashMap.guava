@@ -3,29 +3,116 @@ module core;
 # A standard hash map (aka hash table) using separate chaining.
 
 public sealed type HashMap[K, V] extends MutableMap[K, V] {
-  public Unit init() {
-    # FIXME: implement hash map
+  private Array[ImmutableSet[MapEntry[K, V]]] buckets;
+  private Int count;
+
+  public Unit init(Int initialCapacity) {
+    if (initialCapacity < 1)
+      1 / 0; # fail
+    this.buckets = {ListSet.empty.cast[ImmutableSet[MapEntry[K, V]]]()} * initialCapacity;
+    this.count = 0;
   }
 
-  public Unit init(Set[MapEntry[K, V]] source) {
-    this.init();
+  public Unit init() {
+    this.init(4);
+  }
+
+  public Unit init(Collection[MapEntry[K, V]] source) {
+    this.init(source.size());
     foreach (MapEntry[K, V] entry in source)
       this += entry;
   }
 
+  private Int bucketIndexFor(K key) {
+    return key.hashCode() % this.buckets.size();
+  }
+
+  private ImmutableSet[MapEntry[K, V]] bucketFor(K key) {
+    return this.buckets(this.bucketIndexFor(key));
+  }
+
+  private Bool shouldExpand() {
+    return this.count > this.buckets.size();
+  }
+
+  private Bool shouldShrink() {
+    return this.count > 10 & this.count * 4 < this.buckets.size();
+  }
+
+  public Bool containsKey(K key) {
+    foreach (MapEntry[K, V] entry in this.bucketFor(key))
+      if (entry.key == key)
+        return true;
+    return false;
+  }
+
+  public Bool contains(MapEntry[K, V] entry) {
+    return this.bucketFor(entry.key).contains(entry);
+  }
+
   public Maybe[V] tryGet(K key) {
-    # FIXME: implement hash map
+    foreach (MapEntry[K, V] entry in this.bucketFor(key))
+      if (entry.key == key)
+        return new Some[V](entry.value);
+    return None();
   }
 
   public Unit set(K key, V value) {
-    # FIXME: implement hash map
+    Int idx = this.bucketIndexFor(key);
+    ImmutableSet[MapEntry[K, V]] bucket = this.buckets(idx);
+
+    # Remove the existing entry for that key, if there was one.
+    foreach (MapEntry[K, V] entry in bucket)
+      if (entry.key == key) {
+        bucket = bucket - entry;
+        this.count = this.count - 1;
+      }
+
+    this.buckets(idx) = bucket + new MapEntry[K, V](key, value);
+    this.count = this.count + 1;
   }
 
   public Unit -=(K key) {
-    # FIXME: implement hash map
+    Int idx = this.bucketIndexFor(key);
+    ImmutableSet[MapEntry[K, V]] bucket = this.buckets(idx);
+
+    foreach (MapEntry[K, V] entry in bucket)
+      if (entry.key == key) {
+        bucket = bucket - entry;
+        this.count = this.count - 1;
+      }
+
+    this.buckets(idx) = bucket;
+  }
+
+  public Int size() {
+    return this.count;
   }
 
   public Source[MapEntry[K, V]] enumerator() {
-    # FIXME: implement hash map
+    return new HashMapEnumerator[K, V](this.buckets);
+  }
+}
+
+type HashMapEnumerator[K, V] extends Source[MapEntry[K, V]] {
+  private Source[ImmutableSet[MapEntry[K, V]]] bucketEnum;
+  private Source[MapEntry[K, V]] entryEnum;
+
+  Unit init(Array[ImmutableSet[MapEntry[K, V]]] buckets) {
+    this.bucketEnum = buckets.enumerator();
+    # There must be at least one bucket.
+    this.entryEnum = this.bucketEnum.take().get().enumerator();
+  }
+
+  public Maybe[MapEntry[K, V]] take() {
+    Maybe[MapEntry[K, V]] maybeElem = this.entryEnum.take();
+    while (maybeElem.isEmpty()) {
+      Maybe[ImmutableSet[MapEntry[K, V]]] maybeBucket = this.bucketEnum.take();
+      if (maybeBucket.isEmpty())
+        return None();
+      this.entryEnum = maybeBucket.get().enumerator();
+      maybeElem = this.entryEnum.take();
+    }
+    return maybeElem;
   }
 }
