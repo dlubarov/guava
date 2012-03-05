@@ -34,6 +34,19 @@ public abstract type Map[K, +V] extends Set[MapEntry[K, V]] {
     return this.tryGet(key).get();
   }
 
+  public Bool containsKey(K key) {
+    return !this.tryGet(key).isEmpty();
+  }
+
+  public Bool contains(MapEntry[K, V] entry) {
+    switch (this.tryGet(entry.key)) {
+      Some[V] value ->
+        return entry.value == value;
+      None _ ->
+        return false;
+    }
+  }
+
   public Set[K] getKeys() {
     MutableSet[K] keys = new HashSet[K]();
     foreach (MapEntry[K, V] entry in this)
@@ -48,13 +61,34 @@ public abstract type Map[K, +V] extends Set[MapEntry[K, V]] {
     return values;
   }
 
+  public Map[K2, V] mapKeys[K2](Function1[K, K2] f) {
+    # TODO: mapKeys
+  }
+
+  public Map[K, V2] mapValues[V2](Function1[V, V2] f) {
+    # TODO: mapValues
+  }
+
+  public Map[K, V] filterKeys(Function1[K, Bool] f) {
+    # TODO: filterKeys
+  }
+
+  public Map[K, V] filterValues(Function1[V, Bool] f) {
+    # TODO: filterValues
+  }
+
   public ImmutableMap[K, V] toImmutable() {
     # TODO: construct some immutable map
+  }
+
+  public String toString() {
+    # TODO: Map toString
   }
 }
 
 # Does no implement MutableSet[MapEntry[K, V]] because users of that
 # type would not expect adding an element to remove a distinct element.
+
 public abstract type MutableMap[K, V] extends Map[K, V] {
   public Unit set(K key, V value);
 
@@ -65,9 +99,10 @@ public abstract type MutableMap[K, V] extends Map[K, V] {
   public Unit -=(K key);
 }
 
-# Does no implement ImmutableSet[MapEntry[K, +V]] because users of that
+# Does no implement ImmutableSet[MapEntry[K, V]] because users of that
 # type would not expect adding an element to remove a distinct element.
-public abstract type ImmutableMap[K, V] extends Map[K, V] {
+
+public abstract type ImmutableMap[K, +V] extends Map[K, V] {
   # TODO: :+
   public ImmutableMap[K, V] +(MapEntry[K, V] entry);
 

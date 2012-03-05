@@ -45,7 +45,6 @@ public abstract type Collection[+T] extends Enumerable[T] {
   }
 
   # Transform each element according to some function, and return the resulting collection.
-  [U > T]
   public Collection[U] map[U](Function1[T, U] f) {
     MutableStack[U] stack = new DynamicArray[U]();
     foreach (T elem in this)

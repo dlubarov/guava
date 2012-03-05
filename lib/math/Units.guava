@@ -1,5 +1,7 @@
 module math;
 
+# Represents a basic unit, such as seconds, minutes, or meters.
+
 [D < BasicDimension]
 public abstract type BasicUnit[D] {
   public readonly String name;
@@ -48,7 +50,42 @@ sealed type DerivedBasicUnit[D] extends BasicUnit[D] {
   }
 }
 
-# TODO: better name? CompoundUnit?
-public sealed type Units {
-  private readonly Map[BasicUnit[BasicDimension], Int] units;
+public sealed type CompoundUnit {
+  private readonly Map[BasicUnit[BasicDimension], Int] parts;
+
+  public Unit init(Map[BasicUnit[BasicDimension], Int] parts) {
+    # TODO: needs Function wrappers
+    #this.parts = parts.filterValues(0.!=).toImmutable();
+  }
+
+  public CompoundUnit reciprocal() {
+    # TODO: needs lambdas
+    #return new CompoundUnit(this.parts.mapValues((e) => { return -e; }));
+  }
+
+  public CompoundUnit *(CompoundUnit that) {
+    MutableMap[BasicUnit[BasicDimension], Int] newParts = new HashMap[BasicUnit[BasicDimension], Int](this.parts);
+    foreach (MapEntry[BasicUnit[BasicDimension], Int] entry in that.parts)
+      if (newParts.containsKey(entry.key))
+        newParts(entry.key) = newParts(entry.key) + entry.value;
+      else
+        newParts(entry.key) = entry.value;
+    return new CompoundUnit(newParts);
+  }
+
+  public CompoundUnit /(CompoundUnit that) {
+    return this * that.reciprocal();
+  }
+
+  public Bool ==(Top o) {
+    # TODO: CompoundUnit ==
+  }
+
+  public Int hashCode() {
+    # TODO: CompoundUnit hashCode
+  }
+
+  public String toString() {
+    # TODO: CompoundUnit toString
+  }
 }

@@ -28,12 +28,29 @@ public abstract type Set[+T] extends Sequence[T] {
   }
 
   public Bool ==(Top o) {
+    switch (o) {
+      Set[Top] that -> {
+        if (this.size() != that.size())
+          return false;
+        foreach (Top elem in that)
+          if (!this.contains(elem))
+            return false;
+        return true;
+      }
+      other ->
+        return false;
+    }
   }
 
   public Int hashCode() {
+    Int hash = 0;
+    foreach (T elem in this)
+      hash = hash + elem.hashCode();
+    return hash;
   }
 
   public String toString() {
+    return "Set(" + ", ".join(new Array[T](this)) + ")";
   }
 }
 

@@ -1,7 +1,10 @@
 module math;
 
+# A basic quantity, that is, a quantity of some basic unit.
+# For example, 2 days and 5 meters are basic quantities.
+
 [D < BasicDimension]
-public sealed type SimpleQuantity[D] extends NaturallyOrdered[SimpleQuantity[D]] {
+public sealed type Quantity[D] extends NaturallyOrdered[Quantity[D]] {
   public readonly Double amount;
   public readonly BasicUnit[D] unit;
 
@@ -10,55 +13,55 @@ public sealed type SimpleQuantity[D] extends NaturallyOrdered[SimpleQuantity[D]]
     this.unit = unit;
   }
 
-  public SimpleQuantity[D] in(BasicUnit[D] newUnit) {
+  public Quantity[D] in(BasicUnit[D] newUnit) {
     Double conv = this.unit.ratioTo(newUnit);
-    return new SimpleQuantity[D](this.amount * conv, newUnit);
+    return new Quantity[D](this.amount * conv, newUnit);
   }
 
-  public SimpleQuantity[D] +() {
+  public Quantity[D] +() {
     return this;
   }
 
-  public SimpleQuantity[D] -() {
+  public Quantity[D] -() {
     return this * -1.0;
   }
 
-  public SimpleQuantity[D] +(SimpleQuantity[D] that) {
+  public Quantity[D] +(Quantity[D] that) {
     Double totalAmount = this.amount + that.in(this.unit).amount;
-    return new SimpleQuantity[D](totalAmount, this.unit);
+    return new Quantity[D](totalAmount, this.unit);
   }
 
-  public SimpleQuantity[D] -(SimpleQuantity[D] that) {
+  public Quantity[D] -(Quantity[D] that) {
     return this + -that;
   }
 
-  public SimpleQuantity[D] *(Double s) {
-    return new SimpleQuantity[D](this.amount * s, this.unit);
+  public Quantity[D] *(Double s) {
+    return new Quantity[D](this.amount * s, this.unit);
   }
 
-  public SimpleQuantity[D] /(Double d) {
-    return new SimpleQuantity[D](this.amount / d, this.unit);
+  public Quantity[D] /(Double d) {
+    return new Quantity[D](this.amount / d, this.unit);
   }
 
-  public SimpleQuantity[D] %(Double d) {
-    return new SimpleQuantity[D](this.amount % d, this.unit);
+  public Quantity[D] %(Double d) {
+    return new Quantity[D](this.amount % d, this.unit);
   }
 
-  public Relation compareTo(SimpleQuantity[D] that) {
+  public Relation compareTo(Quantity[D] that) {
     return this.amount.compareTo(that.in(this.unit).amount);
   }
 
-  public SimpleQuantity[D] min(SimpleQuantity[D] that) {
-    return new NaturalOrdering[SimpleQuantity[D]]().min(this, that);
+  public Quantity[D] min(Quantity[D] that) {
+    return new NaturalOrdering[Quantity[D]]().min(this, that);
   }
 
-  public SimpleQuantity[D] max(SimpleQuantity[D] that) {
-    return new NaturalOrdering[SimpleQuantity[D]]().max(this, that);
+  public Quantity[D] max(Quantity[D] that) {
+    return new NaturalOrdering[Quantity[D]]().max(this, that);
   }
 
   public Bool ==(Top o) {
     switch (o) {
-      SimpleQuantity[D] that ->
+      Quantity[D] that ->
         return this.amount == that.in(this.unit).amount;
       other ->
         return false;
@@ -77,7 +80,27 @@ public sealed type SimpleQuantity[D] extends NaturallyOrdered[SimpleQuantity[D]]
   }
 }
 
-public sealed type Quantity {
+# A general quantity can have arbitrary units, as in 4 meters/second^2.
+# A basic quantity like 2 hours can also be expressed as a general quantity,
+# although if you know you are dealing with a basic quantity, it is better
+# to use the Quantity type for simplicity, speed and type safety.
+
+public sealed type GeneralQuantity {
   public readonly Double amount;
-  public readonly Units units;
+  public readonly CompoundUnit units;
+
+  public Unit init(Double amount, CompoundUnit units) {
+    this.amount = amount;
+    this.units = units;
+  }
+
+  public GeneralQuantity *(GeneralQuantity that) {
+    return new GeneralQuantity(this.amount * that.amount, this.units * that.units);
+  }
+
+  public GeneralQuantity /(GeneralQuantity that) {
+    return new GeneralQuantity(this.amount / that.amount, this.units / that.units);
+  }
+
+  # TODO: GeneralQuantity +, -, ==, hashCode, toString
 }

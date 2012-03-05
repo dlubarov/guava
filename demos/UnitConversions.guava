@@ -4,7 +4,7 @@ import math.*;
 
 type UnitConversions {
   static Unit run() {
-    SimpleQuantity[Time] day = new SimpleQuantity[Time](1.0, Time.DAY);
+    Quantity[Time] day = new Quantity[Time](1.0, Time.DAY);
     Console.outln(day.toString() + "...");
 
     foreach (BasicUnit[Time] unit in {Time.HOUR, Time.SECOND, Time.MILLISECOND}) {

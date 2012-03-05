@@ -23,3 +23,9 @@ public type Time extends BasicDimension {
     new Time();
   }
 }
+
+public sealed type CompoundDimension {
+  private readonly Map[BasicDimension, Int] parts;
+
+  # TODO: finish CompoundDimension
+}
