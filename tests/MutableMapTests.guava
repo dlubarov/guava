@@ -1,0 +1,25 @@
+module test;
+
+type MutableMapTests {
+  static Unit testMutableMap(MutableMap[Int, Int] m) {
+    m(1) = 2;
+    m(3) = 6;
+    m(0) = 0;
+    if (m.tryGet(3).isEmpty())
+      1 / 0;
+    if (m(3) != 6)
+      1 / 0;
+    if (m(0) != 0)
+      1 / 0;
+    if (m(1) != 2)
+      1 / 0;
+    if (m.size() != 3)
+      1 / 0;
+    if (m.enumerator().takeAll().size() != 3)
+      1 / 0;
+  }
+
+  static Unit run() {
+    MutableMapTests.testMutableMap(new HashMap[Int, Int]());
+  }
+}

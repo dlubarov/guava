@@ -1,0 +1,10 @@
+module test;
+
+type CastTests {
+  static Unit run() {
+    2.cast[Int]();
+    "hi".cast[String]();
+    ListSet.empty.cast[ListSet[Int]]();
+    ListSet.empty.cast[ImmutableSet[Int]]();
+  }
+}

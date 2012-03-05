@@ -4,8 +4,14 @@ type AllTests {
   static Unit main(Sequence[String] args) {
     Console.outln("Running all tests...");
 
+    Console.outln("    Testing casts...");
+    CastTests.run();
+
     Console.outln("    Testing sequences...");
     SequenceTests.run();
+
+    Console.outln("    Testing mutable maps...");
+    MutableMapTests.run();
 
     Console.outln("All tests passed.\n");
   }

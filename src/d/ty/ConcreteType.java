@@ -2,6 +2,8 @@ package d.ty;
 
 import java.util.Arrays;
 
+import common.RawType;
+
 import d.*;
 import d.ty.sup.SuperType;
 
@@ -25,6 +27,9 @@ public class ConcreteType {
     }
 
     public boolean isSubtype(ConcreteType that) {
+        if (rawType.desc.equals(RawType.coreBottom))
+            return true;
+
         SuperType[] myGenericArgsForThat = rawType.superGenerics.get(that.rawType);
         if (myGenericArgsForThat == null)
             return false; // the raw types don't even fit
