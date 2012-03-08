@@ -21,13 +21,13 @@ public class LocalAssignment extends Expression {
     }
 
     @Override
-    public CodeTree compile(CodeContext ctx) {
+    public CodeTree compile(Type requiredType, CodeContext ctx) {
         Type expectedType = ctx.getLocalType(name);
         if (!value.hasType(expectedType, ctx))
             throw new NiftyException("'%s' does not conform to %s's type of %s.",
                     value, name, expectedType);
         return new CodeTree(
-                value.compileWithTypeHint(expectedType, ctx),
+                value.compile(expectedType, ctx),
                 Opcodes.DUP,
                 Opcodes.PUT_LOCAL,
                 ctx.getLocalIndex(name)

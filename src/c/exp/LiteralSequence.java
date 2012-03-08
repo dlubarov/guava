@@ -24,13 +24,16 @@ public class LiteralSequence extends Expression {
         }
     }
 
-    @Override
-    public ParameterizedType inferType(CodeContext ctx) {
+    private Type inferElemType(CodeContext ctx) {
         Type[] elementTypes = new Type[elements.length];
         for (int i = 0; i < elementTypes.length; ++i)
             elementTypes[i] = elements[i].inferType(ctx);
-        Type elementType = TypeUtils.union(elementTypes);
-        return new ParameterizedType(RawType.coreArray, new Type[] {elementType});
+        return TypeUtils.union(elementTypes);
+    }
+
+    @Override
+    public ParameterizedType inferType(CodeContext ctx) {
+        return new ParameterizedType(RawType.coreArray, new Type[] {inferElemType(ctx)});
     }
 
     @Override
@@ -48,27 +51,17 @@ public class LiteralSequence extends Expression {
         return super.hasType(type, ctx);
     }
 
-    private CodeTree compileWithElemType(Type elementType, CodeContext ctx) {
+    @Override
+    public CodeTree compile(Type requiredType, CodeContext ctx) {
+        Type elementType = getElemType(requiredType, ctx);
+        if (elementType == null)
+            elementType = inferElemType(ctx);
         return new CodeTree(
                 Expression.compileAll(elements, ctx),
                 Opcodes.CREATE_SEQ,
                 ctx.method.getFullTypeTableIndex(elementType),
                 elements.length
         );
-    }
-
-    @Override
-    public CodeTree compile(CodeContext ctx) {
-        Type elementType = inferType(ctx).genericArgs[0];
-        return compileWithElemType(elementType, ctx);
-    }
-
-    @Override
-    public CodeTree compileWithTypeHint(Type requiredType, CodeContext ctx) {
-        Type elementType = getElemType(requiredType, ctx);
-        if (elementType == null)
-            return super.compileWithTypeHint(requiredType, ctx);
-        return compileWithElemType(elementType, ctx);
     }
 
     @Override

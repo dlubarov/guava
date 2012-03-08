@@ -19,7 +19,7 @@ public class LiteralDouble extends Expression {
     }
 
     @Override
-    public CodeTree compile(CodeContext ctx) {
+    public CodeTree compile(Type requiredType, CodeContext ctx) {
         long l = Double.doubleToLongBits(value);
         int i1 = (int) (l >>> 32), i0 = (int) l;
         return new CodeTree(Opcodes.CONST_DOUBLE, i1, i0);

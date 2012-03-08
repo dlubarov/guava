@@ -115,7 +115,7 @@ public class InstanceMethodInvocation extends Expression {
     }
 
     @Override
-    public CodeTree compile(CodeContext ctx) {
+    public CodeTree compile(Type requiredType, CodeContext ctx) {
         MethodDef m = getMethod(ctx);
         TypeDef owner = Project.singleton.resolve(m.owner);
         CodeTree targetCode = target.compile(ctx);

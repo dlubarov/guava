@@ -54,7 +54,7 @@ public class InstanceMemberInvocation extends Expression {
     }
 
     @Override
-    public CodeTree compile(CodeContext ctx) {
+    public CodeTree compile(Type requiredType, CodeContext ctx) {
         return getActualInvocation(ctx).compile(ctx);
     }
 

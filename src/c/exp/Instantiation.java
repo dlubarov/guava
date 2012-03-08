@@ -35,7 +35,7 @@ public class Instantiation extends Expression {
     }
 
     @Override
-    public CodeTree compile(CodeContext ctx) {
+    public CodeTree compile(Type requiredType, CodeContext ctx) {
         MethodDef constructor = getConstructor(ctx);
         int constructorIdx = ctx.method.getMethodTableIndex(constructor);
 

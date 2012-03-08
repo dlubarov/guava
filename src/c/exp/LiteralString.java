@@ -19,7 +19,7 @@ public class LiteralString extends Expression {
     }
 
     @Override
-    public CodeTree compile(CodeContext ctx) {
+    public CodeTree compile(Type requiredType, CodeContext ctx) {
         return new CodeTree(Opcodes.CONST_STRING, ctx.method.getStringTableIndex(value));
     }
 

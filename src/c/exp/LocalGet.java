@@ -17,7 +17,7 @@ public class LocalGet extends Expression {
     }
 
     @Override
-    public CodeTree compile(CodeContext ctx) {
+    public CodeTree compile(Type requiredType, CodeContext ctx) {
         return new CodeTree(Opcodes.GET_LOCAL, ctx.getLocalIndex(name));
     }
 

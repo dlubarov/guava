@@ -29,7 +29,7 @@ public class InstanceFieldAssignment extends Expression {
     }
 
     @Override
-    public CodeTree compile(CodeContext ctx) {
+    public CodeTree compile(Type requiredType, CodeContext ctx) {
         FieldDef field = getField(ctx);
         ParameterizedType targetAsFieldOwner = target.inferType(ctx).asSupertype(field.owner, ctx);
 
@@ -41,7 +41,7 @@ public class InstanceFieldAssignment extends Expression {
 
         int fieldNameIndex = ctx.method.getStringTableIndex(fieldName);
         return new CodeTree(
-                value.compileWithTypeHint(expectedType, ctx),
+                value.compile(expectedType, ctx),
                 Opcodes.DUP,
                 target.compile(ctx),
                 Opcodes.PUT_INSTANCE_FIELD,

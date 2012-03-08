@@ -19,7 +19,7 @@ public class LiteralLong extends Expression {
     }
 
     @Override
-    public CodeTree compile(CodeContext ctx) {
+    public CodeTree compile(Type requiredType, CodeContext ctx) {
         int i1 = (int) (value >>> 32), i0 = (int) value;
         return new CodeTree(Opcodes.CONST_LONG, i1, i0);
     }

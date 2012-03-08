@@ -20,7 +20,7 @@ public class StaticFieldGet extends Expression {
     }
 
     @Override
-    public CodeTree compile(CodeContext ctx) {
+    public CodeTree compile(Type requiredType, CodeContext ctx) {
         TypeDef ownerDef = Project.singleton.resolve(owner);
         int ownerIndex = ctx.method.getRawTypeTableIndex(owner);
         int fieldIndex = ownerDef.getStaticFieldIndex(fieldName);

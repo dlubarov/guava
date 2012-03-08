@@ -19,7 +19,7 @@ public class IfElse extends Statement {
 
     @Override
     public CompilationResult compile(CodeContext ctx) {
-        CodeTree condCode = cond.compileWithTypeHint(Type.coreBool, ctx);
+        CodeTree condCode = cond.compile(Type.coreBool, ctx);
         CodeTree trueCode = bodyTrue.compile(ctx).code;
         CodeTree falseCode = bodyFalse.compile(ctx).code;
         CodeTree code = new CodeTree(

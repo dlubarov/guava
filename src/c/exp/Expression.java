@@ -8,18 +8,24 @@ import c.ty.*;
 public abstract class Expression {
     public abstract Type inferType(CodeContext ctx);
 
+    // Check whether an expression CAN conform to a certain type.
     public boolean hasType(Type type, CodeContext ctx) {
         if (type.equals(new ParameterizedType(RawType.coreTop)))
             return true;
         return inferType(ctx).isSubtype(type, ctx);
     }
 
-    public abstract CodeTree compile(CodeContext ctx);
+    // Compile an expression which must conform to some required type.
+    // Note, callers CANNOT count on implementations of this method to check that the type
+    // requirement is satisfied. They should check this with hasType.
+    // This method is just here to support polymorphic expressions, like {}.
+    public abstract CodeTree compile(Type requiredType, CodeContext ctx);
 
-    public CodeTree compileWithTypeHint(Type requiredType, CodeContext ctx) {
-        if (!hasType(requiredType, ctx))
-            throw new NiftyException("'%s' does not conform to expected type %s.", this, requiredType);
-        return compile(ctx);
+    // Compile an expression whose type we don't care about.
+    // This should  be used for compiling eval statements, for example, because the value
+    // returned by the evaluated expression is simply discarded.
+    public CodeTree compile(CodeContext ctx) {
+        return compile(Type.coreTop, ctx);
     }
 
     public static Type[] inferAllTypes(Expression[] expressions, CodeContext ctx) {

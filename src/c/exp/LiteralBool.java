@@ -19,7 +19,7 @@ public class LiteralBool extends Expression {
     }
 
     @Override
-    public CodeTree compile(CodeContext ctx) {
+    public CodeTree compile(Type requiredType, CodeContext ctx) {
         if (value)
             return new CodeTree(Opcodes.CONST_TRUE);
         return new CodeTree(Opcodes.CONST_FALSE);

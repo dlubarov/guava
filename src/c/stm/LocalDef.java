@@ -28,7 +28,7 @@ public class LocalDef extends Statement {
             ctx = ctx.addLocal(type, names[i]);
             if (initVals[i] != null) {
                 CodeTree assignment = new CodeTree(
-                                initVals[i].compileWithTypeHint(type, ctx),
+                                initVals[i].compile(type, ctx),
                                 Opcodes.PUT_LOCAL,
                                 ctx.getLocalIndex(names[i]));
                 assignments.add(assignment);

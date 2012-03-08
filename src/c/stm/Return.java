@@ -33,7 +33,7 @@ public class Return extends Statement {
 
         return new CompilationResult(
                 new CodeTree(
-                        value.compileWithTypeHint(ctx.method.returnType, ctx),
+                        value.compile(ctx.method.returnType, ctx),
                         Opcodes.RETURN),
                 ctx);
     }

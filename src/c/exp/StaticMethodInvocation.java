@@ -47,7 +47,7 @@ public class StaticMethodInvocation extends Expression {
     }
 
     @Override
-    public CodeTree compile(CodeContext ctx) {
+    public CodeTree compile(Type requiredType, CodeContext ctx) {
         MethodDef m = getMethod(ctx);
         int methodIndex = ctx.method.getMethodTableIndex(m);
 
@@ -59,6 +59,11 @@ public class StaticMethodInvocation extends Expression {
                 Expression.compileAll(args, ctx),
                 Opcodes.INVOKE_STATIC, methodIndex, genericArgIndicesTree
         );
+    }
+
+    @Override
+    public CodeTree compile(CodeContext ctx) {
+        return compile(Type.coreTop, ctx);
     }
 
     @Override

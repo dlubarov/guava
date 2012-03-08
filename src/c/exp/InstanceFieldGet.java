@@ -42,7 +42,7 @@ public class InstanceFieldGet extends Expression {
     }
 
     @Override
-    public CodeTree compile(CodeContext ctx) {
+    public CodeTree compile(Type requiredType, CodeContext ctx) {
         getField(ctx); // Ensure that the field exists.
         int fieldNameIndex = ctx.method.getStringTableIndex(fieldName);
         return new CodeTree(

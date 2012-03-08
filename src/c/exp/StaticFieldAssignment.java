@@ -22,7 +22,7 @@ public class StaticFieldAssignment extends Expression {
     }
 
     @Override
-    public CodeTree compile(CodeContext ctx) {
+    public CodeTree compile(Type requiredType, CodeContext ctx) {
         TypeDef ownerDef = Project.singleton.resolve(owner);
         int ownerIndex = ctx.method.getRawTypeTableIndex(owner);
         int fieldIndex = ownerDef.getStaticFieldIndex(fieldName);
@@ -33,7 +33,7 @@ public class StaticFieldAssignment extends Expression {
                     value, owner, fieldName, expectedType);
 
         return new CodeTree(
-                value.compileWithTypeHint(expectedType, ctx),
+                value.compile(expectedType, ctx),
                 Opcodes.DUP,
                 Opcodes.PUT_STATIC_FIELD,
                 ownerIndex, fieldIndex

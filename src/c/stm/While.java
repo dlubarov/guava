@@ -18,7 +18,7 @@ public class While extends Statement {
 
     @Override
     public CompilationResult compile(CodeContext ctx) {
-        CodeTree condCode = cond.compileWithTypeHint(Type.coreBool, ctx);
+        CodeTree condCode = cond.compile(Type.coreBool, ctx);
         CodeTree bodyCode = body.compile(ctx).code;
         CodeTree code = new CodeTree(
                 condCode, Opcodes.BOOL_NEG,
