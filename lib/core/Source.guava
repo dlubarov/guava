@@ -1,33 +1,91 @@
 module core;
 
 public abstract type Source[+T] {
-  public Maybe[T] take();
+  public Maybe[T] tryTake();
 
   public Sequence[T] takeUpTo(Int n) {
     MutableStack[T] stack = new DynamicArray[T]();
     if (n <= 0)
       return stack;
-    Maybe[T] elem = this.take();
+    Maybe[T] elem = this.tryTake();
     while (stack.size() < n & !elem.isEmpty()) {
       stack.pushBack(elem.get());
-      elem = this.take();
-    }
-    return stack;
-  }
-
-  # Read all data from this source.
-  public Sequence[T] takeAll() {
-    MutableStack[T] stack = new DynamicArray[T]();
-    Maybe[T] elem = this.take();
-    while (!elem.isEmpty()) {
-      stack.pushBack(elem.get());
-      elem = this.take();
+      elem = this.tryTake();
     }
     return stack;
   }
 }
 
-public sealed type EmptySource extends Source[Bottom] {
+public abstract type FiniteSource[+T] extends Source[T] {
+  # Read all data from this source.
+  public Sequence[T] takeAll() {
+    MutableStack[T] stack = new DynamicArray[T]();
+    Maybe[T] elem = this.tryTake();
+    while (!elem.isEmpty()) {
+      stack.pushBack(elem.get());
+      elem = this.tryTake();
+    }
+    return stack;
+  }
+}
+
+public abstract type InfiniteSource[+T] extends Source[T] {
+  public T take();
+
+  public Some[T] tryTake() {
+    return new Some[T](this.take());
+  }
+}
+
+type SourceConverter[A, B] extends Source[B] {
+  private readonly Source[A] source;
+  private readonly Function1[A, B] map;
+
+  public Unit init(Source[A] source, Function1[A, B] map) {
+    this.source = source;
+    this.map = map;
+  }
+
+  public Maybe[B] tryTake() {
+    return this.source.tryTake().map[B](this.map);
+  }
+}
+
+type FiniteSourceConverter[A, B] extends SourceConverter[A, B], FiniteSource[B] {}
+
+type InfiniteSourceConverter[A, B] extends InfiniteSource[B] {
+  private readonly InfiniteSource[A] source;
+  private readonly Function1[A, B] map;
+
+  public Unit init(InfiniteSource[A] source, Function1[A, B] map) {
+    this.source = source;
+    this.map = map;
+  }
+
+  public B take() {
+    return this.map(this.source.take());
+  }
+}
+
+type SourceFilter[A] extends Source[A] {
+  private readonly Source[A] source;
+  private readonly Function1[A, Bool] predicate;
+
+  public Unit init(Source[A] source, Function1[A, Bool] predicate) {
+    this.source = source;
+    this.predicate = predicate;
+  }
+
+  public Maybe[A] tryTake() {
+    return this.source.tryTake().filter(this.predicate);
+  }
+}
+
+type FiniteSourceFilter[A] extends SourceFilter[A], FiniteSource[A] {}
+
+# TODO: consider whether to add InfiniteSourceFilter
+
+public sealed type EmptySource extends FiniteSource[Bottom] {
   private static readonly EmptySource singleton;
 
   private Unit init() {}
@@ -40,12 +98,12 @@ public sealed type EmptySource extends Source[Bottom] {
     return EmptySource.singleton;
   }
 
-  public None take() {
+  public None tryTake() {
     return None();
   }
 }
 
-public sealed type SingletonSource[+T] extends Source[T] {
+public sealed type SingletonSource[+T] extends FiniteSource[T] {
   private readonly T value;
   private Bool used;
 
@@ -53,7 +111,7 @@ public sealed type SingletonSource[+T] extends Source[T] {
     this.value = value;
   }
 
-  public Maybe[T] take() {
+  public Maybe[T] tryTake() {
     if (this.used)
       return None();
     this.used = true;
@@ -61,15 +119,7 @@ public sealed type SingletonSource[+T] extends Source[T] {
   }
 }
 
-public abstract type InfiniteSource[+T] extends Source[T] {
-  public Some[T] take();
-
-  public Bottom takeAll() {
-    1 / 0; # fail
-  }
-}
-
-public sealed type RandomAccessEnumerator[+T] extends Source[T] {
+public sealed type RandomAccessEnumerator[+T] extends FiniteSource[T] {
   private readonly Sequence[T] seq;
   private Int index;
 
@@ -78,7 +128,7 @@ public sealed type RandomAccessEnumerator[+T] extends Source[T] {
     this.index = 0;
   }
 
-  public Maybe[T] take() {
+  public Maybe[T] tryTake() {
     if (this.index >= this.seq.size())
       return None();
     T result = this.seq(this.index);

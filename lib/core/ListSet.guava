@@ -44,7 +44,7 @@ public sealed type ListSet[+T] extends ImmutableSet[T] {
     return this.backingList.size();
   }
 
-  public Source[T] enumerator() {
+  public FiniteSource[T] enumerator() {
     return this.backingList.enumerator();
   }
 }

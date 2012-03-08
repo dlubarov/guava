@@ -48,7 +48,7 @@ public type HashBag[T] extends Collection[T] {
     this.numItems = this.numItems - 1;
   }
 
-  public Source[T] enumerator() {
+  public FiniteSource[T] enumerator() {
     if (this.isEmpty())
       return EmptySource();
     return new HashBagEnumerator[T](this);
@@ -56,21 +56,21 @@ public type HashBag[T] extends Collection[T] {
 }
 
 # Assumes that the bag contains at least one item.
-type HashBagEnumerator[+T] extends Source[T] {
+type HashBagEnumerator[+T] extends FiniteSource[T] {
   private readonly Source[MapEntry[T, Int]] entryEnum;
   private T elem;
   private Int numLeft;
 
   Unit init(HashBag[T] source) {
     this.entryEnum = source.countMap.enumerator();
-    MapEntry[T, Int] entry = this.entryEnum.take().get();
+    MapEntry[T, Int] entry = this.entryEnum.tryTake().get();
     this.elem = entry.key;
     this.numLeft = entry.value;
   }
 
-  public Maybe[T] take() {
+  public Maybe[T] tryTake() {
     if (this.numLeft == 0) {
-      Maybe[MapEntry[T, Int]] maybeEntry = this.entryEnum.take();
+      Maybe[MapEntry[T, Int]] maybeEntry = this.entryEnum.tryTake();
       if (maybeEntry.isEmpty())
         return None();
       MapEntry[T, Int] entry = maybeEntry.get();

@@ -80,7 +80,7 @@ public type ArrayDeque[T] extends MutableDeque[T] {
     return result;
   }
 
-  public Source[T] enumerator() {
+  public FiniteSource[T] enumerator() {
     return new RandomAccessEnumerator[T](this);
   }
 }

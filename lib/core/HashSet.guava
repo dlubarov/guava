@@ -88,29 +88,29 @@ public sealed type HashSet[T] extends MutableSet[T] {
     return this.count;
   }
 
-  public Source[T] enumerator() {
+  public FiniteSource[T] enumerator() {
     return new HashSetEnumerator[T](this.buckets);
   }
 }
 
-type HashSetEnumerator[T] extends Source[T] {
+type HashSetEnumerator[T] extends FiniteSource[T] {
   private Source[ImmutableSet[T]] bucketEnum;
   private Source[T] elemEnum;
 
   Unit init(Array[ImmutableSet[T]] buckets) {
     this.bucketEnum = buckets.enumerator();
     # There must be at least one bucket.
-    this.elemEnum = this.bucketEnum.take().get().enumerator();
+    this.elemEnum = this.bucketEnum.tryTake().get().enumerator();
   }
 
-  public Maybe[T] take() {
-    Maybe[T] maybeElem = this.elemEnum.take();
+  public Maybe[T] tryTake() {
+    Maybe[T] maybeElem = this.elemEnum.tryTake();
     while (maybeElem.isEmpty()) {
-      Maybe[ImmutableSet[T]] maybeBucket = this.bucketEnum.take();
+      Maybe[ImmutableSet[T]] maybeBucket = this.bucketEnum.tryTake();
       if (maybeBucket.isEmpty())
         return None();
       this.elemEnum = maybeBucket.get().enumerator();
-      maybeElem = this.elemEnum.take();
+      maybeElem = this.elemEnum.tryTake();
     }
     return maybeElem;
   }

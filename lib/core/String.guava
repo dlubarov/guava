@@ -43,7 +43,7 @@ public sealed type String extends ImmutableSequence[Char] {
     # TODO: implement string formatting
   }
 
-  public Source[Char] enumerator() {
+  public FiniteSource[Char] enumerator() {
     return this.backingArray.enumerator();
   }
 

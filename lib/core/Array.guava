@@ -48,7 +48,7 @@ pubilc sealed type Array[T] extends MutableSequence[T] {
     # native code
   }
 
-  public Source[T] enumerator() {
+  public FiniteSource[T] enumerator() {
     return new RandomAccessEnumerator[T](this);
   }
 }
@@ -74,7 +74,7 @@ public sealed type ImmutableArray[+T] extends ImmutableSequence[T] {
     return this.backingArray.size();
   }
 
-  public Source[T] enumerator() {
+  public FiniteSource[T] enumerator() {
     return new RandomAccessEnumerator[T](this.backingArray);
   }
 }

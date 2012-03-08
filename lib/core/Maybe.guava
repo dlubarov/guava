@@ -5,6 +5,10 @@ public abstract type Maybe[+T] extends ImmutableCollection[T] {
 
   [U > T]
   public U getOr[U](U default);
+
+  public Maybe[U] map[U](Function1[T, U] f);
+
+  public Maybe[T] filter(Function1[T, Bool] p);
 }
 
 public sealed type Some[+T] extends Maybe[T] {
@@ -23,11 +27,21 @@ public sealed type Some[+T] extends Maybe[T] {
     return this.value;
   }
 
+  public Some[U] map[U](Function1[T, U] f) {
+    return new Some[U](f(this.value));
+  }
+
+  public Maybe[T] filter(Function1[T, Bool] p) {
+    if (p(this.value))
+      return this;
+    return None();
+  }
+
   public Int size() {
     return 1;
   }
 
-  public Source[T] enumerator() {
+  public FiniteSource[T] enumerator() {
     return new SingletonSource[T](this.value);
   }
 
@@ -71,11 +85,19 @@ public sealed type None extends Maybe[Bottom] {
     return default;
   }
 
+  public None map[U](Function1[Bottom, U] f) {
+    return this;
+  }
+
+  public None filter(Function1[Bottom, Bool] p) {
+    return this;
+  }
+
   public Int size() {
     return 0;
   }
 
-  public Source[Bottom] enumerator() {
+  public FiniteSource[Bottom] enumerator() {
     return EmptySource();
   }
 

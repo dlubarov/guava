@@ -95,7 +95,7 @@ public sealed type CircularBuffer[T] extends MutableSequence[T] {
     return result;
   }
 
-  public Source[T] enumerator() {
+  public FiniteSource[T] enumerator() {
     return new RandomAccessEnumerator[T](this);
   }
 }

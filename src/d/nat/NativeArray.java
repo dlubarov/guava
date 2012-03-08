@@ -56,7 +56,7 @@ public class NativeArray extends NativeObject {
                                 TypeDesc.NONE,
                                 new RawMethod[] {
                                     RawMethod.coreEnumerable_enumerator,
-                                    RawMethod.coreSource_take,
+                                    RawMethod.coreSource_tryTake,
                                     RawMethod.coreCollection_isEmpty,
                                     RawMethod.coreMaybe_get
                                 }

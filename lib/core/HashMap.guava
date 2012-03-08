@@ -89,29 +89,29 @@ public sealed type HashMap[K, V] extends MutableMap[K, V] {
     return this.count;
   }
 
-  public Source[MapEntry[K, V]] enumerator() {
+  public FiniteSource[MapEntry[K, V]] enumerator() {
     return new HashMapEnumerator[K, V](this.buckets);
   }
 }
 
-type HashMapEnumerator[K, V] extends Source[MapEntry[K, V]] {
+type HashMapEnumerator[K, V] extends FiniteSource[MapEntry[K, V]] {
   private Source[ImmutableSet[MapEntry[K, V]]] bucketEnum;
   private Source[MapEntry[K, V]] entryEnum;
 
   Unit init(Array[ImmutableSet[MapEntry[K, V]]] buckets) {
     this.bucketEnum = buckets.enumerator();
     # There must be at least one bucket.
-    this.entryEnum = this.bucketEnum.take().get().enumerator();
+    this.entryEnum = this.bucketEnum.tryTake().get().enumerator();
   }
 
-  public Maybe[MapEntry[K, V]] take() {
-    Maybe[MapEntry[K, V]] maybeElem = this.entryEnum.take();
+  public Maybe[MapEntry[K, V]] tryTake() {
+    Maybe[MapEntry[K, V]] maybeElem = this.entryEnum.tryTake();
     while (maybeElem.isEmpty()) {
-      Maybe[ImmutableSet[MapEntry[K, V]]] maybeBucket = this.bucketEnum.take();
+      Maybe[ImmutableSet[MapEntry[K, V]]] maybeBucket = this.bucketEnum.tryTake();
       if (maybeBucket.isEmpty())
         return None();
       this.entryEnum = maybeBucket.get().enumerator();
-      maybeElem = this.entryEnum.take();
+      maybeElem = this.entryEnum.tryTake();
     }
     return maybeElem;
   }

@@ -29,10 +29,10 @@ public class ForEach extends Statement {
          * is sugar for (roughly)
          *     {
          *         Source[ElemType] iter = iterable.enumerator();
-         *         Maybe[ElemType] elemName = iter.take();
+         *         Maybe[ElemType] elemName = iter.tryTake();
          *         while (!elemName.isEmpty()) {
          *             body
-         *             elemName = iter.take();
+         *             elemName = iter.tryTake();
          *         }
          *     }
          */
@@ -52,7 +52,7 @@ public class ForEach extends Statement {
                 new LocalDef(
                         new Type("Maybe", new Type[] {elemType}), maybeId,
                         new Invocation(
-                                new MemberAccess(iterVar, "take"),
+                                new MemberAccess(iterVar, "tryTake"),
                                 Type.NONE, Expression.NONE
                         )
                 ),
@@ -77,7 +77,7 @@ public class ForEach extends Statement {
                                         new Assignment(
                                                 maybeVar,
                                                 new Invocation(
-                                                        new MemberAccess(iterVar, "take"),
+                                                        new MemberAccess(iterVar, "tryTake"),
                                                         Type.NONE, Expression.NONE)
                                         )
                                 )

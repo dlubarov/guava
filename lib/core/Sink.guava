@@ -1,5 +1,20 @@
 module core;
 
 public abstract type Sink[-T] {
-  Bool give(T elem);
+  Unit give(T value);
+
+  Unit giveAll(Source[T] values) {
+    forever {
+      switch (values.tryTake()) {
+        Some[T] value ->
+          this.give(value.get());
+        None _ ->
+          return;
+      }
+    }
+  }
+
+  Unit giveAll(Enumerable[T] values) {
+    this.giveAll(values.enumerator());
+  }
 }

@@ -58,7 +58,7 @@ public sealed type DynamicArray[T] extends MutableStack[T] {
     this.backingArray(i) = new Some[T](value);
   }
 
-  public Source[T] enumerator() {
+  public FiniteSource[T] enumerator() {
     return new RandomAccessEnumerator[T](this);
   }
 }

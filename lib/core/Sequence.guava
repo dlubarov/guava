@@ -21,9 +21,13 @@ public abstract type Sequence[+T] extends Collection[T] {
 
   public T get(Int index) {
     Source[T] enum = this.enumerator();
-    repeat (index)
-      enum.take();
-    return enum.take().get();
+    enum.takeUpTo(index);
+    switch (enum.tryTake()) {
+      Some[T] elem ->
+        return elem.get();
+      None _ ->
+        1 / 0; # fail
+    }
   }
 
   public T getFront() {
@@ -117,8 +121,8 @@ public abstract type Sequence[+T] extends Collection[T] {
         Source[Top] enumA = this.enumerator();
         Source[Top] enumB = that.enumerator();
         forever {
-          Maybe[Top] maybeA = enumA.take();
-          Maybe[Top] maybeB = enumB.take();
+          Maybe[Top] maybeA = enumA.tryTake();
+          Maybe[Top] maybeB = enumB.tryTake();
           if (maybeA.isEmpty() & maybeB.isEmpty())
             return true;
           if (maybeA.isEmpty() | maybeB.isEmpty())

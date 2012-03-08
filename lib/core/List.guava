@@ -12,7 +12,7 @@ public abstract type List[+T] extends ImmutableSequence[T] {
     return result;
   }
 
-  public Source[T] enumerator() {
+  public FiniteSource[T] enumerator() {
     return new ListEnumerator[T](this);
   }
 }
@@ -85,14 +85,14 @@ public sealed type NonEmptyList[+T] extends List[T] {
   }
 }
 
-sealed type ListEnumerator[+T] extends Source[T] {
+sealed type ListEnumerator[+T] extends FiniteSource[T] {
   private List[T] source;
 
   public Unit init(List[T] source) {
     this.source = source;
   }
 
-  public Maybe[T] take() {
+  public Maybe[T] tryTake() {
     if (this.source.isEmpty())
       return None();
     T elem = this.source.getFront();
