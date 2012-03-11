@@ -44,6 +44,10 @@ public type Random {
     return (this.nextInt() & mask) % ceil;
   }
 
+  public Bool nextBool() {
+    return (this.nextLong() & 1L) == 1L;
+  }
+
   public Double nextDouble() {
     Long d = ~0L ^ 1L << 63; # all bits set except for the sign bit
     return new Double(this.nextLong() & d) / new Double(d);
