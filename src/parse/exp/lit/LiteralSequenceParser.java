@@ -1,11 +1,13 @@
-package parse.exp;
+package parse.exp.lit;
 
 import java.util.*;
 
 import common.NiftyException;
 
 import a.exp.*;
+import a.exp.lit.LiteralSequence;
 import parse.*;
+import parse.exp.ExpressionParser;
 
 public class LiteralSequenceParser extends Parser<Expression> {
     public static final Parser<Expression> singleton = new LiteralSequenceParser();

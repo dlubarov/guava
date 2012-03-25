@@ -1,5 +1,6 @@
-package a.exp;
+package a.exp.lit;
 
+import a.exp.Expression;
 import common.NiftyException;
 
 public class LiteralChar extends Expression {
@@ -14,7 +15,7 @@ public class LiteralChar extends Expression {
         if (value.isEmpty())
             throw new NiftyException("empty character literal");
         if (value.length() == 1)
-            return new b.exp.LiteralChar(value.charAt(0));
+            return new b.exp.lit.LiteralChar(value.charAt(0));
         if (value.length() == 2 && value.charAt(0) == '\\') {
             char c = value.charAt(1);
             switch (c) {
@@ -25,6 +26,7 @@ public class LiteralChar extends Expression {
                 case '\'': case '\\': break;
                 default: throw new NiftyException("can't escape character '%c'", c);
             }
+            return new b.exp.lit.LiteralChar(c);
         }
         throw new NiftyException("more than one character in character literal");
     }

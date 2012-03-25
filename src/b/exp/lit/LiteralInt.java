@@ -1,6 +1,7 @@
-package b.exp;
+package b.exp.lit;
 
 import b.*;
+import b.exp.Expression;
 
 public class LiteralInt extends Expression {
     public final int value;
@@ -11,7 +12,7 @@ public class LiteralInt extends Expression {
 
     @Override
     public c.exp.Expression refine(TypeDef typeCtx, MethodDef methodCtx) {
-        return new c.exp.LiteralInt(value);
+        return new c.exp.lit.LiteralInt(value);
     }
 
     @Override

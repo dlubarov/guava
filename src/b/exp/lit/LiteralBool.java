@@ -1,6 +1,7 @@
-package b.exp;
+package b.exp.lit;
 
 import b.*;
+import b.exp.Expression;
 
 public class LiteralBool extends Expression {
     public final boolean value;
@@ -11,7 +12,7 @@ public class LiteralBool extends Expression {
 
     @Override
     public c.exp.Expression refine(TypeDef typeCtx, MethodDef methodCtx) {
-        return new c.exp.LiteralBool(value);
+        return new c.exp.lit.LiteralBool(value);
     }
 
     @Override

@@ -4,6 +4,7 @@ import static util.StringUtils.indent;
 
 import a.Type;
 import a.exp.*;
+import a.exp.lit.LiteralInt;
 import common.VariableGenerator;
 
 public class Repeat extends Statement {

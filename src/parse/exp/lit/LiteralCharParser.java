@@ -1,6 +1,7 @@
-package parse.exp;
+package parse.exp.lit;
 
 import a.exp.*;
+import a.exp.lit.LiteralChar;
 import parse.*;
 
 public class LiteralCharParser extends Parser<Expression> {

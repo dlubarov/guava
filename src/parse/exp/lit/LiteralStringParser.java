@@ -1,6 +1,7 @@
-package parse.exp;
+package parse.exp.lit;
 
 import a.exp.*;
+import a.exp.lit.LiteralString;
 import parse.*;
 
 public class LiteralStringParser extends Parser<Expression> {

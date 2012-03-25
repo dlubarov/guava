@@ -1,5 +1,6 @@
-package a.exp;
+package a.exp.lit;
 
+import a.exp.Expression;
 import common.NiftyException;
 
 public class LiteralString extends Expression {
@@ -25,7 +26,7 @@ public class LiteralString extends Expression {
                 }
             sb.append(c);
         }
-        return new b.exp.LiteralString(sb.toString());
+        return new b.exp.lit.LiteralString(sb.toString());
     }
 
     @Override

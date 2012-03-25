@@ -1,7 +1,7 @@
 module math;
 
 public abstract type BasicDimension {
-  # TIME, MASS, DISTANCE, CHARGE, TEMPERATURE, DATA_LENGTH;
+  # TODO TIME, MASS, DISTANCE, CHARGE, TEMPERATURE, DATA_LENGTH;
 }
 
 public type Time extends BasicDimension {

@@ -1,4 +1,6 @@
-package a.exp;
+package a.exp.lit;
+
+import a.exp.Expression;
 
 public class LiteralBool extends Expression {
     public final boolean value;
@@ -9,7 +11,7 @@ public class LiteralBool extends Expression {
 
     @Override
     public b.exp.Expression refine() {
-        return new b.exp.LiteralBool(value);
+        return new b.exp.lit.LiteralBool(value);
     }
 
     @Override

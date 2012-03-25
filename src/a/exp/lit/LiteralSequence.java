@@ -1,7 +1,7 @@
-package b.exp;
+package a.exp.lit;
 
 import static util.StringUtils.implode;
-import b.*;
+import a.exp.Expression;
 
 public class LiteralSequence extends Expression {
     public final Expression[] elements;
@@ -11,9 +11,9 @@ public class LiteralSequence extends Expression {
     }
 
     @Override
-    public c.exp.Expression refine(TypeDef typeCtx, MethodDef methodCtx) {
-        c.exp.Expression[] refinedElements = Expression.refineAll(elements, typeCtx, methodCtx);
-        return new c.exp.LiteralSequence(refinedElements);
+    public b.exp.Expression refine() {
+        b.exp.Expression[] refinedElements = Expression.refineAll(elements);
+        return new b.exp.lit.LiteralSequence(refinedElements);
     }
 
     @Override

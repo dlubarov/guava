@@ -1,8 +1,9 @@
-package parse.exp;
+package parse.exp.lit;
 
 import common.NiftyException;
 
 import a.exp.*;
+import a.exp.lit.LiteralDouble;
 import parse.*;
 
 // TODO: Add exponent syntax for literal doubles.

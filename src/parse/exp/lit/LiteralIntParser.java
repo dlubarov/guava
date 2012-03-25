@@ -1,8 +1,9 @@
-package parse.exp;
+package parse.exp.lit;
 
 import common.NiftyException;
 
 import a.exp.*;
+import a.exp.lit.*;
 import parse.*;
 
 public class LiteralIntParser extends Parser<Expression> {

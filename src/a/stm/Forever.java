@@ -1,7 +1,7 @@
 package a.stm;
 
 import static util.StringUtils.indent;
-import a.exp.LiteralBool;
+import a.exp.lit.LiteralBool;
 
 public class Forever extends Statement {
     public final Statement body;

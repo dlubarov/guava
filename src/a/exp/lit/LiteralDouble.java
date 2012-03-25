@@ -1,4 +1,6 @@
-package a.exp;
+package a.exp.lit;
+
+import a.exp.Expression;
 
 public class LiteralDouble extends Expression {
     public final double value;
@@ -9,7 +11,7 @@ public class LiteralDouble extends Expression {
 
     @Override
     public b.exp.Expression refine() {
-        return new b.exp.LiteralDouble(value);
+        return new b.exp.lit.LiteralDouble(value);
     }
 
     @Override

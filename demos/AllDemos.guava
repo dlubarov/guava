@@ -7,6 +7,7 @@ type AllDemos {
       Console.outln(arg);
     if (args.isEmpty())
       Console.outln("No arguments to show :-(");
+    Console.outln();
 
     UnitConversions.run();
     Console.outln();
