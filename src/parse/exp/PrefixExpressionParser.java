@@ -12,6 +12,8 @@ public class PrefixExpressionParser extends Parser<Expression> {
 
     private static final String[] prefixOps = {"+", "-", "~", "!"};
 
+    private static final Parser<Expression> innerParser = InfixExpressionParser.exponentiationParser;
+
     @Override
     public Success<Expression> parse(String s, int p) {
         // Parse the operator.
@@ -22,12 +24,12 @@ public class PrefixExpressionParser extends Parser<Expression> {
                 break;
             }
         if (opUsed == null)
-            return ChainParser.singleton.parse(s, p);
+            return innerParser.parse(s, p);
         p += opUsed.length();
         p = optWS(s, p);
 
         // Parse the target.
-        Success<Expression> resTarget = ChainParser.singleton.parse(s, p);
+        Success<Expression> resTarget = innerParser.parse(s, p);
         if (resTarget == null)
             throw new NiftyException("Expecting expression after unary %s.", opUsed);
         p = resTarget.rem;

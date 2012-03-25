@@ -1,7 +1,7 @@
 package a.exp.lit;
 
+import util.StringUtils;
 import a.exp.Expression;
-import common.NiftyException;
 
 public class LiteralString extends Expression {
     public final String value;
@@ -16,14 +16,7 @@ public class LiteralString extends Expression {
         for (int i = 0; i < value.length(); ++i) {
             char c = value.charAt(i);
             if (c == '\\')
-                switch (c = value.charAt(++i)) {
-                    case 'r': c = '\r'; break;
-                    case 'n': c = '\n'; break;
-                    case 't': c = '\t'; break;
-                    case '0': c = '\0'; break;
-                    case '"': case '\\': break;
-                    default: throw new NiftyException("can't escape character '%c'", c);
-                }
+                c = StringUtils.unescape(value.charAt(++i));
             sb.append(c);
         }
         return new b.exp.lit.LiteralString(sb.toString());

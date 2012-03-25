@@ -1,7 +1,5 @@
 package parse.misc;
 
-import java.util.*;
-
 import parse.*;
 
 import util.StringUtils;
@@ -18,21 +16,19 @@ public class OperatorParser extends Parser<String> {
                 "<<=", ">>>=", ">>=",
                 "+=", "-=",
                 "*=", "/=", "%=",
+                "**=",
 
                 "~", "!",
                 "|", "^", "&",
                 "==", "!=",
                 "<=", ">=", "<", ">",
                 "<<", ">>>", ">>",
+                ":+", "+:",
                 "+", "-",
-                "*", "/", "%"
+                "*", "/", "%",
+                "**"
         };
-        Arrays.sort(operators, new Comparator<String>() {
-            @Override
-            public int compare(String s1, String s2) {
-                return s2.length() - s1.length();
-            }
-        });
+        StringUtils.sortDescendingLength(operators);
     }
 
     @Override

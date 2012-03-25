@@ -13,25 +13,34 @@ public class InfixOperation extends Expression {
         this.right = right;
     }
 
-    @Override
-    public b.exp.Expression refine() {
-        Expression target, arg;
-        if (operator.equals(":")) {
+    private Expression proxy() {
+        if (operator.equals("="))
+            return new Assignment(left, right);
+
+        Expression target, argument;
+        if (operator.equals("+:")) {
             target = right;
-            arg = left;
+            argument = left;
         } else {
             target = left;
-            arg = right;
+            argument = right;
         }
 
         return new Invocation(
                 new MemberAccess(target, operator),
-                Type.NONE, new Expression[] {arg}
-        ).refine();
+                Type.NONE,
+                new Expression[] {argument});
+    }
+
+    @Override
+    public b.exp.Expression refine() {
+        return proxy().refine();
     }
 
     @Override
     public String toString() {
-        return String.format("(%s %s %s)", left, operator, right);
+        boolean parens = operator.endsWith("=");
+        String format = parens ? "(%s %s %s)" : "%s %s %s";
+        return String.format(format, left, operator, right);
     }
 }

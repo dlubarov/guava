@@ -1,9 +1,23 @@
 package util;
 
-import java.util.Collection;
+import java.util.*;
 
 public final class StringUtils {
     private StringUtils() {}
+
+    public static Comparator<String> descendingLengthComparator = new Comparator<String>() {
+        @Override
+        public int compare(String a, String b) {
+            int diff = b.length() - a.length();
+            if (diff == 0)
+                return a.compareTo(b);
+            return diff;
+        }
+    };
+
+    public static void sortDescendingLength(String[] strings) {
+        Arrays.sort(strings, descendingLengthComparator);
+    }
 
     public static String implode(String glue, Object[] parts) {
         StringBuilder sb = new StringBuilder();
@@ -40,6 +54,20 @@ public final class StringUtils {
 
     public static String indent(Object code) {
         return indent(code, 1);
+    }
+
+    public static char unescape(char c) {
+        switch (c) {
+            case 'r': return '\r';
+            case 'n': return '\n';
+            case 't': return '\t';
+            case '0': return '\0';
+            case '\'': return '\'';
+            case '"': return '"';
+            case '\\': return '\\';
+            default:
+                throw new IllegalArgumentException("Invalid escape sequence: \\" + c);
+        }
     }
 
     public static boolean containsAt(String s, String substr, int p) {
