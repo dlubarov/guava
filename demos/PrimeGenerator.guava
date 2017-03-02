@@ -10,7 +10,7 @@ type PrimeGenerator {
 
   static Unit run() {
     Console.out("Here are the first few primes:");
-    for (Int n = 0; n < 20; n = n + 1)
+    for (Int n = 0; n < 100; n = n + 1)
       if (PrimeGenerator.isPrime(n))
         Console.out(" " + n);
     Console.outln();
