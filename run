@@ -1,4 +1,0 @@
-set -e
-
-cd bin
-java -ea Main ../{lib,tests,demos}/**/*.guava "$@"

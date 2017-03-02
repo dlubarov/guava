@@ -76,14 +76,15 @@ substitutability.
 
 ## Building
 
-Building and running Guava is easy. If you have bash 4+, you can just do
+Building and running Guava is easy:
 
     git clone git@github.com:dlubarov/guava.git
     cd guava
-    mkdir bin
-    shopt -s globstar
-    javac -d bin src/**/*.java
-    ./run
+    ./compile
+    ./run-demos
+    ./run-tests
+
+Note that these scripts require Bash 4.0 or higher.
 
 Since Guava has no dependencies or generated code, it is also trivial to build
 it using any Java IDE.

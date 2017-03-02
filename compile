@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Requires bash 4+
+shopt -s globstar
+
+rm -rf bin
+mkdir bin
+javac -d bin src/**/*.java
